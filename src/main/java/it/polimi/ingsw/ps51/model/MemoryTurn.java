@@ -18,7 +18,7 @@ public class MemoryTurn {
      * it allocates the List as a new ArrayList
      */
     public MemoryTurn(){
-        listOfAction = new ArrayList<ActionTurn>();
+        this.listOfAction = new ArrayList<>();
     }
 
     /**
