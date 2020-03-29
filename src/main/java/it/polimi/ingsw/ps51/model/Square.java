@@ -1,34 +1,47 @@
 package it.polimi.ingsw.ps51.model;
 
+/**
+ * Represent a single square of the game map
+ * @author Mattia Iamundo
+ */
 public class Square {
 
-  
     private  Level level ;
     private Worker presentWorker;
     private Coordinates coordinates ;
 
 
     
-    public Square (){
-
+    public Square (Coordinates coordinates){
+        level = Level.GROUND;
+        presentWorker = null;
+        this.coordinates = coordinates;
     }
 
     public Level getLevel(){
-        return null ;
+        return level;
     }
     public void setLevel(Level newLevel){
-
+        level = newLevel;
     }
 
-    public Boolean getPresentWorker(){
-        return null;
+    public Worker getPresentWorker(){
+        return presentWorker;
     }
 
-    public void setPresentWorker(boolean bool){
+    /***
+     * This method check if a worker is present on his square
+     * @return true if a worker is on this square, false otherwise
+     */
+    public boolean isPresentWorker(){
+        return presentWorker != null;
+    }
 
+    public void setPresentWorker(Worker worker){
+        presentWorker = worker;
     }
 
     public Coordinates getCoordinates(){
-        return null;
+        return coordinates;
     }
 }
