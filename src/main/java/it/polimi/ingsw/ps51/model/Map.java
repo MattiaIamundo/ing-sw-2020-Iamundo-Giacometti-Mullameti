@@ -60,13 +60,13 @@ public class Map {
      * @return a List pointing to the squares starting from the upper left one continuing clockwise. If a square
      *         doesn't exists it's position in the list is set to null
      */
-    public List<Square> getAdiacentSquare(Square square){
+    public List<Square> getAdjacentSquare(Square square){
         Coordinates squareCoord = square.getCoordinates();
         List<Square> adjacentSquares = new ArrayList<Square>();
         //This for retrieve the three square above the selected one
         for (int i=-1; i < 2; i++){
             try {
-                adjacentSquares.add(getSquare(squareCoord.getX() + i, squareCoord.getY() + 1));
+                adjacentSquares.add(getSquare(squareCoord.getX() + i, squareCoord.getY() - 1));
             } catch (OutOfMapException e) {
                 adjacentSquares.add(null);
             }
@@ -78,9 +78,9 @@ public class Map {
             adjacentSquares.add(null);
         }
         //This for retrieve the three square under the selected one
-        for (int i=-1; i < 2; i++){
+        for (int i=1; i > -2; i--){
             try {
-                adjacentSquares.add(getSquare(squareCoord.getX() - 1, squareCoord.getY() + i));
+                adjacentSquares.add(getSquare(squareCoord.getX() + i, squareCoord.getY() + 1));
             } catch (OutOfMapException e) {
                 adjacentSquares.add(null);
             }

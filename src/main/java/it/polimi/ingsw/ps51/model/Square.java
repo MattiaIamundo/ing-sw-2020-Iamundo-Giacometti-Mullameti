@@ -44,4 +44,18 @@ public class Square {
     public Coordinates getCoordinates(){
         return coordinates;
     }
+
+    public boolean equals(Object o){
+        if (this == o){
+            return true;
+        }
+
+        if (o == null || o.getClass() != this.getClass()){
+            return false;
+        }
+
+        Square square = (Square) o;
+        return (square.presentWorker == this.presentWorker && square.coordinates.equals(this.coordinates)
+                && square.level.equals(this.level));
+    }
 }

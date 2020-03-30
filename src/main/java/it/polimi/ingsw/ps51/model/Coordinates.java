@@ -1,5 +1,6 @@
 package it.polimi.ingsw.ps51.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Coordinates {
@@ -9,18 +10,41 @@ public class Coordinates {
 
     
     public Coordinates(Integer x , Integer y){
-
+        this.x = x;
+        this.y = y;
     }
 
     public List<Integer> getCoordinates(){
-        return null;
+        List<Integer> coordinates = new ArrayList<>();
+        coordinates.add(x);
+        coordinates.add(y);
+        return coordinates;
     }
 
     public Integer getX(){
-        return null;
+        return x;
     }
 
     public Integer getY(){
-        return null;
+        return y;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if (this == o){
+            return true;
+        }
+
+        if (o == null || o.getClass() != this.getClass()){
+            return false;
+        }
+
+        Coordinates coord = (Coordinates) o;
+        return (coord.x.equals(this.x) && coord.y.equals(this.y));
+    }
+
+    @Override
+    public int hashCode(){
+        return (this.x + this.y);
     }
 }
