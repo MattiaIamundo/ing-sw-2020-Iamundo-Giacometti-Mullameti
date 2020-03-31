@@ -236,4 +236,71 @@ public class MapTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void isThisPerimeterSquare_x0y3_ReturnTrue(){
+        Square square = new Square(new Coordinates(0, 3));
+        
+        Assert.assertTrue(map.isThisPerimeterSquare(square));
+    }
+
+    @Test
+    public void isThisPerimeterSquare_x2y0_ReturnTrue(){
+        Square square = new Square(new Coordinates(2, 0));
+
+        Assert.assertTrue(map.isThisPerimeterSquare(square));
+    }
+
+    @Test
+    public void isThisPerimeterSquare_x4y3_ReturnTrue(){
+        Square square = new Square(new Coordinates(4, 3));
+
+        Assert.assertTrue(map.isThisPerimeterSquare(square));
+    }
+
+    @Test
+    public void isThisPerimeterSquare_x3y4_ReturnTrue(){
+        Square square = new Square(new Coordinates(3, 4));
+
+        Assert.assertTrue(map.isThisPerimeterSquare(square));
+    }
+
+    @Test
+    public void isThisPerimeterSquare_x0y0_ReturnTrue(){
+        Square square = new Square(new Coordinates(0, 0));
+
+        Assert.assertTrue(map.isThisPerimeterSquare(square));
+    }
+
+    @Test
+    public void isThisPerimeterSquare_x4y0_ReturnTrue(){
+        Square square = new Square(new Coordinates(4, 0));
+
+        Assert.assertTrue(map.isThisPerimeterSquare(square));
+    }
+
+    @Test
+    public void isThisPerimeterSquare_x4y4_ReturnTrue(){
+        Square square = new Square(new Coordinates(4, 4));
+
+        Assert.assertTrue(map.isThisPerimeterSquare(square));
+    }
+
+    @Test
+    public void isThisPerimeterSquare_x2y3_ReturnFalse(){
+        Square square = new Square(new Coordinates(2, 3));
+
+        Assert.assertFalse(map.isThisPerimeterSquare(square));
+    }
+
+    @Test
+    public void AlternativeConstructorTest(){
+        map = new Map(8, 8);
+
+        try {
+            Assert.assertEquals(map.getSquare(6,6), new Square(new Coordinates(6,6)));
+        } catch (OutOfMapException e) {
+            e.printStackTrace();
+        }
+    }
 }

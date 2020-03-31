@@ -99,10 +99,10 @@ public class Map {
      * @param square to check
      * @return true if the given square is on the map's perimeter, false otherwise
      */
-    public boolean isThisAPerimetralSquare(Square square){
+    public boolean isThisPerimeterSquare(Square square){
         Coordinates coordinates = square.getCoordinates();
 
-        return (coordinates.getX() < 0) || (coordinates.getY() < 0) || (coordinates.getX() >= map.length) ||
-                (coordinates.getY() >= map[0].length);
+        return (coordinates.getX() == 0) || (coordinates.getY() == 0) || (coordinates.getX() == map.length - 1)
+                || (coordinates.getY() == map[0].length - 1);
     }
 }
