@@ -1,7 +1,7 @@
 package it.polimi.ingsw.ps51.model;
 
-import it.polimi.ingsw.ps51.model.Gods.Apollo;
-import it.polimi.ingsw.ps51.model.Gods.Card;
+import it.polimi.ingsw.ps51.model.gods.Apollo;
+import it.polimi.ingsw.ps51.model.gods.Card;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

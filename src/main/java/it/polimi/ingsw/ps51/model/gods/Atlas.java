@@ -1,4 +1,4 @@
-package it.polimi.ingsw.ps51.model.Gods;
+package it.polimi.ingsw.ps51.model.gods;
 
 public class Atlas extends CommonAction{
 }

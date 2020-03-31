@@ -1,6 +1,6 @@
 package it.polimi.ingsw.ps51.model;
 
-import it.polimi.ingsw.ps51.model.Gods.Card;
+import it.polimi.ingsw.ps51.model.gods.Card;
 import java.util.List;
 
 /**

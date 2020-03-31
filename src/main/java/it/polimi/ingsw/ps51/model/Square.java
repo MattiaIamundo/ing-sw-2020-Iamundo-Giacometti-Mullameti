@@ -1,10 +1,12 @@
 package it.polimi.ingsw.ps51.model;
 
+import java.io.Serializable;
+
 /**
  * Represent a single square of the game map
  * @author Mattia Iamundo
  */
-public class Square {
+public class Square implements Serializable {
 
     private  Level level ;
     private Worker presentWorker;

@@ -1,9 +1,10 @@
 package it.polimi.ingsw.ps51.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Coordinates {
+public class Coordinates implements Serializable {
    
     private Integer x ;
     private Integer y ;

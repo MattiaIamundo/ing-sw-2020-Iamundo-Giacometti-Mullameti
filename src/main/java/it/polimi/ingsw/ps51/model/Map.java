@@ -2,6 +2,7 @@ package it.polimi.ingsw.ps51.model;
 
 import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * Is the game's map
  * @author Mattia Iamundo
  */
-public class Map {
+public class Map implements Serializable {
 
     private Square[][] map;
 
