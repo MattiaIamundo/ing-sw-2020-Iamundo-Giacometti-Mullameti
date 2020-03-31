@@ -16,6 +16,8 @@ public class Map implements Serializable {
 
     /**
      * This is the standard constructor, it's create a 5x5 map
+     * The X-axis grows from left to right, The Y-axis grows top down
+     * the origin is in the upper left corner
      */
     public Map(){
         map = new Square[5][5];
