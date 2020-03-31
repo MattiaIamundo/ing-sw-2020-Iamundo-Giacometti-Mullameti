@@ -1,0 +1,191 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Map</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Map (it.polimi.ingsw.ps51.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Map</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60%
+  </span>
+  <span class="absValue">
+    (3/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    76,9%
+  </span>
+  <span class="absValue">
+    (30/ 39)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import java.util.ArrayList;
+<i>6</i>&nbsp;import java.util.List;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;/**
+<i>9</i>&nbsp; * Is the game&#39;s map
+<i>10</i>&nbsp; * @author Mattia Iamundo
+<i>11</i>&nbsp; */
+<i>12</i>&nbsp;public class Map {
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    private Square[][] map;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    /**
+<i>17</i>&nbsp;     * This is the standard constructor, it&#39;s create a 5x5 map
+<i>18</i>&nbsp;     */
+<b class="fc"><i>19</i>&nbsp;    public Map(){</b>
+<b class="fc"><i>20</i>&nbsp;        map = new Square[5][5];</b>
+<b class="fc"><i>21</i>&nbsp;        for (int x=0; x &lt; 5; x++){</b>
+<b class="fc"><i>22</i>&nbsp;            for (int y=0; y &lt; 5; y++){</b>
+<b class="fc"><i>23</i>&nbsp;                map[y][x] = new Square(new Coordinates(y, x));</b>
+<i>24</i>&nbsp;            }
+<i>25</i>&nbsp;        }
+<b class="fc"><i>26</i>&nbsp;    }</b>
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    /***
+<i>29</i>&nbsp;     * This is an alternative constructor in case a map of different dimension is needed
+<i>30</i>&nbsp;     * @param x the number of columns
+<i>31</i>&nbsp;     * @param y the number o rows
+<i>32</i>&nbsp;     */
+<b class="nc"><i>33</i>&nbsp;    public Map(int x, int y){</b>
+<b class="nc"><i>34</i>&nbsp;        map = new Square[x][y];</b>
+<b class="nc"><i>35</i>&nbsp;        for (int i=0; i &lt; x; i++){</b>
+<b class="nc"><i>36</i>&nbsp;            for (int k=0; k &lt; y; k++){</b>
+<b class="nc"><i>37</i>&nbsp;                map[k][i] = new Square(new Coordinates(k, i));</b>
+<i>38</i>&nbsp;            }
+<i>39</i>&nbsp;        }
+<b class="nc"><i>40</i>&nbsp;    }</b>
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    /**
+<i>43</i>&nbsp;     * Retrieve a square given it&#39;s position
+<i>44</i>&nbsp;     * @param x the column number
+<i>45</i>&nbsp;     * @param y the row number
+<i>46</i>&nbsp;     * @return the square in the specified coordinates
+<i>47</i>&nbsp;     * @throws OutOfMapException if the given coordinate indicates a point outside the map
+<i>48</i>&nbsp;     */
+<i>49</i>&nbsp;    public Square getSquare(Integer x , Integer y) throws OutOfMapException {
+<b class="fc"><i>50</i>&nbsp;        if ((x &lt; 0) || (y &lt; 0) || (x &gt;= map.length) || (y &gt;= map[x].length)){</b>
+<b class="fc"><i>51</i>&nbsp;            throw new OutOfMapException(x, y);</b>
+<i>52</i>&nbsp;        }else {
+<b class="fc"><i>53</i>&nbsp;            return map[x][y];</b>
+<i>54</i>&nbsp;        }
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    /**
+<i>58</i>&nbsp;     * Get the list of the near squares in a precise order
+<i>59</i>&nbsp;     * @param square whose neighbors are wanted
+<i>60</i>&nbsp;     * @return a List pointing to the squares starting from the upper left one continuing clockwise. If a square
+<i>61</i>&nbsp;     *         doesn&#39;t exists it&#39;s position in the list is set to null
+<i>62</i>&nbsp;     */
+<i>63</i>&nbsp;    public List&lt;Square&gt; getAdjacentSquare(Square square){
+<b class="fc"><i>64</i>&nbsp;        Coordinates squareCoord = square.getCoordinates();</b>
+<b class="fc"><i>65</i>&nbsp;        List&lt;Square&gt; adjacentSquares = new ArrayList&lt;Square&gt;();</b>
+<i>66</i>&nbsp;        //This for retrieve the three square above the selected one
+<b class="fc"><i>67</i>&nbsp;        for (int i=-1; i &lt; 2; i++){</b>
+<i>68</i>&nbsp;            try {
+<b class="fc"><i>69</i>&nbsp;                adjacentSquares.add(getSquare(squareCoord.getX() + i, squareCoord.getY() - 1));</b>
+<b class="fc"><i>70</i>&nbsp;            } catch (OutOfMapException e) {</b>
+<b class="fc"><i>71</i>&nbsp;                adjacentSquares.add(null);</b>
+<b class="fc"><i>72</i>&nbsp;            }</b>
+<i>73</i>&nbsp;        }
+<i>74</i>&nbsp;        //This retrieve the square in the right of the selected one
+<i>75</i>&nbsp;        try {
+<b class="fc"><i>76</i>&nbsp;            adjacentSquares.add(getSquare(squareCoord.getX() + 1, squareCoord.getY()));</b>
+<b class="fc"><i>77</i>&nbsp;        }catch (OutOfMapException e){</b>
+<b class="fc"><i>78</i>&nbsp;            adjacentSquares.add(null);</b>
+<b class="fc"><i>79</i>&nbsp;        }</b>
+<i>80</i>&nbsp;        //This for retrieve the three square under the selected one
+<b class="fc"><i>81</i>&nbsp;        for (int i=1; i &gt; -2; i--){</b>
+<i>82</i>&nbsp;            try {
+<b class="fc"><i>83</i>&nbsp;                adjacentSquares.add(getSquare(squareCoord.getX() + i, squareCoord.getY() + 1));</b>
+<b class="fc"><i>84</i>&nbsp;            } catch (OutOfMapException e) {</b>
+<b class="fc"><i>85</i>&nbsp;                adjacentSquares.add(null);</b>
+<b class="fc"><i>86</i>&nbsp;            }</b>
+<i>87</i>&nbsp;        }
+<i>88</i>&nbsp;        //This retrieve the left square of the selected one
+<i>89</i>&nbsp;        try {
+<b class="fc"><i>90</i>&nbsp;            adjacentSquares.add(getSquare(squareCoord.getX() - 1, squareCoord.getY()));</b>
+<b class="fc"><i>91</i>&nbsp;        }catch (OutOfMapException e){</b>
+<b class="fc"><i>92</i>&nbsp;            adjacentSquares.add(null);</b>
+<b class="fc"><i>93</i>&nbsp;        }</b>
+<b class="fc"><i>94</i>&nbsp;        return adjacentSquares;</b>
+<i>95</i>&nbsp;    }
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    /**
+<i>98</i>&nbsp;     * check if a square is on the map&#39;s perimeter
+<i>99</i>&nbsp;     * @param square to check
+<i>100</i>&nbsp;     * @return true if the given square is on the map&#39;s perimeter, false otherwise
+<i>101</i>&nbsp;     */
+<i>102</i>&nbsp;    public boolean isThisAPerimetralSquare(Square square){
+<b class="nc"><i>103</i>&nbsp;        Coordinates coordinates = square.getCoordinates();</b>
+<i>104</i>&nbsp;
+<b class="nc"><i>105</i>&nbsp;        return (coordinates.getX() &lt; 0) || (coordinates.getY() &lt; 0) || (coordinates.getX() &gt;= map.length) ||</b>
+<b class="nc"><i>106</i>&nbsp;                (coordinates.getY() &gt;= map[0].length);</b>
+<i>107</i>&nbsp;    }
+<i>108</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-03-31 10:49</div>
+</div>
+</body>
+</html>
