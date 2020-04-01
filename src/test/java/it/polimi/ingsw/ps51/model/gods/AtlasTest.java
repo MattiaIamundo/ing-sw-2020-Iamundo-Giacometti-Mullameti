@@ -22,7 +22,6 @@ public class AtlasTest {
         this.atlas = new Atlas();
         this.mapOfGame = new Map();
         this.workerPlayer = new Worker("Luca");
-        this.workerPlayer.setCanDoLevelUp(true);
     }
 
     @After
@@ -43,7 +42,6 @@ public class AtlasTest {
             Worker worker2 = new Worker("Merita");
             worker2.setPosition(mapOfGame.getSquare(2,2));
             this.mapOfGame.getSquare(2,2).setPresentWorker(worker2);
-            worker2.setCanDoLevelUp(true);
 
             this.mapOfGame.getSquare(0,1).setLevel(Level.SECOND);
             this.mapOfGame.getSquare(0,2).setLevel(Level.FIRST);

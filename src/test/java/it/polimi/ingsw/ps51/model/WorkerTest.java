@@ -5,8 +5,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class WorkerTest {
 
     private Worker worker = null;
@@ -38,13 +36,13 @@ public class WorkerTest {
     }
 
     @Test
-    public void getCanDoLevelUpTest() {
-        Assert.assertFalse(this.worker.getCanDoLevelUp());
+    public void getInWinningConditionTest() {
+        Assert.assertFalse(this.worker.getInWinningCondition());
     }
 
     @Test
-    public void setCanDoLevelUpTest() {
-        this.worker.setCanDoLevelUp(true);
-        Assert.assertTrue(this.worker.getCanDoLevelUp());
+    public void setInWinningConditionTest() {
+        this.worker.setInWinningCondition(true);
+        Assert.assertTrue(this.worker.getInWinningCondition());
     }
 }

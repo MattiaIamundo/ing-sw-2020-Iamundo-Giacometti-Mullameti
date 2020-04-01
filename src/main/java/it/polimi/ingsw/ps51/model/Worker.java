@@ -1,15 +1,22 @@
 package it.polimi.ingsw.ps51.model;
 
+import it.polimi.ingsw.ps51.model.gods.opponent_move_manager.Gods;
+import it.polimi.ingsw.ps51.utility.Observer;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Merita Mullameti
  * This class is dedicated to the workers that each player possesses
  */
-public class Worker{
+public class Worker implements Observer<Gods> {
 
     private String namePlayer;
-    private Square position ;
-    private boolean canDoLevelUp;
-
+    private Square position;
+    private boolean inWinningCondition = false;
+    private List<Gods> activeGods = new ArrayList<>();
+    //TODO clean this array before turn change
 
     /**
      * The constructor of the class
@@ -47,15 +54,29 @@ public class Worker{
      * This method gets if the worker can build in this square
      * @return if the worker can build in this square
      */
-    public boolean getCanDoLevelUp(){
-        return this.canDoLevelUp;
+    public boolean getInWinningCondition(){
+        return this.inWinningCondition;
     }
 
     /**
      * This method sets if the worker can build in this square
-     * @param permission decides if the worker can build in the square
+     * @param condition decides if the worker can build in the square
      */
-    public void setCanDoLevelUp(boolean permission){
-        this.canDoLevelUp=permission;
+    public void setInWinningCondition(boolean condition){
+        this.inWinningCondition =condition;
+    }
+
+    public List<Gods> getActiveGods() {
+        return activeGods;
+    }
+
+    /**
+     * Represents the update to do about the object T
+     *
+     * @param message the object which have to be updated
+     */
+    @Override
+    public void update(Gods message) {
+        activeGods.add(message);
     }
 }

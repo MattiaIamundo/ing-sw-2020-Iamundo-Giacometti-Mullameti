@@ -12,7 +12,7 @@ import java.util.List;
 public interface Card {
 
     /**
-     * check where the selected worker can move
+     * check where the selected worker can be moved
      * @param worker the selected worker
      * @param map the game map
      * @return a List of the Coordinates where the selected worker can be moved
