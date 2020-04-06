@@ -6,9 +6,9 @@ import java.io.Serializable;
  * Represent a single square of the game map
  * @author Mattia Iamundo
  */
-public class Square implements Serializable {
+public class Square implements Serializable, Cloneable {
 
-    private  Level level ;
+    private Level level ;
     private Worker presentWorker;
     private Coordinates coordinates ;
 
@@ -60,4 +60,5 @@ public class Square implements Serializable {
         return (square.presentWorker == this.presentWorker && square.coordinates.equals(this.coordinates)
                 && square.level.equals(this.level));
     }
+
 }

@@ -3,6 +3,7 @@ package it.polimi.ingsw.ps51.model;
 import it.polimi.ingsw.ps51.model.gods.opponent_move_manager.Gods;
 import it.polimi.ingsw.ps51.utility.Observer;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
  * @author Merita Mullameti
  * This class is dedicated to the workers that each player possesses
  */
-public class Worker implements Observer<Gods> {
+public class Worker implements Serializable, Observer<Gods>, Cloneable {
 
     private String namePlayer;
     private Square position;
@@ -79,4 +80,5 @@ public class Worker implements Observer<Gods> {
     public void update(Gods message) {
         activeGods.add(message);
     }
+
 }

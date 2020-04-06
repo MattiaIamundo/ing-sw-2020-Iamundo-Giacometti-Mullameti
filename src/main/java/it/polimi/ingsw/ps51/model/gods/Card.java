@@ -34,7 +34,7 @@ public interface Card {
      * @return a List of Pair, each Pair contains a Coordinates, where the worker can build, and a Level that indicates
      *         which level the worker can build
      */
-    List<Pair<Coordinates, Level>> checkBuild(Worker worker, Map map);
+    List<Pair<Coordinates, List<Level>>> checkBuild(Worker worker, Map map);
 
     /**
      * build a level on the desired square

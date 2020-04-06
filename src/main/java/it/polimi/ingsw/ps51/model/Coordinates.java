@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Coordinates implements Serializable {
+public class Coordinates implements Serializable, Cloneable{
    
     private Integer x ;
     private Integer y ;
@@ -48,4 +48,5 @@ public class Coordinates implements Serializable {
     public int hashCode(){
         return (this.x + this.y);
     }
+
 }

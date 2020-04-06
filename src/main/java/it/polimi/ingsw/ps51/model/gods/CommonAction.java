@@ -3,7 +3,7 @@ package it.polimi.ingsw.ps51.model.gods;
 import it.polimi.ingsw.ps51.model.*;
 import it.polimi.ingsw.ps51.model.gods.opponent_move_manager.Gods;
 import it.polimi.ingsw.ps51.model.gods.opponent_move_manager.OpponentGodsFactory;
-import it.polimi.ingsw.ps51.model.gods.opponent_move_manager.OpponetTurnGodsManager;
+import it.polimi.ingsw.ps51.model.gods.opponent_move_manager.OpponentTurnGodsManager;
 import it.polimi.ingsw.ps51.utility.Observable;
 import org.javatuples.Pair;
 
@@ -27,24 +27,29 @@ abstract class CommonAction extends Observable<Gods> implements Card {
     }
 
     @Override
-    public List<Pair<Coordinates, Level>> checkBuild(Worker worker, Map map) {
-        List<Pair<Coordinates, Level>> validBuilds = new ArrayList<>();
+    public List<Pair<Coordinates, List<Level>>> checkBuild(Worker worker, Map map) {
+        List<Pair<Coordinates, List<Level>>> validBuilds = new ArrayList<>();
         List<Square> adjacentSquares = map.getAdjacentSquare(worker.getPosition());
 
         for (Square square : adjacentSquares){
             if ((square != null) && !(square.getLevel().equals(Level.DOME)) && !(square.isPresentWorker())){
+                List<Level> validLevels = new ArrayList<>();
                 switch (square.getLevel()){
                     case GROUND:
-                        validBuilds.add(new Pair<>(square.getCoordinates(), Level.FIRST));
+                        validLevels.add(Level.FIRST);
+                        validBuilds.add(new Pair<>(square.getCoordinates(), validLevels));
                         break;
                     case FIRST:
-                        validBuilds.add(new Pair<>(square.getCoordinates(), Level.SECOND));
+                        validLevels.add(Level.SECOND);
+                        validBuilds.add(new Pair<>(square.getCoordinates(), validLevels));
                         break;
                     case SECOND:
-                        validBuilds.add(new Pair<>(square.getCoordinates(), Level.THIRD));
+                        validLevels.add(Level.THIRD);
+                        validBuilds.add(new Pair<>(square.getCoordinates(), validLevels));
                         break;
                     case THIRD:
-                        validBuilds.add(new Pair<>(square.getCoordinates(), Level.DOME));
+                        validLevels.add(Level.DOME);
+                        validBuilds.add(new Pair<>(square.getCoordinates(), validLevels));
                         break;
                     default:
                         break;
@@ -68,9 +73,10 @@ abstract class CommonAction extends Observable<Gods> implements Card {
 
     @Override
     public synchronized void build(Worker worker, Square position, Level level, Map map) {
-        Pair<Coordinates, Level> desiredBuild = new Pair<>(position.getCoordinates(), level);
-        if (checkBuild(worker, map).contains(desiredBuild)){
-            position.setLevel(level);
+        for (Pair<Coordinates, List<Level>> pair : checkBuild(worker, map)){
+            if (pair.getValue0().equals(position.getCoordinates()) && pair.getValue1().contains(level)){
+                position.setLevel(level);
+            }
         }
     }
 
@@ -83,7 +89,7 @@ abstract class CommonAction extends Observable<Gods> implements Card {
      * @return the List of the coordinates where the selected worker can be moved
      */
     protected List<Coordinates> clearPositions(List<Coordinates> positions, Worker worker, Map map){
-        OpponetTurnGodsManager manager;
+        OpponentTurnGodsManager manager;
         OpponentGodsFactory factory = new OpponentGodsFactory();
         for (Gods god : worker.getActiveGods()){
             manager = factory.getGod(god);

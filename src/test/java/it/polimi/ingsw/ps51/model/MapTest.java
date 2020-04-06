@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class MapTest {
@@ -302,5 +303,100 @@ public class MapTest {
         } catch (OutOfMapException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void iteratorTest_WhileHasNext(){
+        Iterator<Square> iter = map.iterator();
+        List<Square> out = new ArrayList<>();
+        List<Square> expected = new ArrayList<>();
+
+        expected.add(new Square(new Coordinates(0,0)));
+        expected.add(new Square(new Coordinates(1,0)));
+        expected.add(new Square(new Coordinates(2,0)));
+        expected.add(new Square(new Coordinates(3,0)));
+        expected.add(new Square(new Coordinates(4,0)));
+        expected.add(new Square(new Coordinates(0,1)));
+        expected.add(new Square(new Coordinates(1,1)));
+        expected.add(new Square(new Coordinates(2,1)));
+        expected.add(new Square(new Coordinates(3,1)));
+        expected.add(new Square(new Coordinates(4,1)));
+        expected.add(new Square(new Coordinates(0,2)));
+        expected.add(new Square(new Coordinates(1,2)));
+        expected.add(new Square(new Coordinates(2,2)));
+        expected.add(new Square(new Coordinates(3,2)));
+        expected.add(new Square(new Coordinates(4,2)));
+        expected.add(new Square(new Coordinates(0,3)));
+        expected.add(new Square(new Coordinates(1,3)));
+        expected.add(new Square(new Coordinates(2,3)));
+        expected.add(new Square(new Coordinates(3,3)));
+        expected.add(new Square(new Coordinates(4,3)));
+        expected.add(new Square(new Coordinates(0,4)));
+        expected.add(new Square(new Coordinates(1,4)));
+        expected.add(new Square(new Coordinates(2,4)));
+        expected.add(new Square(new Coordinates(3,4)));
+        expected.add(new Square(new Coordinates(4,4)));
+
+
+        while (iter.hasNext()){
+            out.add(iter.next());
+        }
+
+        Assert.assertEquals(expected, out);
+    }
+
+    @Test
+    public void iteratorTest_ForEachLoop(){
+        List<Square> out = new ArrayList<>();
+        List<Square> expected = new ArrayList<>();
+
+        expected.add(new Square(new Coordinates(0,0)));
+        expected.add(new Square(new Coordinates(1,0)));
+        expected.add(new Square(new Coordinates(2,0)));
+        expected.add(new Square(new Coordinates(3,0)));
+        expected.add(new Square(new Coordinates(4,0)));
+        expected.add(new Square(new Coordinates(0,1)));
+        expected.add(new Square(new Coordinates(1,1)));
+        expected.add(new Square(new Coordinates(2,1)));
+        expected.add(new Square(new Coordinates(3,1)));
+        expected.add(new Square(new Coordinates(4,1)));
+        expected.add(new Square(new Coordinates(0,2)));
+        expected.add(new Square(new Coordinates(1,2)));
+        expected.add(new Square(new Coordinates(2,2)));
+        expected.add(new Square(new Coordinates(3,2)));
+        expected.add(new Square(new Coordinates(4,2)));
+        expected.add(new Square(new Coordinates(0,3)));
+        expected.add(new Square(new Coordinates(1,3)));
+        expected.add(new Square(new Coordinates(2,3)));
+        expected.add(new Square(new Coordinates(3,3)));
+        expected.add(new Square(new Coordinates(4,3)));
+        expected.add(new Square(new Coordinates(0,4)));
+        expected.add(new Square(new Coordinates(1,4)));
+        expected.add(new Square(new Coordinates(2,4)));
+        expected.add(new Square(new Coordinates(3,4)));
+        expected.add(new Square(new Coordinates(4,4)));
+
+        for (Square square : map){
+            out.add(square);
+        }
+
+        Assert.assertEquals(expected, out);
+    }
+
+    @Test
+    public void equalsTest_Itself_ReturnTrue() {
+        Assert.assertEquals(map, map);
+    }
+
+    @Test
+    public void equalsTest_EqualObject_ReturnFalse(){
+        Map eqMap = new Map();
+
+        Assert.assertEquals(eqMap, map);
+    }
+
+    @Test
+    public void equalsTest_Null_ReturnFalse(){
+        Assert.assertNotEquals(null, map);
     }
 }

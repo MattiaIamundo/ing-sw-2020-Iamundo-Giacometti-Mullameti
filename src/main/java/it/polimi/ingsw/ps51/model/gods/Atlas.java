@@ -13,22 +13,16 @@ import java.util.List;
 public class Atlas extends CommonAction {
 
     @Override
-    public List<Pair<Coordinates, Level>> checkBuild(Worker worker, Map map) {
+    public List<Pair<Coordinates, List<Level>>> checkBuild(Worker worker, Map map) {
 
-        //getting the adjacent squares from the worker position
-        List<Square> adjacentSquaresAtlas = map.getAdjacentSquare(worker.getPosition());
         //getting the common build action calling the super method checkBuild
-        List<Pair<Coordinates, Level>> validBuildsAtlas = new ArrayList<>(super.checkBuild(worker, map));
+        List<Pair<Coordinates, List<Level>>> validBuildsAtlas = new ArrayList<>(super.checkBuild(worker, map));
 
-        for (Square square : adjacentSquaresAtlas){
-            //excluding the third level because the dome construction on the third level
-            // is already present in validBuildsAtlas
-            if ( (square != null) && !(square.getLevel().equals(Level.DOME)) && !(square.isPresentWorker())
-                    && !(square.getLevel().equals(Level.THIRD)) ) {
-
-                validBuildsAtlas.add(new Pair<>(square.getCoordinates(), Level.DOME));
+        //adding Dome level to each position
+        for (Pair<Coordinates, List<Level>> listPair : validBuildsAtlas){
+            if (!listPair.getValue1().contains(Level.DOME)){
+                listPair.getValue1().add(Level.DOME);
             }
-
         }
 
         return validBuildsAtlas;

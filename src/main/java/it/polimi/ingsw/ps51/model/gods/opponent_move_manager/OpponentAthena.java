@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Implement the effect of Athena power over the opponent's turn
  */
-public class OpponentAthena implements OpponetTurnGodsManager{
+public class OpponentAthena implements OpponentTurnGodsManager {
 
     /**
      * Removes those positions that are at an higher level compared to the worker

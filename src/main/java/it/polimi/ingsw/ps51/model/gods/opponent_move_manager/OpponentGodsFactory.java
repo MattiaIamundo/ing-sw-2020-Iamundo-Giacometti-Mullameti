@@ -10,7 +10,7 @@ public class OpponentGodsFactory {
      * @param god the desired god's manager
      * @return the manager associated to the inserted god
      */
-    public OpponetTurnGodsManager getGod(Gods god){
+    public OpponentTurnGodsManager getGod(Gods god){
         switch (god){
             case ATHENA:
                 return new OpponentAthena();
