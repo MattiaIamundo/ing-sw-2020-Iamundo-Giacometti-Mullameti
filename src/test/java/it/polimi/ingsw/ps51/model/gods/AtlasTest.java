@@ -9,6 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class AtlasTest {
@@ -52,20 +54,15 @@ public class AtlasTest {
             e.printStackTrace();
         }
 
-        List<Pair<Coordinates, Level>> validBuildsAtlas = this.atlas.checkBuild(this.workerPlayer, this.mapOfGame);
-        List<Pair<Coordinates, Level>> pairs = new ArrayList<>();
+        List<Pair<Coordinates, List<Level>>> validBuildsAtlas = this.atlas.checkBuild(this.workerPlayer, this.mapOfGame);
+        List<Pair<Coordinates, List<Level>>> pairs = new ArrayList<>();
 
-        pairs.add(new Pair<>(new Coordinates(0,1), Level.THIRD));
-        pairs.add(new Pair<>(new Coordinates(0,2), Level.SECOND));
-        pairs.add(new Pair<>(new Coordinates(0,3), Level.FIRST));
-        pairs.add(new Pair<>(new Coordinates(1,1), Level.DOME));
-        pairs.add(new Pair<>(new Coordinates(1,3), Level.FIRST));
-        pairs.add(new Pair<>(new Coordinates(2,3), Level.FIRST));
-        pairs.add(new Pair<>(new Coordinates(0,1), Level.DOME));
-        pairs.add(new Pair<>(new Coordinates(0,2), Level.DOME));
-        pairs.add(new Pair<>(new Coordinates(0,3), Level.DOME));
-        pairs.add(new Pair<>(new Coordinates(1,3), Level.DOME));
-        pairs.add(new Pair<>(new Coordinates(2,3), Level.DOME));
+        pairs.add(new Pair<>(new Coordinates(0,1), new ArrayList<>(Arrays.asList(Level.THIRD, Level.DOME))));
+        pairs.add(new Pair<>(new Coordinates(0,2), new ArrayList<>(Arrays.asList(Level.SECOND, Level.DOME))));
+        pairs.add(new Pair<>(new Coordinates(0,3), new ArrayList<>(Arrays.asList(Level.FIRST, Level.DOME))));
+        pairs.add(new Pair<>(new Coordinates(1,1), new ArrayList<>(Collections.singleton(Level.DOME))));
+        pairs.add(new Pair<>(new Coordinates(1,3), new ArrayList<>(Arrays.asList(Level.FIRST, Level.DOME))));
+        pairs.add(new Pair<>(new Coordinates(2,3), new ArrayList<>(Arrays.asList(Level.FIRST, Level.DOME))));
 
         isOk = pairs.containsAll(validBuildsAtlas);
         Assert.assertTrue(isOk);

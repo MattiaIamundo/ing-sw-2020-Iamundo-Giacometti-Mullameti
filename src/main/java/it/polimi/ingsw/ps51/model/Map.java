@@ -3,14 +3,14 @@ package it.polimi.ingsw.ps51.model;
 import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Is the game's map
  * @author Mattia Iamundo
  */
-public class Map implements Serializable {
+public class Map implements Serializable, Iterable<Square>, Cloneable{
 
     private Square[][] map;
 
@@ -23,7 +23,7 @@ public class Map implements Serializable {
         map = new Square[5][5];
         for (int x=0; x < 5; x++){
             for (int y=0; y < 5; y++){
-                map[y][x] = new Square(new Coordinates(y, x));
+                map[y][x] = new Square(new Coordinates(x, y));
             }
         }
     }
@@ -34,10 +34,10 @@ public class Map implements Serializable {
      * @param y the number o rows
      */
     public Map(int x, int y){
-        map = new Square[x][y];
+        map = new Square[y][x];
         for (int i=0; i < x; i++){
             for (int k=0; k < y; k++){
-                map[k][i] = new Square(new Coordinates(k, i));
+                map[k][i] = new Square(new Coordinates(i, k));
             }
         }
     }
@@ -50,10 +50,10 @@ public class Map implements Serializable {
      * @throws OutOfMapException if the given coordinate indicates a point outside the map
      */
     public Square getSquare(Integer x , Integer y) throws OutOfMapException {
-        if ((x < 0) || (y < 0) || (x >= map.length) || (y >= map[x].length)){
+        if ((x < 0) || (y < 0) || (y >= map.length) || (x >= map[y].length)){
             throw new OutOfMapException(x, y);
         }else {
-            return map[x][y];
+            return map[y][x];
         }
     }
 
@@ -108,4 +108,86 @@ public class Map implements Serializable {
         return (coordinates.getX() == 0) || (coordinates.getY() == 0) || (coordinates.getX() == map.length - 1)
                 || (coordinates.getY() == map[0].length - 1);
     }
+
+
+    /**
+     * The class create an iterator for the map that scans it from left to right top down
+     */
+    private class MapIterator implements Iterator<Square>{
+
+        Square[][] map;
+        Integer x = 0;
+        Integer y = 0;
+
+        public MapIterator(Square[][] map){
+            this.map = map;
+        }
+
+        /**
+         * Returns {@code true} if the iteration has more elements.
+         * (In other words, returns {@code true} if {@link #next} would
+         * return an element rather than throwing an exception.)
+         *
+         * @return {@code true} if the iteration has more elements
+         */
+        @Override
+        public boolean hasNext() {
+            return (y < map.length) && (x < map[y].length);
+        }
+
+        /**
+         * Returns the next element in the iteration.
+         *
+         * @return the next element in the iteration
+         * @throws NoSuchElementException if the iteration has no more elements
+         */
+        @Override
+        public Square next() {
+            if (x < map[y].length - 1){
+                Square square = map[y][x];
+                x++;
+                return square;
+            }else if (y < map.length){
+                Square square = map[y][x];
+                x = 0;
+                y++;
+                return square;
+            }else {
+                throw new NoSuchElementException();
+            }
+        }
+    }
+
+
+    /**
+     * Returns an iterator over elements of type {@code T}.
+     *
+     * @return an Iterator.
+     */
+    @Override
+    public Iterator<Square> iterator() {
+        return new MapIterator(map);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj){
+            return true;
+        }
+
+        if (obj == null || obj.getClass() != this.getClass()){
+            return false;
+        }
+
+        Map itsMap = (Map) obj;
+        for (int y=0; y < itsMap.map.length; y++){
+            for (int x=0; x < itsMap.map[y].length; x++){
+                if (!itsMap.map[y][x].equals(map[y][x])){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 }

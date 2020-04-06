@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Manage the effects of those gods that have a power that affects the opponent's turn
  */
-public interface OpponetTurnGodsManager {
+public interface OpponentTurnGodsManager {
 
     /**
      * Adjust the list of valid positions where to move the worker accordingly with the effect of the
