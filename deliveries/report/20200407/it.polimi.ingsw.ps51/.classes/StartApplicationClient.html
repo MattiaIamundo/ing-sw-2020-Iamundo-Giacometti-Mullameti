@@ -1,0 +1,116 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: StartApplicationClient</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51</a> ]
+</div>
+
+<h1>Coverage Summary for Class: StartApplicationClient (it.polimi.ingsw.ps51)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">StartApplicationClient</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.ps51.network.socket.Client;
+<i>4</i>&nbsp;
+<b class="nc"><i>5</i>&nbsp;public class StartApplicationClient {</b>
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;    public static void main(String[] args) {
+<b class="nc"><i>8</i>&nbsp;        System.out.println(&quot;Welcome to out Santorini game!&quot;);</b>
+<i>9</i>&nbsp;        /*
+<i>10</i>&nbsp;        System.out.println(&quot;Do you want to use a Cli or a Gui&quot;);
+<i>11</i>&nbsp;        System.out.println(&quot;Press respectively 0 or 1&quot;);
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;        Scanner scanner = new Scanner(System.in);
+<i>14</i>&nbsp;        boolean ok = false;
+<i>15</i>&nbsp;        Integer i = 0
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;        while(!ok) {
+<i>18</i>&nbsp;            try {
+<i>19</i>&nbsp;                i = scanner.nextInt();
+<i>20</i>&nbsp;                if (i != 0 &amp;&amp; i != 1) new NoGoodNumberException();
+<i>21</i>&nbsp;                ok = true;
+<i>22</i>&nbsp;            } catch (InputMismatchException e) {
+<i>23</i>&nbsp;                System.out.println(&quot;Please, insert 0 or 1, no a string!&quot;);
+<i>24</i>&nbsp;            } catch (NoGoodNumberException n) {
+<i>25</i>&nbsp;                System.out.println(&quot;Please, insert 0 or 1, no an another number!&quot;);
+<i>26</i>&nbsp;            }
+<i>27</i>&nbsp;        }
+<i>28</i>&nbsp;        */
+<b class="nc"><i>29</i>&nbsp;        Client client = new Client(0);</b>
+<b class="nc"><i>30</i>&nbsp;        Thread t = new Thread(client);</b>
+<b class="nc"><i>31</i>&nbsp;        t.start();</b>
+<i>32</i>&nbsp;    }
+<i>33</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-07 08:32</div>
+</div>
+</body>
+</html>
