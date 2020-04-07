@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class represents the god Atlas
+ * This class represents the god's power of Atlas
  * @author Luca Giacometti
  */
 public class Atlas extends CommonAction {

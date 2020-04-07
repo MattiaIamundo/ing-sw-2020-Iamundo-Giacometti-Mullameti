@@ -6,8 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class implement the God Apollo who's effect give you the possibility to move your worker to a square occupied
- * by an opponent's worker swapping their positions
+ * This class implement the god's power of Apollo
  */
 public class Apollo extends CommonAction{
 
@@ -19,12 +18,22 @@ public class Apollo extends CommonAction{
         for (Square square : adjacentSquares){
             if ((square != null) && (square.getLevel().ordinal() - worker.getPosition().getLevel().ordinal() <= 1)
                     && !square.getLevel().equals(Level.DOME)){
+
+                if (square.isPresentWorker() && worker.getNamePlayer().equals(square.getPresentWorker().getNamePlayer())){
+                    continue;
+                }
                 validCoordinates.add(square.getCoordinates());
             }
         }
         return clearPositions(validCoordinates, worker, map);
     }
 
+    /**
+     * In case of a square where there is an opponent's worker their positions are swapped
+     * @param worker the selected worker
+     * @param position the position where the worker must be moved
+     * @param map the game map
+     */
     @Override
     public synchronized void move(Worker worker, Square position, Map map) {
         if (checkMoves(worker, map).contains(position.getCoordinates())){

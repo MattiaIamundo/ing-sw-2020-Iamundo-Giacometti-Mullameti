@@ -14,8 +14,7 @@ public class OpponentGodsFactory {
         switch (god){
             case ATHENA:
                 return new OpponentAthena();
-            default:
-                return null;
         }
+        return null;
     }
 }

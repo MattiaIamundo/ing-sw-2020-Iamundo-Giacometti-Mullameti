@@ -47,6 +47,14 @@ public class Square implements Serializable, Cloneable {
         return coordinates;
     }
 
+    /**
+     * verify if the square is free or not
+     * @return true if on the square there isn't a worker nor a dome
+     */
+    public boolean isFreeSquare(){
+        return !level.equals(Level.DOME) && !isPresentWorker();
+    }
+
     public boolean equals(Object o){
         if (this == o){
             return true;

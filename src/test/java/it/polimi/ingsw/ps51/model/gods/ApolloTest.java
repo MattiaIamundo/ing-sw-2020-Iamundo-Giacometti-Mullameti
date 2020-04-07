@@ -61,6 +61,36 @@ public class ApolloTest {
     }
 
     @Test
+    public void checkMoves_PlayerWorkerInx2y2PlayerWorkerInx1y2_ReturnSevenValidPositions() {
+        List<Coordinates> out;
+        List<Coordinates> expected = new ArrayList<>();
+        try {
+            Worker worker2 = new Worker("Player");
+
+
+            worker.setPosition(map.getSquare(2,2));
+            map.getSquare(2,2).setPresentWorker(worker);
+            worker2.setPosition(map.getSquare(1,2));
+            map.getSquare(1,2).setPresentWorker(worker2);
+            opponentWorker.setPosition(map.getSquare(3,2));
+            map.getSquare(3,2).setPresentWorker(opponentWorker);
+            out = card.checkMoves(worker, map);
+
+            expected.add(new Coordinates(1,1));
+            expected.add(new Coordinates(2,1));
+            expected.add(new Coordinates(3,1));
+            expected.add(new Coordinates(3,2));
+            expected.add(new Coordinates(3,3));
+            expected.add(new Coordinates(2,3));
+            expected.add(new Coordinates(1,3));
+
+            Assert.assertEquals(expected, out);
+        }catch (OutOfMapException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     public void move_ToOpponentPosition_WorkersPositionsAreSwapped() {
         try {
             worker.setPosition(map.getSquare(2,2));

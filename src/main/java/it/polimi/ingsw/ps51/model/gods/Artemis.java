@@ -5,6 +5,9 @@ import it.polimi.ingsw.ps51.model.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class implements the god's power of Artemis
+ */
 public class Artemis extends CommonAction{
 
     @Override
