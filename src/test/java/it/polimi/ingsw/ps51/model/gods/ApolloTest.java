@@ -48,38 +48,11 @@ public class ApolloTest {
             expected.add(new Coordinates(1,1));
             expected.add(new Coordinates(2,1));
             expected.add(new Coordinates(3,1));
-            expected.add(new Coordinates(3,3));
-            expected.add(new Coordinates(2,3));
-            expected.add(new Coordinates(1,3));
-            expected.add(new Coordinates(1,2));
-            expected.add(new Coordinates(3,2));
-
-            Assert.assertEquals(expected, out);
-        }catch (OutOfMapException e){
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void checkMoves_PlayerInx2y2OpponentInx0y0_ReturnNineValidPositions() {
-        List<Coordinates> out;
-        List<Coordinates> expected = new ArrayList<>();
-        try {
-            worker.setPosition(map.getSquare(2,2));
-            map.getSquare(2,2).setPresentWorker(worker);
-            opponentWorker.setPosition(map.getSquare(0,0));
-            map.getSquare(0,0).setPresentWorker(opponentWorker);
-            out = card.checkMoves(worker, map);
-
-            expected.add(new Coordinates(1,1));
-            expected.add(new Coordinates(2,1));
-            expected.add(new Coordinates(3,1));
             expected.add(new Coordinates(3,2));
             expected.add(new Coordinates(3,3));
             expected.add(new Coordinates(2,3));
             expected.add(new Coordinates(1,3));
             expected.add(new Coordinates(1,2));
-            expected.add(new Coordinates(0,0));
 
             Assert.assertEquals(expected, out);
         }catch (OutOfMapException e){
@@ -92,11 +65,11 @@ public class ApolloTest {
         try {
             worker.setPosition(map.getSquare(2,2));
             map.getSquare(2,2).setPresentWorker(worker);
-            opponentWorker.setPosition(map.getSquare(0,0));
-            map.getSquare(0,0).setPresentWorker(opponentWorker);
+            opponentWorker.setPosition(map.getSquare(1,1));
+            map.getSquare(1,1).setPresentWorker(opponentWorker);
 
-            card.move(worker, map.getSquare(0,0), map);
-            Assert.assertEquals(map.getSquare(0,0), worker.getPosition());
+            card.move(worker, map.getSquare(1,1), map);
+            Assert.assertEquals(map.getSquare(1,1), worker.getPosition());
             Assert.assertEquals(map.getSquare(2,2), opponentWorker.getPosition());
         }catch (OutOfMapException e){
             e.printStackTrace();

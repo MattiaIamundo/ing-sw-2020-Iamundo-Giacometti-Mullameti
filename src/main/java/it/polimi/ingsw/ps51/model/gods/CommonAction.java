@@ -63,9 +63,10 @@ abstract class CommonAction extends Observable<Gods> implements Card {
     @Override
     public synchronized void move(Worker worker, Square position, Map map) {
         if (checkMoves(worker, map).contains(position.getCoordinates())){
+            Square oldPosition = worker.getPosition();
             position.setPresentWorker(worker);
             worker.setPosition(position);
-            if (position.getLevel().equals(Level.THIRD)){
+            if (position.getLevel().equals(Level.THIRD) && oldPosition.getLevel().ordinal() < Level.THIRD.ordinal()){
                 worker.setInWinningCondition(true);
             }
         }

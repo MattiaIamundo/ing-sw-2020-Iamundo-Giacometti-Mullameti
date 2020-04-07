@@ -1,10 +1,8 @@
 package it.polimi.ingsw.ps51.model.gods;
 
-import it.polimi.ingsw.ps51.model.Coordinates;
-import it.polimi.ingsw.ps51.model.Map;
-import it.polimi.ingsw.ps51.model.Square;
-import it.polimi.ingsw.ps51.model.Worker;
+import it.polimi.ingsw.ps51.model.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,14 +13,16 @@ public class Apollo extends CommonAction{
 
     @Override
     public List<Coordinates> checkMoves(Worker worker, Map map) {
-        List<Coordinates> positions;
-        positions = super.checkMoves(worker, map);
-        for (Square square : map){
-            if (square.isPresentWorker() && !worker.getNamePlayer().equals(square.getPresentWorker().getNamePlayer())){
-                positions.add(square.getCoordinates());
+        Square workerPosition = worker.getPosition();
+        List<Square> adjacentSquares = map.getAdjacentSquare(workerPosition);
+        List<Coordinates> validCoordinates = new ArrayList<>();
+        for (Square square : adjacentSquares){
+            if ((square != null) && (square.getLevel().ordinal() - worker.getPosition().getLevel().ordinal() <= 1)
+                    && !square.getLevel().equals(Level.DOME)){
+                validCoordinates.add(square.getCoordinates());
             }
         }
-        return clearPositions(positions, worker, map);
+        return clearPositions(validCoordinates, worker, map);
     }
 
     @Override
