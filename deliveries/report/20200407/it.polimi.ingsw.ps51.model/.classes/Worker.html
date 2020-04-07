@@ -1,0 +1,167 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Worker</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Worker (it.polimi.ingsw.ps51.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Worker</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (15/ 15)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.ps51.model.gods.opponent_move_manager.Gods;
+<i>4</i>&nbsp;import it.polimi.ingsw.ps51.utility.Observer;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import java.io.Serializable;
+<i>7</i>&nbsp;import java.util.ArrayList;
+<i>8</i>&nbsp;import java.util.List;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;/**
+<i>11</i>&nbsp; * @author Merita Mullameti
+<i>12</i>&nbsp; * This class is dedicated to the workers that each player possesses
+<i>13</i>&nbsp; */
+<i>14</i>&nbsp;public class Worker implements Serializable, Observer&lt;Gods&gt;, Cloneable {
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    private String namePlayer;
+<i>17</i>&nbsp;    private Square position;
+<b class="fc"><i>18</i>&nbsp;    private boolean inWinningCondition = false;</b>
+<b class="fc"><i>19</i>&nbsp;    private List&lt;Gods&gt; activeGods = new ArrayList&lt;&gt;();</b>
+<i>20</i>&nbsp;    //TODO clean this array before turn change
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    /**
+<i>23</i>&nbsp;     * The constructor of the class
+<i>24</i>&nbsp;     * @param namePlayer represents the nickname of the Player
+<i>25</i>&nbsp;     */
+<b class="fc"><i>26</i>&nbsp;    public  Worker (String namePlayer){</b>
+<b class="fc"><i>27</i>&nbsp;        this.namePlayer=namePlayer;</b>
+<b class="fc"><i>28</i>&nbsp;    }</b>
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    /**
+<i>31</i>&nbsp;     * This method gets the nickname of the player
+<i>32</i>&nbsp;     * @return the name of the player
+<i>33</i>&nbsp;     */
+<i>34</i>&nbsp;    public String getNamePlayer(){
+<b class="fc"><i>35</i>&nbsp;        return this.namePlayer;</b>
+<i>36</i>&nbsp;    }
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    /**
+<i>39</i>&nbsp;     * This method sets the position of the worker
+<i>40</i>&nbsp;     * @param pos represents the square where the worker is
+<i>41</i>&nbsp;     */
+<i>42</i>&nbsp;    public void setPosition (Square pos){
+<b class="fc"><i>43</i>&nbsp;        this.position=pos;</b>
+<b class="fc"><i>44</i>&nbsp;    }</b>
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    /**
+<i>47</i>&nbsp;     * This method gets the position of the worker
+<i>48</i>&nbsp;     * @return the square where the worker is
+<i>49</i>&nbsp;     */
+<i>50</i>&nbsp;    public Square getPosition(){
+<b class="fc"><i>51</i>&nbsp;        return this.position;</b>
+<i>52</i>&nbsp;    }
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    /**
+<i>55</i>&nbsp;     * This method gets if the worker can build in this square
+<i>56</i>&nbsp;     * @return if the worker can build in this square
+<i>57</i>&nbsp;     */
+<i>58</i>&nbsp;    public boolean getInWinningCondition(){
+<b class="fc"><i>59</i>&nbsp;        return this.inWinningCondition;</b>
+<i>60</i>&nbsp;    }
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    /**
+<i>63</i>&nbsp;     * This method sets if the worker can build in this square
+<i>64</i>&nbsp;     * @param condition decides if the worker can build in the square
+<i>65</i>&nbsp;     */
+<i>66</i>&nbsp;    public void setInWinningCondition(boolean condition){
+<b class="fc"><i>67</i>&nbsp;        this.inWinningCondition =condition;</b>
+<b class="fc"><i>68</i>&nbsp;    }</b>
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;    public List&lt;Gods&gt; getActiveGods() {
+<b class="fc"><i>71</i>&nbsp;        return activeGods;</b>
+<i>72</i>&nbsp;    }
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    /**
+<i>75</i>&nbsp;     * Represents the update to do about the object T
+<i>76</i>&nbsp;     *
+<i>77</i>&nbsp;     * @param message the object which have to be updated
+<i>78</i>&nbsp;     */
+<i>79</i>&nbsp;    @Override
+<i>80</i>&nbsp;    public void update(Gods message) {
+<b class="fc"><i>81</i>&nbsp;        activeGods.add(message);</b>
+<b class="fc"><i>82</i>&nbsp;    }</b>
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-07 08:32</div>
+</div>
+</body>
+</html>
