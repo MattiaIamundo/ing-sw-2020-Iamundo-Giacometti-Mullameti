@@ -1,37 +1,45 @@
 package it.polimi.ingsw.ps51.model.gods;
 
 import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
-import it.polimi.ingsw.ps51.model.Coordinates;
-import it.polimi.ingsw.ps51.model.Level;
-import it.polimi.ingsw.ps51.model.Map;
-import it.polimi.ingsw.ps51.model.Worker;
+import it.polimi.ingsw.ps51.model.*;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
 public class MinotaurTest {
     Map map;
-    Minotaur card = new Minotaur();
+    Minotaur card;
     Worker worker;
+    Worker worker2;
+    Player player;
     Worker opponentWorker;
 
     @Before
     public void setUp() throws Exception {
         map = new Map();
+        card = new Minotaur();
         worker = new Worker("Player");
+        worker2 = new Worker("Player");
+        player = new Player("Player");
+        player.setWorkers(Arrays.asList(worker, worker2));
         opponentWorker = new Worker("Opponent");
+        card.addObserver(opponentWorker);
     }
 
     @After
     public void tearDown() throws Exception {
         map = null;
+        card = null;
         worker = null;
+        worker2 = null;
+        player = null;
         opponentWorker = null;
     }
 
@@ -39,10 +47,9 @@ public class MinotaurTest {
     public void checkMovesTest_WorkerInX2Y3OpponentInX3Y3PowerUsable_ListOfEightPossibleMovements() {
         try {
             worker.setPosition(map.getSquare(2,3));
-            map.getSquare(2,3).setPresentWorker(worker);
+            worker2.setPosition(map.getSquare(0,0));
 
             opponentWorker.setPosition(map.getSquare(3,3));
-            map.getSquare(2,3).setPresentWorker(opponentWorker);
 
             List<Coordinates> expected = new ArrayList<>();
 
@@ -55,7 +62,7 @@ public class MinotaurTest {
             expected.add(new Coordinates(1,4));
             expected.add(new Coordinates(1,3));
 
-            Assert.assertEquals(expected, card.checkMoves(worker, map));
+            Assert.assertEquals(expected, card.checkMoves(player, worker, map));
 
         } catch (OutOfMapException e) {
             e.printStackTrace();
@@ -66,10 +73,9 @@ public class MinotaurTest {
     public void checkMovesTest_WorkerInX2Y3OpponentInX3Y3PowerUsableDifferentHeight_ListOfEightPossibleMovements() {
         try {
             worker.setPosition(map.getSquare(2,3));
-            map.getSquare(2,3).setPresentWorker(worker);
+            worker2.setPosition(map.getSquare(0,0));
 
             opponentWorker.setPosition(map.getSquare(3,3));
-            map.getSquare(3,3).setPresentWorker(opponentWorker);
             map.getSquare(4,3).setLevel(Level.THIRD);
 
             List<Coordinates> expected = new ArrayList<>();
@@ -83,7 +89,7 @@ public class MinotaurTest {
             expected.add(new Coordinates(1,4));
             expected.add(new Coordinates(1,3));
 
-            Assert.assertEquals(expected, card.checkMoves(worker, map));
+            Assert.assertEquals(expected, card.checkMoves(player, worker, map));
 
         } catch (OutOfMapException e) {
             e.printStackTrace();
@@ -94,10 +100,8 @@ public class MinotaurTest {
     public void checkMovesTest_WorkerInX2Y3OpponentInX3Y3PowerNotUsableDome_ListOfSevenPossibleMovements() {
         try {
             worker.setPosition(map.getSquare(2,3));
-            map.getSquare(2,3).setPresentWorker(worker);
 
             opponentWorker.setPosition(map.getSquare(3,3));
-            map.getSquare(3,3).setPresentWorker(opponentWorker);
             map.getSquare(4,3).setLevel(Level.DOME);
 
             List<Coordinates> expected = new ArrayList<>();
@@ -110,7 +114,7 @@ public class MinotaurTest {
             expected.add(new Coordinates(1,4));
             expected.add(new Coordinates(1,3));
 
-            Assert.assertEquals(expected, card.checkMoves(worker, map));
+            Assert.assertEquals(expected, card.checkMoves(player, worker, map));
 
         } catch (OutOfMapException e) {
             e.printStackTrace();
@@ -122,13 +126,10 @@ public class MinotaurTest {
         Worker thirdWorker = new Worker("Third");
         try {
             worker.setPosition(map.getSquare(2,3));
-            map.getSquare(2,3).setPresentWorker(worker);
 
             opponentWorker.setPosition(map.getSquare(3,3));
-            map.getSquare(3,3).setPresentWorker(opponentWorker);
 
             thirdWorker.setPosition(map.getSquare(4,3));
-            map.getSquare(4,3).setPresentWorker(thirdWorker);
 
             List<Coordinates> expected = new ArrayList<>();
 
@@ -140,7 +141,7 @@ public class MinotaurTest {
             expected.add(new Coordinates(1,4));
             expected.add(new Coordinates(1,3));
 
-            Assert.assertEquals(expected, card.checkMoves(worker, map));
+            Assert.assertEquals(expected, card.checkMoves(player, worker, map));
 
         } catch (OutOfMapException e) {
             e.printStackTrace();

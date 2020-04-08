@@ -1,6 +1,7 @@
 package it.polimi.ingsw.ps51.model.gods;
 
 import it.polimi.ingsw.ps51.model.*;
+import org.javatuples.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 public class Minotaur extends CommonAction{
 
     @Override
-    public List<Coordinates> checkMoves(Worker worker, Map map) {
+    public List<Coordinates> checkMoves(Player player, Worker worker, Map map) {
         Square workerPosition = worker.getPosition();
         List<Square> adjacentSquares = map.getAdjacentSquare(workerPosition);
         List<Coordinates> validCoordinates = new ArrayList<>();
@@ -21,10 +22,26 @@ public class Minotaur extends CommonAction{
                     && (!square.getLevel().equals(Level.DOME))
                     && (!(square.isPresentWorker()) || (square.isPresentWorker() && isValidSquareWithWorker(square, i, map)))){
 
+                if (square.isPresentWorker() && isAlliedWorker(player.getWorkers(), square)){
+                    continue;
+                }
                 validCoordinates.add(square.getCoordinates());
             }
         }
         return clearPositions(validCoordinates, worker, map);
+    }
+
+    @Override
+    public synchronized void move(Player player, Worker worker, Square position, Map map) {
+        if (position.isPresentWorker()){
+            int dir = map.getAdjacentSquare(worker.getPosition()).indexOf(position);
+            Square newPos = map.getAdjacentSquare(position).get(dir);
+
+            notify(new Pair<Square, Square>(position, newPos));
+            worker.setPosition(position);
+        }else {
+            super.move(player, worker, position, map);
+        }
     }
 
     /**
@@ -41,5 +58,14 @@ public class Minotaur extends CommonAction{
     private boolean isValidSquareWithWorker(Square opponentPosition, int direction, Map map){
         List<Square> adjacentSquares = map.getAdjacentSquare(opponentPosition);
         return adjacentSquares.get(direction).isFreeSquare();
+    }
+
+    private boolean isAlliedWorker(List<Worker> workers, Square position){
+        for (Worker worker : workers){
+            if (worker.getPosition().equals(position)){
+                return true;
+            }
+        }
+        return false;
     }
 }

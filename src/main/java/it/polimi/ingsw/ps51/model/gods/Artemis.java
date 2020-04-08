@@ -11,10 +11,10 @@ import java.util.List;
 public class Artemis extends CommonAction{
 
     @Override
-    public List<Coordinates> checkMoves(Worker worker, Map map) {
+    public List<Coordinates> checkMoves(Player player, Worker worker, Map map) {
         Square workerPosition = worker.getPosition();
         List<Square> adjacentSquares = map.getAdjacentSquare(workerPosition);
-        List<Coordinates> validCoordinates = new ArrayList<>(super.checkMoves(worker,map));
+        List<Coordinates> validCoordinates = new ArrayList<>(super.checkMoves(player, worker, map));
         boolean alreadyPresent = false;
 
         for (Square square : adjacentSquares){

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.ps51.utility;
 
+import it.polimi.ingsw.ps51.model.gods.opponent_move_manager.Gods;
+
 import java.util.ArrayList;
 
 /**

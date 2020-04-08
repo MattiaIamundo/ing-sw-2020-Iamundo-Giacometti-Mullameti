@@ -41,7 +41,6 @@ public class OpponentAthenaTest {
 
         try {
             worker.setPosition(map.getSquare(2,2));
-            map.getSquare(2,2).setPresentWorker(worker);
 
             given.add(new Coordinates(1,1));
             given.add(new Coordinates(2,1));
@@ -78,7 +77,6 @@ public class OpponentAthenaTest {
 
         try {
             worker.setPosition(map.getSquare(2,2));
-            map.getSquare(2,2).setPresentWorker(worker);
 
             map.getSquare(1,3).setLevel(Level.FIRST);
             map.getSquare(3,2).setLevel(Level.SECOND);

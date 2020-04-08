@@ -16,6 +16,7 @@ import java.util.List;
 public class AtlasTest {
 
     private Worker workerPlayer;
+    private Player player;
     private Map mapOfGame;
     private Atlas atlas;
 
@@ -24,11 +25,13 @@ public class AtlasTest {
         this.atlas = new Atlas();
         this.mapOfGame = new Map();
         this.workerPlayer = new Worker("Luca");
+        this.player = new Player("Luca");
     }
 
     @After
     public void tearDown() {
         this.workerPlayer = null;
+        this.player = null;
         this.mapOfGame = null;
         this.atlas = null;
     }
@@ -40,10 +43,8 @@ public class AtlasTest {
 
         try {
             this.workerPlayer.setPosition(mapOfGame.getSquare(1,2));
-            this.mapOfGame.getSquare(1,2).setPresentWorker(this.workerPlayer);
             Worker worker2 = new Worker("Merita");
             worker2.setPosition(mapOfGame.getSquare(2,2));
-            this.mapOfGame.getSquare(2,2).setPresentWorker(worker2);
 
             this.mapOfGame.getSquare(0,1).setLevel(Level.SECOND);
             this.mapOfGame.getSquare(0,2).setLevel(Level.FIRST);

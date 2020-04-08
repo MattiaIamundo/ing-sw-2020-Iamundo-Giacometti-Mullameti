@@ -1,10 +1,7 @@
 package it.polimi.ingsw.ps51.model.gods;
 
 import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
-import it.polimi.ingsw.ps51.model.Coordinates;
-import it.polimi.ingsw.ps51.model.Level;
-import it.polimi.ingsw.ps51.model.Map;
-import it.polimi.ingsw.ps51.model.Worker;
+import it.polimi.ingsw.ps51.model.*;
 import org.javatuples.Pair;
 import org.junit.After;
 import org.junit.Assert;
@@ -20,12 +17,14 @@ public class ArtemisTest {
 
     private Artemis artemis;
     private Worker worker;
+    private Player player;
     private Map map;
 
     @Before
     public void setUp() {
         this.artemis = new Artemis();
         this.worker = new Worker("Merita");
+        this.player = new Player("Merita");
         this.map = new Map();
     }
 
@@ -33,6 +32,7 @@ public class ArtemisTest {
     public void tearDown() {
         this.artemis = null;
         this.worker = null;
+        this.player = null;
         this.map = null;
     }
 
@@ -44,7 +44,6 @@ public class ArtemisTest {
         try{
 
             this.worker.setPosition(map.getSquare(1,1));
-            this.map.getSquare(1,1).setPresentWorker(this.worker);
             this.map.getSquare(1,1).setLevel(Level.GROUND);
 
             this.map.getSquare(0,0).setLevel(Level.GROUND);
@@ -67,12 +66,10 @@ public class ArtemisTest {
 
             Worker worker2 = new Worker("Merita");
             worker2.setPosition(map.getSquare(2,2));
-            this.map.getSquare(2,2).setPresentWorker(worker2);
             this.map.getSquare(2,2).setLevel(Level.SECOND);
 
             Worker worker3 = new Worker("Luca");
             worker3.setPosition(map.getSquare(0,1));
-            this.map.getSquare(0,1).setPresentWorker(worker3);
             this.map.getSquare(0,1).setLevel(Level.SECOND);
 
 
@@ -80,7 +77,7 @@ public class ArtemisTest {
             e.printStackTrace();
         }
 
-        List<Coordinates> validSquares = this.artemis.checkMoves(this.worker, this.map);
+        List<Coordinates> validSquares = this.artemis.checkMoves(this.player, this.worker, this.map);
         List<Coordinates> squares = new ArrayList<>();
 
         squares.add(new Coordinates(0,0));

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.ps51.model.gods;
 
 import it.polimi.ingsw.ps51.model.*;
+import org.javatuples.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 public class Apollo extends CommonAction{
 
     @Override
-    public List<Coordinates> checkMoves(Worker worker, Map map) {
+    public List<Coordinates> checkMoves(Player player, Worker worker, Map map) {
         Square workerPosition = worker.getPosition();
         List<Square> adjacentSquares = map.getAdjacentSquare(workerPosition);
         List<Coordinates> validCoordinates = new ArrayList<>();
@@ -19,7 +20,7 @@ public class Apollo extends CommonAction{
             if ((square != null) && (square.getLevel().ordinal() - worker.getPosition().getLevel().ordinal() <= 1)
                     && !square.getLevel().equals(Level.DOME)){
 
-                if (square.isPresentWorker() && worker.getNamePlayer().equals(square.getPresentWorker().getNamePlayer())){
+                if (square.isPresentWorker() && isAlliedWorker(player.getWorkers(), square)){
                     continue;
                 }
                 validCoordinates.add(square.getCoordinates());
@@ -35,25 +36,25 @@ public class Apollo extends CommonAction{
      * @param map the game map
      */
     @Override
-    public synchronized void move(Worker worker, Square position, Map map) {
-        if (checkMoves(worker, map).contains(position.getCoordinates())){
+    public synchronized void move(Player player, Worker worker, Square position, Map map) {
+        if (checkMoves(player, worker, map).contains(position.getCoordinates())){
             if (position.isPresentWorker()){
-                //save the opponent worker
-                Worker otherWorker = position.getPresentWorker();
-                //save the starting position of the worker who did the move
                 Square oldPosition = worker.getPosition();
-
-                //set the new position for the worker that made the move
-                position.setPresentWorker(worker);
                 worker.setPosition(position);
-                //set the position of the opponent worker to the previous position of the worker who moved
-                otherWorker.setPosition(oldPosition);
-                oldPosition.setPresentWorker(otherWorker);
+                notify(new Pair<Square, Square>(position, oldPosition));
+                position.setPresentWorker(true);
             }else {
-                worker.setPosition(position);
-                position.setPresentWorker(worker);
+                super.move(player, worker, position, map);
             }
         }
     }
 
+    private boolean isAlliedWorker(List<Worker> workers, Square position){
+        for (Worker worker : workers){
+            if (worker.getPosition().equals(position)){
+                return true;
+            }
+        }
+        return false;
+    }
 }

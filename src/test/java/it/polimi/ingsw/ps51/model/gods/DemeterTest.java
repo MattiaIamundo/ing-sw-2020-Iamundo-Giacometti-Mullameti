@@ -34,7 +34,6 @@ public class DemeterTest {
             List<Pair<Square, Level>> builds = new ArrayList<>();
 
             worker.setPosition(map.getSquare(2,2));
-            map.getSquare(2,2).setPresentWorker(worker);
             builds.add(new Pair<>(map.getSquare(3,3), Level.FIRST));
             builds.add(new Pair<>(map.getSquare(3,2), Level.FIRST));
             card.buildDouble(worker, builds, map);
@@ -53,7 +52,6 @@ public class DemeterTest {
             List<Pair<Square, Level>> builds = new ArrayList<>();
 
             worker.setPosition(map.getSquare(2,2));
-            map.getSquare(2,2).setPresentWorker(worker);
             builds.add(new Pair<>(map.getSquare(3,3), Level.FIRST));
             builds.add(new Pair<>(map.getSquare(3,3), Level.FIRST));
             card.buildDouble(worker, builds, map);
@@ -71,7 +69,6 @@ public class DemeterTest {
             List<Pair<Square, Level>> builds = new ArrayList<>();
 
             worker.setPosition(map.getSquare(2,2));
-            map.getSquare(2,2).setPresentWorker(worker);
             builds.add(new Pair<>(map.getSquare(3,3), Level.FIRST));
             card.buildDouble(worker, builds, map);
 

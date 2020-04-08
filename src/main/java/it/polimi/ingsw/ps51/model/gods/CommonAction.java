@@ -10,10 +10,10 @@ import org.javatuples.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract class CommonAction extends Observable<Gods> implements Card {
+abstract class CommonAction extends Observable implements Card {
 
     @Override
-    public List<Coordinates> checkMoves(Worker worker, Map map) {
+    public List<Coordinates> checkMoves(Player player, Worker worker, Map map) {
         Square workerPosition = worker.getPosition();
         List<Square> adjacentSquares = map.getAdjacentSquare(workerPosition);
         List<Coordinates> validCoordinates = new ArrayList<>();
@@ -61,10 +61,9 @@ abstract class CommonAction extends Observable<Gods> implements Card {
     }
 
     @Override
-    public synchronized void move(Worker worker, Square position, Map map) {
-        if (checkMoves(worker, map).contains(position.getCoordinates())){
+    public synchronized void move(Player player, Worker worker, Square position, Map map) {
+        if (checkMoves(player, worker, map).contains(position.getCoordinates())){
             Square oldPosition = worker.getPosition();
-            position.setPresentWorker(worker);
             worker.setPosition(position);
             if (position.getLevel().equals(Level.THIRD) && oldPosition.getLevel().ordinal() < Level.THIRD.ordinal()){
                 worker.setInWinningCondition(true);

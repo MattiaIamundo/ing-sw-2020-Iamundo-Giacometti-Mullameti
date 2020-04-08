@@ -13,19 +13,21 @@ public interface Card {
 
     /**
      * check where the selected worker can be moved
+     * @param player the player who is playing his game turn
      * @param worker the selected worker
      * @param map the game map
      * @return a List of the Coordinates where the selected worker can be moved
      */
-    List<Coordinates> checkMoves(Worker worker, Map map);
+    List<Coordinates> checkMoves(Player player, Worker worker, Map map);
 
     /**
      * moves the selected worker in the desired position
+     * @param player the player who is playing his game turn
      * @param worker the selected worker
      * @param position the chosen position, must be one of those contained in the List returned by checkMoves
      * @param map the game map
      */
-    void move(Worker worker, Square position, Map map);
+    void move(Player player, Worker worker, Square position, Map map);
 
     /**
      * checks where the selected worker can build and at which height

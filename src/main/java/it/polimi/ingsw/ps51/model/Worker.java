@@ -2,6 +2,8 @@ package it.polimi.ingsw.ps51.model;
 
 import it.polimi.ingsw.ps51.model.gods.opponent_move_manager.Gods;
 import it.polimi.ingsw.ps51.utility.Observer;
+import it.polimi.ingsw.ps51.utility.WorkerObserver;
+import org.javatuples.Pair;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ import java.util.List;
  * @author Merita Mullameti
  * This class is dedicated to the workers that each player possesses
  */
-public class Worker implements Serializable, Observer<Gods>, Cloneable {
+public class Worker implements Serializable, WorkerObserver, Cloneable {
 
     private String namePlayer;
     private Square position;
@@ -40,7 +42,11 @@ public class Worker implements Serializable, Observer<Gods>, Cloneable {
      * @param pos represents the square where the worker is
      */
     public void setPosition (Square pos){
+        if (position != null){
+            position.setPresentWorker(false);
+        }
         this.position=pos;
+        position.setPresentWorker(true);
     }
 
     /**
@@ -71,14 +77,16 @@ public class Worker implements Serializable, Observer<Gods>, Cloneable {
         return activeGods;
     }
 
-    /**
-     * Represents the update to do about the object T
-     *
-     * @param message the object which have to be updated
-     */
+
     @Override
-    public void update(Gods message) {
+    public void updateGods(Gods message) {
         activeGods.add(message);
     }
 
+    @Override
+    public void updatePosition(Pair<Square, Square> message) {
+        if (position.equals(message.getValue0())){
+            setPosition(message.getValue1());
+        }
+    }
 }

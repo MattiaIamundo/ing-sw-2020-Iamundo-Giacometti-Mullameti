@@ -18,6 +18,7 @@ import static org.junit.Assert.*;
 public class CommonActionTest {
     Map map;
     Worker worker;
+    Player player;
     PhantomCard card = new PhantomCard();
 
     private static class PhantomCard extends CommonAction{
@@ -28,12 +29,14 @@ public class CommonActionTest {
     public void setUp(){
         map = new Map();
         worker = new Worker("Player");
+        player = new Player("Player");
     }
 
     @After
     public void tearDown(){
         map = null;
         worker = null;
+        player = null;
     }
 
     @Test
@@ -43,7 +46,7 @@ public class CommonActionTest {
 
             map.getSquare(1,0).setLevel(Level.FIRST);
 
-            List<Coordinates> output = card.checkMoves(worker, map);
+            List<Coordinates> output = card.checkMoves(player, worker, map);
             List<Coordinates> expected = new ArrayList<>();
 
             expected.add(new Coordinates(1,0));
@@ -66,7 +69,7 @@ public class CommonActionTest {
             map.getSquare(2,3).setLevel(Level.FIRST);
             map.getSquare(1,2).setLevel(Level.SECOND);
 
-            List<Coordinates> output = card.checkMoves(worker, map);
+            List<Coordinates> output = card.checkMoves(player, worker, map);
             List<Coordinates> expected = new ArrayList<>();
 
             expected.add(new Coordinates(1,1));
@@ -92,7 +95,7 @@ public class CommonActionTest {
             map.getSquare(2,3).setLevel(Level.FIRST);
             map.getSquare(1,2).setLevel(Level.DOME);
 
-            List<Coordinates> output = card.checkMoves(worker, map);
+            List<Coordinates> output = card.checkMoves(player, worker, map);
             List<Coordinates> expected = new ArrayList<>();
 
             expected.add(new Coordinates(1,1));
@@ -119,7 +122,7 @@ public class CommonActionTest {
             map.getSquare(2,3).setLevel(Level.FIRST);
             map.getSquare(1,2).setLevel(Level.SECOND);
 
-            List<Coordinates> output = card.checkMoves(worker, map);
+            List<Coordinates> output = card.checkMoves(player, worker, map);
             List<Coordinates> expected = new ArrayList<>();
 
             expected.add(new Coordinates(1,1));
@@ -142,7 +145,6 @@ public class CommonActionTest {
         try {
             Worker worker2 = new Worker("Worker2");
             worker2.setPosition(map.getSquare(3,1));
-            map.getSquare(3,1).setPresentWorker(worker2);
 
             worker.setPosition(map.getSquare(2,2));
             map.getSquare(2,2).setLevel(Level.FIRST);
@@ -152,7 +154,7 @@ public class CommonActionTest {
             map.getSquare(2,3).setLevel(Level.FIRST);
             map.getSquare(1,2).setLevel(Level.SECOND);
 
-            List<Coordinates> output = card.checkMoves(worker, map);
+            List<Coordinates> output = card.checkMoves(player, worker, map);
             List<Coordinates> expected = new ArrayList<>();
 
             expected.add(new Coordinates(1,1));
@@ -178,7 +180,7 @@ public class CommonActionTest {
             map.getSquare(1,1).setLevel(Level.FIRST);
             map.getSquare(2,3).setLevel(Level.FIRST);
 
-            List<Coordinates> output = card.checkMoves(worker, map);
+            List<Coordinates> output = card.checkMoves(player, worker, map);
             List<Coordinates> expected = new ArrayList<>();
 
             expected.add(new Coordinates(2,1));
@@ -254,7 +256,7 @@ public class CommonActionTest {
             map.getSquare(1,1).setLevel(Level.FIRST);
             map.getSquare(2,3).setLevel(Level.FIRST);
 
-            card.move(worker, map.getSquare(2,1), map);
+            card.move(player, worker, map.getSquare(2,1), map);
 
             Assert.assertEquals(map.getSquare(2,1), worker.getPosition());
             Assert.assertFalse(worker.getInWinningCondition());
@@ -271,7 +273,7 @@ public class CommonActionTest {
             map.getSquare(1,1).setLevel(Level.FIRST);
             map.getSquare(2,3).setLevel(Level.FIRST);
 
-            card.move(worker, map.getSquare(2,3), map);
+            card.move(player, worker, map.getSquare(2,3), map);
 
             Assert.assertEquals(map.getSquare(2,3), worker.getPosition());
             Assert.assertFalse(worker.getInWinningCondition());
@@ -289,7 +291,7 @@ public class CommonActionTest {
             map.getSquare(1,1).setLevel(Level.FIRST);
             map.getSquare(2,3).setLevel(Level.THIRD);
 
-            card.move(worker, map.getSquare(2,3), map);
+            card.move(player, worker, map.getSquare(2,3), map);
 
             Assert.assertEquals(map.getSquare(2,3), worker.getPosition());
             Assert.assertTrue(worker.getInWinningCondition());
@@ -307,7 +309,7 @@ public class CommonActionTest {
             map.getSquare(1,2).setLevel(Level.SECOND);
             map.getSquare(2,3).setLevel(Level.FIRST);
 
-            card.move(worker, map.getSquare(1,2), map);
+            card.move(player, worker, map.getSquare(1,2), map);
 
             Assert.assertEquals(map.getSquare(2,2), worker.getPosition());
             Assert.assertFalse(worker.getInWinningCondition());
@@ -324,7 +326,7 @@ public class CommonActionTest {
             map.getSquare(1,1).setLevel(Level.FIRST);
             map.getSquare(2,3).setLevel(Level.FIRST);
 
-            card.move(worker, map.getSquare(2,4), map);
+            card.move(player, worker, map.getSquare(2,4), map);
 
             Assert.assertEquals(map.getSquare(2,2), worker.getPosition());
             Assert.assertFalse(worker.getInWinningCondition());

@@ -3,6 +3,7 @@ package it.polimi.ingsw.ps51.model.gods;
 import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
 import it.polimi.ingsw.ps51.model.Coordinates;
 import it.polimi.ingsw.ps51.model.Map;
+import it.polimi.ingsw.ps51.model.Player;
 import it.polimi.ingsw.ps51.model.Worker;
 import org.junit.After;
 import org.junit.Assert;
@@ -10,27 +11,38 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
 public class ApolloTest {
     Map map;
-    Apollo card = new Apollo();
+    Apollo card;
     Worker worker;
+    Worker worker2;
+    Player player;
     Worker opponentWorker;
 
     @Before
     public void setUp() throws Exception {
         map = new Map();
+        card = new Apollo();
         worker = new Worker("Player");
+        worker2 = new Worker("Player");
+        player= new Player("Player");
+        player.setWorkers(Arrays.asList(worker, worker2));
         opponentWorker = new Worker("Opponent");
+        card.addObserver(opponentWorker);
     }
 
     @After
     public void tearDown() throws Exception {
         map = null;
+        card = null;
         worker = null;
+        worker2 = null;
+        player = null;
         opponentWorker = null;
     }
 
@@ -40,10 +52,9 @@ public class ApolloTest {
         List<Coordinates> expected = new ArrayList<>();
         try {
             worker.setPosition(map.getSquare(2,2));
-            map.getSquare(2,2).setPresentWorker(worker);
+            worker2.setPosition(map.getSquare(0,0));
             opponentWorker.setPosition(map.getSquare(3,2));
-            map.getSquare(3,2).setPresentWorker(opponentWorker);
-            out = card.checkMoves(worker, map);
+            out = card.checkMoves(player, worker, map);
 
             expected.add(new Coordinates(1,1));
             expected.add(new Coordinates(2,1));
@@ -65,16 +76,10 @@ public class ApolloTest {
         List<Coordinates> out;
         List<Coordinates> expected = new ArrayList<>();
         try {
-            Worker worker2 = new Worker("Player");
-
-
             worker.setPosition(map.getSquare(2,2));
-            map.getSquare(2,2).setPresentWorker(worker);
             worker2.setPosition(map.getSquare(1,2));
-            map.getSquare(1,2).setPresentWorker(worker2);
             opponentWorker.setPosition(map.getSquare(3,2));
-            map.getSquare(3,2).setPresentWorker(opponentWorker);
-            out = card.checkMoves(worker, map);
+            out = card.checkMoves(player, worker, map);
 
             expected.add(new Coordinates(1,1));
             expected.add(new Coordinates(2,1));
@@ -94,11 +99,10 @@ public class ApolloTest {
     public void move_ToOpponentPosition_WorkersPositionsAreSwapped() {
         try {
             worker.setPosition(map.getSquare(2,2));
-            map.getSquare(2,2).setPresentWorker(worker);
+            worker2.setPosition(map.getSquare(0,0));
             opponentWorker.setPosition(map.getSquare(1,1));
-            map.getSquare(1,1).setPresentWorker(opponentWorker);
 
-            card.move(worker, map.getSquare(1,1), map);
+            card.move(player, worker, map.getSquare(1,1), map);
             Assert.assertEquals(map.getSquare(1,1), worker.getPosition());
             Assert.assertEquals(map.getSquare(2,2), opponentWorker.getPosition());
         }catch (OutOfMapException e){
@@ -110,11 +114,9 @@ public class ApolloTest {
     public void move_ToFreePosition_NormalMove() {
         try {
             worker.setPosition(map.getSquare(2,2));
-            map.getSquare(2,2).setPresentWorker(worker);
             opponentWorker.setPosition(map.getSquare(0,0));
-            map.getSquare(0,0).setPresentWorker(opponentWorker);
 
-            card.move(worker, map.getSquare(3,2), map);
+            card.move(player, worker, map.getSquare(3,2), map);
             Assert.assertEquals(map.getSquare(3,2), worker.getPosition());
             Assert.assertEquals(map.getSquare(0,0), opponentWorker.getPosition());
         }catch (OutOfMapException e){

@@ -26,19 +26,11 @@ public class SquareTest {
         Assert.assertEquals(Level.FIRST, square.getLevel());
     }
 
-    @Test
-    public void workerManagement_SetPlayer1_GetPlayer1(){
-        Worker worker = new Worker("Player1");
-        square.setPresentWorker(worker);
-
-        Assert.assertNotEquals(null, square.getPresentWorker());
-        Assert.assertEquals(worker, square.getPresentWorker());
-    }
 
     @Test
     public void isPresentWorker_Player1_ReturnTrue(){
         Worker worker = new Worker("Player1");
-        square.setPresentWorker(worker);
+        worker.setPosition(square);
 
         Assert.assertTrue(square.isPresentWorker());
     }
@@ -48,8 +40,4 @@ public class SquareTest {
         Assert.assertFalse(square.isPresentWorker());
     }
 
-    @Test
-    public void getPresentWorker_Null_ReturnNull(){
-        Assert.assertNull(square.getPresentWorker());
-    }
 }

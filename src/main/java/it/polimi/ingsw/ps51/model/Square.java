@@ -8,39 +8,31 @@ import java.io.Serializable;
  */
 public class Square implements Serializable, Cloneable {
 
-    private Level level ;
-    private Worker presentWorker;
-    private Coordinates coordinates ;
-
+    private Level level;
+    private Coordinates coordinates;
+    private boolean isPresentWorker;
 
     
     public Square (Coordinates coordinates){
         level = Level.GROUND;
-        presentWorker = null;
         this.coordinates = coordinates;
+        isPresentWorker = false;
     }
 
     public Level getLevel(){
         return level;
     }
+
     public void setLevel(Level newLevel){
         level = newLevel;
     }
 
-    public Worker getPresentWorker(){
-        return presentWorker;
+    public boolean isPresentWorker() {
+        return isPresentWorker;
     }
 
-    /***
-     * This method check if a worker is present on his square
-     * @return true if a worker is on this square, false otherwise
-     */
-    public boolean isPresentWorker(){
-        return presentWorker != null;
-    }
-
-    public void setPresentWorker(Worker worker){
-        presentWorker = worker;
+    public void setPresentWorker(boolean presentWorker) {
+        isPresentWorker = presentWorker;
     }
 
     public Coordinates getCoordinates(){
@@ -65,7 +57,7 @@ public class Square implements Serializable, Cloneable {
         }
 
         Square square = (Square) o;
-        return (square.presentWorker == this.presentWorker && square.coordinates.equals(this.coordinates)
+        return ((square.isPresentWorker == this.isPresentWorker) && square.coordinates.equals(this.coordinates)
                 && square.level.equals(this.level));
     }
 

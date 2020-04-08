@@ -22,7 +22,6 @@ public class HephaestusTest {
             map = new Map();
             worker = new Worker("Player");
             worker.setPosition(map.getSquare(2,2));
-            map.getSquare(2,2).setPresentWorker(worker);
         } catch (OutOfMapException e) {
             e.printStackTrace();
         }
