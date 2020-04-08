@@ -399,4 +399,84 @@ public class MapTest {
     public void equalsTest_Null_ReturnFalse(){
         Assert.assertNotEquals(null, map);
     }
+
+    @Test
+    public void cloneTest_VerifyCopyIsEqualToTheOriginal(){
+        List<Square> copy = new ArrayList<>();
+        List<Square> original = new ArrayList<>();
+
+        try {
+            Map deepCopy = (Map) map.clone();
+
+            for (Square square : map){
+                original.add(square);
+            }
+
+            for (Square square : deepCopy){
+                copy.add(square);
+            }
+
+            Assert.assertEquals(copy, original);
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void cloneTest_ChangeLevel_CopyMustBeDifferent(){
+        List<Square> copy = new ArrayList<>();
+        List<Square> original = new ArrayList<>();
+
+        try {
+            Map deepCopy = (Map) map.clone();
+
+            for (Square square : map){
+                original.add(square);
+            }
+
+            for (Square square : deepCopy){
+                copy.add(square);
+            }
+
+            map.getSquare(2,2).setLevel(Level.FIRST);
+
+            Assert.assertNotEquals(map.getSquare(2,2), deepCopy.getSquare(2,2));
+
+            original.remove(map.getSquare(2,2));
+            copy.remove(deepCopy.getSquare(2,2));
+
+            Assert.assertEquals(original, copy);
+        } catch (CloneNotSupportedException | OutOfMapException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void cloneTest_ChangeIsPresentWorker_CopyMustBeDifferent(){
+        List<Square> copy = new ArrayList<>();
+        List<Square> original = new ArrayList<>();
+
+        try {
+            Map deepCopy = (Map) map.clone();
+
+            for (Square square : map){
+                original.add(square);
+            }
+
+            for (Square square : deepCopy){
+                copy.add(square);
+            }
+
+            map.getSquare(2,2).setPresentWorker(true);
+
+            Assert.assertNotEquals(map.getSquare(2,2).isPresentWorker(), deepCopy.getSquare(2,2).isPresentWorker());
+
+            original.remove(map.getSquare(2,2));
+            copy.remove(deepCopy.getSquare(2,2));
+
+            Assert.assertEquals(original, copy);
+        } catch (CloneNotSupportedException | OutOfMapException e) {
+            e.printStackTrace();
+        }
+    }
 }

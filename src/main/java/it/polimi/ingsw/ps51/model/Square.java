@@ -61,4 +61,12 @@ public class Square implements Serializable, Cloneable {
                 && square.level.equals(this.level));
     }
 
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        Square square = (Square) super.clone();
+        square.level = Level.getByValue(this.level.ordinal());
+        square.isPresentWorker = this.isPresentWorker;
+        square.coordinates = (Coordinates) this.coordinates.clone();
+        return square;
+    }
 }

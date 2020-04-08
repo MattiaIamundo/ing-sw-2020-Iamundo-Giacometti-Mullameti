@@ -122,6 +122,30 @@ public class MinotaurTest {
     }
 
     @Test
+    public void checkMovesTest_WorkerInX2Y3AlliedInX3Y3PowerNotUsableAllied_ListOfSevenPossibleMovements() {
+        try {
+            worker.setPosition(map.getSquare(2,3));
+
+            worker2.setPosition(map.getSquare(3,3));
+
+            List<Coordinates> expected = new ArrayList<>();
+
+            expected.add(new Coordinates(1,2));
+            expected.add(new Coordinates(2,2));
+            expected.add(new Coordinates(3,2));
+            expected.add(new Coordinates(3,4));
+            expected.add(new Coordinates(2,4));
+            expected.add(new Coordinates(1,4));
+            expected.add(new Coordinates(1,3));
+
+            Assert.assertEquals(expected, card.checkMoves(player, worker, map));
+
+        } catch (OutOfMapException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     public void checkMovesTest_WorkerInX2Y3OpponentInX3Y3PowerNotUsableOtherWorker_ListOfSevenPossibleMovements() {
         Worker thirdWorker = new Worker("Third");
         try {
@@ -143,6 +167,34 @@ public class MinotaurTest {
 
             Assert.assertEquals(expected, card.checkMoves(player, worker, map));
 
+        } catch (OutOfMapException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void moveTest_x2y2Tox3y2UsePower_MovePerformed() {
+        try {
+            worker.setPosition(map.getSquare(2,2));
+            opponentWorker.setPosition(map.getSquare(3,2));
+
+            card.move(player, worker, map.getSquare(3,2), map);
+
+            Assert.assertEquals(map.getSquare(3,2), worker.getPosition());
+            Assert.assertEquals(map.getSquare(4,2), opponentWorker.getPosition());
+        } catch (OutOfMapException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void moveTest_x2y3Tox3y3NormalMove_Success() {
+        try {
+            worker.setPosition(map.getSquare(2,3));
+
+            card.move(player, worker, map.getSquare(3,3), map);
+
+            Assert.assertEquals(map.getSquare(3,3), worker.getPosition());
         } catch (OutOfMapException e) {
             e.printStackTrace();
         }

@@ -49,4 +49,11 @@ public class Coordinates implements Serializable, Cloneable{
         return (this.x + this.y);
     }
 
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        Coordinates coordinates = (Coordinates) super.clone();
+        coordinates.x = this.x;
+        coordinates.y = this.y;
+        return coordinates;
+    }
 }
