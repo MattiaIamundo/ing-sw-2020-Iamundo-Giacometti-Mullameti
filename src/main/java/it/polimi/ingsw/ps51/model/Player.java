@@ -21,6 +21,10 @@ public class Player {
         this.nickname=nickname;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
     /**
      * This method gets the card the player owns
      * @return the card the player owns

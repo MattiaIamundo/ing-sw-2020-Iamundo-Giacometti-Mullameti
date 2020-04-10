@@ -1,6 +1,6 @@
 package it.polimi.ingsw.ps51.controller;
 
-import it.polimi.ingsw.ps51.event.Event;
+import it.polimi.ingsw.ps51.events.Event;
 import it.polimi.ingsw.ps51.model.Coordinates;
 import it.polimi.ingsw.ps51.model.MemoryTurn;
 import it.polimi.ingsw.ps51.model.Player;
