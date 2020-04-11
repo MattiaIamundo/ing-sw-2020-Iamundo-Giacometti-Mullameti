@@ -1,4 +1,4 @@
-package it.polimi.ingsw.ps51.network.socket;
+package it.polimi.ingsw.ps51.network.server;
 
 public class MainServer implements Runnable{
 

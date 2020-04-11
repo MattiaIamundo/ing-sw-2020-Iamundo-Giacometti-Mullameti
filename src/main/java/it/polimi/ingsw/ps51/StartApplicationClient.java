@@ -1,7 +1,12 @@
 package it.polimi.ingsw.ps51;
 
-import it.polimi.ingsw.ps51.network.socket.Client;
+import it.polimi.ingsw.ps51.network.client.Client;
 
+/**
+ * This class represents the first class to be launched from the client,
+ * it admits the user to start the thread {@link Client}
+ * @author Luca Giacometti
+ */
 public class StartApplicationClient {
 
     public static void main(String[] args) {
