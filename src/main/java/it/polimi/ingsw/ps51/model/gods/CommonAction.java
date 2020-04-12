@@ -10,7 +10,7 @@ import org.javatuples.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract class CommonAction extends Observable implements Card {
+public abstract class CommonAction extends Observable implements Card {
 
     @Override
     public List<Coordinates> checkMoves(Player player, Worker worker, Map map) {

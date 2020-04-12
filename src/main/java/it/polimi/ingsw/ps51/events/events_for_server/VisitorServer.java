@@ -14,4 +14,6 @@ public interface VisitorServer {
     void visitBuild(Build event);
 
     void visitWorkerChoice(WorkerChoice event);
+
+    void visitDecisionTaken(DecisionTaken event);
 }

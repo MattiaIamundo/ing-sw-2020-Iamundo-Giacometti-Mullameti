@@ -1,81 +1,22 @@
 package it.polimi.ingsw.ps51.controller.gods;
 
-import it.polimi.ingsw.ps51.events.events_for_client.ChooseBuild;
-import it.polimi.ingsw.ps51.events.events_for_client.ChooseMove;
-import it.polimi.ingsw.ps51.events.events_for_client.ChooseWorker;
-import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
-import it.polimi.ingsw.ps51.events.events_for_server.EventForServer;
-import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
-import it.polimi.ingsw.ps51.model.*;
-import it.polimi.ingsw.ps51.model.gods.Card;
-import it.polimi.ingsw.ps51.utility.Observable;
-import it.polimi.ingsw.ps51.utility.Observer;
-import org.javatuples.Pair;
+import it.polimi.ingsw.ps51.model.Coordinates;
+import it.polimi.ingsw.ps51.model.Level;
+import it.polimi.ingsw.ps51.model.Worker;
 
-import java.util.ArrayList;
-import java.util.List;
+public interface GodController {
 
-public abstract class GodController extends Observable<EventForClient> implements Observer<EventForServer> {
-    Card card;
-    Map map;
-    Player player;
-    Worker selectedWorker;
+    /**
+     * This method is that one which must be called to start the turn, it retrieves the list of the workers that can be
+     * moved and creates an event which is sent to the actual player who choose the worker to use,
+     * if none of the workers of the actual player can be moved Game will be advised that the actual player
+     * lost the match
+     */
+    void start();
 
-    public GodController(Card card, Map map, Player player) {
-        this.card = card;
-        this.map = map;
-        this.player = player;
-    }
+    void manageWorkerChoice(Worker worker);
 
-    public void start(){
-        List<Worker> validWorkers = new ArrayList<>();
+    void manageMoveChoice(Coordinates moveTo);
 
-        for (Worker worker : player.getWorkers()){
-            if (!card.checkMoves(player, worker, map).isEmpty()){
-                validWorkers.add(worker);
-            }
-        }
-
-        notify(new ChooseWorker(validWorkers, player.getNickname()));
-    }
-
-    protected void searchForMoves(Worker worker){
-        List<Coordinates> validMoves;
-
-        for (Worker worker1 : player.getWorkers()){
-            if (worker1.equals(worker)){
-                selectedWorker = worker1;
-            }
-        }
-        validMoves = card.checkMoves(player, selectedWorker, map);
-        notify(new ChooseMove(validMoves, player.getNickname()));
-    }
-
-    protected void effectuateMove(Coordinates moveTo){
-        try {
-            Square square = map.getSquare(moveTo.getX(), moveTo.getY());
-            card.move(player, selectedWorker, square, map);
-            searchForBuild();
-        } catch (OutOfMapException e) {
-            e.printStackTrace();
-        }
-    }
-
-    protected void searchForBuild(){
-        List<Pair<Coordinates, List<Level>>> vaidBuilds;
-
-        vaidBuilds = card.checkBuild(selectedWorker, map);
-        notify(new ChooseBuild(vaidBuilds, player.getNickname()));
-    }
-
-    protected void build(Coordinates coordinates, Level level){
-        try {
-            Square square = map.getSquare(coordinates.getX(), coordinates.getY());
-            card.build(selectedWorker, square, level, map);
-        } catch (OutOfMapException e) {
-            e.printStackTrace();
-        }
-    }
-
-
+    void manageBuildChoice(Coordinates buildOn, Level level);
 }

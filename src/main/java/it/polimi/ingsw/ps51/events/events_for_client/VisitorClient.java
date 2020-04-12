@@ -19,4 +19,8 @@ public interface VisitorClient {
     void visitNumberOfPlayer(NumberOfPlayer event);
 
     void visitWin(Win event);
+
+    void visitMapUpdate(MapUpdate event);
+
+    void visitMakeDecision(MakeDecision event);
 }
