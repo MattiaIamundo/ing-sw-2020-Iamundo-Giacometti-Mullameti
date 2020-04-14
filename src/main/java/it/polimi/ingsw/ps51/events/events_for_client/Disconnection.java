@@ -5,8 +5,14 @@ package it.polimi.ingsw.ps51.events.events_for_client;
  */
 public class Disconnection implements EventForClient{
 
+
     @Override
     public void acceptVisitor(VisitorClient visitor) {
         visitor.visitDisconnection(this);
+    }
+
+    @Override
+    public String getReceiver() {
+        return "DISCONNECTION";
     }
 }

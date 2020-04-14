@@ -9,4 +9,9 @@ public class Nickname implements EventForClient{
     public void acceptVisitor(VisitorClient visitor) {
         visitor.visitNickname(this);
     }
+
+    @Override
+    public String getReceiver() {
+        return "NICKNAME";
+    }
 }

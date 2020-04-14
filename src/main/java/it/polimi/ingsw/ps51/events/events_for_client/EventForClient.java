@@ -6,4 +6,6 @@ package it.polimi.ingsw.ps51.events.events_for_client;
 public interface EventForClient {
 
     void acceptVisitor(VisitorClient visitor);
+
+    String getReceiver();
 }

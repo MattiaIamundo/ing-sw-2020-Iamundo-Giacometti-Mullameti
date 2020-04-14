@@ -6,4 +6,9 @@ public class EndEvent implements EventForClient{
     public void acceptVisitor(VisitorClient visitor) {
         visitor.visitEndEvent(this);
     }
+
+    @Override
+    public String getReceiver() {
+        return "END";
+    }
 }

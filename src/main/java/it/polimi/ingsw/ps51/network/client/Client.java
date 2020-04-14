@@ -1,6 +1,7 @@
 package it.polimi.ingsw.ps51.network.client;
 
 import it.polimi.ingsw.ps51.network.client.socket.SocketConnection;
+import it.polimi.ingsw.ps51.view.Cli;
 import it.polimi.ingsw.ps51.view.Supporter;
 
 import java.io.IOException;
@@ -18,18 +19,18 @@ public class Client implements Runnable {
 
     /**
      * Constructor
-     * Here is create the Supporter
+     * Here the Supporter is created
      * @param i 0 if the user wants a Cli
      */
     public Client(Integer i) {
         this.url = "127.0.0.1";
         this.port = 20000;
-        /*
-        if (integer == 0)
+
+        if (i == 0)
             s = new Cli();
-        else
-            s = new Gui();
-         */
+        //else
+        //    s = new Gui();
+
     }
 
     /**
@@ -55,6 +56,7 @@ public class Client implements Runnable {
             thread.start();
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("Something during the initialization was not good...");
         }
 
     }

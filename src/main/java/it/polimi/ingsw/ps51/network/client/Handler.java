@@ -37,8 +37,11 @@ public class Handler extends Observable<EventForClient> implements Runnable, Obs
 
         while (!isFinished) {
             EventForClient event = connection.receiveEvent();
-            if (event != null)
+            if (event != null) {
                 notify(event);
+                if(event.getReceiver().equals("END") || event.getReceiver().equals("DISCONNECTION"))
+                    isFinished = true;
+            }
             else {
                 isFinished = true;
                 Disconnection d = new Disconnection();
@@ -55,6 +58,7 @@ public class Handler extends Observable<EventForClient> implements Runnable, Obs
         boolean ok = connection.sendEvent(message);
         if (!ok) {
             isFinished = true;
+            notify(new Disconnection());
             connection.closeConnection();
         }
     }

@@ -43,7 +43,7 @@ public class Observable <T> {
      * To notify the observers about the object T
      * @param message the variable which generates the update
      */
-    protected void notify(T message) {
+    public void notify(T message) {
         //stopping the variable players
         synchronized (observers) {
 

@@ -2,10 +2,11 @@ package it.polimi.ingsw.ps51.network.client;
 
 import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
 import it.polimi.ingsw.ps51.events.events_for_server.EventForServer;
+import it.polimi.ingsw.ps51.network.server.Room;
 import it.polimi.ingsw.ps51.view.Supporter;
 
 /**
- * This interface is the representation of the connection between {@link Client} and server
+ * This interface is the representation of the client connection between {@link Supporter} and {@link Room}
  * @author Luca Giacometti
  */
 public interface ClientInterface {

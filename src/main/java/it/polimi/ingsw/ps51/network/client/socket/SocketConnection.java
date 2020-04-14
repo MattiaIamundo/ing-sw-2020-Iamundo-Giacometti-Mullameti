@@ -27,14 +27,10 @@ public class SocketConnection implements ClientInterface {
      * Constructor
      * @param socket the socket connection
      */
-    public SocketConnection(Socket socket) {
+    public SocketConnection(Socket socket) throws IOException {
         this.connection = socket;
-        try {
-            this.oos = new ObjectOutputStream(this.connection.getOutputStream());
-            this.ois = new ObjectInputStream(this.connection.getInputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.oos = new ObjectOutputStream(this.connection.getOutputStream());
+        this.ois = new ObjectInputStream(this.connection.getInputStream());
     }
 
     @Override
