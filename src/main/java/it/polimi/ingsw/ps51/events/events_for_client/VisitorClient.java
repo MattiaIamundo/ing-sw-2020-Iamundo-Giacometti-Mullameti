@@ -4,9 +4,15 @@ public interface VisitorClient {
 
     void visitChooseBuild(ChooseBuild event);
 
+    void visitChooseGod(ChooseGod event);
+
+    void visitChooseGodsDeck(ChooseGodsDeck event);
+
     void visitChooseMove(ChooseMove event);
 
     void visitChooseWorker(ChooseWorker event);
+
+    void visitChooseWorkerPosition(ChooseWorkerPosition event);
 
     void visitDisconnection(Disconnection event);
 
@@ -14,13 +20,13 @@ public interface VisitorClient {
 
     void visitLose(Lose event);
 
+    void visitMakeDecision(MakeDecision event);
+
+    void visitMapUpdate(MapUpdate event);
+
     void visitNickname(Nickname event);
 
     void visitNumberOfPlayer(NumberOfPlayer event);
 
     void visitWin(Win event);
-
-    void visitMapUpdate(MapUpdate event);
-
-    void visitMakeDecision(MakeDecision event);
 }

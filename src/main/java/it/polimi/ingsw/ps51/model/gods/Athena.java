@@ -4,7 +4,6 @@ import it.polimi.ingsw.ps51.model.Map;
 import it.polimi.ingsw.ps51.model.Player;
 import it.polimi.ingsw.ps51.model.Square;
 import it.polimi.ingsw.ps51.model.Worker;
-import it.polimi.ingsw.ps51.model.gods.opponent_move_manager.Gods;
 
 /**
  * This class implements the god's power of Athena

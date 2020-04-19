@@ -1,11 +1,10 @@
 package it.polimi.ingsw.ps51.model.gods.opponent_move_manager;
 
+import it.polimi.ingsw.ps51.model.gods.Gods;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class OpponentGodsFactoryTest {
 

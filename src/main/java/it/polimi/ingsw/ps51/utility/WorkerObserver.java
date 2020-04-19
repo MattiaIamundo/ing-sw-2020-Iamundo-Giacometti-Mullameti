@@ -1,7 +1,7 @@
 package it.polimi.ingsw.ps51.utility;
 
 import it.polimi.ingsw.ps51.model.Square;
-import it.polimi.ingsw.ps51.model.gods.opponent_move_manager.Gods;
+import it.polimi.ingsw.ps51.model.gods.Gods;
 import org.javatuples.Pair;
 
 public interface WorkerObserver extends Observer{

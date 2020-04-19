@@ -5,6 +5,7 @@ import it.polimi.ingsw.ps51.events.Event;
 import it.polimi.ingsw.ps51.events.events_for_client.ChooseBuild;
 import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
 import it.polimi.ingsw.ps51.events.events_for_client.MakeDecision;
+import it.polimi.ingsw.ps51.events.events_for_server.EventForServer;
 import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
 import it.polimi.ingsw.ps51.model.*;
 import it.polimi.ingsw.ps51.model.gods.Card;
@@ -56,7 +57,7 @@ public class DemeterControllerTest {
         }
 
         @Override
-        public void update(Event message) {
+        public void update(EventForServer message) {
 
         }
     }

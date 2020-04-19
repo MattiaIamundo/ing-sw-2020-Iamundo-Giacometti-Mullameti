@@ -46,4 +46,6 @@ public interface Card {
      * @param map the game map
      */
     void build(Worker worker, Square position, Level level, Map map);
+
+
 }

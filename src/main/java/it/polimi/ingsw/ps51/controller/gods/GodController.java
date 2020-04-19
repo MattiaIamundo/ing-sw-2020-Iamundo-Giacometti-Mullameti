@@ -14,9 +14,25 @@ public interface GodController {
      */
     void start();
 
+    /**
+     * The method is called as a consequence of receiving a {@code WorkerChoice} event that specifies which of the player's
+     * workers must be selected to perform the turn
+     * @param worker the selected worker
+     */
     void manageWorkerChoice(Worker worker);
 
+    /**
+     * The method is called as a consequence of receiving a {@code MoveChoice} event that specifies where to move the
+     * selected worker
+     * @param moveTo the coordinates where the worker must be moved
+     */
     void manageMoveChoice(Coordinates moveTo);
 
+    /**
+     * The method is called as a consequence of receiving a {@code Build} event that specifies where and at which level
+     * must be built a new tower's level.
+     * @param buildOn the coordinates where the new level must be built
+     * @param level the level that must be built
+     */
     void manageBuildChoice(Coordinates buildOn, Level level);
 }

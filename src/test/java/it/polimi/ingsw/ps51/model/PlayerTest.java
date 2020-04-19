@@ -39,7 +39,7 @@ public class PlayerTest {
 
     @Test
     public void getWorkersTest() {
-        Assert.assertNull(this.player.getWorkers());
+        Assert.assertEquals(0, player.getWorkers().size());
     }
 
     @Test

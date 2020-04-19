@@ -5,15 +5,21 @@ package it.polimi.ingsw.ps51.events.events_for_server;
  */
 public interface VisitorServer {
 
-    void visitNickname(Nickname event);
+    void visitBuild(Build event);
+
+    void visitDecisionTaken(DecisionTaken event);
+
+    void visitGodChoice(GodChoice event);
+
+    void visitGodsDeck(GodsDeck event);
 
     void visitMoveChoice(MoveChoice event);
 
-    void visitNumberOfPlayer(NumberOfPlayers event);
+    void visitNickname(Nickname event);
 
-    void visitBuild(Build event);
+    void visitNumberOfPlayer(NumberOfPlayers event);
 
     void visitWorkerChoice(WorkerChoice event);
 
-    void visitDecisionTaken(DecisionTaken event);
+    void visitWorkerPosition(WorkerPosition event);
 }

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.ps51.model.gods.opponent_move_manager;
 
+import it.polimi.ingsw.ps51.model.gods.Gods;
+
 /**
  * Factory class that creates the correct manager to apply the "Opponent's turn" effect
  */

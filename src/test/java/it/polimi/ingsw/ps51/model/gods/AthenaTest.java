@@ -5,14 +5,10 @@ import it.polimi.ingsw.ps51.model.Level;
 import it.polimi.ingsw.ps51.model.Map;
 import it.polimi.ingsw.ps51.model.Player;
 import it.polimi.ingsw.ps51.model.Worker;
-import it.polimi.ingsw.ps51.model.gods.opponent_move_manager.Gods;
-import it.polimi.ingsw.ps51.utility.*;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class AthenaTest {
     Athena card;

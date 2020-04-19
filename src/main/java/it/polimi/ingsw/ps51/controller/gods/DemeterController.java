@@ -10,7 +10,7 @@ import org.javatuples.Pair;
 
 import java.util.List;
 
-public class DemeterController extends NormalGodsController{
+public class DemeterController extends NormalGodsController implements GodControllerWithDecision{
 
     private boolean secondBuild = false;
     private List<Pair<Coordinates, List<Level>>> secondBuildPositions;
@@ -25,24 +25,24 @@ public class DemeterController extends NormalGodsController{
      * the list of the possible square where a level can be built, excluding the just built one, is saved into {@code secondBuildPositions}
      * a {@code MakeDecision} event will be sent to ask if the player want to build one more level.
      * For the second build the {@code secondBuild} will be set back to false and the super() method will be called
-     * @param coordinates the coordinates where the new level must be built
+     * @param buildOn the coordinates where the new level must be built
      * @param level the level that must be built
      */
     @Override
-    public void build(Coordinates coordinates, Level level) {
+    public void build(Coordinates buildOn, Level level) {
         if (secondBuild){
             secondBuild = false;
-            super.build(coordinates, level);
+            super.build(buildOn, level);
         }else {
             try {
-                Square square = map.getSquare(coordinates.getX(), coordinates.getY());
+                Square square = map.getSquare(buildOn.getX(), buildOn.getY());
                 card.build(selectedWorker, square, level, map);
                 if (isWinner()){
                     notifyToGame(ControllerToGame.WINNER);
                     return;
                 }
                 secondBuildPositions = card.checkBuild(selectedWorker, map);
-                secondBuildPositions.removeIf(c -> c.getValue0().equals(coordinates));
+                secondBuildPositions.removeIf(c -> c.getValue0().equals(buildOn));
                 if (secondBuildPositions.isEmpty()){
                     notifyToGame(ControllerToGame.END_TURN);
                 }else {

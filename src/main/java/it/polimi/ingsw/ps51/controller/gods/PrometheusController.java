@@ -14,7 +14,7 @@ import java.util.List;
  * This class implements the logic to manage a turn done by a player who have the Prometheus god. The player can build
  * also before moving if and only if when he will move his worker he don't moves it up
  */
-public class PrometheusController extends NormalGodsController{
+public class PrometheusController extends NormalGodsController implements GodControllerWithDecision{
 
     private boolean useGodPower = false;
 

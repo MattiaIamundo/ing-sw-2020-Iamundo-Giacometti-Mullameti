@@ -1,11 +1,14 @@
 package it.polimi.ingsw.ps51.model;
 
+import it.polimi.ingsw.ps51.model.gods.Apollo;
+import it.polimi.ingsw.ps51.model.gods.Athena;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class PlaygroundTest {
@@ -19,6 +22,9 @@ public class PlaygroundTest {
         players.add(player1);
         players.add(player2);
         playground = new Playground(players);
+
+        player1.setWorkers(Arrays.asList(new Worker("Player1"), new Worker("Player1")));
+        player2.setWorkers(Arrays.asList(new Worker("Player2"), new Worker("Player2")));
     }
 
     @After
@@ -63,9 +69,22 @@ public class PlaygroundTest {
     }
 
     @Test
-    public void setActualPlayer_Player1_ReturnPlayer1(){
+    public void getNextPlayerTest(){
+        player1.setGod(new Athena());
+        player2.setGod(new Apollo());
         playground.setActualPlayer(player1);
+        Player next = playground.getNextPlayer();
 
-        Assert.assertEquals(player1, playground.getActualPlayer());
+        Assert.assertEquals(player2, next);
+    }
+
+    @Test
+    public void getNextPlayerTest_ActualIsTheLastOfTheList(){
+        player1.setGod(new Athena());
+        player2.setGod(new Apollo());
+        playground.setActualPlayer(player2);
+        Player next = playground.getNextPlayer();
+
+        Assert.assertEquals(player1, next);
     }
 }

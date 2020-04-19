@@ -1,6 +1,9 @@
 package it.polimi.ingsw.ps51.model;
 
+import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
+import it.polimi.ingsw.ps51.events.events_for_client.MapUpdate;
 import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
+import it.polimi.ingsw.ps51.utility.Observer;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -9,6 +12,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class MapTest {
 
@@ -397,7 +401,19 @@ public class MapTest {
 
     @Test
     public void equalsTest_Null_ReturnFalse(){
-        Assert.assertNotEquals(null, map);
+        Assert.assertFalse(map.equals(null));
+    }
+
+    @Test
+    public void equalsTest_DifferentMap_ReturnFalse(){
+        Map map2 = new Map();
+        try {
+            map2.getSquare(2,2).setLevel(Level.FIRST);
+        } catch (OutOfMapException e) {
+            e.printStackTrace();
+        }
+
+        Assert.assertFalse(map.equals(map2));
     }
 
     @Test
@@ -477,6 +493,27 @@ public class MapTest {
             Assert.assertEquals(original, copy);
         } catch (CloneNotSupportedException | OutOfMapException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void notifyMapUpdateTest_NewCopySent(){
+        Messagereceiver receiver = new Messagereceiver();
+        map.addObserver(receiver);
+        map.notifyMapUpdate();
+
+        Assert.assertNotNull(receiver.event);
+        Assert.assertTrue(receiver.event instanceof MapUpdate);
+        Assert.assertEquals(map, ((MapUpdate) receiver.event).getMap());
+    }
+
+    private class Messagereceiver implements Observer<EventForClient>{
+
+        EventForClient event;
+
+        @Override
+        public void update(EventForClient message) {
+            event = message;
         }
     }
 }

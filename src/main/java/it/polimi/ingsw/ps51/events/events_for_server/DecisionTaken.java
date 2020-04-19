@@ -1,5 +1,8 @@
 package it.polimi.ingsw.ps51.events.events_for_server;
 
+/**
+ * Event that carries the decision taken by the player
+ */
 public class DecisionTaken implements EventForServer {
 
     private boolean decided;

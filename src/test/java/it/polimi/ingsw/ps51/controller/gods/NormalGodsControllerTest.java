@@ -6,6 +6,7 @@ import it.polimi.ingsw.ps51.events.events_for_client.ChooseBuild;
 import it.polimi.ingsw.ps51.events.events_for_client.ChooseMove;
 import it.polimi.ingsw.ps51.events.events_for_client.ChooseWorker;
 import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
+import it.polimi.ingsw.ps51.events.events_for_server.EventForServer;
 import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
 import it.polimi.ingsw.ps51.model.*;
 import it.polimi.ingsw.ps51.model.gods.Card;
@@ -52,7 +53,7 @@ public class NormalGodsControllerTest {
         }
 
         @Override
-        public void update(Event message) {
+        public void update(EventForServer message) {
 
         }
     }

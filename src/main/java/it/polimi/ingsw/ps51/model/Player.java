@@ -1,6 +1,8 @@
 package it.polimi.ingsw.ps51.model;
 
 import it.polimi.ingsw.ps51.model.gods.Card;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,8 +11,8 @@ import java.util.List;
  */
 public class Player {
 
-    private String nickname;
-    private Card god ;
+    private final String nickname;
+    private Card god = null;
     private List<Worker> workers;
 
     /**
@@ -19,6 +21,7 @@ public class Player {
      */
     public Player (String nickname){
         this.nickname=nickname;
+        workers = new ArrayList<>();
     }
 
     public String getNickname() {
@@ -54,8 +57,13 @@ public class Player {
      * @param workers represents the workers this player owns
      */
     public void setWorkers(List<Worker> workers){
-        this.workers=workers;
+        this.workers.addAll(workers);
     }
+
+    public void addWorker(Worker worker){
+        workers.add(worker);
+    }
+
 }
 
 

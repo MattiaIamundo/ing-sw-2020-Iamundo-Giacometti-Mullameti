@@ -1,7 +1,6 @@
 package it.polimi.ingsw.ps51.model.gods;
 
 import it.polimi.ingsw.ps51.model.*;
-import it.polimi.ingsw.ps51.model.gods.opponent_move_manager.Gods;
 import it.polimi.ingsw.ps51.model.gods.opponent_move_manager.OpponentGodsFactory;
 import it.polimi.ingsw.ps51.model.gods.opponent_move_manager.OpponentTurnGodsManager;
 import it.polimi.ingsw.ps51.utility.Observable;
@@ -65,6 +64,7 @@ public abstract class CommonAction extends Observable implements Card {
         if (checkMoves(player, worker, map).contains(position.getCoordinates())){
             Square oldPosition = worker.getPosition();
             worker.setPosition(position);
+            map.notifyMapUpdate();
             if (position.getLevel().equals(Level.THIRD) && oldPosition.getLevel().ordinal() < Level.THIRD.ordinal()){
                 worker.setInWinningCondition(true);
             }
@@ -78,6 +78,7 @@ public abstract class CommonAction extends Observable implements Card {
                 position.setLevel(level);
             }
         }
+        map.notifyMapUpdate();
     }
 
     /**
@@ -97,4 +98,5 @@ public abstract class CommonAction extends Observable implements Card {
         }
         return positions;
     }
+
 }

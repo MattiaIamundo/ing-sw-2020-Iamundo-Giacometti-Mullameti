@@ -38,7 +38,11 @@ public class NormalGodsController extends GodControllerObservable implements God
 
         for (Worker worker : player.getWorkers()){
             if (!card.checkMoves(player, worker, map).isEmpty()){
-                validWorkers.add(worker);
+                try {
+                    validWorkers.add((Worker) worker.clone());
+                } catch (CloneNotSupportedException e) {
+                    e.printStackTrace();
+                }
             }
         }
         if (validWorkers.isEmpty()){
@@ -93,12 +97,12 @@ public class NormalGodsController extends GodControllerObservable implements God
     /**
      * The method perform the build action and if the worker is in a winning condition {@code game} will
      * be advised of this, otherwise {@code Game} will be informed that the turn is ended
-     * @param coordinates the coordinates where the new level must be built
+     * @param buildOn the coordinates where the new level must be built
      * @param level the level that must be built
      */
-    public void build(Coordinates coordinates, Level level){
+    public void build(Coordinates buildOn, Level level){
         try {
-            Square square = map.getSquare(coordinates.getX(), coordinates.getY());
+            Square square = map.getSquare(buildOn.getX(), buildOn.getY());
             card.build(selectedWorker, square, level, map);
             if (isWinner()){
                 notifyToGame(ControllerToGame.WINNER);

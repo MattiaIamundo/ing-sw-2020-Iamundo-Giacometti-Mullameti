@@ -2,6 +2,9 @@ package it.polimi.ingsw.ps51.events.events_for_client;
 
 import it.polimi.ingsw.ps51.model.Map;
 
+/**
+ * Event that carries the updated map, that may be caused by a moved worker or due to a new level that as been built
+ */
 public class MapUpdate implements EventForClient{
 
     Map map;

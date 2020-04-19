@@ -2,7 +2,6 @@ package it.polimi.ingsw.ps51.model.gods;
 
 import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
 import it.polimi.ingsw.ps51.model.*;
-import it.polimi.ingsw.ps51.model.gods.opponent_move_manager.Gods;
 import org.javatuples.Pair;
 import org.junit.After;
 import org.junit.Assert;
@@ -12,8 +11,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class CommonActionTest {
     Map map;

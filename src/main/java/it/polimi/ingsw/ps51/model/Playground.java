@@ -1,5 +1,8 @@
 package it.polimi.ingsw.ps51.model;
 
+import it.polimi.ingsw.ps51.model.gods.CommonAction;
+import it.polimi.ingsw.ps51.model.gods.Gods;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +51,38 @@ public class Playground {
         return actualPlayer;
     }
 
-    public void setActualPlayer(Player newActualPlayer){
-        actualPlayer = newActualPlayer;
+    public void setActualPlayer(Player actualPlayer) {
+        this.actualPlayer = actualPlayer;
+    }
+
+    public Player getNextPlayer(){
+        int index = players.indexOf(actualPlayer);
+        index++;
+        actualPlayer = players.get((index % players.size()));
+        for (Player player : players){
+            if (!player.equals(actualPlayer)){
+                for (Worker worker : player.getWorkers()){
+                    worker.removeGod(actualPlayer.getGod());
+                }
+            }
+        }
+
+        return actualPlayer;
+    }
+
+    public synchronized void removePlayer(Player player){
+        for (Worker worker : player.getWorkers()){
+            worker.getPosition().setPresentWorker(false);
+        }
+
+        for (Player player1 : players){
+            if (!player1.equals(player) && Gods.isOpponentTurnEffect(player1.getGod())){
+                for (Worker worker : player.getWorkers()){
+                    ((CommonAction) player1.getGod()).removeObserver(worker);
+                }
+            }
+        }
+
+        players.remove(player);
     }
 }

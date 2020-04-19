@@ -1,7 +1,7 @@
 package it.polimi.ingsw.ps51.model;
 
-import it.polimi.ingsw.ps51.model.gods.opponent_move_manager.Gods;
-import it.polimi.ingsw.ps51.utility.Observer;
+import it.polimi.ingsw.ps51.model.gods.Card;
+import it.polimi.ingsw.ps51.model.gods.Gods;
 import it.polimi.ingsw.ps51.utility.WorkerObserver;
 import org.javatuples.Pair;
 
@@ -19,14 +19,27 @@ public class Worker implements Serializable, WorkerObserver, Cloneable {
     private Square position;
     private boolean inWinningCondition = false;
     private List<Gods> activeGods = new ArrayList<>();
-    //TODO clean this array before turn change
 
     /**
      * The constructor of the class
+     * @deprecated This constructor doesn't support the immediate collocation of the worker on the map
+     * Use {@link #Worker(String, Square)}
      * @param namePlayer represents the nickname of the Player
      */
+    @Deprecated(since = "17/04/2020", forRemoval = true)
     public  Worker (String namePlayer){
         this.namePlayer=namePlayer;
+    }
+
+    /**
+     * Creates a new worker and positions it on the map on the given square
+     * @param namePlayer represents the nickname of the Player
+     * @param position the square where to collocates the worker
+     */
+    public Worker (String namePlayer, Square position){
+        this.namePlayer = namePlayer;
+        this.position = position;
+        position.setPresentWorker(true);
     }
 
     /**
@@ -83,10 +96,37 @@ public class Worker implements Serializable, WorkerObserver, Cloneable {
         activeGods.add(message);
     }
 
+    public void removeGod(Card card){
+        activeGods.remove(Gods.getGodFromCard(card));
+    }
+
     @Override
     public void updatePosition(Pair<Square, Square> message) {
         if (position.equals(message.getValue0())){
             setPosition(message.getValue1());
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj){
+            return true;
+        }
+
+        if (obj == null || obj.getClass() != this.getClass()){
+            return false;
+        }
+
+        Worker worker = (Worker) obj;
+        return ((this.namePlayer.equals(worker.namePlayer)) && (this.inWinningCondition == worker.inWinningCondition) &&
+                (this.position.equals(worker.position)) && (this.activeGods.equals(worker.activeGods)));
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Worker worker = (Worker) super.clone();
+        worker.position = (Square) this.position.clone();
+        worker.activeGods = new ArrayList<>(this.activeGods);
+        return worker;
     }
 }

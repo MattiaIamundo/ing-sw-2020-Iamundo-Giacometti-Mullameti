@@ -1,18 +1,20 @@
 package it.polimi.ingsw.ps51.model;
 
+import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
+import it.polimi.ingsw.ps51.events.events_for_client.MapUpdate;
 import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
+import it.polimi.ingsw.ps51.utility.Observable;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.function.Consumer;
 
 /**
  * Is the game's map
  * @author Mattia Iamundo
  */
-public class Map implements Serializable, Iterable<Square>, Cloneable{
+public class Map extends Observable<EventForClient> implements Serializable, Iterable<Square>, Cloneable{
 
-    private Square[][] map;
+    private Square[][] effectiveMap;
 
     /**
      * This is the standard constructor, it's create a 5x5 map
@@ -20,10 +22,10 @@ public class Map implements Serializable, Iterable<Square>, Cloneable{
      * the origin is in the upper left corner
      */
     public Map(){
-        map = new Square[5][5];
+        effectiveMap = new Square[5][5];
         for (int x=0; x < 5; x++){
             for (int y=0; y < 5; y++){
-                map[y][x] = new Square(new Coordinates(x, y));
+                effectiveMap[y][x] = new Square(new Coordinates(x, y));
             }
         }
     }
@@ -34,10 +36,10 @@ public class Map implements Serializable, Iterable<Square>, Cloneable{
      * @param y the number o rows
      */
     public Map(int x, int y){
-        map = new Square[y][x];
+        effectiveMap = new Square[y][x];
         for (int i=0; i < x; i++){
             for (int k=0; k < y; k++){
-                map[k][i] = new Square(new Coordinates(i, k));
+                effectiveMap[k][i] = new Square(new Coordinates(i, k));
             }
         }
     }
@@ -50,10 +52,10 @@ public class Map implements Serializable, Iterable<Square>, Cloneable{
      * @throws OutOfMapException if the given coordinate indicates a point outside the map
      */
     public Square getSquare(Integer x , Integer y) throws OutOfMapException {
-        if ((x < 0) || (y < 0) || (y >= map.length) || (x >= map[y].length)){
+        if ((x < 0) || (y < 0) || (y >= effectiveMap.length) || (x >= effectiveMap[y].length)){
             throw new OutOfMapException(x, y);
         }else {
-            return map[y][x];
+            return effectiveMap[y][x];
         }
     }
 
@@ -105,10 +107,20 @@ public class Map implements Serializable, Iterable<Square>, Cloneable{
     public boolean isThisPerimeterSquare(Square square){
         Coordinates coordinates = square.getCoordinates();
 
-        return (coordinates.getX() == 0) || (coordinates.getY() == 0) || (coordinates.getX() == map.length - 1)
-                || (coordinates.getY() == map[0].length - 1);
+        return (coordinates.getX() == 0) || (coordinates.getY() == 0) || (coordinates.getX() == effectiveMap.length - 1)
+                || (coordinates.getY() == effectiveMap[0].length - 1);
     }
 
+    /**
+     * The method notify all the players that the map has been changed, to the clients is sent a deep copy of the map
+     */
+    public void notifyMapUpdate(){
+        try {
+            notify(new MapUpdate((Map) this.clone()));
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * The class create an iterator for the map that scans it from left to right top down
@@ -166,7 +178,7 @@ public class Map implements Serializable, Iterable<Square>, Cloneable{
      */
     @Override
     public Iterator<Square> iterator() {
-        return new MapIterator(map);
+        return new MapIterator(effectiveMap);
     }
 
     @Override
@@ -180,9 +192,9 @@ public class Map implements Serializable, Iterable<Square>, Cloneable{
         }
 
         Map itsMap = (Map) obj;
-        for (int y=0; y < itsMap.map.length; y++){
-            for (int x=0; x < itsMap.map[y].length; x++){
-                if (!itsMap.map[y][x].equals(map[y][x])){
+        for (int y = 0; y < itsMap.effectiveMap.length; y++){
+            for (int x = 0; x < itsMap.effectiveMap[y].length; x++){
+                if (!itsMap.effectiveMap[y][x].equals(effectiveMap[y][x])){
                     return false;
                 }
             }
@@ -193,10 +205,10 @@ public class Map implements Serializable, Iterable<Square>, Cloneable{
     @Override
     protected Object clone() throws CloneNotSupportedException {
         Map newMap = (Map) super.clone();
-        newMap.map = new Square[this.map.length][this.map[0].length];
-        for (int y = 0; y < newMap.map.length; y++){
-            for (int x = 0; x < newMap.map[y].length; x++){
-                newMap.map[y][x] = (Square) this.map[y][x].clone();
+        newMap.effectiveMap = new Square[this.effectiveMap.length][this.effectiveMap[0].length];
+        for (int y = 0; y < newMap.effectiveMap.length; y++){
+            for (int x = 0; x < newMap.effectiveMap[y].length; x++){
+                newMap.effectiveMap[y][x] = (Square) this.effectiveMap[y][x].clone();
             }
         }
 
