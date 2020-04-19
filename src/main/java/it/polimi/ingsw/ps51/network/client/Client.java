@@ -14,23 +14,25 @@ import java.net.Socket;
 public class Client implements Runnable {
 
     private Supporter s;
-    private String url;
-    private Integer port;
+    String url;
+    Integer port;
 
     /**
      * Constructor
      * Here the Supporter is created
      * @param i 0 if the user wants a Cli
      */
-    public Client(Integer i) {
-        this.url = "127.0.0.1";
-        this.port = 20000;
+    public Client(Integer i, String url, Integer port) {
+        this.url = url;
+        this.port = port;
 
         if (i == 0)
             s = new Cli();
-        //else
-        //    s = new Gui();
-
+ /*       else if (i == 1)
+            s = new Gui();
+        else
+            s = new Bot();
+  */
     }
 
     /**

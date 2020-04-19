@@ -15,7 +15,7 @@ public class StartApplicationServer {
     public static void main(String[] args) {
         try {
             MainServer mainServer = new MainServer();
-            ServerSocket ss = new ServerSocket(mainServer);
+            ServerSocket ss = new ServerSocket(mainServer, 20000);
             Thread t1 = new Thread(mainServer);
             Thread t2 = new Thread(ss);
             t2.start();

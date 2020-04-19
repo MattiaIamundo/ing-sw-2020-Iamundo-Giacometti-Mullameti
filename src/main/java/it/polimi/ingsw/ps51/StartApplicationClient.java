@@ -31,7 +31,7 @@ public class StartApplicationClient {
             }
         }
         */
-        Client client = new Client(0);
+        Client client = new Client(0, "127.0.0.1", 20000);
         Thread t = new Thread(client);
         t.start();
     }

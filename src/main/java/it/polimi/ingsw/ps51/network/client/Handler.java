@@ -15,7 +15,7 @@ import it.polimi.ingsw.ps51.view.Supporter;
 public class Handler extends Observable<EventForClient> implements Runnable, Observer<EventForServer>{
 
     private boolean isFinished;
-    private ClientInterface connection;
+    ClientInterface connection;
 
     /**
      * Constructor

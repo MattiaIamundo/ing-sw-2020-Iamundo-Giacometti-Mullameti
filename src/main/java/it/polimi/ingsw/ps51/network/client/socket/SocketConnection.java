@@ -20,8 +20,8 @@ import java.net.Socket;
 public class SocketConnection implements ClientInterface {
 
     Socket connection;
-    private ObjectOutputStream oos;
-    private ObjectInputStream ois;
+    ObjectOutputStream oos;
+    ObjectInputStream ois;
 
     /**
      * Constructor

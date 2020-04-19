@@ -18,9 +18,9 @@ public class ServerSocket implements Runnable{
      * @param mainServer the central server
      * @throws IOException it is thrown if the server socket has got some problem with the port number
      */
-    public ServerSocket(MainServer mainServer) throws IOException {
+    public ServerSocket(MainServer mainServer, Integer port) throws IOException {
         this.mainServer = mainServer;
-        this.ss = new java.net.ServerSocket(20000);
+        this.ss = new java.net.ServerSocket(port);
     }
 
     /**

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.ps51.network.server;
 
 import it.polimi.ingsw.ps51.controller.Game;
-import it.polimi.ingsw.ps51.events.events_for_client.NumberOfPlayer;
 import it.polimi.ingsw.ps51.model.Player;
 import it.polimi.ingsw.ps51.model.Playground;
 
@@ -20,9 +19,9 @@ public class MainServer implements Runnable{
 
     private Integer numberOfPlayer;
     private final Object objectToSynchronized = new Object();
-    private List<String> allNicknamesOfPlayers;
-    private List<String> actualNicknameInSearchOfRoom;
-    private Map<String,ServerInterface> mapOfNicknameAndServerInterface;
+    List<String> allNicknamesOfPlayers;
+    List<String> actualNicknameInSearchOfRoom;
+    Map<String,ServerInterface> mapOfNicknameAndServerInterface;
 
     /**
      * Constructor
