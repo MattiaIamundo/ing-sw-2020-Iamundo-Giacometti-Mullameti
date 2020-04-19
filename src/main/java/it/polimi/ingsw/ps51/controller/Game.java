@@ -190,7 +190,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
         switch (message){
             case END_TURN:
                 actualPlayer = gameRoom.getNextPlayer();
-                godControllersMap.get(actualPlayer).start();
+                getActualController().start();
                 break;
             case LOSER:
                 notify(new Lose(actualPlayer.getNickname()));
@@ -198,11 +198,10 @@ public class Game extends Observable<EventForClient> implements GameObserver {
                     Player toRemove = actualPlayer;
                     actualPlayer = gameRoom.getNextPlayer();
                     gameRoom.removePlayer(toRemove);
-                    godControllersMap.get(actualPlayer).start();
+                    getActualController().start();
                 }else {
-                    int loserIndex = gameRoom.getPlayers().indexOf(actualPlayer);
-                    int winnerIndex = (loserIndex + 1) % gameRoom.getPlayers().size();
-                    notify(new Win(gameRoom.getPlayers().get(winnerIndex).getNickname()));
+                    actualPlayer = gameRoom.getNextPlayer();
+                    notify(new Win(actualPlayer.getNickname()));
                 }
                 break;
             case WINNER:

@@ -72,14 +72,7 @@ public class Room extends Observable<EventForServer> implements Runnable, Observ
 
     @Override
     public void run() {
-
-        while (firstPhase) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        game.startGame();
 
         while (!isFinish) {
             try {
