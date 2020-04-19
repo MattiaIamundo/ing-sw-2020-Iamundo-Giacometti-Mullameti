@@ -12,18 +12,8 @@ public class VisitorController implements VisitorServer {
     }
 
     @Override
-    public void visitNickname(Nickname event) {
-
-    }
-
-    @Override
     public void visitMoveChoice(MoveChoice event) {
         game.getActualController().manageMoveChoice(event.getMoveTo());
-    }
-
-    @Override
-    public void visitNumberOfPlayer(NumberOfPlayers event) {
-
     }
 
     @Override

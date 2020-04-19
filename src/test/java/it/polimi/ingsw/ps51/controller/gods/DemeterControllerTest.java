@@ -1,7 +1,6 @@
 package it.polimi.ingsw.ps51.controller.gods;
 
 import it.polimi.ingsw.ps51.events.ControllerToGame;
-import it.polimi.ingsw.ps51.events.Event;
 import it.polimi.ingsw.ps51.events.events_for_client.ChooseBuild;
 import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
 import it.polimi.ingsw.ps51.events.events_for_client.MakeDecision;

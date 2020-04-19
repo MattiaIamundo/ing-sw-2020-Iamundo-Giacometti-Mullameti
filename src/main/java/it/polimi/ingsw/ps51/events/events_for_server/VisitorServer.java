@@ -15,10 +15,6 @@ public interface VisitorServer {
 
     void visitMoveChoice(MoveChoice event);
 
-    void visitNickname(Nickname event);
-
-    void visitNumberOfPlayer(NumberOfPlayers event);
-
     void visitWorkerChoice(WorkerChoice event);
 
     void visitWorkerPosition(WorkerPosition event);
