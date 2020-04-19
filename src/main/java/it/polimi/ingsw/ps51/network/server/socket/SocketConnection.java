@@ -23,12 +23,12 @@ public class SocketConnection implements Runnable, ServerInterface {
 
     private boolean isFinish;
     private boolean firstPhase;
-    private Socket connection;
+    Socket connection;
     private String nickname;
     private Room gameRoom;
-    private ObjectOutputStream oos;
-    private MainServer mainServer;
-    private ObjectInputStream ois;
+    ObjectOutputStream oos;
+    MainServer mainServer;
+    ObjectInputStream ois;
 
     /**
      * Constructor
@@ -105,12 +105,8 @@ public class SocketConnection implements Runnable, ServerInterface {
                         Nickname nickname = (Nickname) this.ois.readObject();
                         ok = true;
                         synchronized (this.mainServer.getObjectToSynchronized()) {
-                            for (String s : this.mainServer.getAllNicknamesOfPlayers()) {
-                                if (s.equals(nickname.getNickname())) {
-                                    ok = false;
-                                    break;
-                                }
-                            }
+
+                            ok = this.mainServer.checkName(nickname.getNickname());
 
                             if (ok) {
                                 firstPhase = false;
@@ -124,21 +120,18 @@ public class SocketConnection implements Runnable, ServerInterface {
                     }
 
                     if (ok) {
-                        boolean eventSent = false;
+
+                        boolean first;
                         synchronized (this.mainServer.getObjectToSynchronized()) {
-                            if (this.mainServer.getActualNicknameInSearchOfRoom().size() == 1 &&
-                                    this.mainServer.getActualNicknameInSearchOfRoom().get(0).equals(this.nickname)) {
-                                sendEvent(new NumberOfPlayer("client"));
-                                eventSent = true;
-                            }
+                            first = this.mainServer.iMFirst(this.nickname);
+                            if (first) sendEvent(new NumberOfPlayer("client"));
                         }
 
-                        if (eventSent) {
+                        if (first) {
                             try {
                                 NumberOfPlayers numberOfPlayers = (NumberOfPlayers) this.ois.readObject();
 
                                 synchronized (this.mainServer.getObjectToSynchronized()) {
-
                                     this.mainServer.setNumberOfPlayer(numberOfPlayers.getPlayerNumber());
                                 }
 
@@ -152,6 +145,7 @@ public class SocketConnection implements Runnable, ServerInterface {
             }//END WHILE FIRST PHASE
         } catch (NullPointerException e) {
             e.printStackTrace();
+            if (!this.nickname.isEmpty()) this.mainServer.removeNickname(this.nickname);
             sendEvent(new Disconnection());
             isFinish = true;
         }

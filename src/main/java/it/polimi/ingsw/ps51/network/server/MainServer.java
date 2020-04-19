@@ -1,13 +1,11 @@
 package it.polimi.ingsw.ps51.network.server;
 
 import it.polimi.ingsw.ps51.controller.Game;
+import it.polimi.ingsw.ps51.events.events_for_client.NumberOfPlayer;
 import it.polimi.ingsw.ps51.model.Player;
 import it.polimi.ingsw.ps51.model.Playground;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class represents the central server which handles:
@@ -100,6 +98,46 @@ public class MainServer implements Runnable{
         this.getActualNicknameInSearchOfRoom().add(s);
         this.getAllNicknamesOfPlayers().add(s);
         this.mapOfNicknameAndServerInterface.put(s,serverInterface);
+    }
+
+    /**
+     * This method check if the nickname choose by the user is
+     * already used or not inside the list of all nickname present
+     * @param nickToCheck the nickname to be checked
+     * @return true if the nickname is not already present
+     *          false if it is already present
+     */
+    public synchronized boolean checkName(String nickToCheck) {
+        for (String s : getAllNicknamesOfPlayers()) {
+            if (s.equals(nickToCheck)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * This method checks in the list of nickname which are in search of
+     * a game if the nickname passed as parameter is the first one or not
+     * @param nickname the nickname of the user
+     * @return true if it is the first of the list
+     *          false if it is not
+     */
+    public synchronized boolean iMFirst(String nickname) {
+        return getActualNicknameInSearchOfRoom().size() == 1 &&
+                getActualNicknameInSearchOfRoom().get(0).equals(nickname);
+    }
+
+    /**
+     * This method removes from all the list which contains it
+     * @param nickname the nickname to remove from the server
+     */
+    public synchronized void removeNickname(String nickname) {
+        allNicknamesOfPlayers.remove(nickname);
+        actualNicknameInSearchOfRoom.remove(nickname);
+        ServerInterface si = mapOfNicknameAndServerInterface.get(nickname);
+        si.closeConnection();
+        mapOfNicknameAndServerInterface.remove(nickname, si);
     }
 
     /**

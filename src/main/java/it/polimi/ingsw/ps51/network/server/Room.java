@@ -17,10 +17,9 @@ import java.util.*;
 public class Room extends Observable<EventForServer> implements Runnable, Observer<EventForClient> {
 
     private boolean isFinish;
-    private boolean firstPhase;
     private Game game;
-    private List<String> nicknames;
-    private Map<String,ServerInterface> mapOfNicknameAndServerInterface;
+    List<String> nicknames;
+    Map<String,ServerInterface> mapOfNicknameAndServerInterface;
 
     /**
      * Constructor
@@ -28,7 +27,6 @@ public class Room extends Observable<EventForServer> implements Runnable, Observ
      * @param map the association between the nickname and the server interface which the client is using
      */
     public Room(List<String> nick, Map<String,ServerInterface> map) {
-        this.firstPhase = true;
         this.isFinish = false;
         this.nicknames = new ArrayList<>();
         this.nicknames.addAll(nick);
@@ -70,6 +68,10 @@ public class Room extends Observable<EventForServer> implements Runnable, Observ
 
     }
 
+    /**
+     * Here the game is started and the room is continuing sleeping
+     * until the end of the game or a disconnection of a player
+     */
     @Override
     public void run() {
         game.startGame();

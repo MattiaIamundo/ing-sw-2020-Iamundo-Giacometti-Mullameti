@@ -10,8 +10,8 @@ import java.io.IOException;
  */
 public class ServerSocket implements Runnable{
 
-    private MainServer mainServer;
-    private java.net.ServerSocket ss;
+    MainServer mainServer;
+    java.net.ServerSocket ss;
 
     /**
      * Constructor
