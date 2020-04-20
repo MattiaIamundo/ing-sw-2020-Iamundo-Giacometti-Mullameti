@@ -88,14 +88,6 @@ public class SocketConnection implements Runnable, ServerInterface {
             this.oos.writeObject(event);
         } catch (IOException e) {
             e.printStackTrace();
-            /*
-            if (this.nickname == null);
-            else if (!this.ok) {
-
-            }
-            else {}
-
-             */
         }
     }
 
@@ -110,7 +102,7 @@ public class SocketConnection implements Runnable, ServerInterface {
         try {
             this.oos.close();
         } catch (IOException e) {
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         try {
             this.ois.close();
@@ -166,7 +158,7 @@ public class SocketConnection implements Runnable, ServerInterface {
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-            //this.gameRoom.notify(new it.polimi.ingsw.ps51.events.events_for_server.Disconnection(this.nickname));
+            this.gameRoom.update(new it.polimi.ingsw.ps51.events.events_for_server.Disconnection(this.nickname));
         }
 
     }

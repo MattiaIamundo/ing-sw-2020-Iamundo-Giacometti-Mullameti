@@ -2,9 +2,10 @@ package it.polimi.ingsw.ps51.network.server;
 
 import it.polimi.ingsw.ps51.controller.Game;
 import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
+import it.polimi.ingsw.ps51.events.events_for_server.Disconnection;
 import it.polimi.ingsw.ps51.events.events_for_server.EventForServer;
 import it.polimi.ingsw.ps51.utility.Observable;
-import it.polimi.ingsw.ps51.utility.Observer;
+import it.polimi.ingsw.ps51.utility.RoomObserver;
 
 import java.util.*;
 
@@ -14,7 +15,7 @@ import java.util.*;
  * and the references to the server interfaces
  * @author Luca Giacometti
  */
-public class Room extends Observable<EventForServer> implements Runnable, Observer<EventForClient> {
+public class Room extends Observable<EventForServer> implements Runnable, RoomObserver {
 
     private boolean isFinish;
     private Game game;
@@ -87,5 +88,20 @@ public class Room extends Observable<EventForServer> implements Runnable, Observ
         for( String s : this.nicknames) {
             this.mapOfNicknameAndServerInterface.get(s).closeConnection();
         }
+    }
+
+    /**
+     * This update create a Disconnection event for each client
+     * and set the condition to finish the game
+     * @param disconnection the event which contains the nickname of the player which is
+     *                      disconnected by the game
+     */
+    @Override
+    public void update(Disconnection disconnection) {
+        for(String s : this.nicknames) {
+            if (!s.equals(disconnection.getPlayerDisconnected()))
+                mapOfNicknameAndServerInterface.get(s).sendEvent(new it.polimi.ingsw.ps51.events.events_for_client.Disconnection());
+        }
+        this.isFinish = true;
     }
 }
