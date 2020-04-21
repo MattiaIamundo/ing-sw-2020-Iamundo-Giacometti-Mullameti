@@ -1,0 +1,158 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: SocketConnection</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.network.client.socket</a> ]
+</div>
+
+<h1>Coverage Summary for Class: SocketConnection (it.polimi.ingsw.ps51.network.client.socket)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SocketConnection</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 25)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.network.client.socket;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_client.Disconnection;
+<i>4</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
+<i>5</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_server.EventForServer;
+<i>6</i>&nbsp;import it.polimi.ingsw.ps51.network.client.ClientInterface;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;import java.io.IOException;
+<i>9</i>&nbsp;import java.io.ObjectInputStream;
+<i>10</i>&nbsp;import java.io.ObjectOutputStream;
+<i>11</i>&nbsp;import java.net.Socket;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;/**
+<i>14</i>&nbsp; * This class represents the connection with the socket
+<i>15</i>&nbsp; * here there are:
+<i>16</i>&nbsp; * the socket,
+<i>17</i>&nbsp; * the streams to communicate with the server
+<i>18</i>&nbsp; * @author Luca Giacometti
+<i>19</i>&nbsp; */
+<i>20</i>&nbsp;public class SocketConnection implements ClientInterface {
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    Socket connection;
+<i>23</i>&nbsp;    ObjectOutputStream oos;
+<i>24</i>&nbsp;    ObjectInputStream ois;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    /**
+<i>27</i>&nbsp;     * Constructor
+<i>28</i>&nbsp;     * @param socket the socket connection
+<i>29</i>&nbsp;     */
+<b class="nc"><i>30</i>&nbsp;    public SocketConnection(Socket socket) throws IOException {</b>
+<b class="nc"><i>31</i>&nbsp;        this.connection = socket;</b>
+<b class="nc"><i>32</i>&nbsp;        this.oos = new ObjectOutputStream(this.connection.getOutputStream());</b>
+<b class="nc"><i>33</i>&nbsp;        this.ois = new ObjectInputStream(this.connection.getInputStream());</b>
+<i>34</i>&nbsp;    }
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;    @Override
+<i>37</i>&nbsp;    public boolean sendEvent(EventForServer event) {
+<i>38</i>&nbsp;        try {
+<b class="nc"><i>39</i>&nbsp;            this.oos.writeObject(event);</b>
+<b class="nc"><i>40</i>&nbsp;            return true;</b>
+<b class="nc"><i>41</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>42</i>&nbsp;            e.printStackTrace();</b>
+<i>43</i>&nbsp;        }
+<b class="nc"><i>44</i>&nbsp;        return false;</b>
+<i>45</i>&nbsp;    }
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    @Override
+<i>48</i>&nbsp;    public EventForClient receiveEvent() {
+<i>49</i>&nbsp;        try {
+<b class="nc"><i>50</i>&nbsp;            return (EventForClient) this.ois.readObject();</b>
+<b class="nc"><i>51</i>&nbsp;        } catch (IOException | ClassNotFoundException e) {</b>
+<b class="nc"><i>52</i>&nbsp;            e.printStackTrace();</b>
+<i>53</i>&nbsp;        }
+<b class="nc"><i>54</i>&nbsp;        return new Disconnection();</b>
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    @Override
+<i>58</i>&nbsp;    public void closeConnection() {
+<i>59</i>&nbsp;        try {
+<b class="nc"><i>60</i>&nbsp;            this.oos.close();</b>
+<b class="nc"><i>61</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>62</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>63</i>&nbsp;        }</b>
+<i>64</i>&nbsp;        try {
+<b class="nc"><i>65</i>&nbsp;            this.ois.close();</b>
+<b class="nc"><i>66</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>67</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>68</i>&nbsp;        }</b>
+<i>69</i>&nbsp;        try {
+<b class="nc"><i>70</i>&nbsp;            this.connection.close();</b>
+<b class="nc"><i>71</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>72</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>73</i>&nbsp;        }</b>
+<i>74</i>&nbsp;    }
+<i>75</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-21 10:29</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,113 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ChooseBuild</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.events.events_for_client</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ChooseBuild (it.polimi.ingsw.ps51.events.events_for_client)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ChooseBuild</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66,7%
+  </span>
+  <span class="absValue">
+    (2/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66,7%
+  </span>
+  <span class="absValue">
+    (4/ 6)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.events.events_for_client;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.ps51.model.Coordinates;
+<i>4</i>&nbsp;import it.polimi.ingsw.ps51.model.Level;
+<i>5</i>&nbsp;import org.javatuples.Pair;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;import java.util.List;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;/**
+<i>10</i>&nbsp; * Event that carries the list of the of the valid combinations of coordinates and level
+<i>11</i>&nbsp; * where a new level of a tower can be built
+<i>12</i>&nbsp; */
+<i>13</i>&nbsp;public class ChooseBuild extends SpecificUserEvent implements EventForClient{
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;    private List&lt;Pair&lt;Coordinates, List&lt;Level&gt;&gt;&gt; validChoices;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    public ChooseBuild(List&lt;Pair&lt;Coordinates, List&lt;Level&gt;&gt;&gt; validChoices, String receiver) {
+<b class="fc"><i>18</i>&nbsp;        super(receiver);</b>
+<b class="fc"><i>19</i>&nbsp;        this.validChoices = validChoices;</b>
+<b class="fc"><i>20</i>&nbsp;    }</b>
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    public List&lt;Pair&lt;Coordinates, List&lt;Level&gt;&gt;&gt; getValidChoices() {
+<b class="fc"><i>23</i>&nbsp;        return validChoices;</b>
+<i>24</i>&nbsp;    }
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    @Override
+<i>27</i>&nbsp;    public void acceptVisitor(VisitorClient visitor) {
+<b class="nc"><i>28</i>&nbsp;        visitor.visitChooseBuild(this);</b>
+<b class="nc"><i>29</i>&nbsp;    }</b>
+<i>30</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-21 10:29</div>
+</div>
+</body>
+</html>

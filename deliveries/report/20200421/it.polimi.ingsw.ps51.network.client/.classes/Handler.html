@@ -1,0 +1,149 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Handler</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.network.client</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Handler (it.polimi.ingsw.ps51.network.client)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Handler</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 19)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.network.client;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_client.Disconnection;
+<i>4</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
+<i>5</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_server.EventForServer;
+<i>6</i>&nbsp;import it.polimi.ingsw.ps51.utility.Observable;
+<i>7</i>&nbsp;import it.polimi.ingsw.ps51.utility.Observer;
+<i>8</i>&nbsp;import it.polimi.ingsw.ps51.view.Supporter;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;/**
+<i>11</i>&nbsp; * This class represents the link between the type of connection {@link ClientInterface}
+<i>12</i>&nbsp; * and the the type of view chose by the user {@link Supporter}
+<i>13</i>&nbsp; * @author Luca Giacometti
+<i>14</i>&nbsp; */
+<i>15</i>&nbsp;public class Handler extends Observable&lt;EventForClient&gt; implements Runnable, Observer&lt;EventForServer&gt;{
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    private boolean isFinished;
+<i>18</i>&nbsp;    ClientInterface connection;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    /**
+<i>21</i>&nbsp;     * Constructor
+<i>22</i>&nbsp;     * @param connection the type of connection
+<i>23</i>&nbsp;     */
+<b class="nc"><i>24</i>&nbsp;    public Handler(ClientInterface connection) {</b>
+<b class="nc"><i>25</i>&nbsp;        this.connection = connection;</b>
+<b class="nc"><i>26</i>&nbsp;        this.isFinished = false;</b>
+<i>27</i>&nbsp;    }
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    /**
+<i>30</i>&nbsp;     * Here the Handler handles the communication with the server
+<i>31</i>&nbsp;     * it is always waiting an event with the method receiveEvent
+<i>32</i>&nbsp;     * so the thread is blocked in it until the arrive of an event.
+<i>33</i>&nbsp;     * Therefore, it is propagated to the {@link Supporter}
+<i>34</i>&nbsp;     */
+<i>35</i>&nbsp;    @Override
+<i>36</i>&nbsp;    public void run() {
+<i>37</i>&nbsp;
+<b class="nc"><i>38</i>&nbsp;        while (!isFinished) {</b>
+<b class="nc"><i>39</i>&nbsp;            EventForClient event = connection.receiveEvent();</b>
+<b class="nc"><i>40</i>&nbsp;            if (event != null) {</b>
+<b class="nc"><i>41</i>&nbsp;                notify(event);</b>
+<b class="nc"><i>42</i>&nbsp;                if(event.getReceiver().equals(&quot;END&quot;) || event.getReceiver().equals(&quot;DISCONNECTION&quot;))</b>
+<b class="nc"><i>43</i>&nbsp;                    isFinished = true;</b>
+<i>44</i>&nbsp;            }
+<i>45</i>&nbsp;            else {
+<b class="nc"><i>46</i>&nbsp;                isFinished = true;</b>
+<b class="nc"><i>47</i>&nbsp;                Disconnection d = new Disconnection();</b>
+<b class="nc"><i>48</i>&nbsp;                notify(d);</b>
+<i>49</i>&nbsp;            }
+<b class="nc"><i>50</i>&nbsp;        }</b>
+<i>51</i>&nbsp;
+<b class="nc"><i>52</i>&nbsp;        connection.closeConnection();</b>
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    }
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    public void update(EventForServer message) {
+<b class="nc"><i>58</i>&nbsp;        boolean ok = connection.sendEvent(message);</b>
+<b class="nc"><i>59</i>&nbsp;        if (!ok) {</b>
+<b class="nc"><i>60</i>&nbsp;            isFinished = true;</b>
+<b class="nc"><i>61</i>&nbsp;            notify(new Disconnection());</b>
+<b class="nc"><i>62</i>&nbsp;            connection.closeConnection();</b>
+<i>63</i>&nbsp;        }
+<i>64</i>&nbsp;    }
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-21 10:29</div>
+</div>
+</body>
+</html>

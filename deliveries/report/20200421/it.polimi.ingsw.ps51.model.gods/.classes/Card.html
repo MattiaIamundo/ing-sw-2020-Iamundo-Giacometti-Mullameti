@@ -1,0 +1,98 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Card</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.model.gods</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Card (it.polimi.ingsw.ps51.model.gods)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">Card</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.model.gods;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.ps51.model.*;
+<i>4</i>&nbsp;import org.javatuples.Pair;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import java.util.List;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;/**
+<i>9</i>&nbsp; * This interface express the mandatory methods for each God card whom must implements this interface directly
+<i>10</i>&nbsp; * or in an indirect way through the abstract class that them extends
+<i>11</i>&nbsp; */
+<i>12</i>&nbsp;public interface Card {
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    /**
+<i>15</i>&nbsp;     * check where the selected worker can be moved
+<i>16</i>&nbsp;     * @param player the player who is playing his game turn
+<i>17</i>&nbsp;     * @param worker the selected worker
+<i>18</i>&nbsp;     * @param map the game map
+<i>19</i>&nbsp;     * @return a List of the Coordinates where the selected worker can be moved
+<i>20</i>&nbsp;     */
+<i>21</i>&nbsp;    List&lt;Coordinates&gt; checkMoves(Player player, Worker worker, Map map);
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;    /**
+<i>24</i>&nbsp;     * moves the selected worker in the desired position
+<i>25</i>&nbsp;     * @param player the player who is playing his game turn
+<i>26</i>&nbsp;     * @param worker the selected worker
+<i>27</i>&nbsp;     * @param position the chosen position, must be one of those contained in the List returned by checkMoves
+<i>28</i>&nbsp;     * @param map the game map
+<i>29</i>&nbsp;     */
+<i>30</i>&nbsp;    void move(Player player, Worker worker, Square position, Map map);
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    /**
+<i>33</i>&nbsp;     * checks where the selected worker can build and at which height
+<i>34</i>&nbsp;     * @param worker the selected worker
+<i>35</i>&nbsp;     * @param map the game map
+<i>36</i>&nbsp;     * @return a List of Pair, each Pair contains a Coordinates, where the worker can build, and a Level that indicates
+<i>37</i>&nbsp;     *         which level the worker can build
+<i>38</i>&nbsp;     */
+<i>39</i>&nbsp;    List&lt;Pair&lt;Coordinates, List&lt;Level&gt;&gt;&gt; checkBuild(Worker worker, Map map);
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    /**
+<i>42</i>&nbsp;     * build a level on the desired square
+<i>43</i>&nbsp;     * @param worker the selected worker
+<i>44</i>&nbsp;     * @param position the position where the worker chose to build
+<i>45</i>&nbsp;     * @param level the level that the worker chose to build
+<i>46</i>&nbsp;     * @param map the game map
+<i>47</i>&nbsp;     */
+<i>48</i>&nbsp;    void build(Worker worker, Square position, Level level, Map map);
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-21 10:29</div>
+</div>
+</body>
+</html>
