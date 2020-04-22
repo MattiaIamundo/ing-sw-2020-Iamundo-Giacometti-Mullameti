@@ -1,7 +1,11 @@
 package it.polimi.ingsw.ps51.model;
 
+import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
+import it.polimi.ingsw.ps51.events.events_for_client.MapUpdate;
 import it.polimi.ingsw.ps51.model.gods.CommonAction;
 import it.polimi.ingsw.ps51.model.gods.Gods;
+import it.polimi.ingsw.ps51.utility.Observable;
+import it.polimi.ingsw.ps51.utility.SquareObserver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +13,7 @@ import java.util.List;
 /**
  * This is the main class of the model and represents the actual sate of the game
  */
-public class Playground {
+public class Playground extends Observable<EventForClient> implements SquareObserver {
 
     private Map boardMap;
     private List<Player> players;
@@ -19,6 +23,7 @@ public class Playground {
 
     public Playground(List<Player> players){
         boardMap = new Map();
+        boardMap.addObservers(this);
         this.players = players;
         log = new MemoryTurn();
         actualTurn = 0;
@@ -84,5 +89,21 @@ public class Playground {
         }
 
         players.remove(player);
+    }
+
+    @Override
+    public void mapUpdated() {
+        List<Worker> workers = new ArrayList<>();
+
+        try {
+            for (Player player : players){
+                for (Worker worker : player.getWorkers()){
+                    workers.add((Worker) worker.clone());
+                }
+            }
+            notify(new MapUpdate(((Map) boardMap.clone()), workers));
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
     }
 }

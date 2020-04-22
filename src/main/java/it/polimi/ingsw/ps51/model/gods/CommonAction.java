@@ -64,7 +64,7 @@ public abstract class CommonAction extends Observable implements Card {
         if (checkMoves(player, worker, map).contains(position.getCoordinates())){
             Square oldPosition = worker.getPosition();
             worker.setPosition(position);
-            map.notifyMapUpdate();
+            position.notifyChange();
             if (position.getLevel().equals(Level.THIRD) && oldPosition.getLevel().ordinal() < Level.THIRD.ordinal()){
                 worker.setInWinningCondition(true);
             }
@@ -78,7 +78,7 @@ public abstract class CommonAction extends Observable implements Card {
                 position.setLevel(level);
             }
         }
-        map.notifyMapUpdate();
+        position.notifyChange();
     }
 
     /**

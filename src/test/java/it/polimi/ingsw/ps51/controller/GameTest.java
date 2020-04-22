@@ -66,6 +66,7 @@ public class GameTest {
 
         assertNotNull(stub.event);
         assertTrue(stub.event instanceof ChooseGodsDeck);
+        assertEquals(3, ((ChooseGodsDeck) stub.event).getGodsNum());
     }
 
     @Test

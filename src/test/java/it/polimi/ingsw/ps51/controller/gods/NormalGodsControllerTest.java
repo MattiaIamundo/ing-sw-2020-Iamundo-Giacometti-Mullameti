@@ -18,6 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 public class NormalGodsControllerTest {
 
@@ -59,23 +60,23 @@ public class NormalGodsControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        map = new Map();
-        game = new PhantomGame();
-        card = new SimpleGod();
-        receiver = new MessageReceiver();
         player = new Player("Player");
-        worker1 = new Worker("Player");
-        worker2 = new Worker("Player");
-        player.setWorkers(Arrays.asList(worker1, worker2));
-        controller = new NormalGodsController(card, map, player);
-        controller.addObserver(receiver);
-        controller.addGame(game);
+        Playground playground = new Playground(Collections.singletonList(player));
+        map = playground.getBoardMap();
         try {
-            worker1.setPosition(map.getSquare(3,2));
-            worker2.setPosition(map.getSquare(2,0));
+            worker1 = new Worker("Player", map.getSquare(3,2));
+            worker2 = new Worker("Player", map.getSquare(2,0));
         } catch (OutOfMapException e) {
             e.printStackTrace();
         }
+        player.setWorkers(Arrays.asList(worker1, worker2));
+        game = new PhantomGame();
+        card = new SimpleGod();
+        receiver = new MessageReceiver();
+        controller = new NormalGodsController(card, map, player);
+        controller.addObserver(receiver);
+        controller.addGame(game);
+        playground.addObserver(receiver);
     }
 
     @After

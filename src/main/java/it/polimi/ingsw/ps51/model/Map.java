@@ -12,7 +12,7 @@ import java.util.*;
  * Is the game's map
  * @author Mattia Iamundo
  */
-public class Map extends Observable<EventForClient> implements Serializable, Iterable<Square>, Cloneable{
+public class Map implements Serializable, Iterable<Square>, Cloneable{
 
     private Square[][] effectiveMap;
 
@@ -41,6 +41,12 @@ public class Map extends Observable<EventForClient> implements Serializable, Ite
             for (int k=0; k < y; k++){
                 effectiveMap[k][i] = new Square(new Coordinates(i, k));
             }
+        }
+    }
+
+    public void addObservers(Playground observer){
+        for (Square square : this){
+            square.addObserver(observer);
         }
     }
 
@@ -111,16 +117,6 @@ public class Map extends Observable<EventForClient> implements Serializable, Ite
                 || (coordinates.getY() == effectiveMap[0].length - 1);
     }
 
-    /**
-     * The method notify all the players that the map has been changed, to the clients is sent a deep copy of the map
-     */
-    public void notifyMapUpdate(){
-        try {
-            notify(new MapUpdate((Map) this.clone()));
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * The class create an iterator for the map that scans it from left to right top down

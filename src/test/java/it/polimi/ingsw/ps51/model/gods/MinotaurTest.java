@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -19,17 +20,25 @@ public class MinotaurTest {
     Worker worker;
     Worker worker2;
     Player player;
+    Stub stub;
     Worker opponentWorker;
 
     @Before
     public void setUp() throws Exception {
-        map = new Map();
-        card = new Minotaur();
-        worker = new Worker("Player");
-        worker2 = new Worker("Player");
         player = new Player("Player");
+        Playground playground = new Playground(Collections.singletonList(player));
+        map = playground.getBoardMap();
+        try {
+            worker = new Worker("Player", map.getSquare(2,3));
+            worker2 = new Worker("Player", map.getSquare(0,0));
+            opponentWorker = new Worker("Opponent", map.getSquare(3,3));
+        } catch (OutOfMapException e) {
+            e.printStackTrace();
+        }
         player.setWorkers(Arrays.asList(worker, worker2));
-        opponentWorker = new Worker("Opponent");
+        stub = new Stub();
+        playground.addObserver(stub);
+        card = new Minotaur();
         card.addObserver(opponentWorker);
     }
 
@@ -41,6 +50,7 @@ public class MinotaurTest {
         worker2 = null;
         player = null;
         opponentWorker = null;
+        stub = null;
     }
 
     @Test

@@ -20,6 +20,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -64,25 +65,24 @@ public class DemeterControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        map = new Map();
+        player = new Player("Player");
+        Playground playground = new Playground(Collections.singletonList(player));
+        map = playground.getBoardMap();
+        try {
+            worker1 = new Worker("Player", map.getSquare(2,2));
+            worker2 = new Worker("Player", map.getSquare(3,0));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        player.setWorkers(Arrays.asList(worker1, worker2));
         game = new PhantomGame();
         card = new Demeter();
-        player = new Player("Player");
-        worker1 = new Worker("Player");
-        worker2 = new Worker("Player");
-        player.setWorkers(Arrays.asList(worker1, worker2));
         receiver = new MessageReceiver();
         controller = new DemeterController(card, map, player);
         controller.addGame(game);
         controller.addObserver(receiver);
         controller.selectedWorker = worker1;
-
-        try {
-            worker1.setPosition(map.getSquare(2,2));
-            worker2.setPosition(map.getSquare(3,0));
-        } catch (OutOfMapException e) {
-            e.printStackTrace();
-        }
+        playground.addObserver(receiver);
     }
 
     @After

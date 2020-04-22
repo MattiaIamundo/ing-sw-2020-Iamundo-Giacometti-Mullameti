@@ -39,7 +39,7 @@ public class Minotaur extends CommonAction{
 
             notify(new Pair<Square, Square>(position, newPos));
             worker.setPosition(position);
-            map.notifyMapUpdate();
+            position.notifyChange();
         }else {
             super.move(player, worker, position, map);
         }

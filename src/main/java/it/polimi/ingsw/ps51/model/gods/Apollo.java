@@ -43,7 +43,7 @@ public class Apollo extends CommonAction{
                 worker.setPosition(position);
                 notify(new Pair<Square, Square>(position, oldPosition));
                 position.setPresentWorker(true);
-                map.notifyMapUpdate();
+                position.notifyChange();
             }else {
                 super.move(player, worker, position, map);
             }

@@ -9,13 +9,16 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public class CommonActionTest {
     Map map;
     Worker worker;
+    Worker worker2;
     Player player;
+    Stub stub;
     PhantomCard card = new PhantomCard();
 
     private static class PhantomCard extends CommonAction{
@@ -24,16 +27,27 @@ public class CommonActionTest {
 
     @Before
     public void setUp(){
-        map = new Map();
-        worker = new Worker("Player");
         player = new Player("Player");
+        Playground playground = new Playground(Collections.singletonList(player));
+        map = playground.getBoardMap();
+        try {
+            worker = new Worker("Player", map.getSquare(2,2));
+            worker2 = new Worker("Player", map.getSquare(4,4));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        player.setWorkers(Arrays.asList(worker, worker2));
+        stub = new Stub();
+        playground.addObserver(stub);
     }
 
     @After
     public void tearDown(){
         map = null;
         worker = null;
+        worker2 = null;
         player = null;
+        stub = null;
     }
 
     @Test
@@ -218,6 +232,7 @@ public class CommonActionTest {
     public void checkBuild_x3y3_ReturnEightValidPositions() {
         try {
             worker.setPosition(map.getSquare(3,3));
+            worker2.setPosition(map.getSquare(1,3));
             map.getSquare(3,3).setLevel(Level.THIRD);
 
             map.getSquare(2,2).setLevel(Level.SECOND);

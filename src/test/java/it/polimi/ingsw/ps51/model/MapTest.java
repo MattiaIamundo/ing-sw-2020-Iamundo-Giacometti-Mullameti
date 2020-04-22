@@ -496,16 +496,6 @@ public class MapTest {
         }
     }
 
-    @Test
-    public void notifyMapUpdateTest_NewCopySent(){
-        Messagereceiver receiver = new Messagereceiver();
-        map.addObserver(receiver);
-        map.notifyMapUpdate();
-
-        Assert.assertNotNull(receiver.event);
-        Assert.assertTrue(receiver.event instanceof MapUpdate);
-        Assert.assertEquals(map, ((MapUpdate) receiver.event).getMap());
-    }
 
     private class Messagereceiver implements Observer<EventForClient>{
 

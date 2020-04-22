@@ -17,6 +17,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -59,24 +60,24 @@ public class PrometheusControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        map = new Map();
         player = new Player("Player");
-        worker = new Worker("Player");
-        player.setWorkers(Arrays.asList(worker));
+        Playground playground = new Playground(Collections.singletonList(player));
+        map = playground.getBoardMap();
+        try {
+            worker = new Worker("Player", map.getSquare(0,0));
+            map.getSquare(0,1).setLevel(Level.FIRST);
+            map.getSquare(1,0).setLevel(Level.FIRST);
+        } catch (OutOfMapException e) {
+            e.printStackTrace();
+        }
+        player.setWorkers(Collections.singletonList(worker));
         card = new Prometheus();
         receiver = new MessageReceiver();
         game = new PhantomGame();
         controller = new PrometheusController(card, map, player);
         controller.addGame(game);
         controller.addObserver(receiver);
-
-        try {
-            worker.setPosition(map.getSquare(0,0));
-            map.getSquare(0,1).setLevel(Level.FIRST);
-            map.getSquare(1,0).setLevel(Level.FIRST);
-        } catch (OutOfMapException e) {
-            e.printStackTrace();
-        }
+        playground.addObserver(receiver);
     }
 
     @After

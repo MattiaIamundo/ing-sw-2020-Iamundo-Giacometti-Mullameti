@@ -5,8 +5,15 @@ package it.polimi.ingsw.ps51.events.events_for_client;
  */
 public class ChooseGodsDeck extends SpecificUserEvent implements EventForClient{
 
-    public ChooseGodsDeck(String receiver) {
+    private int godsNum;
+
+    public ChooseGodsDeck(String receiver, int godsNum) {
         super(receiver);
+        this.godsNum = godsNum;
+    }
+
+    public int getGodsNum() {
+        return godsNum;
     }
 
     @Override

@@ -1,12 +1,14 @@
 package it.polimi.ingsw.ps51.model;
 
+import it.polimi.ingsw.ps51.utility.SquareChangeNotifier;
+
 import java.io.Serializable;
 
 /**
  * Represent a single square of the game map
  * @author Mattia Iamundo
  */
-public class Square implements Serializable, Cloneable {
+public class Square extends SquareChangeNotifier implements Serializable, Cloneable {
 
     private Level level;
     private Coordinates coordinates;

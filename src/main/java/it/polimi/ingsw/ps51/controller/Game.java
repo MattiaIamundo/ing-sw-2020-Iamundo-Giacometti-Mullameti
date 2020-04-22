@@ -48,7 +48,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
      */
     public void startGame() {
         actualPlayer = gameRoom.getPlayers().get(new Random().nextInt(gameRoom.getPlayers().size()));
-        notify(new ChooseGodsDeck(actualPlayer.getNickname()));
+        notify(new ChooseGodsDeck(actualPlayer.getNickname(), gameRoom.getPlayers().size()));
     }
 
     /**
