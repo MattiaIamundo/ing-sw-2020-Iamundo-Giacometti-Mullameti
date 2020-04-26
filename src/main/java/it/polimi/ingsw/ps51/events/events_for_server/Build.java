@@ -2,6 +2,7 @@ package it.polimi.ingsw.ps51.events.events_for_server;
 
 import it.polimi.ingsw.ps51.model.Coordinates;
 import it.polimi.ingsw.ps51.model.Level;
+import it.polimi.ingsw.ps51.visitor.VisitorForPong;
 import org.javatuples.Pair;
 
 /**
@@ -21,6 +22,11 @@ public class Build implements EventForServer{
 
     @Override
     public void acceptVisitor(VisitorServer visitor) {
+        visitor.visitBuild(this);
+    }
+
+    @Override
+    public void acceptVisitor(VisitorForPong visitor) {
         visitor.visitBuild(this);
     }
 }

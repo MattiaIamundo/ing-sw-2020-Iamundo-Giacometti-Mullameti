@@ -47,7 +47,10 @@ public class SocketConnection implements ClientInterface {
     @Override
     public EventForClient receiveEvent() {
         try {
-            return (EventForClient) this.ois.readObject();
+            this.connection.setSoTimeout(20000);
+            EventForClient event = (EventForClient) this.ois.readObject();
+            this.connection.setSoTimeout(0);
+            return event;
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

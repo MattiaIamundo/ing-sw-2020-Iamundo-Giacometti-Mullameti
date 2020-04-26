@@ -1,8 +1,10 @@
 package it.polimi.ingsw.ps51.network.server;
 
 import it.polimi.ingsw.ps51.controller.Game;
+import it.polimi.ingsw.ps51.events.events_for_client.OutOfRoom;
 import it.polimi.ingsw.ps51.model.Player;
 import it.polimi.ingsw.ps51.model.Playground;
+import it.polimi.ingsw.ps51.network.server.socket.ServerSocket;
 
 import java.util.*;
 
@@ -18,6 +20,7 @@ import java.util.*;
 public class MainServer implements Runnable{
 
     private Integer numberOfPlayer;
+    ServerSocket ss;
     private final Object objectToSynchronized = new Object();
     List<String> allNicknamesOfPlayers;
     List<String> actualNicknameInSearchOfRoom;
@@ -27,7 +30,7 @@ public class MainServer implements Runnable{
      * Constructor
      */
     public MainServer() {
-        this.numberOfPlayer = 2;
+        this.numberOfPlayer = 0;
         this.allNicknamesOfPlayers = new ArrayList<>();
         this.actualNicknameInSearchOfRoom = new ArrayList<>();
         this.mapOfNicknameAndServerInterface = new HashMap<>();
@@ -83,6 +86,10 @@ public class MainServer implements Runnable{
      */
     public synchronized boolean computeTheSizeOfList() {
         synchronized ( getObjectToSynchronized() ) {
+            if ( actualNicknameInSearchOfRoom.size() == 0 && numberOfPlayer != 0)
+                numberOfPlayer = 0;
+            if (this.numberOfPlayer == 0)
+                return true;
             return getActualNicknameInSearchOfRoom().size() < getNumberOfPlayer();
         }
     }
@@ -127,6 +134,10 @@ public class MainServer implements Runnable{
                 getActualNicknameInSearchOfRoom().get(0).equals(nickname);
     }
 
+    public void setSS(ServerSocket ss) {
+        this.ss = ss;
+    }
+
     /**
      * This method removes from all the list which contains it
      * @param nickname the nickname to remove from the server
@@ -150,6 +161,9 @@ public class MainServer implements Runnable{
     @Override
     public void run() {
 
+        Thread t1 = new Thread(ss);
+        t1.start();
+
         while (computeTheSizeOfList()) {
             try {
                 Thread.sleep(1000);
@@ -158,7 +172,20 @@ public class MainServer implements Runnable{
             }
         }
 
+        t1.interrupt();
+
         synchronized ( getObjectToSynchronized() ) {
+
+            //now i have to tell to all the client out the number that they are out of room
+            //and delete that nickname from all the lists
+            while (actualNicknameInSearchOfRoom.size() > numberOfPlayer) {
+                int num = actualNicknameInSearchOfRoom.size();
+                String name = actualNicknameInSearchOfRoom.get(num-1);
+                ServerInterface si = mapOfNicknameAndServerInterface.remove(name);
+                si.sendEvent(new OutOfRoom());
+                si.closeConnection();
+                allNicknamesOfPlayers.remove(name);
+            }
 
             List<String> list = new ArrayList<>(this.actualNicknameInSearchOfRoom);
             Map<String,ServerInterface> stringServerInterfaceMap = new HashMap<>();
@@ -186,7 +213,7 @@ public class MainServer implements Runnable{
             t.start();
 
             this.actualNicknameInSearchOfRoom.clear();
-            this.numberOfPlayer = 2;
+            this.numberOfPlayer = 0;
         }
     }
 }

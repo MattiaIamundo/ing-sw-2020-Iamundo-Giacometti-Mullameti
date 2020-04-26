@@ -1,6 +1,7 @@
 package it.polimi.ingsw.ps51.events.events_for_server;
 
-import it.polimi.ingsw.ps51.visitor.VisitorSocketConnectionServer;
+import it.polimi.ingsw.ps51.visitor.VisitorFirstPhase;
+import it.polimi.ingsw.ps51.visitor.VisitorForPong;
 
 /**
  * Event that carries the number of player of the game, this is chose by the user who creates the match
@@ -23,7 +24,12 @@ public class NumberOfPlayers implements EventForFirstPhase{
     }
 
     @Override
-    public void acceptVisitor(VisitorSocketConnectionServer visitor) {
+    public void acceptVisitor(VisitorForPong visitor) {
+
+    }
+
+    @Override
+    public void acceptVisitor(VisitorFirstPhase visitor) {
         visitor.visitNumberOfPlayer(this);
     }
 }

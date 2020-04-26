@@ -3,6 +3,7 @@ package it.polimi.ingsw.ps51.network.client;
 import it.polimi.ingsw.ps51.events.events_for_client.Disconnection;
 import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
 import it.polimi.ingsw.ps51.events.events_for_server.EventForServer;
+import it.polimi.ingsw.ps51.events.events_for_server.Pong;
 import it.polimi.ingsw.ps51.utility.Observable;
 import it.polimi.ingsw.ps51.utility.Observer;
 import it.polimi.ingsw.ps51.view.Supporter;
@@ -16,6 +17,7 @@ public class Handler extends Observable<EventForClient> implements Runnable, Obs
 
     private boolean isFinished;
     ClientInterface connection;
+    private final Object ob = new Object();
 
     /**
      * Constructor
@@ -38,9 +40,23 @@ public class Handler extends Observable<EventForClient> implements Runnable, Obs
         while (!isFinished) {
             EventForClient event = connection.receiveEvent();
             if (event != null) {
-                notify(event);
-                if(event.getReceiver().equals("END") || event.getReceiver().equals("DISCONNECTION"))
-                    isFinished = true;
+
+                if (event.getReceiver().equals("PING")) {
+                    boolean ok;
+                    synchronized (this.ob) {
+                        ok = connection.sendEvent(new Pong());
+                        if (!ok) {
+                            isFinished = true;
+                            notify(new Disconnection());
+                        }
+                    }
+                }
+                else {
+                    notify(event);
+                    if(event.getReceiver().equals("END") || event.getReceiver().equals("DISCONNECTION"))
+                        isFinished = true;
+                }
+
             }
             else {
                 isFinished = true;
@@ -55,11 +71,13 @@ public class Handler extends Observable<EventForClient> implements Runnable, Obs
 
 
     public void update(EventForServer message) {
-        boolean ok = connection.sendEvent(message);
-        if (!ok) {
-            isFinished = true;
-            notify(new Disconnection());
-            connection.closeConnection();
+        synchronized (this.ob) {
+            boolean ok = connection.sendEvent(message);
+            if (!ok) {
+                isFinished = true;
+                notify(new Disconnection());
+                connection.closeConnection();
+            }
         }
     }
 

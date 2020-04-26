@@ -1,6 +1,7 @@
 package it.polimi.ingsw.ps51.events.events_for_server;
 
 import it.polimi.ingsw.ps51.model.gods.Gods;
+import it.polimi.ingsw.ps51.visitor.VisitorForPong;
 
 import java.util.List;
 
@@ -21,6 +22,11 @@ public class GodsDeck implements EventForServer{
 
     @Override
     public void acceptVisitor(VisitorServer visitor) {
+        visitor.visitGodsDeck(this);
+    }
+
+    @Override
+    public void acceptVisitor(VisitorForPong visitor) {
         visitor.visitGodsDeck(this);
     }
 }

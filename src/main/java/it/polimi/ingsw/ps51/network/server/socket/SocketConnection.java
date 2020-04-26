@@ -7,6 +7,10 @@ import it.polimi.ingsw.ps51.events.events_for_server.*;
 import it.polimi.ingsw.ps51.network.server.MainServer;
 import it.polimi.ingsw.ps51.network.server.Room;
 import it.polimi.ingsw.ps51.network.server.ServerInterface;
+import it.polimi.ingsw.ps51.utility.PingThread;
+import it.polimi.ingsw.ps51.visitor.VisitorFirstPhase;
+import it.polimi.ingsw.ps51.visitor.VisitorForPong;
+import it.polimi.ingsw.ps51.visitor.VisitorPong;
 import it.polimi.ingsw.ps51.visitor.VisitorSocketConnectionServer;
 
 import java.io.IOException;
@@ -29,7 +33,11 @@ public class SocketConnection implements Runnable, ServerInterface {
     ObjectOutputStream oos;
     MainServer mainServer;
     ObjectInputStream ois;
-    VisitorSocketConnectionServer visitor;
+    VisitorFirstPhase visitor;
+    private final Object ob = new Object();
+    PingThread pingThread;
+    int timeOut;
+    VisitorForPong visitorPong;
 
     /**
      * Constructor
@@ -47,6 +55,9 @@ public class SocketConnection implements Runnable, ServerInterface {
         this.visitor = new VisitorSocketConnectionServer(this);
         this.oos = new ObjectOutputStream(this.connection.getOutputStream());
         this.ois = new ObjectInputStream(this.connection.getInputStream());
+        this.timeOut = 20000;
+        this.pingThread = new PingThread(this, timeOut/2);
+        this.visitorPong = new VisitorPong(this);
     }
 
     public void setNickname(String nick) {
@@ -85,7 +96,9 @@ public class SocketConnection implements Runnable, ServerInterface {
     @Override
     public void sendEvent(EventForClient event){
         try {
-            this.oos.writeObject(event);
+            synchronized (this.getOb()) {
+                this.oos.writeObject(event);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -96,13 +109,30 @@ public class SocketConnection implements Runnable, ServerInterface {
         this.gameRoom = room;
     }
 
+    public String getNickname() {
+        return this.nickname;
+    }
+
+    public Object getOb() {
+        return this.ob;
+    }
+
+    public void startPingThread() {
+        Thread t = new Thread(this.pingThread);
+        t.start();
+    }
+
+    public Room getGameRoom() {
+        return this.gameRoom;
+    }
+
     @Override
     public void closeConnection() {
         this.isFinish = true;
         try {
             this.oos.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         try {
             this.ois.close();
@@ -129,14 +159,14 @@ public class SocketConnection implements Runnable, ServerInterface {
     public void run() {
 
         try {
-
+            connection.setSoTimeout(timeOut);
+            startPingThread();
             while (!ok) {
 
                 if (nick)
                     sendEvent(new it.polimi.ingsw.ps51.events.events_for_client.Nickname());
                 else
                     sendEvent(new NumberOfPlayer());
-
                 EventForFirstPhase event = (EventForFirstPhase) this.ois.readObject();
                 event.acceptVisitor(this.visitor);
             }
@@ -152,9 +182,10 @@ public class SocketConnection implements Runnable, ServerInterface {
         }
 
         try {
+            connection.setSoTimeout(timeOut);
             while(!isFinish) {
                 EventForServer event = (EventForServer) this.ois.readObject();
-                this.gameRoom.notify(event);
+                event.acceptVisitor(visitorPong);
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

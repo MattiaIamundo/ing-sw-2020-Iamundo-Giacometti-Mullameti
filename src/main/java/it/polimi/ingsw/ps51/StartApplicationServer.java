@@ -7,7 +7,7 @@ import java.io.IOException;
 
 /**
  * This class is the first class to be launched from the server,
- * it admits the server to start the class {@link MainServer} and the class {@link ServerSocket}
+ * it admits the server to start the class {@link MainServer}
  * @author Luca Giacometti
  */
 public class StartApplicationServer {
@@ -16,9 +16,8 @@ public class StartApplicationServer {
         try {
             MainServer mainServer = new MainServer();
             ServerSocket ss = new ServerSocket(mainServer, 20000);
+            mainServer.setSS(ss);
             Thread t1 = new Thread(mainServer);
-            Thread t2 = new Thread(ss);
-            t2.start();
             t1.start();
         } catch (IOException e) {
             System.out.println("Something during the initialization of all the server network failed...");
