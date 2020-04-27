@@ -1,0 +1,122 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: OpponentAthena</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.model.gods.opponent_move_manager</a> ]
+</div>
+
+<h1>Coverage Summary for Class: OpponentAthena (it.polimi.ingsw.ps51.model.gods.opponent_move_manager)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">OpponentAthena</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    81,8%
+  </span>
+  <span class="absValue">
+    (9/ 11)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.model.gods.opponent_move_manager;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
+<i>4</i>&nbsp;import it.polimi.ingsw.ps51.model.Coordinates;
+<i>5</i>&nbsp;import it.polimi.ingsw.ps51.model.Map;
+<i>6</i>&nbsp;import it.polimi.ingsw.ps51.model.Square;
+<i>7</i>&nbsp;import it.polimi.ingsw.ps51.model.Worker;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;import java.util.ArrayList;
+<i>10</i>&nbsp;import java.util.List;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;/**
+<i>13</i>&nbsp; * Implement the effect of Athena power over the opponent&#39;s turn
+<i>14</i>&nbsp; */
+<b class="fc"><i>15</i>&nbsp;public class OpponentAthena implements OpponentTurnGodsManager {</b>
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    /**
+<i>18</i>&nbsp;     * Removes those positions that are at an higher level compared to the worker
+<i>19</i>&nbsp;     * @param validPositions the list of valid positions if no &quot;Opponent&#39;s turn&quot; effect will be applied
+<i>20</i>&nbsp;     * @param worker the selected worker
+<i>21</i>&nbsp;     * @param map the game map
+<i>22</i>&nbsp;     * @return the list with the valid positions after having applied the god&#39;s &quot;Opponent&#39;s turn&quot; effect
+<i>23</i>&nbsp;     */
+<i>24</i>&nbsp;    @Override
+<i>25</i>&nbsp;    public List&lt;Coordinates&gt; epurateMove(List&lt;Coordinates&gt; validPositions, Worker worker, Map map) {
+<b class="fc"><i>26</i>&nbsp;        List&lt;Coordinates&gt; newPositions = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>27</i>&nbsp;        for (Coordinates coordinates : validPositions){</b>
+<i>28</i>&nbsp;            try {
+<b class="fc"><i>29</i>&nbsp;                Square square = map.getSquare(coordinates.getX(), coordinates.getY());</b>
+<b class="fc"><i>30</i>&nbsp;                if (square.getLevel().ordinal() - worker.getPosition().getLevel().ordinal() &lt;= 0){</b>
+<b class="fc"><i>31</i>&nbsp;                    newPositions.add(coordinates);</b>
+<i>32</i>&nbsp;                }
+<b class="nc"><i>33</i>&nbsp;            } catch (OutOfMapException e) {</b>
+<b class="nc"><i>34</i>&nbsp;                e.printStackTrace();</b>
+<b class="fc"><i>35</i>&nbsp;            }</b>
+<b class="fc"><i>36</i>&nbsp;        }</b>
+<b class="fc"><i>37</i>&nbsp;        return newPositions;</b>
+<i>38</i>&nbsp;    }
+<i>39</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-27 18:33</div>
+</div>
+</body>
+</html>

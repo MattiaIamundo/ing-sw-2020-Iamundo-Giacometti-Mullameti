@@ -1,0 +1,318 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: SocketConnection</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.network.server.socket</a> ]
+</div>
+
+<h1>Coverage Summary for Class: SocketConnection (it.polimi.ingsw.ps51.network.server.socket)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SocketConnection</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 82)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.network.server.socket;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_client.Disconnection;
+<i>4</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
+<i>5</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_client.NumberOfPlayer;
+<i>6</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_server.*;
+<i>7</i>&nbsp;import it.polimi.ingsw.ps51.network.server.MainServer;
+<i>8</i>&nbsp;import it.polimi.ingsw.ps51.network.server.Room;
+<i>9</i>&nbsp;import it.polimi.ingsw.ps51.network.server.ServerInterface;
+<i>10</i>&nbsp;import it.polimi.ingsw.ps51.utility.PingThread;
+<i>11</i>&nbsp;import it.polimi.ingsw.ps51.visitor.VisitorFirstPhase;
+<i>12</i>&nbsp;import it.polimi.ingsw.ps51.visitor.VisitorForPong;
+<i>13</i>&nbsp;import it.polimi.ingsw.ps51.visitor.VisitorPong;
+<i>14</i>&nbsp;import it.polimi.ingsw.ps51.visitor.VisitorSocketConnectionServer;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;import java.io.IOException;
+<i>17</i>&nbsp;import java.io.ObjectInputStream;
+<i>18</i>&nbsp;import java.io.ObjectOutputStream;
+<i>19</i>&nbsp;import java.net.Socket;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;/**
+<i>22</i>&nbsp; * This class represents the socket connection created by the server to communicate with the client
+<i>23</i>&nbsp; * @author Luca Giacometti
+<i>24</i>&nbsp; */
+<i>25</i>&nbsp;public class SocketConnection implements Runnable, ServerInterface {
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    private boolean isFinish;
+<i>28</i>&nbsp;    boolean nick;
+<i>29</i>&nbsp;    boolean ok;
+<i>30</i>&nbsp;    Socket connection;
+<i>31</i>&nbsp;    private String nickname;
+<i>32</i>&nbsp;    private Room gameRoom;
+<i>33</i>&nbsp;    ObjectOutputStream oos;
+<i>34</i>&nbsp;    MainServer mainServer;
+<i>35</i>&nbsp;    ObjectInputStream ois;
+<i>36</i>&nbsp;    VisitorFirstPhase visitor;
+<b class="nc"><i>37</i>&nbsp;    private final Object ob = new Object();</b>
+<i>38</i>&nbsp;    PingThread pingThread;
+<i>39</i>&nbsp;    int timeOut;
+<i>40</i>&nbsp;    VisitorForPong visitorPong;
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    /**
+<i>43</i>&nbsp;     * Constructor
+<i>44</i>&nbsp;     * @param connection the socket connection given by the {@link ServerSocket}
+<i>45</i>&nbsp;     * @param mainServer the link to the {@link MainServer}
+<i>46</i>&nbsp;     * @throws IOException it is launched if there are problems with the streams
+<i>47</i>&nbsp;     */
+<b class="nc"><i>48</i>&nbsp;    public SocketConnection(Socket connection, MainServer mainServer) throws IOException {</b>
+<b class="nc"><i>49</i>&nbsp;        this.isFinish = false;</b>
+<b class="nc"><i>50</i>&nbsp;        this.nick = true;</b>
+<b class="nc"><i>51</i>&nbsp;        this.ok = false;</b>
+<b class="nc"><i>52</i>&nbsp;        this.nickname = null;</b>
+<b class="nc"><i>53</i>&nbsp;        this.connection = connection;</b>
+<b class="nc"><i>54</i>&nbsp;        this.mainServer = mainServer;</b>
+<b class="nc"><i>55</i>&nbsp;        this.visitor = new VisitorSocketConnectionServer(this);</b>
+<b class="nc"><i>56</i>&nbsp;        this.oos = new ObjectOutputStream(this.connection.getOutputStream());</b>
+<b class="nc"><i>57</i>&nbsp;        this.ois = new ObjectInputStream(this.connection.getInputStream());</b>
+<b class="nc"><i>58</i>&nbsp;        this.timeOut = 20000;</b>
+<b class="nc"><i>59</i>&nbsp;        this.pingThread = new PingThread(this, timeOut/2);</b>
+<b class="nc"><i>60</i>&nbsp;        this.visitorPong = new VisitorPong(this);</b>
+<i>61</i>&nbsp;    }
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    /**
+<i>64</i>&nbsp;     * Setter of nickname of the player
+<i>65</i>&nbsp;     * @param nick the nickname of the player
+<i>66</i>&nbsp;     */
+<i>67</i>&nbsp;    public void setNickname(String nick) {
+<b class="nc"><i>68</i>&nbsp;        this.nickname = nick;</b>
+<i>69</i>&nbsp;    }
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;    /**
+<i>72</i>&nbsp;     * Access to the {@link MainServer} in a synchronized mode
+<i>73</i>&nbsp;     * to call the checkName method and if it is a good nickname
+<i>74</i>&nbsp;     * call the addNickname method to add this client
+<i>75</i>&nbsp;     * @return true if the nickname is a valid one
+<i>76</i>&nbsp;     *          false if it is not
+<i>77</i>&nbsp;     */
+<i>78</i>&nbsp;    public boolean checkName() {
+<i>79</i>&nbsp;        boolean ok;
+<b class="nc"><i>80</i>&nbsp;        synchronized (this.mainServer.getObjectToSynchronized()) {</b>
+<b class="nc"><i>81</i>&nbsp;            ok = this.mainServer.checkName(this.nickname);</b>
+<b class="nc"><i>82</i>&nbsp;            if (ok) {</b>
+<b class="nc"><i>83</i>&nbsp;                this.mainServer.addNickname(this.nickname, this);</b>
+<i>84</i>&nbsp;            }
+<b class="nc"><i>85</i>&nbsp;        }</b>
+<b class="nc"><i>86</i>&nbsp;        return ok;</b>
+<i>87</i>&nbsp;    }
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;    /**
+<i>90</i>&nbsp;     * Access synchronized to the {@link MainServer} to call
+<i>91</i>&nbsp;     * the iMFirst method to check is this client is the first one
+<i>92</i>&nbsp;     * to join for game
+<i>93</i>&nbsp;     */
+<i>94</i>&nbsp;    public void first() {
+<i>95</i>&nbsp;        boolean first;
+<b class="nc"><i>96</i>&nbsp;        synchronized (this.mainServer.getObjectToSynchronized()) {</b>
+<b class="nc"><i>97</i>&nbsp;            first = this.mainServer.iMFirst(this.nickname);</b>
+<b class="nc"><i>98</i>&nbsp;        }</b>
+<b class="nc"><i>99</i>&nbsp;        if (first)</b>
+<b class="nc"><i>100</i>&nbsp;            this.nick = false;</b>
+<i>101</i>&nbsp;        else
+<b class="nc"><i>102</i>&nbsp;            this.ok = true;</b>
+<i>103</i>&nbsp;    }
+<i>104</i>&nbsp;
+<i>105</i>&nbsp;    /**
+<i>106</i>&nbsp;     * Access synchronized to the {@link MainServer} to set
+<i>107</i>&nbsp;     * the number of players for the next game
+<i>108</i>&nbsp;     * @param number the number of player chosen by the client
+<i>109</i>&nbsp;     */
+<i>110</i>&nbsp;    public void setOnServerNumberOfPlayer(Integer number) {
+<b class="nc"><i>111</i>&nbsp;        synchronized (this.mainServer.getObjectToSynchronized()) {</b>
+<b class="nc"><i>112</i>&nbsp;            this.mainServer.setNumberOfPlayer(number);</b>
+<b class="nc"><i>113</i>&nbsp;        }</b>
+<b class="nc"><i>114</i>&nbsp;        this.ok = true;</b>
+<i>115</i>&nbsp;    }
+<i>116</i>&nbsp;
+<i>117</i>&nbsp;    @Override
+<i>118</i>&nbsp;    public void sendEvent(EventForClient event){
+<i>119</i>&nbsp;        try {
+<b class="nc"><i>120</i>&nbsp;            synchronized (this.getOb()) {</b>
+<b class="nc"><i>121</i>&nbsp;                this.oos.writeObject(event);</b>
+<b class="nc"><i>122</i>&nbsp;            }</b>
+<b class="nc"><i>123</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>124</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>125</i>&nbsp;        }</b>
+<i>126</i>&nbsp;    }
+<i>127</i>&nbsp;
+<i>128</i>&nbsp;    @Override
+<i>129</i>&nbsp;    public void pairWithRoom(Room room) {
+<b class="nc"><i>130</i>&nbsp;        this.gameRoom = room;</b>
+<i>131</i>&nbsp;    }
+<i>132</i>&nbsp;
+<i>133</i>&nbsp;    /**
+<i>134</i>&nbsp;     * Getter of nickname
+<i>135</i>&nbsp;     * @return the reference of nickname attribute
+<i>136</i>&nbsp;     */
+<i>137</i>&nbsp;    public String getNickname() {
+<b class="nc"><i>138</i>&nbsp;        return this.nickname;</b>
+<i>139</i>&nbsp;    }
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;    /**
+<i>142</i>&nbsp;     * Getter of ob
+<i>143</i>&nbsp;     * @return the object to synchronize to send an event
+<i>144</i>&nbsp;     */
+<i>145</i>&nbsp;    public Object getOb() {
+<b class="nc"><i>146</i>&nbsp;        return this.ob;</b>
+<i>147</i>&nbsp;    }
+<i>148</i>&nbsp;
+<i>149</i>&nbsp;    /**
+<i>150</i>&nbsp;     * Start a new thread {@link PingThread} to send
+<i>151</i>&nbsp;     * to the client a {@link it.polimi.ingsw.ps51.events.events_for_client.Ping} event
+<i>152</i>&nbsp;     */
+<i>153</i>&nbsp;    public void startPingThread() {
+<b class="nc"><i>154</i>&nbsp;        Thread t = new Thread(this.pingThread);</b>
+<b class="nc"><i>155</i>&nbsp;        t.start();</b>
+<i>156</i>&nbsp;    }
+<i>157</i>&nbsp;
+<i>158</i>&nbsp;    /**
+<i>159</i>&nbsp;     * Getter of gameRoom
+<i>160</i>&nbsp;     * @return the reference to the gameRoom attribute
+<i>161</i>&nbsp;     */
+<i>162</i>&nbsp;    public Room getGameRoom() {
+<b class="nc"><i>163</i>&nbsp;        return this.gameRoom;</b>
+<i>164</i>&nbsp;    }
+<i>165</i>&nbsp;
+<i>166</i>&nbsp;    @Override
+<i>167</i>&nbsp;    public void closeConnection() {
+<b class="nc"><i>168</i>&nbsp;        this.isFinish = true;</b>
+<i>169</i>&nbsp;        try {
+<b class="nc"><i>170</i>&nbsp;            this.oos.close();</b>
+<b class="nc"><i>171</i>&nbsp;        } catch (IOException e) {</b>
+<i>172</i>&nbsp;            //e.printStackTrace();
+<b class="nc"><i>173</i>&nbsp;        }</b>
+<i>174</i>&nbsp;        try {
+<b class="nc"><i>175</i>&nbsp;            this.ois.close();</b>
+<b class="nc"><i>176</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>177</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>178</i>&nbsp;        }</b>
+<i>179</i>&nbsp;        try {
+<b class="nc"><i>180</i>&nbsp;            this.connection.close();</b>
+<b class="nc"><i>181</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>182</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>183</i>&nbsp;        }</b>
+<i>184</i>&nbsp;    }
+<i>185</i>&nbsp;
+<i>186</i>&nbsp;    /**
+<i>187</i>&nbsp;     * When this class is instantiated, it starts the first phase:
+<i>188</i>&nbsp;     * it send and waiting the request of nickname and the answer from the user,
+<i>189</i>&nbsp;     * checks if it is a good one (if it is unique), and if it is, it adds it to the
+<i>190</i>&nbsp;     * server list of nicknames creating the link between this nickname and this class.
+<i>191</i>&nbsp;     * If the client is the first one, requests the number of player of the game and then
+<i>192</i>&nbsp;     * it sets up that number.
+<i>193</i>&nbsp;     * After that, it starts the normal phase of the game.
+<i>194</i>&nbsp;     * In every phase, it sends continually a {@link it.polimi.ingsw.ps51.events.events_for_client.Ping} event
+<i>195</i>&nbsp;     * to verify if the client is on or not
+<i>196</i>&nbsp;     */
+<i>197</i>&nbsp;    @Override
+<i>198</i>&nbsp;    public void run() {
+<i>199</i>&nbsp;
+<i>200</i>&nbsp;        try {
+<b class="nc"><i>201</i>&nbsp;            connection.setSoTimeout(timeOut);</b>
+<b class="nc"><i>202</i>&nbsp;            startPingThread();</b>
+<b class="nc"><i>203</i>&nbsp;            while (!ok) {</b>
+<i>204</i>&nbsp;
+<b class="nc"><i>205</i>&nbsp;                if (nick)</b>
+<b class="nc"><i>206</i>&nbsp;                    sendEvent(new it.polimi.ingsw.ps51.events.events_for_client.Nickname());</b>
+<i>207</i>&nbsp;                else
+<b class="nc"><i>208</i>&nbsp;                    sendEvent(new NumberOfPlayer());</b>
+<b class="nc"><i>209</i>&nbsp;                EventForFirstPhase event = (EventForFirstPhase) this.ois.readObject();</b>
+<b class="nc"><i>210</i>&nbsp;                event.acceptVisitor(this.visitor);</b>
+<b class="nc"><i>211</i>&nbsp;            }</b>
+<i>212</i>&nbsp;
+<b class="nc"><i>213</i>&nbsp;        } catch (IOException | ClassNotFoundException e) {</b>
+<b class="nc"><i>214</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>215</i>&nbsp;            synchronized (this.mainServer.getObjectToSynchronized()) {</b>
+<b class="nc"><i>216</i>&nbsp;                if (this.nickname != null)</b>
+<b class="nc"><i>217</i>&nbsp;                    this.mainServer.removeNickname(this.nickname);</b>
+<b class="nc"><i>218</i>&nbsp;            }</b>
+<b class="nc"><i>219</i>&nbsp;            sendEvent(new Disconnection());</b>
+<b class="nc"><i>220</i>&nbsp;            isFinish = true;</b>
+<b class="nc"><i>221</i>&nbsp;        }</b>
+<i>222</i>&nbsp;
+<i>223</i>&nbsp;        try {
+<b class="nc"><i>224</i>&nbsp;            connection.setSoTimeout(timeOut);</b>
+<b class="nc"><i>225</i>&nbsp;            while(!isFinish) {</b>
+<b class="nc"><i>226</i>&nbsp;                EventForServer event = (EventForServer) this.ois.readObject();</b>
+<b class="nc"><i>227</i>&nbsp;                event.acceptVisitor(visitorPong);</b>
+<b class="nc"><i>228</i>&nbsp;            }</b>
+<b class="nc"><i>229</i>&nbsp;        } catch (IOException | ClassNotFoundException e) {</b>
+<b class="nc"><i>230</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>231</i>&nbsp;            this.gameRoom.update(new it.polimi.ingsw.ps51.events.events_for_server.Disconnection(this.nickname));</b>
+<b class="nc"><i>232</i>&nbsp;        }</b>
+<i>233</i>&nbsp;
+<i>234</i>&nbsp;    }
+<i>235</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-27 18:33</div>
+</div>
+</body>
+</html>
