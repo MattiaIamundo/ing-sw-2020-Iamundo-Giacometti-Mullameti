@@ -16,15 +16,19 @@ public class Client implements Runnable {
     private Supporter s;
     String url;
     Integer port;
+    Integer timeoutSocket;
 
     /**
      * Constructor
-     * Here the Supporter is created
-     * @param i 0 if the user wants a Cli
+     * @param i it is a 0 if the user wants a {@link Cli}
+     * @param url it is the String which represent the url of the server
+     * @param port it is the port on which the {@link it.polimi.ingsw.ps51.network.server.socket.ServerSocket} is on
+     * @param timeoutSocket this integer represents the countdown for the socket
      */
-    public Client(Integer i, String url, Integer port) {
+    public Client(Integer i, String url, Integer port, Integer timeoutSocket) {
         this.url = url;
         this.port = port;
+        this.timeoutSocket = timeoutSocket;
 
         if (i == 0)
             s = new Cli();
@@ -48,7 +52,7 @@ public class Client implements Runnable {
 
         try {
             Socket socket = new Socket(url, port);
-            ClientInterface ci = new SocketConnection(socket);
+            ClientInterface ci = new SocketConnection(socket, timeoutSocket);
             Handler h = new Handler(ci);
             h.addObserver(s);
             s.addObserver(h);

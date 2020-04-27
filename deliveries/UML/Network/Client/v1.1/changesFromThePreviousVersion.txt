@@ -1,0 +1,6 @@
+Modifies introduced in the client UML:
+
+	*	In the client and socketConnection is introduced an integer to indicate
+		the timeout for the socket (for the connection problems).
+	*	In the handler is introduced a final Object to be synchronized when
+		the method sendEvent of ClientInterface object is called.
