@@ -60,10 +60,21 @@ public class SocketConnection implements Runnable, ServerInterface {
         this.visitorPong = new VisitorPong(this);
     }
 
+    /**
+     * Setter of nickname of the player
+     * @param nick the nickname of the player
+     */
     public void setNickname(String nick) {
         this.nickname = nick;
     }
 
+    /**
+     * Access to the {@link MainServer} in a synchronized mode
+     * to call the checkName method and if it is a good nickname
+     * call the addNickname method to add this client
+     * @return true if the nickname is a valid one
+     *          false if it is not
+     */
     public boolean checkName() {
         boolean ok;
         synchronized (this.mainServer.getObjectToSynchronized()) {
@@ -75,6 +86,11 @@ public class SocketConnection implements Runnable, ServerInterface {
         return ok;
     }
 
+    /**
+     * Access synchronized to the {@link MainServer} to call
+     * the iMFirst method to check is this client is the first one
+     * to join for game
+     */
     public void first() {
         boolean first;
         synchronized (this.mainServer.getObjectToSynchronized()) {
@@ -86,6 +102,11 @@ public class SocketConnection implements Runnable, ServerInterface {
             this.ok = true;
     }
 
+    /**
+     * Access synchronized to the {@link MainServer} to set
+     * the number of players for the next game
+     * @param number the number of player chosen by the client
+     */
     public void setOnServerNumberOfPlayer(Integer number) {
         synchronized (this.mainServer.getObjectToSynchronized()) {
             this.mainServer.setNumberOfPlayer(number);
@@ -109,19 +130,35 @@ public class SocketConnection implements Runnable, ServerInterface {
         this.gameRoom = room;
     }
 
+    /**
+     * Getter of nickname
+     * @return the reference of nickname attribute
+     */
     public String getNickname() {
         return this.nickname;
     }
 
+    /**
+     * Getter of ob
+     * @return the object to synchronize to send an event
+     */
     public Object getOb() {
         return this.ob;
     }
 
+    /**
+     * Start a new thread {@link PingThread} to send
+     * to the client a {@link it.polimi.ingsw.ps51.events.events_for_client.Ping} event
+     */
     public void startPingThread() {
         Thread t = new Thread(this.pingThread);
         t.start();
     }
 
+    /**
+     * Getter of gameRoom
+     * @return the reference to the gameRoom attribute
+     */
     public Room getGameRoom() {
         return this.gameRoom;
     }
@@ -153,7 +190,9 @@ public class SocketConnection implements Runnable, ServerInterface {
      * server list of nicknames creating the link between this nickname and this class.
      * If the client is the first one, requests the number of player of the game and then
      * it sets up that number.
-     * After that, it starts the normal phase of the game
+     * After that, it starts the normal phase of the game.
+     * In every phase, it sends continually a {@link it.polimi.ingsw.ps51.events.events_for_client.Ping} event
+     * to verify if the client is on or not
      */
     @Override
     public void run() {

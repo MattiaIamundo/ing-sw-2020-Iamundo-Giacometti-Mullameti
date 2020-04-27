@@ -5,7 +5,7 @@ import it.polimi.ingsw.ps51.network.server.MainServer;
 import java.io.IOException;
 
 /**
- * This class represents the Server which create the socket connection
+ * This class represents the Server which creates the socket connections
  * @author Luca Giacometti
  */
 public class ServerSocket implements Runnable{
@@ -32,7 +32,7 @@ public class ServerSocket implements Runnable{
 
         while (this.mainServer.computeTheSizeOfList()) {
             try {
-                SocketConnection si = new SocketConnection(ss.accept(),this.mainServer);
+                SocketConnection si = new SocketConnection(ss.accept(), this.mainServer);
                 Thread t = new Thread(si);
                 t.start();
             } catch (IOException e) {
