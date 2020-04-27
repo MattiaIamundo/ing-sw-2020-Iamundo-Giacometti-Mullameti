@@ -1,0 +1,11 @@
+Modifies introduced in the server UML:
+
+	*	The ServerSocket is launched from the MainServer
+	*	In the MainServer is added two private methods to set
+		the game and to control if there are
+		some players out of room
+	*	Add some methods in the SocketConnection to handle the
+		connection, the initialization and the game phase
+		with the client
+	*	Added a update method in the Room, to signal
+		if there is a client which is disconnected from the game
