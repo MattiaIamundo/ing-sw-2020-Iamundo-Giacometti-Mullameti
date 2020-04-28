@@ -44,6 +44,10 @@ public class Map implements Serializable, Iterable<Square>, Cloneable{
         }
     }
 
+    /**
+     * Add the playground that creates this map as observer of all the square that compose the map
+     * @param observer the playground that creates this map
+     */
     public void addObservers(Playground observer){
         for (Square square : this){
             square.addObserver(observer);

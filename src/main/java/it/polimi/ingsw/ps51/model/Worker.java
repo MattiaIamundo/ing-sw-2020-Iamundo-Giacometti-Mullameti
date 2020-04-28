@@ -74,7 +74,7 @@ public class Worker implements Serializable, WorkerObserver, Cloneable {
      * This method gets if the worker can build in this square
      * @return if the worker can build in this square
      */
-    public boolean getInWinningCondition(){
+    public boolean isInWinningCondition(){
         return this.inWinningCondition;
     }
 

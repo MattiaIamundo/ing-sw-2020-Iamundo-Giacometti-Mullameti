@@ -120,7 +120,7 @@ public class NormalGodsController extends GodControllerObservable implements God
      */
     protected boolean isWinner(){
         for (Worker worker : player.getWorkers()){
-            if (worker.getInWinningCondition()){
+            if (worker.isInWinningCondition()){
                 return true;
             }
         }

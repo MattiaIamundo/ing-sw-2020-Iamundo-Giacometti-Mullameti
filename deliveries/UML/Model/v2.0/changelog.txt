@@ -1,0 +1,61 @@
+-[Gods] added getGodFromString() function
+-[OpponentsGodsFactory] Fix getGod return null, now return OpponentTurnGodsManager
+-[OpponentsGodsFactory] added class constructor 
+-[OpponentTurnGodsManager] changed first parameter of epurateMove from "position" to "validPositions"
+-[OpponentAthena] changed first parameter of epurateMove from "position" to "validPositions"
+-[Card] fix missing parameter "player" in checkMove()
+-[Card] fix missing parameter "player" in move()
+-[CommonAction] fix missing parameter "player" in move()
+-[CommonAction] added function checkMove()
+-[CommonAction] added function checkBuild()
+-[CommonAction] added function clearPositions()
+-[CommonAction] added function getGodName()
+-[Apollo] added function isAlliedWorker()
+-[Minotaur] added function isValidSquareWithWorker()
+-[Minotaur] added function isAlliedWorker()
+-[Coordinates] added function equals()
+-[Coordinates] added function hashCode()
+-[Coordinates] added function clone()
+-[Level] added function getByValue()
+-[Map] added function addObservers()
+-[Map] renamed "isThisAPerimetralSquare" to "isThisPerimeterSquare"
+-[Map] added function iterator()
+-[Map] added function equals()
+-[Map] added function clone()
+-[Player] removed attribute "isWinner"
+-[Player] removed attribute "observers"
+-[Player] added function getNickname()
+-[Player] added function addWorker()
+-[Playground] changed setActualPlayer parameter from "newActualPlayer" to "actualPlayer"
+-[Playground] added function getNextPlayer()
+-[Playground] added function removePlayer()
+-[Playground] added function mapUpdated()
+-[Square] removed attribute "observers"
+-[Square] renamed getPresentWorker() to isPresentWorker
+-[Square] added function isFreeSquare()
+-[Square] added function equals()
+-[Square] added function clone()
+-[Worker] removed attribute "canDoLevelUp"
+-[Worker] removed attribute "observers"
+-[Worker] added attribute "inWinningCondition"
+-[Worker] added attribute "activeGods"
+-[Worker] renamed function move() to setPosition()
+-[Worker] removed function getCanDoLevelUp()
+-[Worker] removed function setCanDoLevelUp()
+-[Worker] added function isInWinningCondition()
+-[Worker] added function setInWinningCondition()
+-[Worker] added function getActiveGods()
+-[Worker] added function updateGods()
+-[Worker] added function removeGod()
+-[Worker] added function updatePosition()
+-[Worker] added function equals()
+-[Worker] added function clone()
+-[Observable] added attribute "observers"
+-[Observable] added function addObserver()
+-[Observable] added function removeObserver()
+-[Observable] added function copyObservers()
+-[Observable] added function notify()
+-added interface "WorkerObserver"
+-added interface "Observer"
+-added interface "SquareObserver"
+-added class "SquareChangeNotifier"

@@ -41,13 +41,13 @@ public class WorkerTest {
 
     @Test
     public void getInWinningConditionTest() {
-        Assert.assertFalse(this.worker.getInWinningCondition());
+        Assert.assertFalse(this.worker.isInWinningCondition());
     }
 
     @Test
     public void setInWinningConditionTest() {
         this.worker.setInWinningCondition(true);
-        Assert.assertTrue(this.worker.getInWinningCondition());
+        Assert.assertTrue(this.worker.isInWinningCondition());
     }
 
     @Test
@@ -100,7 +100,7 @@ public class WorkerTest {
             Assert.assertNotEquals(worker.getActiveGods(), clonedWorker.getActiveGods());
 
             worker.setInWinningCondition(true);
-            Assert.assertNotEquals(worker.getInWinningCondition(), clonedWorker.getInWinningCondition());
+            Assert.assertNotEquals(worker.isInWinningCondition(), clonedWorker.isInWinningCondition());
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }

@@ -271,7 +271,7 @@ public class CommonActionTest {
             card.move(player, worker, map.getSquare(2,1), map);
 
             Assert.assertEquals(map.getSquare(2,1), worker.getPosition());
-            Assert.assertFalse(worker.getInWinningCondition());
+            Assert.assertFalse(worker.isInWinningCondition());
         }catch (OutOfMapException e){
             e.printStackTrace();
         }
@@ -288,7 +288,7 @@ public class CommonActionTest {
             card.move(player, worker, map.getSquare(2,3), map);
 
             Assert.assertEquals(map.getSquare(2,3), worker.getPosition());
-            Assert.assertFalse(worker.getInWinningCondition());
+            Assert.assertFalse(worker.isInWinningCondition());
         }catch (OutOfMapException e){
             e.printStackTrace();
         }
@@ -306,7 +306,7 @@ public class CommonActionTest {
             card.move(player, worker, map.getSquare(2,3), map);
 
             Assert.assertEquals(map.getSquare(2,3), worker.getPosition());
-            Assert.assertTrue(worker.getInWinningCondition());
+            Assert.assertTrue(worker.isInWinningCondition());
         }catch (OutOfMapException e){
             e.printStackTrace();
         }
@@ -324,7 +324,7 @@ public class CommonActionTest {
             card.move(player, worker, map.getSquare(1,2), map);
 
             Assert.assertEquals(map.getSquare(2,2), worker.getPosition());
-            Assert.assertFalse(worker.getInWinningCondition());
+            Assert.assertFalse(worker.isInWinningCondition());
         }catch (OutOfMapException e){
             e.printStackTrace();
         }
@@ -341,7 +341,7 @@ public class CommonActionTest {
             card.move(player, worker, map.getSquare(2,4), map);
 
             Assert.assertEquals(map.getSquare(2,2), worker.getPosition());
-            Assert.assertFalse(worker.getInWinningCondition());
+            Assert.assertFalse(worker.isInWinningCondition());
         }catch (OutOfMapException e){
             e.printStackTrace();
         }

@@ -10,8 +10,6 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static org.junit.Assert.*;
-
 public class PanTest {
     Map map;
     Pan card = new Pan();
@@ -53,7 +51,7 @@ public class PanTest {
             map.getSquare(2,3).setLevel(Level.FIRST);
 
             card.move(player, worker, map.getSquare(2,3), map);
-            Assert.assertTrue(worker.getInWinningCondition());
+            Assert.assertTrue(worker.isInWinningCondition());
         } catch (OutOfMapException e) {
             e.printStackTrace();
         }
@@ -65,7 +63,7 @@ public class PanTest {
             map.getSquare(2,2).setLevel(Level.THIRD);
 
             card.move(player, worker, map.getSquare(2,3), map);
-            Assert.assertTrue(worker.getInWinningCondition());
+            Assert.assertTrue(worker.isInWinningCondition());
         } catch (OutOfMapException e) {
             e.printStackTrace();
         }
@@ -79,7 +77,7 @@ public class PanTest {
             map.getSquare(2,3).setLevel(Level.FIRST);
 
             card.move(player, worker, map.getSquare(2,3), map);
-            Assert.assertFalse(worker.getInWinningCondition());
+            Assert.assertFalse(worker.isInWinningCondition());
         } catch (OutOfMapException e) {
             e.printStackTrace();
         }
@@ -93,7 +91,7 @@ public class PanTest {
             map.getSquare(2,3).setLevel(Level.SECOND);
 
             card.move(player, worker, map.getSquare(2,3), map);
-            Assert.assertFalse(worker.getInWinningCondition());
+            Assert.assertFalse(worker.isInWinningCondition());
         } catch (OutOfMapException e) {
             e.printStackTrace();
         }
@@ -107,7 +105,7 @@ public class PanTest {
             map.getSquare(2,3).setLevel(Level.THIRD);
 
             card.move(player, worker, map.getSquare(2,3), map);
-            Assert.assertFalse(worker.getInWinningCondition());
+            Assert.assertFalse(worker.isInWinningCondition());
         } catch (OutOfMapException e) {
             e.printStackTrace();
         }

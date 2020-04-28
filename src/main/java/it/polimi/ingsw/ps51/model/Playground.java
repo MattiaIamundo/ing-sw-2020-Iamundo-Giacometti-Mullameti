@@ -71,7 +71,7 @@ public class Playground extends Observable<EventForClient> implements SquareObse
                 }
             }
         }
-
+        setActualTurn();
         return actualPlayer;
     }
 
