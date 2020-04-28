@@ -7,8 +7,8 @@ public class Ping implements EventForClient{
     }
 
     @Override
-    public void acceptVisitor(VisitorClient visitor) {
-
+    public String acceptVisitor(VisitorClient visitor) {
+        return null;
     }
 
     @Override

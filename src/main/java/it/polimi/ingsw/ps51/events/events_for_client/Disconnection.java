@@ -7,8 +7,8 @@ public class Disconnection implements EventForClient{
 
 
     @Override
-    public void acceptVisitor(VisitorClient visitor) {
-        visitor.visitDisconnection(this);
+    public String acceptVisitor(VisitorClient visitor) {
+        return visitor.visitDisconnection(this);
     }
 
     @Override

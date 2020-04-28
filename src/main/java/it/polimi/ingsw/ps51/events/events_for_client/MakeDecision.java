@@ -17,7 +17,7 @@ public class MakeDecision extends SpecificUserEvent implements EventForClient {
     }
 
     @Override
-    public void acceptVisitor(VisitorClient visitor) {
-        visitor.visitMakeDecision(this);
+    public String acceptVisitor(VisitorClient visitor) {
+        return visitor.visitMakeDecision(this);
     }
 }

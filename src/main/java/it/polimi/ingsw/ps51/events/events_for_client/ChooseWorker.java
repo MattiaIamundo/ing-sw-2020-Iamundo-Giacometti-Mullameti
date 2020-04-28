@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Event that ask to the player to chose one of his worker to play the turn
  */
-public class ChooseWorker extends SpecificUserEvent implements EventForClient{
+public class  ChooseWorker extends SpecificUserEvent implements EventForClient{
 
     private List<Worker> validChoices;
 
@@ -21,7 +21,7 @@ public class ChooseWorker extends SpecificUserEvent implements EventForClient{
     }
 
     @Override
-    public void acceptVisitor(VisitorClient visitor) {
-        visitor.visitChooseWorker(this);
+    public String acceptVisitor(VisitorClient visitor) {
+        return visitor.visitChooseWorker(this);
     }
 }

@@ -2,31 +2,33 @@ package it.polimi.ingsw.ps51.events.events_for_client;
 
 public interface VisitorClient {
 
-    void visitChooseBuild(ChooseBuild event);
+    String visitChooseBuild(ChooseBuild event);
 
-    void visitChooseGod(ChooseGod event);
+    String visitChooseGod(ChooseGod event);
 
-    void visitChooseGodsDeck(ChooseGodsDeck event);
+    String visitChooseGodsDeck(ChooseGodsDeck event);
 
-    void visitChooseMove(ChooseMove event);
+    String visitChooseMove(ChooseMove event);
 
-    void visitChooseWorker(ChooseWorker event);
+    String visitChooseWorker(ChooseWorker event);
 
-    void visitChooseWorkerPosition(ChooseWorkerPosition event);
+    String visitChooseWorkerPosition(ChooseWorkerPosition event);
 
-    void visitDisconnection(Disconnection event);
+    String visitDisconnection(Disconnection event);
 
-    void visitEndEvent(EndEvent event);
+    String visitEndEvent(EndEvent event);
 
-    void visitLose(Lose event);
+    String visitLose(Lose event);
 
-    void visitMakeDecision(MakeDecision event);
+    String visitMakeDecision(MakeDecision event);
 
-    void visitMapUpdate(MapUpdate event);
+    String visitMapUpdate(MapUpdate event);
 
-    void visitNickname(Nickname event);
+    String visitNickname(Nickname event);
 
-    void visitNumberOfPlayer(NumberOfPlayer event);
+    String visitNumberOfPlayer(NumberOfPlayer event);
 
-    void visitWin(Win event);
+    String visitWin(Win event);
+
+    String visitOutOfRoom (OutOfRoom event);
 }

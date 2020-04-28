@@ -7,8 +7,8 @@ public class OutOfRoom implements EventForClient{
     }
 
     @Override
-    public void acceptVisitor(VisitorClient visitor) {
-
+    public String acceptVisitor(VisitorClient visitor) {
+        return visitor.visitOutOfRoom(this);
     }
 
     @Override

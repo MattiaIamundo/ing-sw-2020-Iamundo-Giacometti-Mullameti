@@ -20,7 +20,7 @@ public class ChooseWorkerPosition extends SpecificUserEvent implements EventForC
     }
 
     @Override
-    public void acceptVisitor(VisitorClient visitor) {
-
+    public String acceptVisitor(VisitorClient visitor) {
+        return visitor.visitChooseWorkerPosition(this);
     }
 }

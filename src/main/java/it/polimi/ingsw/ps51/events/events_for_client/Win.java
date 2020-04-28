@@ -10,7 +10,7 @@ public class Win extends SpecificUserEvent implements EventForClient{
     }
 
     @Override
-    public void acceptVisitor(VisitorClient visitor) {
-        visitor.visitWin(this);
+    public String acceptVisitor(VisitorClient visitor) {
+        return visitor.visitWin(this);
     }
 }

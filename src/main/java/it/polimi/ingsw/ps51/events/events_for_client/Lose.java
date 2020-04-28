@@ -10,7 +10,7 @@ public class Lose extends SpecificUserEvent implements EventForClient{
     }
 
     @Override
-    public void acceptVisitor(VisitorClient visitor) {
-        visitor.visitLose(this);
+    public String acceptVisitor(VisitorClient visitor) {
+        return visitor.visitLose(this);
     }
 }

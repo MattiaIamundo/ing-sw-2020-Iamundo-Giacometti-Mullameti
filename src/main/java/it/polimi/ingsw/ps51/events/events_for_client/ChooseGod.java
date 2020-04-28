@@ -21,7 +21,7 @@ public class ChooseGod extends SpecificUserEvent implements EventForClient{
     }
 
     @Override
-    public void acceptVisitor(VisitorClient visitor) {
-        visitor.visitChooseGod(this);
+    public String acceptVisitor(VisitorClient visitor) {
+        return visitor.visitChooseGod(this);
     }
 }

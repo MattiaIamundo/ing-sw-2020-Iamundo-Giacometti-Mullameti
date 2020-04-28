@@ -7,7 +7,7 @@ import java.io.Serializable;
  */
 public interface EventForClient extends Serializable {
 
-    void acceptVisitor(VisitorClient visitor);
+    String acceptVisitor(VisitorClient visitor);
 
     String getReceiver();
 }

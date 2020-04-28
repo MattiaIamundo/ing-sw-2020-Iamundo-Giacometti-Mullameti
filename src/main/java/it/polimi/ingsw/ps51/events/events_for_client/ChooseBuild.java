@@ -24,7 +24,7 @@ public class ChooseBuild extends SpecificUserEvent implements EventForClient{
     }
 
     @Override
-    public void acceptVisitor(VisitorClient visitor) {
-        visitor.visitChooseBuild(this);
+    public String acceptVisitor(VisitorClient visitor) {
+        return visitor.visitChooseBuild(this);
     }
 }

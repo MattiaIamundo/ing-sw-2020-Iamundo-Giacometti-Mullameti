@@ -5,9 +5,10 @@ package it.polimi.ingsw.ps51.events.events_for_client;
  */
 public class Nickname implements EventForClient{
 
+
     @Override
-    public void acceptVisitor(VisitorClient visitor) {
-        visitor.visitNickname(this);
+    public String acceptVisitor(VisitorClient visitor) {
+        return visitor.visitNickname(this);
     }
 
     @Override

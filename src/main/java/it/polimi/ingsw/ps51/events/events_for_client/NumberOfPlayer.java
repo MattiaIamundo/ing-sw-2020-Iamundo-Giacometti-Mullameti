@@ -10,8 +10,8 @@ public class NumberOfPlayer implements EventForClient{
     }
 
     @Override
-    public void acceptVisitor(VisitorClient visitor) {
-        visitor.visitNumberOfPlayer(this);
+    public String acceptVisitor(VisitorClient visitor) {
+         return visitor.visitNumberOfPlayer(this);
     }
 
     @Override

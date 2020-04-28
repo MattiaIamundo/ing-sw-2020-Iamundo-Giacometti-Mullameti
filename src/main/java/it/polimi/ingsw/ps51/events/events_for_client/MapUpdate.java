@@ -27,8 +27,8 @@ public class MapUpdate implements EventForClient{
     }
 
     @Override
-    public void acceptVisitor(VisitorClient visitor) {
-        visitor.visitMapUpdate(this);
+    public String acceptVisitor(VisitorClient visitor) {
+        return visitor.visitMapUpdate(this);
     }
 
     @Override

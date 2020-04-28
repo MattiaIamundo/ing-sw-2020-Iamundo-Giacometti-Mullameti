@@ -23,7 +23,7 @@ public class ChooseMove extends SpecificUserEvent implements EventForClient {
     }
 
     @Override
-    public void acceptVisitor(VisitorClient visitor) {
-        visitor.visitChooseMove(this);
+    public String acceptVisitor(VisitorClient visitor) {
+        return visitor.visitChooseMove(this);
     }
 }
