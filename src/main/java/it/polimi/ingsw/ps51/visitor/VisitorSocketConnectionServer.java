@@ -1,5 +1,6 @@
 package it.polimi.ingsw.ps51.visitor;
 
+import it.polimi.ingsw.ps51.events.events_for_client.NumberOfPlayer;
 import it.polimi.ingsw.ps51.events.events_for_server.Nickname;
 import it.polimi.ingsw.ps51.events.events_for_server.NumberOfPlayers;
 import it.polimi.ingsw.ps51.events.events_for_server.Pong;
@@ -15,9 +16,18 @@ public class VisitorSocketConnectionServer implements VisitorFirstPhase{
 
     @Override
     public void visitNickname(Nickname nickname) {
-        socketConnection.setNickname(nickname.getNickname());
-        if ( socketConnection.checkName() )
-            socketConnection.first();
+
+        if ( socketConnection.checkName(nickname.getNickname()) ) {
+            socketConnection.setNickname(nickname.getNickname());
+            boolean first = socketConnection.first();
+
+            if (first)
+                socketConnection.sendEvent(new NumberOfPlayer());
+            else
+                socketConnection.setOk(true);
+        }
+        else
+            socketConnection.sendEvent(new it.polimi.ingsw.ps51.events.events_for_client.Nickname());
     }
 
     @Override

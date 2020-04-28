@@ -88,7 +88,7 @@ public class MainServer implements Runnable{
      *          the number is 0
      *          false if there are enough nicknames
      */
-    public boolean computeTheSizeOfList() {
+    public synchronized boolean computeTheSizeOfList() {
         synchronized ( getObjectToSynchronized() ) {
             if ( actualNicknameInSearchOfRoom.size() == 0 && numberOfPlayer != 0)
                 numberOfPlayer = 0;
@@ -134,7 +134,10 @@ public class MainServer implements Runnable{
      *          false if it is not
      */
     public synchronized boolean iMFirst(String nickname) {
-        return getActualNicknameInSearchOfRoom().get(0).equals(nickname);
+
+        if ( actualNicknameInSearchOfRoom.get(0) != null )
+            return getActualNicknameInSearchOfRoom().get(0).equals(nickname);
+        return true;
     }
 
     /**
@@ -168,9 +171,9 @@ public class MainServer implements Runnable{
         while (actualNicknameInSearchOfRoom.size() > numberOfPlayer) {
             int num = actualNicknameInSearchOfRoom.size();
             String name = actualNicknameInSearchOfRoom.get(num-1);
-            ServerInterface si = mapOfNicknameAndServerInterface.remove(name);
-            si.sendEvent(new OutOfRoom());
-            si.closeConnection();
+            mapOfNicknameAndServerInterface.get(name).sendEvent(new OutOfRoom());
+            mapOfNicknameAndServerInterface.get(name).closeConnection();
+            mapOfNicknameAndServerInterface.remove(name);
             allNicknamesOfPlayers.remove(name);
         }
     }

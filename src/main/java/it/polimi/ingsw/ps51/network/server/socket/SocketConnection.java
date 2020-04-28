@@ -2,7 +2,6 @@ package it.polimi.ingsw.ps51.network.server.socket;
 
 import it.polimi.ingsw.ps51.events.events_for_client.Disconnection;
 import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
-import it.polimi.ingsw.ps51.events.events_for_client.NumberOfPlayer;
 import it.polimi.ingsw.ps51.events.events_for_server.*;
 import it.polimi.ingsw.ps51.network.server.MainServer;
 import it.polimi.ingsw.ps51.network.server.Room;
@@ -75,12 +74,12 @@ public class SocketConnection implements Runnable, ServerInterface {
      * @return true if the nickname is a valid one
      *          false if it is not
      */
-    public boolean checkName() {
+    public boolean checkName(String nickname) {
         boolean ok;
         synchronized (this.mainServer.getObjectToSynchronized()) {
-            ok = this.mainServer.checkName(this.nickname);
+            ok = this.mainServer.checkName(nickname);
             if (ok) {
-                this.mainServer.addNickname(this.nickname, this);
+                this.mainServer.addNickname(nickname, this);
             }
         }
         return ok;
@@ -91,15 +90,12 @@ public class SocketConnection implements Runnable, ServerInterface {
      * the iMFirst method to check is this client is the first one
      * to join for game
      */
-    public void first() {
+    public boolean first() {
         boolean first;
         synchronized (this.mainServer.getObjectToSynchronized()) {
             first = this.mainServer.iMFirst(this.nickname);
         }
-        if (first)
-            this.nick = false;
-        else
-            this.ok = true;
+        return first;
     }
 
     /**
@@ -110,8 +106,9 @@ public class SocketConnection implements Runnable, ServerInterface {
     public void setOnServerNumberOfPlayer(Integer number) {
         synchronized (this.mainServer.getObjectToSynchronized()) {
             this.mainServer.setNumberOfPlayer(number);
+            this.ok = true;
         }
-        this.ok = true;
+
     }
 
     @Override
@@ -163,6 +160,14 @@ public class SocketConnection implements Runnable, ServerInterface {
         return this.gameRoom;
     }
 
+    /**
+     * Setter of ok attribute
+     * @param status the status of ok
+     */
+    public void setOk(boolean status) {
+        this.ok = status;
+    }
+
     @Override
     public void closeConnection() {
         this.isFinish = true;
@@ -200,12 +205,8 @@ public class SocketConnection implements Runnable, ServerInterface {
         try {
             connection.setSoTimeout(timeOut);
             startPingThread();
+            sendEvent(new it.polimi.ingsw.ps51.events.events_for_client.Nickname());
             while (!ok) {
-
-                if (nick)
-                    sendEvent(new it.polimi.ingsw.ps51.events.events_for_client.Nickname());
-                else
-                    sendEvent(new NumberOfPlayer());
                 EventForFirstPhase event = (EventForFirstPhase) this.ois.readObject();
                 event.acceptVisitor(this.visitor);
             }
