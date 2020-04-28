@@ -7,9 +7,6 @@ import it.polimi.ingsw.ps51.model.gods.Gods;
 
 public class GodsControllerFactory {
 
-    public GodsControllerFactory() {
-    }
-
     public static GodController getController(Gods god, Player player, Map map, Card card){
         switch (god){
             case DEMETER:

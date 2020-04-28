@@ -24,15 +24,15 @@ public enum Gods {
     private static final Map<String, Gods> CARD_TO_GODS = new HashMap<>();
 
     static {
-        CARD_TO_GODS.put(Apollo.class.getName(), APOLLO);
-        CARD_TO_GODS.put(Artemis.class.getName(), ARTEMIS);
-        CARD_TO_GODS.put(Athena.class.getName(), ATHENA);
-        CARD_TO_GODS.put(Atlas.class.getName(), ATLAS);
-        CARD_TO_GODS.put(Demeter.class.getName(), DEMETER);
-        CARD_TO_GODS.put(Hephaestus.class.getName(), HEPHAESTUS);
-        CARD_TO_GODS.put(Minotaur.class.getName(), MINOTAUR);
-        CARD_TO_GODS.put(Pan.class.getName(), PAN);
-        CARD_TO_GODS.put(Prometheus.class.getName(), PROMETHEUS);
+        CARD_TO_GODS.put(new Apollo().getGodName(), APOLLO);
+        CARD_TO_GODS.put(new Artemis().getGodName(), ARTEMIS);
+        CARD_TO_GODS.put(new Athena().getGodName(), ATHENA);
+        CARD_TO_GODS.put(new Atlas().getGodName(), ATLAS);
+        CARD_TO_GODS.put(new Demeter().getGodName(), DEMETER);
+        CARD_TO_GODS.put(new Hephaestus().getGodName(), HEPHAESTUS);
+        CARD_TO_GODS.put(new Minotaur().getGodName(), MINOTAUR);
+        CARD_TO_GODS.put(new Pan().getGodName(), PAN);
+        CARD_TO_GODS.put(new Prometheus().getGodName(), PROMETHEUS);
     }
 
     static {
@@ -45,7 +45,17 @@ public enum Gods {
      * @return the value in the enumeration that represent the given card
      */
     public static Gods getGodFromCard(Card card){
-        return CARD_TO_GODS.get(card.getClass().getName());
+        return CARD_TO_GODS.get(((CommonAction) card).getGodName());
+    }
+
+    /**
+     * Given the name of a god return the corresponding enum
+     * @param name the God's name
+     * @return the enum corresponding to the given god's name
+     */
+    public static Gods getGodFromString(String name){
+        String normalizedName = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
+        return CARD_TO_GODS.get(normalizedName);
     }
 
     /**

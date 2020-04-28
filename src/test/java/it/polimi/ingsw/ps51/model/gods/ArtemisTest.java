@@ -4,7 +4,6 @@ import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
 import it.polimi.ingsw.ps51.model.*;
 import org.javatuples.Pair;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,82 +14,91 @@ import static org.junit.Assert.*;
 
 public class ArtemisTest {
 
-    private Artemis artemis;
-    private Worker worker;
-    private Player player;
-    private Map map;
+    Artemis artemis;
+    Worker worker;
+    Worker worker2;
+    Player player;
+    Map map;
 
     @Before
     public void setUp() {
-        this.artemis = new Artemis();
-        this.worker = new Worker("Merita");
-        this.player = new Player("Merita");
-        this.map = new Map();
+        artemis = new Artemis();
+        map = new Map();
+        player = new Player("Merita");
+        try {
+            worker = new Worker("Merita", map.getSquare(2,2));
+            worker2 = new Worker("Merita", map.getSquare(4,1));
+
+            map.getSquare(0,0).setLevel(Level.DOME);
+            map.getSquare(1,0).setLevel(Level.THIRD);
+            map.getSquare(3,0).setLevel(Level.SECOND);
+            map.getSquare(0,1).setLevel(Level.THIRD);
+            map.getSquare(1,1).setLevel(Level.SECOND);
+            map.getSquare(4,1).setLevel(Level.SECOND);
+            map.getSquare(1,2).setLevel(Level.SECOND);
+            map.getSquare(3,2).setLevel(Level.SECOND);
+            map.getSquare(0,3).setLevel(Level.DOME);
+            map.getSquare(1,3).setLevel(Level.FIRST);
+            map.getSquare(3,3).setLevel(Level.DOME);
+            map.getSquare(1,4).setLevel(Level.THIRD);
+            map.getSquare(2,4).setLevel(Level.FIRST);
+            map.getSquare(4,4).setLevel(Level.FIRST);
+        } catch (OutOfMapException e) {
+            e.printStackTrace();
+        }
     }
 
     @After
     public void tearDown() {
-        this.artemis = null;
-        this.worker = null;
-        this.player = null;
-        this.map = null;
+        artemis = null;
+        worker = null;
+        worker2 = null;
+        player = null;
+        map = null;
     }
 
     @Test
-    public void checkMovesTest() {
+    public void checkMovesTest_OnWorker_11ValidPositions() {
+        List<Coordinates> expected = new ArrayList<>();
+        List<Coordinates> outcome;
 
-        boolean containsAll = false;
+        outcome = artemis.checkMoves(player, worker, map);
 
-        try{
+        expected.add(new Coordinates(2,0));
+        expected.add(new Coordinates(4,0));
+        expected.add(new Coordinates(2,1));
+        expected.add(new Coordinates(3,1));
+        expected.add(new Coordinates(0,2));
+        expected.add(new Coordinates(4,2));
+        expected.add(new Coordinates(1,3));
+        expected.add(new Coordinates(2,3));
+        expected.add(new Coordinates(0,4));
+        expected.add(new Coordinates(2,4));
+        expected.add(new Coordinates(4,4));
 
-            this.worker.setPosition(map.getSquare(1,1));
-            this.map.getSquare(1,1).setLevel(Level.GROUND);
+        assertTrue(expected.containsAll(outcome));
+        assertTrue(outcome.containsAll(expected));
+        assertEquals(expected.size(), outcome.size());
+    }
 
-            this.map.getSquare(0,0).setLevel(Level.GROUND);
-            this.map.getSquare(0,1).setLevel(Level.FIRST);
-            this.map.getSquare(0,2).setLevel(Level.THIRD);
-            this.map.getSquare(0,3).setLevel(Level.DOME);
-            this.map.getSquare(1,0).setLevel(Level.FIRST);
-            this.map.getSquare(1,2).setLevel(Level.FIRST);
-            this.map.getSquare(1,3).setLevel(Level.THIRD);
-            this.map.getSquare(2,0).setLevel(Level.DOME);
-            this.map.getSquare(2,1).setLevel(Level.GROUND);
-            this.map.getSquare(2,2).setLevel(Level.SECOND);
-            this.map.getSquare(2,3).setLevel(Level.FIRST);
-            this.map.getSquare(3,0).setLevel(Level.DOME);
-            this.map.getSquare(3,1).setLevel(Level.GROUND);
-            this.map.getSquare(3,2).setLevel(Level.FIRST);
-            this.map.getSquare(3,3).setLevel(Level.THIRD);
+    @Test
+    public void checkMovesTest_OnWorker2_8ValidPositions(){
+        List<Coordinates> expected = new ArrayList<>();
+        List<Coordinates> outcome;
 
+        outcome = artemis.checkMoves(player, worker2, map);
 
+        expected.add(new Coordinates(3,0));
+        expected.add(new Coordinates(4,0));
+        expected.add(new Coordinates(2,1));
+        expected.add(new Coordinates(3,1));
+        expected.add(new Coordinates(3,2));
+        expected.add(new Coordinates(4,2));
+        expected.add(new Coordinates(2,3));
+        expected.add(new Coordinates(4,3));
 
-            Worker worker2 = new Worker("Merita");
-            worker2.setPosition(map.getSquare(2,2));
-            this.map.getSquare(2,2).setLevel(Level.SECOND);
-
-            Worker worker3 = new Worker("Luca");
-            worker3.setPosition(map.getSquare(0,1));
-            this.map.getSquare(0,1).setLevel(Level.SECOND);
-
-
-        } catch (OutOfMapException e) {
-            e.printStackTrace();
-        }
-
-        List<Coordinates> validSquares = this.artemis.checkMoves(this.player, this.worker, this.map);
-        List<Coordinates> squares = new ArrayList<>();
-
-        squares.add(new Coordinates(0,0));
-        squares.add(new Coordinates(1,0));
-        squares.add(new Coordinates(1,2));
-        squares.add(new Coordinates(2,1));
-        squares.add(new Coordinates(2,3));
-        squares.add(new Coordinates(3,1));
-        squares.add(new Coordinates(3,2));
-
-        containsAll = squares.containsAll(validSquares);
-        Assert.assertTrue(containsAll);
-
-
+        assertTrue(expected.containsAll(outcome));
+        assertTrue(outcome.containsAll(expected));
+        assertEquals(expected.size(), outcome.size());
     }
 }

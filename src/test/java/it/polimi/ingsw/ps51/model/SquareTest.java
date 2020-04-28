@@ -29,8 +29,7 @@ public class SquareTest {
 
     @Test
     public void isPresentWorker_Player1_ReturnTrue(){
-        Worker worker = new Worker("Player1");
-        worker.setPosition(square);
+        Worker worker = new Worker("Player1", square);
 
         Assert.assertTrue(square.isPresentWorker());
     }
@@ -38,6 +37,30 @@ public class SquareTest {
     @Test
     public void isPresentWorker_Null_ReturnFalse(){
         Assert.assertFalse(square.isPresentWorker());
+    }
+
+    @Test
+    public void equalsTest_PassedItself_ReturnTrue(){
+        Assert.assertTrue(square.equals(square));
+    }
+
+    @Test
+    public void equalsTest_PassedEquivalentSquare_ReturnTrue(){
+        Square squareEquivalent = new Square(new Coordinates(2,2));
+
+        Assert.assertTrue(square.equals(squareEquivalent));
+    }
+
+    @Test
+    public void equalsTest_PassedInequivalentSquare_ReturnFalse(){
+        Square squareEquivalent = new Square(new Coordinates(3,2));
+
+        Assert.assertFalse(square.equals(squareEquivalent));
+    }
+
+    @Test
+    public void equalsTest_PassedNull_ReturnFalse(){
+        Assert.assertFalse(square.equals(null));
     }
 
 }

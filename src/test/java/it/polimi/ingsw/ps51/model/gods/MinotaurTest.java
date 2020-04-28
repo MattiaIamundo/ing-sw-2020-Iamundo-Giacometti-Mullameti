@@ -192,19 +192,23 @@ public class MinotaurTest {
 
             Assert.assertEquals(map.getSquare(3,2), worker.getPosition());
             Assert.assertEquals(map.getSquare(4,2), opponentWorker.getPosition());
+            Assert.assertFalse(map.getSquare(2,2).isPresentWorker());
+            Assert.assertTrue(map.getSquare(3,2).isPresentWorker());
+            Assert.assertTrue(map.getSquare(4,2).isPresentWorker());
         } catch (OutOfMapException e) {
             e.printStackTrace();
         }
     }
 
+
     @Test
-    public void moveTest_x2y3Tox3y3NormalMove_Success() {
+    public void moveTest_x2y3Tox2y2_NormalMoveExecuted(){
         try {
-            worker.setPosition(map.getSquare(2,3));
+            card.move(player, worker, map.getSquare(2,2), map);
 
-            card.move(player, worker, map.getSquare(3,3), map);
-
-            Assert.assertEquals(map.getSquare(3,3), worker.getPosition());
+            Assert.assertEquals(map.getSquare(2,2), worker.getPosition());
+            Assert.assertTrue(map.getSquare(2,2).isPresentWorker());
+            Assert.assertFalse(map.getSquare(2,3).isPresentWorker());
         } catch (OutOfMapException e) {
             e.printStackTrace();
         }

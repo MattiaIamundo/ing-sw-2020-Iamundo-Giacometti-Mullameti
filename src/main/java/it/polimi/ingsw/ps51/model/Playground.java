@@ -24,7 +24,7 @@ public class Playground extends Observable<EventForClient> implements SquareObse
     public Playground(List<Player> players){
         boardMap = new Map();
         boardMap.addObservers(this);
-        this.players = players;
+        this.players = new ArrayList<>(players);
         log = new MemoryTurn();
         actualTurn = 0;
     }
@@ -81,7 +81,7 @@ public class Playground extends Observable<EventForClient> implements SquareObse
         }
 
         for (Player player1 : players){
-            if (!player1.equals(player) && Gods.isOpponentTurnEffect(player1.getGod())){
+            if (!player1.equals(player)){
                 for (Worker worker : player.getWorkers()){
                     ((CommonAction) player1.getGod()).removeObserver(worker);
                 }

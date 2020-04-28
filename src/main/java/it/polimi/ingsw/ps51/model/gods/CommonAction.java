@@ -99,4 +99,9 @@ public abstract class CommonAction extends Observable implements Card {
         return positions;
     }
 
+    public String getGodName(){
+        String[] name = this.getClass().getName().split("\\.");
+        return name[name.length - 1];
+    }
+
 }

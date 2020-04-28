@@ -58,7 +58,11 @@ public class Minotaur extends CommonAction{
      */
     private boolean isValidSquareWithWorker(Square opponentPosition, int direction, Map map){
         List<Square> adjacentSquares = map.getAdjacentSquare(opponentPosition);
-        return adjacentSquares.get(direction).isFreeSquare();
+        if (adjacentSquares.get(direction) == null){
+            return false;
+        }else {
+            return adjacentSquares.get(direction).isFreeSquare();
+        }
     }
 
     private boolean isAlliedWorker(List<Worker> workers, Square position){

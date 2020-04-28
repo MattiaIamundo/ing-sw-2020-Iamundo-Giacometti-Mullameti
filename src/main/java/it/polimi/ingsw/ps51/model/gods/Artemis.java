@@ -1,5 +1,6 @@
 package it.polimi.ingsw.ps51.model.gods;
 
+import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
 import it.polimi.ingsw.ps51.model.*;
 
 import java.util.ArrayList;
@@ -13,28 +14,23 @@ public class Artemis extends CommonAction{
     @Override
     public List<Coordinates> checkMoves(Player player, Worker worker, Map map) {
         Square workerPosition = worker.getPosition();
-        List<Square> adjacentSquares = map.getAdjacentSquare(workerPosition);
         List<Coordinates> validCoordinates = new ArrayList<>(super.checkMoves(player, worker, map));
-        boolean alreadyPresent = false;
 
-        for (Square square : adjacentSquares){
+        Coordinates workerCoord = worker.getPosition().getCoordinates();
+        Square additional;
+        for (int y2 = -2; y2 < 3; y2 = y2 + 2){
+            for (int x2 = -2; x2 < 3; x2 = x2 + 2){
 
-            List<Square> adjacentSquares2 = map.getAdjacentSquare(square);
-            for(Square square2 : adjacentSquares2){
-                if ((square2 != null) && (square2.getLevel().ordinal() - square.getLevel().ordinal() <= 1)
-                            && (!square2.isPresentWorker()) && !square2.getLevel().equals(Level.DOME) && (square2 != workerPosition)){
+                try {
+                    additional = map.getSquare(workerCoord.getX() + x2, workerCoord.getY() + y2);
+                    if ((additional != null) && (additional.getLevel().ordinal() - workerPosition.getLevel().ordinal() <= 1)
+                            && (!additional.isPresentWorker()) && !additional.getLevel().equals(Level.DOME)){
 
-                    for (Coordinates coordinates : validCoordinates){
-                        if(coordinates == square2.getCoordinates()){
-                            alreadyPresent=true;
-                            break;
-                        }
-
+                        validCoordinates.add(additional.getCoordinates());
                     }
 
-                    if(!alreadyPresent)
-                        validCoordinates.add(square2.getCoordinates());
-
+                } catch (OutOfMapException e) {
+                    additional = null;
                 }
             }
         }
