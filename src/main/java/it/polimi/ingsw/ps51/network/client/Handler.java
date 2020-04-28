@@ -57,8 +57,11 @@ public class Handler extends Observable<EventForClient> implements Runnable, Obs
                 }
                 else {
                     notify(event);
-                    if(event.getReceiver().equals("END") || event.getReceiver().equals("DISCONNECTION"))
+                    if(event.getReceiver().equals("END") || event.getReceiver().equals("DISCONNECTION")) {
+                        System.out.println("END received");
                         isFinished = true;
+                    }
+
                 }
 
             }

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.ps51.network.server.socket;
 
-import it.polimi.ingsw.ps51.events.events_for_client.Disconnection;
 import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
 import it.polimi.ingsw.ps51.events.events_for_server.*;
 import it.polimi.ingsw.ps51.network.server.MainServer;
@@ -118,7 +117,7 @@ public class SocketConnection implements Runnable, ServerInterface {
                 this.oos.writeObject(event);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
@@ -212,13 +211,12 @@ public class SocketConnection implements Runnable, ServerInterface {
             }
 
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             synchronized (this.mainServer.getObjectToSynchronized()) {
                 if (this.nickname != null)
                     this.mainServer.removeNickname(this.nickname);
+                isFinish = true;
             }
-            sendEvent(new Disconnection());
-            isFinish = true;
         }
 
         try {
@@ -228,8 +226,15 @@ public class SocketConnection implements Runnable, ServerInterface {
                 event.acceptVisitor(visitorPong);
             }
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            this.gameRoom.update(new it.polimi.ingsw.ps51.events.events_for_server.Disconnection(this.nickname));
+            //e.printStackTrace();
+            if (gameRoom != null) {
+                this.gameRoom.update(new it.polimi.ingsw.ps51.events.events_for_server.Disconnection(this.nickname));
+            }
+            else {
+                synchronized (this.mainServer.getObjectToSynchronized()) {
+                    this.mainServer.removeNickname(this.nickname);
+                }
+            }
         }
 
     }

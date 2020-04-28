@@ -23,6 +23,14 @@ public class ServerSocket implements Runnable{
         this.ss = new java.net.ServerSocket(port);
     }
 
+    public void stopSS() {
+        try {
+            this.ss.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Here the server socket creates the socket connection with the clients
      * until the number of player for the creation of a room is reached up
@@ -30,16 +38,15 @@ public class ServerSocket implements Runnable{
     @Override
     public void run() {
 
-        while (this.mainServer.computeTheSizeOfList()) {
             try {
-                SocketConnection si = new SocketConnection(ss.accept(), this.mainServer);
-                Thread t = new Thread(si);
-                t.start();
+                while (this.mainServer.computeTheSizeOfList()) {
+                    SocketConnection si = new SocketConnection(ss.accept(), this.mainServer);
+                    Thread t = new Thread(si);
+                    t.start();
+                }
             } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("The accept request didn't produced a new socket connection...");
-                System.out.println("or the streams produced some problems...");
-            }
+                //e.printStackTrace();
+                System.out.println("The server socket is down...");
         }
     }
 }

@@ -61,8 +61,7 @@ public class Client implements Runnable {
             t.start();
             thread.start();
         } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Something during the initialization was not good...");
+            System.out.println("The server is down at the moment...");
         }
 
     }

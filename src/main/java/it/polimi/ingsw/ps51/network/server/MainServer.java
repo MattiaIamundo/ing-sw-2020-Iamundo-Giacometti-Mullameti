@@ -175,6 +175,7 @@ public class MainServer implements Runnable{
             mapOfNicknameAndServerInterface.get(name).closeConnection();
             mapOfNicknameAndServerInterface.remove(name);
             allNicknamesOfPlayers.remove(name);
+            actualNicknameInSearchOfRoom.remove(name);
         }
     }
 
@@ -232,8 +233,7 @@ public class MainServer implements Runnable{
                 e.printStackTrace();
             }
         }
-
-        t1.interrupt();
+        ss.stopSS();
 
         synchronized ( getObjectToSynchronized() ) {
 
