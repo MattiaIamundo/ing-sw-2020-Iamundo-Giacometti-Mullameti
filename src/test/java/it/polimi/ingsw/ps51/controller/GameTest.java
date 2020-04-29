@@ -109,7 +109,7 @@ public class GameTest {
         stub.event = null;
         while (stub.event == null){
             try {
-                Thread.sleep(200);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

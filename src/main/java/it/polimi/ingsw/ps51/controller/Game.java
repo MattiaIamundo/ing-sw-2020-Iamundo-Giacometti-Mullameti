@@ -29,7 +29,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
     private VisitorController visitor;
     private Player actualPlayer;
     private Map<Player, GodController> godControllersMap;
-    protected ThirdPhase thirdPhase = new ThirdPhase();
+    protected ThirdPhase thirdPhase;
 
     /**
      * This is the constructor of the class
@@ -86,6 +86,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
             godsDeck.remove(god);
             notify(new ChooseGod(actualPlayer.getNickname(), godsDeck));
         }else {
+            thirdPhase = new ThirdPhase();
             thirdPhase.start();
         }
     }
@@ -214,5 +215,11 @@ public class Game extends Observable<EventForClient> implements GameObserver {
                 }
                 break;
         }
+    }
+
+    @Override
+    public void addObserver(Observer newObserver) {
+        super.addObserver(newObserver);
+        gameRoom.addObserver(newObserver);
     }
 }
