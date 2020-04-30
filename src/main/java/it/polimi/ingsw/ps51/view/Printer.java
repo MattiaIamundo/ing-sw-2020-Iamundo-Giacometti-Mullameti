@@ -4,6 +4,7 @@ import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
 import it.polimi.ingsw.ps51.model.Level;
 import it.polimi.ingsw.ps51.model.Map;
 import it.polimi.ingsw.ps51.model.Worker;
+import it.polimi.ingsw.ps51.model.gods.Gods;
 import org.fusesource.jansi.AnsiConsole;
 
 import java.io.BufferedReader;
@@ -76,7 +77,12 @@ public class Printer {
         }
 
     }
-    public void printGods(List<String>gods){
+    public void printGods(List<Gods>gods){
+
+        List<String> stringGod = new ArrayList<>();
+        for(Gods god : gods)
+            stringGod.add(god.toString());
+
         String line;
 
         try {
@@ -85,7 +91,7 @@ public class Printer {
 
 
             while ((line = bufferedReader.readLine()) != null) {
-                for(String string : gods){
+                for(String string : stringGod){
                     if(string.equals(line)){
                         println(colorToAnsi(Color.BLUE) + "┌─────────────────────────────────────────────┐   ");
                         print(" ");

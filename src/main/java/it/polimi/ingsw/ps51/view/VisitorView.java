@@ -5,7 +5,7 @@ import it.polimi.ingsw.ps51.events.events_for_client.*;
 
 public class VisitorView implements VisitorClient {
 
-    private Supporter s;
+    Supporter s;
 
     public VisitorView(Supporter supporter) {
         s = supporter;
@@ -68,6 +68,7 @@ public class VisitorView implements VisitorClient {
 
     @Override
     public String visitMakeDecision(MakeDecision event) {
+        s.setDecision(event.getToDecide());
         return "DECISION";
     }
 
@@ -94,7 +95,5 @@ public class VisitorView implements VisitorClient {
     }
 
     @Override
-    public String visitOutOfRoom(OutOfRoom event) {
-        return "ROOM";
-    }
+    public String visitOutOfRoom(OutOfRoom event) { return "ROOM"; }
 }

@@ -16,7 +16,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 abstract public class Supporter extends Observable<EventForServer> implements Runnable, Observer<EventForClient> {
 
-    private List<Coordinates> possibleMove;
+
     private String typeOfEvent;
     private ArrayBlockingQueue<EventForClient> events;
     private int godsNum;
@@ -27,11 +27,11 @@ abstract public class Supporter extends Observable<EventForServer> implements Ru
     private List<Pair<Coordinates, List<Level>>> validChoicesBuild;
     private Map map;
     private List<Worker> workers;
+    private String decision;
 
 
     public Supporter() {
         typeOfEvent = "DEFAULT";
-        possibleMove = new ArrayList<>();
         events = new ArrayBlockingQueue<>(10);
         godsNum = 0;
         availableGods = new ArrayList<>();
@@ -41,6 +41,7 @@ abstract public class Supporter extends Observable<EventForServer> implements Ru
         validChoicesBuild = new ArrayList<>();
         map = new Map();
         workers = new ArrayList<>();
+        decision="";
 
     }
 
@@ -80,5 +81,8 @@ abstract public class Supporter extends Observable<EventForServer> implements Ru
 
     public List<Worker> getWorkers(){return workers;}
     public void setWorkers(List<Worker> workers){this.workers = workers;}
+
+    public String getDecision(){return decision;}
+    public void setDecision(String decision){this.decision = decision;}
 
 }

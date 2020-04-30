@@ -10,7 +10,10 @@ import it.polimi.ingsw.ps51.model.gods.Gods;
 import it.polimi.ingsw.ps51.utility.MessageHandler;
 import org.javatuples.Pair;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
@@ -24,7 +27,8 @@ public class Cli extends Supporter {
     private boolean isFinish;
     private MessageHandler mh;
     private Printer printer;
-    private Scanner scanner = new Scanner(System.in);
+    private BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+    private Scanner reader = new Scanner(bufferedReader);
 
     public Cli() {
         super();
@@ -103,21 +107,25 @@ public class Cli extends Supporter {
                             updateMap();
 
                             break;
+                        case "DECISION" :
+                            boolean decision = makeDecision();
+                            EventForServer eventDecisionTaken = new DecisionTaken(decision);
+                            notify(eventDecisionTaken);
+                            break;
                         case "WIN":
-
+                            winGame();
                             break;
                         case "LOSE":
-
+                            loseGame();
                             break;
                         case "TIE":
-
 
                             break;
                         case "DISCONNECT":
 
                             break;
                         case "END":
-
+                            endGame();
                             break;
                         default:
                             ok = false;
@@ -138,299 +146,430 @@ public class Cli extends Supporter {
     }
 
     public String logIn(){
-        printer.println(printer.colorToAnsi(Color.GREEN)+"Insert your Nickname:");
 
         String nickname = "";
-        while (nickname.equals("")) {
-            nickname = scanner.nextLine();
+        ok = false;
+
+        while(!ok){
+            printer.println(printer.colorToAnsi(Color.GREEN)+"Insert your Nickname:");
+            ok = true;
+            nickname = reader.nextLine();
+
             if ( nickname.contains(" ") ) {
                 printer.println(printer.colorToAnsi(Color.RED)+"Write something without space...");
+                ok = false;
             }
             if ( nickname.equals("")) {
                 printer.println(printer.colorToAnsi(Color.RED)+"Write something...");
+                ok = false;
             }
         }
-        return nickname;
 
+        return nickname;
     }
 
     public int numberOfPlayers(){
+
         int numberOfPlayers = 0;
-        printer.println(printer.colorToAnsi(Color.BLUE)+"Choose the number of players : ");
-        printer.println(printer.colorToAnsi(Color.BLUE)+"2 players or 3 players ? ");
-        while(numberOfPlayers!=2 && numberOfPlayers!=3){
-            numberOfPlayers=scanner.nextInt();
+        ok = false;
+        printer.println(printer.colorToAnsi(Color.BLUE) + "Choose the number of players !");
+        printer.println(printer.colorToAnsi(Color.BLUE) + "2 players or 3 players ? ");
 
-            if(numberOfPlayers!=2 && numberOfPlayers!=3){
-                printer.println(printer.colorToAnsi(Color.RED)+"You can only have 2 or 3 players!! ");
-                printer.println(printer.colorToAnsi(Color.RED)+"Choose another number!");
+        while(!ok){
+            reader.reset();
+            try{
+                numberOfPlayers=reader.nextInt();
+                ok = true;
+
+                if(numberOfPlayers!=2 && numberOfPlayers!=3){
+                    printer.println(printer.colorToAnsi(Color.RED) + "You can only have 2 or 3 players!!");
+                    printer.println(printer.colorToAnsi(Color.RED) + "Enter 2 or 3 !!");
+                    ok = false;
+                }
+
+            }catch(InputMismatchException e){
+                printer.println(printer.colorToAnsi(Color.RED) + "What you entered is NOT OK !!");
+                printer.println(printer.colorToAnsi(Color.RED) + "Enter a number!!");
+                String notANumber = reader.nextLine();
+
             }
-
         }
+        reader.nextLine();
+
         return numberOfPlayers;
     }
 
-    public List<Gods> chooseGodsDeck(){
+    public List<Gods> chooseGodsDeck() {
 
-        List<Gods> choosenGods = new ArrayList<>();
-        String choosenGod;
-
+        List<Gods> chosenGods = new ArrayList<>();
+        String chosenGod = "";
         printer.printDeck();
-        printer.println(printer.colorToAnsi(Color.BLUE) + "You must choose only "+ getGodsNum() +" Gods !!");
-        for(int i=0 ; i<getGodsNum();i++ ){
-            printer.println(printer.colorToAnsi(Color.BLUE) + "Enter the name of the "+i+"º God?");
-            choosenGod =scanner.nextLine();
-           if(Gods.valueOf(choosenGod.toUpperCase()).toString().equals(choosenGod.toUpperCase())){
-               choosenGods.add(Gods.valueOf(choosenGod.toUpperCase()));
-           }else{
-               while(!(Gods.valueOf(choosenGod.toUpperCase()).toString().equals(choosenGod.toUpperCase()))) {
-                   printer.println(printer.colorToAnsi(Color.RED) + "This name is NOT ACCEPTABLE !!");
-                   printer.println(printer.colorToAnsi(Color.BLUE) + "Enter a VALID name of the  God !!");
-                   choosenGod =scanner.nextLine();
-               }
+        printer.println(printer.colorToAnsi(Color.BLUE) + "You must choose only " + getGodsNum() + " Gods !!");
 
-               choosenGods.add(Gods.valueOf(choosenGod.toUpperCase()));
-           }
+        for (int i = 0; i < getGodsNum(); i++) {
+            ok = false;
+            printer.println(printer.colorToAnsi(Color.BLUE) + "Enter the name of the " + (i + 1) + "º God?");
+            while (!ok) {
+                try {
+                    chosenGod = reader.nextLine();
+                    chosenGod=chosenGod.toUpperCase();
+                    ok = true;
+                    if((chosenGods.isEmpty()) || (!(chosenGods.contains(Gods.valueOf(chosenGod))))){
+                        chosenGods.add(Gods.valueOf(chosenGod));
+                    }else{
+                        printer.println(printer.colorToAnsi(Color.RED) + "You already chose that one !!");
+                        printer.println(printer.colorToAnsi(Color.RED) + "Choose another!!");
+                        ok = false;
+                    }
+
+                } catch (IllegalArgumentException e) {
+                    printer.println(printer.colorToAnsi(Color.RED) + "This name is NOT ACCEPTABLE !!");
+                    printer.println(printer.colorToAnsi(Color.RED) + "Enter a VALID name of a  God !!");
+                    ok = false;
+                }
+            }
         }
-
-
-        return choosenGods;
+        return chosenGods;
     }
-    //Da mettere apposto
+
     public Gods chooseGodsPlayers(){
 
-        Gods choosenGod = null ;
-        String choosen = null;
-        List<String> stringGod = new ArrayList<>();
-        for(Gods god : getAvailableGods()){
-            stringGod.add(god.toString());
-        }
-        printer.printGods(stringGod);
-
+        Gods chosenGod = null;
+        String chosen = "";
+        ok=false;
+        printer.printGods(getAvailableGods());
         printer.println(printer.colorToAnsi(Color.BLUE) + "You must choose only 1 God !!");
         printer.println(printer.colorToAnsi(Color.BLUE) + "Type the name RIGHT !!");
-        choosen = scanner.nextLine();
+        while(!ok){
 
-        for(Gods god : getAvailableGods()){
-            if(god==Gods.valueOf(choosen.toUpperCase()))
-                choosenGod=god;
+            try{
+                ok = true;
+                chosen = reader.nextLine();
+                chosen = chosen.toUpperCase();
+                if(getAvailableGods().contains(Gods.valueOf(chosen)))
+                    chosenGod = Gods.valueOf(chosen);
+                else {
+                    printer.println(printer.colorToAnsi(Color.RED) + "The God you choose is NOT AVAILABLE !!");
+                    printer.println(printer.colorToAnsi(Color.RED) + "Choose one of the given Gods!!");
+                    ok = false;
+                }
 
-        }
+            }catch (IllegalArgumentException e){
 
-        while(choosenGod==null){
-
-            printer.println(printer.colorToAnsi(Color.RED) + "Type the name RIGHT !!");
-            printer.println(printer.colorToAnsi(Color.RED) + "Enter a VALID name !!");
-            choosen = scanner.nextLine();
-
-            for(Gods god : getAvailableGods()){
-                if(god==Gods.valueOf(choosen.toUpperCase()))
-                    choosenGod=god;
-
+                printer.println(printer.colorToAnsi(Color.RED) + "This name is NOT ACCEPTABLE !!");
+                printer.println(printer.colorToAnsi(Color.RED) + "Enter a VALID name of a  God !!");
+                ok = false;
             }
         }
 
-
-        return choosenGod;
-
+        return chosenGod;
     }
 
     public void updateMap() throws OutOfMapException {
 
         printer.board(getMap() , getWorkers());
     }
-    //Da mettere apposto
+
     public Coordinates placeWorkers(){
 
-        Coordinates coordinates ;
+        Coordinates coordinates;
         int x = 0;
         int y = 0;
+        ok = false ;
 
         printer.println(printer.colorToAnsi(Color.BLUE) + "Where do you want to place your " + getWorkerNum() + "º worker ?");
         printer.println(printer.colorToAnsi(Color.BLUE) + "Enter VALID coordinates !! ");
-        printer.print(printer.colorToAnsi(Color.BLUE) + "Enter the X coordinate from 1 to 5: ");
-        x = scanner.nextInt();
-        printer.print(printer.colorToAnsi(Color.BLUE) + "Enter the y coordinate from 1 to 5: ");
-        y = scanner.nextInt();
-        while((x<1 || x>5)||(y<1 || y>5)){
-            printer.println(printer.colorToAnsi(Color.BLUE) + "This Coordinates are NOT VALID !!");
-            printer.println(printer.colorToAnsi(Color.BLUE) + "Enter VALID coordinates !! ");
-            printer.print(printer.colorToAnsi(Color.BLUE) + "Enter the X coordinate from 1 to 5: ");
-            x = scanner.nextInt();
-            printer.print(printer.colorToAnsi(Color.BLUE) + "Enter the y coordinate from 1 to 5: ");
-            y = scanner.nextInt();
-        }
-        coordinates = new Coordinates(x-1,y-1);
 
+        while(!ok){
+            reader.reset();
+            printer.print(printer.colorToAnsi(Color.BLUE) + "Enter the X coordinate from 1 to 5: ");
+            try{
+
+                x = reader.nextInt();
+                ok = true;
+                if( x<1 || x>5){
+                    printer.println(printer.colorToAnsi(Color.BLUE) + "This Coordinate is  NOT VALID !!");
+                    printer.println(printer.colorToAnsi(Color.BLUE) + "Enter a VALID coordinate !! ");
+                    ok = false;
+                }
+
+            }catch(InputMismatchException e) {
+                printer.println(printer.colorToAnsi(Color.RED) + "What you entered is NOT OK !!");
+                printer.println(printer.colorToAnsi(Color.RED) + "Enter a number!!");
+                String notANumber = reader.nextLine();
+            }
+        }
+
+        ok = false ;
+        while(!ok){
+            printer.print(printer.colorToAnsi(Color.BLUE) + "Enter the y coordinate from 1 to 5: ");
+            try{
+                y = reader.nextInt();
+                ok = true;
+                if( y<1 || y>5){
+                    printer.println(printer.colorToAnsi(Color.BLUE) + "This Coordinate is  NOT VALID !!");
+                    printer.println(printer.colorToAnsi(Color.BLUE) + "Enter a VALID coordinate !! ");
+                    ok = false;
+                }
+            }catch(InputMismatchException e) {
+                printer.println(printer.colorToAnsi(Color.RED) + "What you entered is NOT OK !!");
+                printer.println(printer.colorToAnsi(Color.RED) + "Enter a number!!");
+                String notANumber = reader.nextLine();
+            }
+        }
+
+        coordinates = new Coordinates(x-1,y-1);
         return coordinates;
     }
 
-
     public Worker chooseWorker(){
-
         int choice = 0;
         Worker worker = null;
-
+        ok =  false;
         printer.println(printer.colorToAnsi(Color.BLUE) + "Which worker do you want to use ?");
-        printer.println(printer.colorToAnsi(Color.BLUE) + "1.The Worker in position ["+getValidChoicesWorkers().get(0).getPosition().getCoordinates().getX()+"]" +
-                        "["+getValidChoicesWorkers().get(0).getPosition().getCoordinates().getY()+"]");
-        printer.println(printer.colorToAnsi(Color.BLUE) + "2.The Worker in position ["+getValidChoicesWorkers().get(1).getPosition().getCoordinates().getX()+"]" +
-                "["+getValidChoicesWorkers().get(1).getPosition().getCoordinates().getY()+"]");
+        printer.println(printer.colorToAnsi(Color.BLUE) + "1.The Worker in position ["+(getValidChoicesWorkers().get(0).getPosition().getCoordinates().getX()+1)+"]" +
+                "["+(getValidChoicesWorkers().get(0).getPosition().getCoordinates().getY()+1)+"]");
+        printer.println(printer.colorToAnsi(Color.BLUE) + "2.The Worker in position ["+(getValidChoicesWorkers().get(1).getPosition().getCoordinates().getX()+1)+"]" +
+                "["+(getValidChoicesWorkers().get(1).getPosition().getCoordinates().getY()+1)+"]");
         printer.println(printer.colorToAnsi(Color.BLUE) + "Enter 1 or 2 !!");
-        choice = scanner.nextInt();
-        while(choice!=1 && choice!=2){
-            printer.println(printer.colorToAnsi(Color.BLUE) + "Enter a VALID number !");
-            printer.println(printer.colorToAnsi(Color.BLUE) + "Enter 1 or 2 !!");
-            choice = scanner.nextInt();
+        while(!ok){
+            try{
+                choice = reader.nextInt();
+                ok = true;
+                if(choice!=1 && choice!=2){
+                    printer.println(printer.colorToAnsi(Color.BLUE) + "Enter a VALID number !");
+                    printer.println(printer.colorToAnsi(Color.BLUE) + "Enter 1 or 2 !!");
+                    ok = false;
+                }
+            }catch(InputMismatchException e) {
+                printer.println(printer.colorToAnsi(Color.RED) + "What you entered is NOT OK !!");
+                printer.println(printer.colorToAnsi(Color.RED) + "Enter a number!!");
+                String notANumber = reader.nextLine();
+            }
         }
-
         worker = getValidChoicesWorkers().get(choice-1);
-
         return worker;
-
     }
 
-    public Coordinates askMove(){
+    public Coordinates askMove() {
 
         int x = 0;
         int y = 0;
-        Coordinates coord = null;
-
+        Coordinates coordinates = null;
+        boolean notAvailable = false;
+        ok = false;
         printer.println(printer.colorToAnsi(Color.BLUE) + "Where do you want your worker to move ?");
-        printer.print(printer.colorToAnsi(Color.BLUE) + "Enter the X coordinate : ");
-        x = scanner.nextInt();
-        printer.println(printer.colorToAnsi(Color.BLUE) + "Enter the Y coordinate : ");
-        y = scanner.nextInt();
-
-        for(Coordinates coordinates : getValidChoicesMoves()){
-            if(coordinates.getX()==x && coordinates.getY()==y)
-                coord=coordinates;
+        printer.println(printer.colorToAnsi(Color.BLUE) + "This are the available coordinates :");
+        for(Coordinates coord : getValidChoicesMoves()){
+            printer.print(printer.colorToAnsi(Color.BLUE) + " [" + (coord.getX()+1) + " , " + (coord.getY()+1) +"]");
         }
+            printer.println("");
+        while (!notAvailable) {
 
-        while (coord==null){
-            printer.println(printer.colorToAnsi(Color.BLUE) + "The coordinates you entered are not available!!");
-            printer.print(printer.colorToAnsi(Color.BLUE) + "Enter a VALID X coordinate ! ");
-            x = scanner.nextInt();
-            printer.println(printer.colorToAnsi(Color.BLUE) + "Enter a VALID Y coordinate ! ");
-            y = scanner.nextInt();
+            while (!ok) {
+                printer.print(printer.colorToAnsi(Color.BLUE) + "Enter the X coordinate : ");
+                try {
+                    x = reader.nextInt();
+                    ok = true;
 
-            for(Coordinates coordinates : getValidChoicesMoves()){
-                if(coordinates.getX()==x && coordinates.getY()==y)
-                    coord=coordinates;
+                    if( x<1 || x>5){
+                        printer.println(printer.colorToAnsi(Color.BLUE) + "This Coordinate is  NOT VALID !!");
+                        printer.println(printer.colorToAnsi(Color.BLUE) + "Enter a VALID coordinate !! ");
+                        ok = false;
+                    }
+                } catch (InputMismatchException e) {
+                    printer.println(printer.colorToAnsi(Color.RED) + "What you entered is NOT OK !!");
+                    printer.println(printer.colorToAnsi(Color.RED) + "Enter a number!!");
+                    String notANumber = reader.nextLine();
+                }
+            }
+
+
+            ok = false;
+
+            while (!ok) {
+                printer.print(printer.colorToAnsi(Color.BLUE) + "Enter the Y coordinate : ");
+                try {
+                    y = reader.nextInt();
+                    ok = true;
+                    if( y<1 || y>5){
+                        printer.println(printer.colorToAnsi(Color.BLUE) + "This Coordinate is  NOT VALID !!");
+                        printer.println(printer.colorToAnsi(Color.BLUE) + "Enter a VALID coordinate !! ");
+                        ok = false;
+                    }
+
+                } catch (InputMismatchException e) {
+                    printer.println(printer.colorToAnsi(Color.RED) + "What you entered is NOT OK !!");
+                    printer.println(printer.colorToAnsi(Color.RED) + "Enter a number!!");
+                    String notANumber = reader.nextLine();
+                }
+            }
+
+            for(Coordinates coord : getValidChoicesMoves()){
+                if(coord.getX()==x && coord.getY()==y){
+                    notAvailable = true;
+                    break;
+                }
+
+
             }
         }
-        return coord;
-
+        coordinates = new Coordinates(x-1,y-1);
+        return coordinates;
     }
-    //Da mettere apposto
+
     public Pair<Coordinates, Level> askBuild(){
 
-        //DA CONTROLLAREEEEEE
-
-        Coordinates coordinates = null;
-        Level level = null ;
-        Level levelPossibilities = null;
-        Pair<Coordinates, Level> buildOn = null;
-
         int x = 0;
         int y = 0;
-        int z = 0;
+        String z = "";
+        boolean notAvailable = false;
+        Coordinates coordinates = null;
+        Level level = null ;
 
+        Pair<Coordinates, Level> buildOn = null;
+        ok = false;
 
-        printer.println(printer.colorToAnsi(Color.BLUE) + "Where do you want to build ?");
-        printer.print(printer.colorToAnsi(Color.BLUE) + "Enter the X coordinate : ");
-        x = scanner.nextInt();
-        printer.println(printer.colorToAnsi(Color.BLUE) + "Enter the Y coordinate : ");
-        y = scanner.nextInt();
-
+        printer.println(printer.colorToAnsi(Color.BLUE) + "Where do you want your worker to move ?");
+        printer.println(printer.colorToAnsi(Color.BLUE) + "This are the available coordinates :");
         for(Pair<Coordinates, List<Level>> validBuilds : getValidChoicesBuild()){
-            if(validBuilds.getValue0().getX()==x && validBuilds.getValue0().getY()==y) {
-                coordinates = new Coordinates(x, y);
-
-            }
+           for(Level l : validBuilds.getValue1())
+                printer.print(printer.colorToAnsi(Color.BLUE) + " [" + (validBuilds.getValue0().getX() + 1) + " , " + (validBuilds.getValue0().getY() + 1) + " , " + l +"]");
         }
+        while (!notAvailable) {
 
-        while(coordinates==null){
-            printer.println(printer.colorToAnsi(Color.BLUE) + "The coordinates you entered are not available!!");
-            printer.print(printer.colorToAnsi(Color.BLUE) + "Enter a VALID X coordinate ! ");
-            x = scanner.nextInt();
-            printer.println(printer.colorToAnsi(Color.BLUE) + "Enter a VALID Y coordinate ! ");
-            y = scanner.nextInt();
+            while (!ok) {
+                printer.print(printer.colorToAnsi(Color.BLUE) + "Enter the X coordinate : ");
+                try {
+                    x = reader.nextInt();
+                    ok = true;
+                    if( x<1 || x>5){
+                        printer.println(printer.colorToAnsi(Color.BLUE) + "This Coordinate is  NOT VALID !!");
+                        printer.println(printer.colorToAnsi(Color.BLUE) + "Enter a VALID coordinate !! ");
+                        ok = false;
+                    }
+                } catch (InputMismatchException e) {
+                    printer.println(printer.colorToAnsi(Color.RED) + "What you entered is NOT OK !!");
+                    printer.println(printer.colorToAnsi(Color.RED) + "Enter a number!!");
+                    String notANumber = reader.nextLine();
+                }
+            }
+
+            ok = false;
+
+
+            while (!ok) {
+                printer.print(printer.colorToAnsi(Color.BLUE) + "Enter the Y coordinate : ");
+                try {
+                    y = reader.nextInt();
+                    ok = true;
+                    if( y<1 || y>5){
+                        printer.println(printer.colorToAnsi(Color.BLUE) + "This Coordinate is  NOT VALID !!");
+                        printer.println(printer.colorToAnsi(Color.BLUE) + "Enter a VALID coordinate !! ");
+                        ok = false;
+                    }
+                } catch (InputMismatchException e) {
+                    printer.println(printer.colorToAnsi(Color.RED) + "What you entered is NOT OK !!");
+                    printer.println(printer.colorToAnsi(Color.RED) + "Enter a number!!");
+                    String notANumber = reader.nextLine();
+                }
+            }
+
+            ok = false;
+
+
+            while (!ok) {
+                printer.println(printer.colorToAnsi(Color.BLUE) + "What level do you want to build ?");
+
+                for (Pair<Coordinates, List<Level>> validBuilds : getValidChoicesBuild())
+                    if (validBuilds.getValue0().getX() == x && validBuilds.getValue0().getY() == y)
+                        for (Level validLevel : validBuilds.getValue1())
+                            printer.println(printer.colorToAnsi(Color.BLUE) + validLevel.toString());
+
+
+                try {
+                    z = reader.nextLine();
+                    z = z.toUpperCase();
+                    ok = true;
+                    Level.valueOf(z);
+
+                } catch (IllegalArgumentException e) {
+
+                    printer.println(printer.colorToAnsi(Color.RED) + "This name is NOT ACCEPTABLE !!");
+                    printer.println(printer.colorToAnsi(Color.RED) + "Enter a VALID name of a  God !!");
+                    ok = false;
+                }
+            }
+
+
 
             for(Pair<Coordinates, List<Level>> validBuilds : getValidChoicesBuild()){
                 if(validBuilds.getValue0().getX()==x && validBuilds.getValue0().getY()==y) {
-                    coordinates = new Coordinates(x, y);
+                    for(Level validLevel : validBuilds.getValue1()) {
 
-                }
-            }
-        }
-
-        printer.println(printer.colorToAnsi(Color.BLUE) + "What level do you want to build ?");
-        printer.println(printer.colorToAnsi(Color.BLUE) + "1.First");
-        printer.println(printer.colorToAnsi(Color.BLUE) + "2.Second");
-        printer.println(printer.colorToAnsi(Color.BLUE) + "3.Third");
-        printer.println(printer.colorToAnsi(Color.BLUE) + "4.Dome");
-
-        z = scanner.nextInt();
-
-        while (z<1||z>4){
-            printer.println(printer.colorToAnsi(Color.RED) + "This number is NOT available!!");
-            printer.println(printer.colorToAnsi(Color.BLUE) + "Enter a number from 1 to 4 !!");
-            z=scanner.nextInt();
-        }
-
-        switch(z) {
-            case 1 :
-                levelPossibilities = Level.FIRST;
-                break;
-            case 2 :
-                levelPossibilities = Level.SECOND;
-                break;
-            case 3 :
-                levelPossibilities = Level.THIRD;
-                break;
-            case 4 :
-                levelPossibilities = Level.DOME;
-                break;
-            default:
-                break;
-        }
-
-        for(Pair<Coordinates, List<Level>> validBuilds : getValidChoicesBuild()){
-            if(validBuilds.getValue0().getX()==x && validBuilds.getValue0().getY()==y) {
-                for(Level validLevel : validBuilds.getValue1()){
-                    if(validLevel==levelPossibilities){
-                        level = levelPossibilities;
+                        if (validLevel == Level.valueOf(z)) {
+                            level = validLevel;
+                            coordinates = new Coordinates(x-1,y-1);
+                            buildOn = buildOn.setAt0(coordinates);
+                            buildOn = buildOn.setAt1(level);
+                            notAvailable = true;
+                            break;
+                        }else{
+                            printer.println(printer.colorToAnsi(Color.RED) + "This level is NOT AVAILABLE !!");
+                            printer.println(printer.colorToAnsi(Color.RED) + "Enter another level !!");
+                            notAvailable = false;
+                        }
                     }
+                }else{
+                    printer.println(printer.colorToAnsi(Color.RED) + "This square is NOT AVAILABLE !!");
+                    printer.println(printer.colorToAnsi(Color.RED) + "Enter other coordinates !!");
+                    notAvailable = false;
                 }
 
             }
         }
-
-        while(level==null){
-            printer.println(printer.colorToAnsi(Color.RED) + "This Level is NOT available!!");
-            printer.println(printer.colorToAnsi(Color.BLUE) + "Enter a valid Level !!");
-
-        }
-
-        buildOn = new Pair<>(coordinates,level);
-
         return buildOn;
     }
 
-    public void winGame(){
+    public boolean makeDecision(){
 
+        String answer="";
+        ok = false;
+        printer.println(printer.colorToAnsi(Color.GREEN)+getDecision());
+
+        while(!ok){
+            printer.println(printer.colorToAnsi(Color.GREEN)+"Enter Y for Yes or N for No !!");
+            answer = reader.nextLine();
+            answer = answer.toUpperCase();
+            ok = true;
+            if(!(answer.equals("Y")||answer.equals("N"))){
+                printer.println(printer.colorToAnsi(Color.GREEN)+"This is NOT VALID !!");
+                ok = false;
+            }
+        }
+        return answer.equals("Y");
+
+
+    }
+
+
+    public void winGame(){
+        printer.println(printer.colorToAnsi(Color.GREEN) + "Congratulations , YOU WON !!");
     }
 
     public void loseGame(){
-
+        printer.println(printer.colorToAnsi(Color.RED) + "Sorry , you lost ...");
     }
 
+    public void tieGame(){
+        printer.println(printer.colorToAnsi(Color.RED) + "This game ");
+    }
     public void disconnectGame(){
-
+        printer.println(printer.colorToAnsi(Color.BLUE) + "Disconnecting Game.....");
     }
 
     public void endGame(){
-
+        printer.println(printer.colorToAnsi(Color.RED) + "End Game");
     }
+
 }
