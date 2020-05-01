@@ -18,7 +18,7 @@ abstract public class Supporter extends Observable<EventForServer> implements Ru
 
 
     private String typeOfEvent;
-    private ArrayBlockingQueue<EventForClient> events;
+    ArrayBlockingQueue<EventForClient> events;
     private int godsNum;
     private List<Gods> availableGods;
     private int workerNum;

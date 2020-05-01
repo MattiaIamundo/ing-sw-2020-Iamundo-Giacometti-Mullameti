@@ -33,7 +33,7 @@ public class Printer {
     public void printDeck(){
 
         String line;
-        int k = 0;
+        int k;
 
         for(int j=0 ; j<3 ;j++) {
             for (int i = j*18; i <(j*18+6); i++) {
@@ -44,20 +44,20 @@ public class Printer {
                 }
                 try {
                     print("  ");
-                    line = Files.readAllLines(Paths.get("C:\\Users\\merit\\Desktop\\ing-sw-2020-Iamundo-Giacometti-Mullameti\\src\\main\\resources\\Gods.txt")).get(i);
+                    line = Files.readAllLines(Paths.get("src/main/resources/Gods.txt")).get(i);
                     print(colorToAnsi(Color.WHITE)+line);
                     space(line);
                     k = i + 6;
-                    line = Files.readAllLines(Paths.get("C:\\Users\\merit\\Desktop\\ing-sw-2020-Iamundo-Giacometti-Mullameti\\src\\main\\resources\\Gods.txt")).get(k);
+                    line = Files.readAllLines(Paths.get("src/main/resources/Gods.txt")).get(k);
                     print(colorToAnsi(Color.WHITE)+line);
                     space(line);
                     k = i + 2*6;
-                    line = Files.readAllLines(Paths.get("C:\\Users\\merit\\Desktop\\ing-sw-2020-Iamundo-Giacometti-Mullameti\\src\\main\\resources\\Gods.txt")).get(k);
+                    line = Files.readAllLines(Paths.get("src/main/resources/Gods.txt")).get(k);
                     print(colorToAnsi(Color.WHITE)+line);
                     println("");
 
                 } catch (IOException e) {
-                    System.out.println(e);
+                    e.printStackTrace();
                 }
 
                 if (i == j*18) {
@@ -86,7 +86,7 @@ public class Printer {
         String line;
 
         try {
-            FileReader reader = new FileReader("C:\\Users\\merit\\Desktop\\ing-sw-2020-Iamundo-Giacometti-Mullameti\\src\\main\\resources\\Gods.txt");
+            FileReader reader = new FileReader("src/main/resources/Gods.txt");
             BufferedReader bufferedReader = new BufferedReader(reader);
 
 

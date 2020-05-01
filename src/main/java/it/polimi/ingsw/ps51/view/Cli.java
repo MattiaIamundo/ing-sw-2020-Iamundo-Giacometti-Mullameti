@@ -24,11 +24,11 @@ import java.util.concurrent.TimeoutException;
 public class Cli extends Supporter {
 
     private boolean ok;
-    private boolean isFinish;
-    private MessageHandler mh;
-    private Printer printer;
-    private BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-    private Scanner reader = new Scanner(bufferedReader);
+    boolean isFinish;
+    MessageHandler mh;
+    Printer printer;
+    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+    Scanner reader = new Scanner(bufferedReader);
 
     public Cli() {
         super();
@@ -119,7 +119,7 @@ public class Cli extends Supporter {
                             loseGame();
                             break;
                         case "DISCONNECT":
-
+                            disconnectGame();
                             break;
                         case "END":
                             endGame();
@@ -135,7 +135,7 @@ public class Cli extends Supporter {
                 }
             }
         }
-
+        System.exit(0);
     }
 
     public void launch(){
@@ -187,7 +187,7 @@ public class Cli extends Supporter {
             }catch(InputMismatchException e){
                 printer.println(printer.colorToAnsi(Color.RED) + "What you entered is NOT OK !!");
                 printer.println(printer.colorToAnsi(Color.RED) + "Enter a number!!");
-                String notANumber = reader.nextLine();
+                reader.nextLine();
 
             }
         }
@@ -199,7 +199,7 @@ public class Cli extends Supporter {
     public List<Gods> chooseGodsDeck() {
 
         List<Gods> chosenGods = new ArrayList<>();
-        String chosenGod = "";
+        String chosenGod;
         printer.printDeck();
         printer.println(printer.colorToAnsi(Color.BLUE) + "You must choose only " + getGodsNum() + " Gods !!");
 
@@ -232,7 +232,7 @@ public class Cli extends Supporter {
     public Gods chooseGodsPlayers(){
 
         Gods chosenGod = null;
-        String chosen = "";
+        String chosen;
         ok=false;
         printer.printGods(getAvailableGods());
         printer.println(printer.colorToAnsi(Color.BLUE) + "You must choose only 1 God !!");
@@ -270,8 +270,8 @@ public class Cli extends Supporter {
     public Coordinates placeWorkers(){
 
         Coordinates coordinates;
-        int x = 0;
-        int y = 0;
+        int x;
+        int y;
 
 
         printer.println(printer.colorToAnsi(Color.BLUE) + "Where do you want to place your " + getWorkerNum() + "º worker ?");
@@ -288,7 +288,7 @@ public class Cli extends Supporter {
 
     public Worker chooseWorker(){
         int choice = 0;
-        Worker worker = null;
+        Worker worker;
         ok =  false;
         printer.println(printer.colorToAnsi(Color.BLUE) + "Which worker do you want to use ?");
         printer.println(printer.colorToAnsi(Color.BLUE) + "1.The Worker in position ["+(getValidChoicesWorkers().get(0).getPosition().getCoordinates().getX()+1)+"]" +
@@ -308,7 +308,7 @@ public class Cli extends Supporter {
             }catch(InputMismatchException e) {
                 printer.println(printer.colorToAnsi(Color.RED) + "What you entered is NOT OK !!");
                 printer.println(printer.colorToAnsi(Color.RED) + "Enter a number!!");
-                String notANumber = reader.nextLine();
+                reader.nextLine();
             }
         }
         worker = getValidChoicesWorkers().get(choice-1);
@@ -319,11 +319,11 @@ public class Cli extends Supporter {
 
         int x = 0;
         int y = 0;
-        Coordinates coordinates = null;
+        Coordinates coordinates;
         boolean notAvailable = false;
         ok = false;
         printer.println(printer.colorToAnsi(Color.BLUE) + "Where do you want your worker to move ?");
-        printer.println(printer.colorToAnsi(Color.BLUE) + "This are the available coordinates :");
+        printer.println(printer.colorToAnsi(Color.BLUE) + "These are the available coordinates :");
         for(Coordinates coord : getValidChoicesMoves()){
             printer.print(printer.colorToAnsi(Color.BLUE) + " [" + (coord.getX()+1) + " , " + (coord.getY()+1) +"]");
         }
@@ -349,18 +349,18 @@ public class Cli extends Supporter {
 
     public Pair<Coordinates, Level> askBuild(){
 
-        int x = 0;
-        int y = 0;
+        int x;
+        int y;
         String z = "";
         boolean notAvailable = false;
         Coordinates coordinates = null;
         Level level = null ;
 
-        Pair<Coordinates, Level> buildOn = null;
+        Pair<Coordinates, Level> buildOn;
 
 
         printer.println(printer.colorToAnsi(Color.BLUE) + "Where do you want your worker to move ?");
-        printer.println(printer.colorToAnsi(Color.BLUE) + "This are the available coordinates :");
+        printer.println(printer.colorToAnsi(Color.BLUE) + "These are the available coordinates :");
         for(Pair<Coordinates, List<Level>> validBuilds : getValidChoicesBuild()){
            for(Level l : validBuilds.getValue1())
                 printer.print(printer.colorToAnsi(Color.BLUE) + " [" + (validBuilds.getValue0().getX() + 1) + " , " + (validBuilds.getValue0().getY() + 1) + " , " + l +"]");
@@ -391,8 +391,8 @@ public class Cli extends Supporter {
 
                 } catch (IllegalArgumentException e) {
 
-                    printer.println(printer.colorToAnsi(Color.RED) + "This name is NOT ACCEPTABLE !!");
-                    printer.println(printer.colorToAnsi(Color.RED) + "Enter a VALID name of a  God !!");
+                    printer.println(printer.colorToAnsi(Color.RED) + "This level is NOT ACCEPTABLE !!");
+                    printer.println(printer.colorToAnsi(Color.RED) + "Enter a VALID level !!");
                     ok = false;
                 }
             }
@@ -476,7 +476,7 @@ public class Cli extends Supporter {
             } catch (InputMismatchException e) {
                 printer.println(printer.colorToAnsi(Color.RED) + "What you entered is NOT OK !!");
                 printer.println(printer.colorToAnsi(Color.RED) + "Enter a number!!");
-                String notANumber = reader.nextLine();
+                reader.nextLine();
             }
         }
         return coordinate;

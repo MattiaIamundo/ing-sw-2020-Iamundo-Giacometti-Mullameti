@@ -2,7 +2,6 @@ package it.polimi.ingsw.ps51.utility;
 
 import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
 import it.polimi.ingsw.ps51.events.events_for_client.VisitorClient;
-import it.polimi.ingsw.ps51.view.Cli;
 import it.polimi.ingsw.ps51.view.Supporter;
 import it.polimi.ingsw.ps51.view.VisitorView;
 
@@ -13,9 +12,9 @@ import java.util.concurrent.Future;
 public class MessageHandler {
 
     private EventForClient event;
-    private Supporter supporter;
-    private VisitorClient visitorClient;
-    private ExecutorService ex = Executors.newSingleThreadExecutor();
+    Supporter supporter;
+    VisitorClient visitorClient;
+    ExecutorService ex = Executors.newSingleThreadExecutor();
 
     public MessageHandler(Supporter s) {
         supporter = s;
