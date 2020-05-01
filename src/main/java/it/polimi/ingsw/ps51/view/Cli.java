@@ -118,9 +118,6 @@ public class Cli extends Supporter {
                         case "LOSE":
                             loseGame();
                             break;
-                        case "TIE":
-
-                            break;
                         case "DISCONNECT":
 
                             break;
@@ -275,48 +272,15 @@ public class Cli extends Supporter {
         Coordinates coordinates;
         int x = 0;
         int y = 0;
-        ok = false ;
+
 
         printer.println(printer.colorToAnsi(Color.BLUE) + "Where do you want to place your " + getWorkerNum() + "º worker ?");
         printer.println(printer.colorToAnsi(Color.BLUE) + "Enter VALID coordinates !! ");
 
-        while(!ok){
-            reader.reset();
-            printer.print(printer.colorToAnsi(Color.BLUE) + "Enter the X coordinate from 1 to 5: ");
-            try{
+        x = coordinateCheck("X");
 
-                x = reader.nextInt();
-                ok = true;
-                if( x<1 || x>5){
-                    printer.println(printer.colorToAnsi(Color.BLUE) + "This Coordinate is  NOT VALID !!");
-                    printer.println(printer.colorToAnsi(Color.BLUE) + "Enter a VALID coordinate !! ");
-                    ok = false;
-                }
 
-            }catch(InputMismatchException e) {
-                printer.println(printer.colorToAnsi(Color.RED) + "What you entered is NOT OK !!");
-                printer.println(printer.colorToAnsi(Color.RED) + "Enter a number!!");
-                String notANumber = reader.nextLine();
-            }
-        }
-
-        ok = false ;
-        while(!ok){
-            printer.print(printer.colorToAnsi(Color.BLUE) + "Enter the y coordinate from 1 to 5: ");
-            try{
-                y = reader.nextInt();
-                ok = true;
-                if( y<1 || y>5){
-                    printer.println(printer.colorToAnsi(Color.BLUE) + "This Coordinate is  NOT VALID !!");
-                    printer.println(printer.colorToAnsi(Color.BLUE) + "Enter a VALID coordinate !! ");
-                    ok = false;
-                }
-            }catch(InputMismatchException e) {
-                printer.println(printer.colorToAnsi(Color.RED) + "What you entered is NOT OK !!");
-                printer.println(printer.colorToAnsi(Color.RED) + "Enter a number!!");
-                String notANumber = reader.nextLine();
-            }
-        }
+        y = coordinateCheck("Y");
 
         coordinates = new Coordinates(x-1,y-1);
         return coordinates;
@@ -366,51 +330,16 @@ public class Cli extends Supporter {
             printer.println("");
         while (!notAvailable) {
 
-            while (!ok) {
-                printer.print(printer.colorToAnsi(Color.BLUE) + "Enter the X coordinate : ");
-                try {
-                    x = reader.nextInt();
-                    ok = true;
-
-                    if( x<1 || x>5){
-                        printer.println(printer.colorToAnsi(Color.BLUE) + "This Coordinate is  NOT VALID !!");
-                        printer.println(printer.colorToAnsi(Color.BLUE) + "Enter a VALID coordinate !! ");
-                        ok = false;
-                    }
-                } catch (InputMismatchException e) {
-                    printer.println(printer.colorToAnsi(Color.RED) + "What you entered is NOT OK !!");
-                    printer.println(printer.colorToAnsi(Color.RED) + "Enter a number!!");
-                    String notANumber = reader.nextLine();
-                }
-            }
+            x = coordinateCheck("X");
 
 
-            ok = false;
-
-            while (!ok) {
-                printer.print(printer.colorToAnsi(Color.BLUE) + "Enter the Y coordinate : ");
-                try {
-                    y = reader.nextInt();
-                    ok = true;
-                    if( y<1 || y>5){
-                        printer.println(printer.colorToAnsi(Color.BLUE) + "This Coordinate is  NOT VALID !!");
-                        printer.println(printer.colorToAnsi(Color.BLUE) + "Enter a VALID coordinate !! ");
-                        ok = false;
-                    }
-
-                } catch (InputMismatchException e) {
-                    printer.println(printer.colorToAnsi(Color.RED) + "What you entered is NOT OK !!");
-                    printer.println(printer.colorToAnsi(Color.RED) + "Enter a number!!");
-                    String notANumber = reader.nextLine();
-                }
-            }
+            y = coordinateCheck("Y");
 
             for(Coordinates coord : getValidChoicesMoves()){
-                if(coord.getX()==x && coord.getY()==y){
+                if(coord.getX()==(x-1) && coord.getY()==(y-1)){
                     notAvailable = true;
                     break;
                 }
-
 
             }
         }
@@ -428,7 +357,7 @@ public class Cli extends Supporter {
         Level level = null ;
 
         Pair<Coordinates, Level> buildOn = null;
-        ok = false;
+
 
         printer.println(printer.colorToAnsi(Color.BLUE) + "Where do you want your worker to move ?");
         printer.println(printer.colorToAnsi(Color.BLUE) + "This are the available coordinates :");
@@ -436,58 +365,25 @@ public class Cli extends Supporter {
            for(Level l : validBuilds.getValue1())
                 printer.print(printer.colorToAnsi(Color.BLUE) + " [" + (validBuilds.getValue0().getX() + 1) + " , " + (validBuilds.getValue0().getY() + 1) + " , " + l +"]");
         }
+        printer.println("");
         while (!notAvailable) {
 
-            while (!ok) {
-                printer.print(printer.colorToAnsi(Color.BLUE) + "Enter the X coordinate : ");
-                try {
-                    x = reader.nextInt();
-                    ok = true;
-                    if( x<1 || x>5){
-                        printer.println(printer.colorToAnsi(Color.BLUE) + "This Coordinate is  NOT VALID !!");
-                        printer.println(printer.colorToAnsi(Color.BLUE) + "Enter a VALID coordinate !! ");
-                        ok = false;
-                    }
-                } catch (InputMismatchException e) {
-                    printer.println(printer.colorToAnsi(Color.RED) + "What you entered is NOT OK !!");
-                    printer.println(printer.colorToAnsi(Color.RED) + "Enter a number!!");
-                    String notANumber = reader.nextLine();
-                }
-            }
+            x = coordinateCheck("X");
+            y = coordinateCheck("Y");
 
             ok = false;
-
-
-            while (!ok) {
-                printer.print(printer.colorToAnsi(Color.BLUE) + "Enter the Y coordinate : ");
-                try {
-                    y = reader.nextInt();
-                    ok = true;
-                    if( y<1 || y>5){
-                        printer.println(printer.colorToAnsi(Color.BLUE) + "This Coordinate is  NOT VALID !!");
-                        printer.println(printer.colorToAnsi(Color.BLUE) + "Enter a VALID coordinate !! ");
-                        ok = false;
-                    }
-                } catch (InputMismatchException e) {
-                    printer.println(printer.colorToAnsi(Color.RED) + "What you entered is NOT OK !!");
-                    printer.println(printer.colorToAnsi(Color.RED) + "Enter a number!!");
-                    String notANumber = reader.nextLine();
-                }
-            }
-
-            ok = false;
-
 
             while (!ok) {
                 printer.println(printer.colorToAnsi(Color.BLUE) + "What level do you want to build ?");
 
                 for (Pair<Coordinates, List<Level>> validBuilds : getValidChoicesBuild())
-                    if (validBuilds.getValue0().getX() == x && validBuilds.getValue0().getY() == y)
+                    if (validBuilds.getValue0().getX() == x-1 && validBuilds.getValue0().getY() == y-1)
                         for (Level validLevel : validBuilds.getValue1())
                             printer.println(printer.colorToAnsi(Color.BLUE) + validLevel.toString());
 
 
                 try {
+                    reader.nextLine();
                     z = reader.nextLine();
                     z = z.toUpperCase();
                     ok = true;
@@ -503,31 +399,26 @@ public class Cli extends Supporter {
 
 
 
-            for(Pair<Coordinates, List<Level>> validBuilds : getValidChoicesBuild()){
-                if(validBuilds.getValue0().getX()==x && validBuilds.getValue0().getY()==y) {
-                    for(Level validLevel : validBuilds.getValue1()) {
+            for(Pair<Coordinates, List<Level>> validBuilds : getValidChoicesBuild()) {
+                if (validBuilds.getValue0().getX() == (x - 1) && validBuilds.getValue0().getY() == (y - 1)) {
+                    for (Level validLevel : validBuilds.getValue1()) {
 
                         if (validLevel == Level.valueOf(z)) {
                             level = validLevel;
-                            coordinates = new Coordinates(x-1,y-1);
-                            buildOn = buildOn.setAt0(coordinates);
-                            buildOn = buildOn.setAt1(level);
+                            coordinates = new Coordinates(x - 1, y - 1);
+
                             notAvailable = true;
                             break;
-                        }else{
+                        } else {
                             printer.println(printer.colorToAnsi(Color.RED) + "This level is NOT AVAILABLE !!");
                             printer.println(printer.colorToAnsi(Color.RED) + "Enter another level !!");
                             notAvailable = false;
                         }
                     }
-                }else{
-                    printer.println(printer.colorToAnsi(Color.RED) + "This square is NOT AVAILABLE !!");
-                    printer.println(printer.colorToAnsi(Color.RED) + "Enter other coordinates !!");
-                    notAvailable = false;
                 }
-
             }
         }
+        buildOn = new Pair<>(coordinates,level);
         return buildOn;
     }
 
@@ -560,10 +451,6 @@ public class Cli extends Supporter {
     public void loseGame(){
         printer.println(printer.colorToAnsi(Color.RED) + "Sorry , you lost ...");
     }
-
-    public void tieGame(){
-        printer.println(printer.colorToAnsi(Color.RED) + "This game ");
-    }
     public void disconnectGame(){
         printer.println(printer.colorToAnsi(Color.BLUE) + "Disconnecting Game.....");
     }
@@ -572,4 +459,26 @@ public class Cli extends Supporter {
         printer.println(printer.colorToAnsi(Color.RED) + "End Game");
     }
 
+    private int  coordinateCheck(String car){
+        ok = false;
+        int coordinate = 0;
+        while (!ok) {
+            printer.print(printer.colorToAnsi(Color.BLUE) + "Enter the "+ car +" coordinate : ");
+            try {
+                coordinate = reader.nextInt();
+                ok = true;
+
+                if( coordinate<1 || coordinate>5){
+                    printer.println(printer.colorToAnsi(Color.BLUE) + "This Coordinate is  NOT VALID !!");
+                    printer.println(printer.colorToAnsi(Color.BLUE) + "Enter a VALID coordinate !! ");
+                    ok = false;
+                }
+            } catch (InputMismatchException e) {
+                printer.println(printer.colorToAnsi(Color.RED) + "What you entered is NOT OK !!");
+                printer.println(printer.colorToAnsi(Color.RED) + "Enter a number!!");
+                String notANumber = reader.nextLine();
+            }
+        }
+        return coordinate;
+    }
 }
