@@ -1,6 +1,5 @@
 package it.polimi.ingsw.ps51.visitor;
 
-import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
 import it.polimi.ingsw.ps51.events.events_for_server.*;
 import it.polimi.ingsw.ps51.network.server.socket.SocketConnection;
 
@@ -51,4 +50,11 @@ public class VisitorPong implements VisitorForPong {
     public void visitPong(Pong event) {
         socketConnection.startPingThread();
     }
+
+    @Override
+    public void visitNumberOfPlayers(NumberOfPlayers event) {
+        socketConnection.setOnServerNumberOfPlayer(event.getPlayerNumber());
+    }
+
+
 }

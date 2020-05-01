@@ -118,11 +118,17 @@ public class Cli extends Supporter {
                         case "LOSE":
                             loseGame();
                             break;
+                        case "ROOM":
+                            outOfRoom();
+                            isFinish = true;
+                            break;
                         case "DISCONNECT":
                             disconnectGame();
+                            isFinish = true;
                             break;
                         case "END":
                             endGame();
+                            isFinish = true;
                             break;
                         default:
                             ok = false;
@@ -480,5 +486,9 @@ public class Cli extends Supporter {
             }
         }
         return coordinate;
+    }
+
+    public void outOfRoom() {
+        printer.println(printer.colorToAnsi(Color.RED) + "The game is already started, try again later...");
     }
 }

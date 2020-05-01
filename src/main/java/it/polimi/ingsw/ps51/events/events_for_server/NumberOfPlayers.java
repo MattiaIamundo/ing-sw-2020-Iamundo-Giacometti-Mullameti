@@ -25,7 +25,7 @@ public class NumberOfPlayers implements EventForFirstPhase{
 
     @Override
     public void acceptVisitor(VisitorForPong visitor) {
-
+        visitor.visitNumberOfPlayers(this);
     }
 
     @Override

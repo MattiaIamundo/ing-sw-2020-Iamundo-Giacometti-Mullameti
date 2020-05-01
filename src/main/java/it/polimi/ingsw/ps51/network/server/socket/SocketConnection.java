@@ -167,6 +167,18 @@ public class SocketConnection implements Runnable, ServerInterface {
         this.ok = status;
     }
 
+    public boolean checkIfIsAlreadyPresentARoom() {
+        boolean present;
+        synchronized (this.mainServer.getObjectToSynchronized()) {
+            present = mainServer.checkIfThereIsAlreadyARoom();
+        }
+        return present;
+    }
+
+    public void setFinish(boolean status) {
+        this.isFinish = status;
+    }
+
     @Override
     public void closeConnection() {
         this.isFinish = true;
@@ -213,14 +225,16 @@ public class SocketConnection implements Runnable, ServerInterface {
         } catch (IOException | ClassNotFoundException e) {
             //e.printStackTrace();
             synchronized (this.mainServer.getObjectToSynchronized()) {
-                if (this.nickname != null)
+                if (this.nickname != null) {
+                    this.mainServer.reAskNumberIfIWasTheFirstOneAndOtherAreConnected(this.nickname);
                     this.mainServer.removeNickname(this.nickname);
+                }
                 isFinish = true;
             }
         }
 
         try {
-            connection.setSoTimeout(timeOut);
+            //connection.setSoTimeout(timeOut);
             while(!isFinish) {
                 EventForServer event = (EventForServer) this.ois.readObject();
                 event.acceptVisitor(visitorPong);
@@ -232,6 +246,7 @@ public class SocketConnection implements Runnable, ServerInterface {
             }
             else {
                 synchronized (this.mainServer.getObjectToSynchronized()) {
+                    this.mainServer.reAskNumberIfIWasTheFirstOneAndOtherAreConnected(this.nickname);
                     this.mainServer.removeNickname(this.nickname);
                 }
             }

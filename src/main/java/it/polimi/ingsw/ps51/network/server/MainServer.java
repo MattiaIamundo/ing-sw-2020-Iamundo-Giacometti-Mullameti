@@ -1,6 +1,7 @@
 package it.polimi.ingsw.ps51.network.server;
 
 import it.polimi.ingsw.ps51.controller.Game;
+import it.polimi.ingsw.ps51.events.events_for_client.NumberOfPlayer;
 import it.polimi.ingsw.ps51.events.events_for_client.OutOfRoom;
 import it.polimi.ingsw.ps51.model.Player;
 import it.polimi.ingsw.ps51.model.Playground;
@@ -25,15 +26,21 @@ public class MainServer implements Runnable{
     List<String> allNicknamesOfPlayers;
     List<String> actualNicknameInSearchOfRoom;
     Map<String,ServerInterface> mapOfNicknameAndServerInterface;
+    List<Room> listOfRoom;
 
     /**
      * Constructor
      */
     public MainServer() {
+        this.listOfRoom = new ArrayList<>();
         this.numberOfPlayer = 0;
         this.allNicknamesOfPlayers = new ArrayList<>();
         this.actualNicknameInSearchOfRoom = new ArrayList<>();
         this.mapOfNicknameAndServerInterface = new HashMap<>();
+    }
+
+    public synchronized List<Room> getListOfRoom() {
+        return this.listOfRoom;
     }
 
     /**
@@ -160,6 +167,17 @@ public class MainServer implements Runnable{
         mapOfNicknameAndServerInterface.remove(nickname, si);
     }
 
+    public boolean checkIfThereIsAlreadyARoom() {
+        return !getListOfRoom().isEmpty();
+    }
+
+    public void reAskNumberIfIWasTheFirstOneAndOtherAreConnected(String nickname) {
+        if ( actualNicknameInSearchOfRoom.size() > 1 && actualNicknameInSearchOfRoom.get(0).equals(nickname)) {
+            numberOfPlayer = 0;
+            mapOfNicknameAndServerInterface.get(actualNicknameInSearchOfRoom.get(1)).sendEvent(new NumberOfPlayer());
+        }
+    }
+
     /**
      * Here foreach player which is over the numberOfPlayer, is removed from
      * every list which contains his nickname and to the client which his
@@ -210,6 +228,8 @@ public class MainServer implements Runnable{
         game.addObserver(newRoom);
         newRoom.setGame(game);
 
+        this.listOfRoom.add(newRoom);
+
         Thread t = new Thread(newRoom);
         t.start();
     }
@@ -228,7 +248,7 @@ public class MainServer implements Runnable{
 
         while (computeTheSizeOfList()) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(400);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

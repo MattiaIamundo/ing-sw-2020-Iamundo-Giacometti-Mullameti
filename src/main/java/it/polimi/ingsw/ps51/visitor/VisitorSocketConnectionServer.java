@@ -1,6 +1,7 @@
 package it.polimi.ingsw.ps51.visitor;
 
 import it.polimi.ingsw.ps51.events.events_for_client.NumberOfPlayer;
+import it.polimi.ingsw.ps51.events.events_for_client.OutOfRoom;
 import it.polimi.ingsw.ps51.events.events_for_server.Nickname;
 import it.polimi.ingsw.ps51.events.events_for_server.NumberOfPlayers;
 import it.polimi.ingsw.ps51.events.events_for_server.Pong;
@@ -16,18 +17,26 @@ public class VisitorSocketConnectionServer implements VisitorFirstPhase{
 
     @Override
     public void visitNickname(Nickname nickname) {
-
-        if ( socketConnection.checkName(nickname.getNickname()) ) {
-            socketConnection.setNickname(nickname.getNickname());
-            boolean first = socketConnection.first();
-
-            if (first)
-                socketConnection.sendEvent(new NumberOfPlayer());
-            else
-                socketConnection.setOk(true);
+        if (socketConnection.checkIfIsAlreadyPresentARoom()) {
+            //the game is already started so the player cannot be admitted in the room
+            socketConnection.setOk(true);
+            socketConnection.setFinish(true);
+            socketConnection.sendEvent(new OutOfRoom());
+            socketConnection.closeConnection();
         }
-        else
-            socketConnection.sendEvent(new it.polimi.ingsw.ps51.events.events_for_client.Nickname());
+        else {
+            if ( socketConnection.checkName(nickname.getNickname()) ) {
+                socketConnection.setNickname(nickname.getNickname());
+                boolean first = socketConnection.first();
+
+                if (first)
+                    socketConnection.sendEvent(new NumberOfPlayer());
+                else
+                    socketConnection.setOk(true);
+            }
+            else
+                socketConnection.sendEvent(new it.polimi.ingsw.ps51.events.events_for_client.Nickname());
+        }
     }
 
     @Override

@@ -19,4 +19,6 @@ public interface VisitorForPong {
     void visitWorkerPosition(WorkerPosition event);
 
     void visitPong(Pong event);
+
+    void visitNumberOfPlayers(NumberOfPlayers event);
 }
