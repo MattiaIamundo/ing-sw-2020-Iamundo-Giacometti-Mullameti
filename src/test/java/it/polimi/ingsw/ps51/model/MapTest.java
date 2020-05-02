@@ -45,6 +45,36 @@ public class MapTest {
     }
 
     @Test
+    public void getMaxXTest(){
+        int out = map.getMaxX();
+
+        Assert.assertEquals(4, out);
+    }
+
+    @Test
+    public void getMaxXTest_With7x4Map(){
+        map = new Map(7, 4);
+        int out = map.getMaxX();
+
+        Assert.assertEquals(6, out);
+    }
+
+    @Test
+    public void getMaxYTest(){
+        int out = map.getMaxY();
+
+        Assert.assertEquals(4, out);
+    }
+
+    @Test
+    public void getMaxYTest_With7x4Map(){
+        map = new Map(7,4);
+        int out = map.getMaxY();
+
+        Assert.assertEquals(3, out);
+    }
+
+    @Test
     public void getAdjacentSquare_x3y3_ListFullOfSquare(){
         try {
             Square square = map.getSquare(3,3);
@@ -385,6 +415,16 @@ public class MapTest {
         }
 
         Assert.assertEquals(expected, out);
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void iteratorTest_CatchException() throws NoSuchElementException{
+        Iterator<Square> iter = map.iterator();
+        Square square;
+
+        while (true){
+            square = iter.next();
+        }
     }
 
     @Test

@@ -9,6 +9,7 @@ import it.polimi.ingsw.ps51.utility.SquareObserver;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * This is the main class of the model and represents the actual sate of the game
@@ -20,6 +21,7 @@ public class Playground extends Observable<EventForClient> implements SquareObse
     private MemoryTurn log ;
     private Integer actualTurn;
     private Player actualPlayer;
+    private final static Logger logger = Logger.getLogger(Playground.class.getName());
 
     public Playground(List<Player> players){
         boardMap = new Map();
@@ -103,7 +105,7 @@ public class Playground extends Observable<EventForClient> implements SquareObse
             }
             notify(new MapUpdate(((Map) boardMap.clone()), workers));
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            logger.severe("Impossible to clone worker");
         }
     }
 }

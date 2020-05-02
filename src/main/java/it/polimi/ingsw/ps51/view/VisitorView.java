@@ -95,5 +95,14 @@ public class VisitorView implements VisitorClient {
     }
 
     @Override
-    public String visitOutOfRoom(OutOfRoom event) { return "ROOM"; }
+    public String visitOutOfRoom(OutOfRoom event) {
+        return "ROOM";
+    }
+
+    @Override
+    public String visitUnsuccessfulOperation(UnsuccessfulOperation event) {
+        //TODO alert the player that something went wrong on the server and his move wasn't be applied, and he must re do it
+        return "UNSUCCESSOPERATION";
+    }
 }
+

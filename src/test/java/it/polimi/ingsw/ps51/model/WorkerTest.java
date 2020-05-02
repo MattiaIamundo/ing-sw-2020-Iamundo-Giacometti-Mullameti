@@ -12,6 +12,17 @@ import org.junit.Test;
 public class WorkerTest {
 
     private Worker worker = null;
+
+    private class IncloneableObj{
+    }
+
+    private class NonClonableWorker extends Worker{
+        private IncloneableObj obj = new IncloneableObj();
+
+        public NonClonableWorker(String namePlayer, Square position) {
+            super(namePlayer, position);
+        }
+    }
     @Before
     public void setUp()  {
         this.worker=new Worker("Nickname");
@@ -90,21 +101,20 @@ public class WorkerTest {
 
     @Test
     public void cloneTest() {
+        Square square = new Square(new Coordinates(3,3));
+        worker.setPosition(square);
+        Worker clonedWorker = null;
         try {
-            Square square = new Square(new Coordinates(3,3));
-            worker.setPosition(square);
-            Worker clonedWorker = (Worker) worker.clone();
-            Assert.assertTrue(worker.equals(clonedWorker));
-
-            worker.updateGods(Gods.ATHENA);
-            Assert.assertNotEquals(worker.getActiveGods(), clonedWorker.getActiveGods());
-
-            worker.setInWinningCondition(true);
-            Assert.assertNotEquals(worker.isInWinningCondition(), clonedWorker.isInWinningCondition());
+            clonedWorker = (Worker) worker.clone();
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
+        Assert.assertTrue(worker.equals(clonedWorker));
 
+        worker.updateGods(Gods.ATHENA);
+        Assert.assertNotEquals(worker.getActiveGods(), clonedWorker.getActiveGods());
 
+        worker.setInWinningCondition(true);
+        Assert.assertNotEquals(worker.isInWinningCondition(), clonedWorker.isInWinningCondition());
     }
 }

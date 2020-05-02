@@ -31,4 +31,6 @@ public interface VisitorClient {
     String visitWin(Win event);
 
     String visitOutOfRoom (OutOfRoom event);
+
+    String visitUnsuccessfulOperation(UnsuccessfulOperation event);
 }

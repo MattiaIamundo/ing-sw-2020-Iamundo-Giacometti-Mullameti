@@ -29,6 +29,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
     private VisitorController visitor;
     private Player actualPlayer;
     private Map<Player, GodController> godControllersMap;
+    private final int WORKER_NUMBER;
     protected ThirdPhase thirdPhase;
 
     /**
@@ -39,6 +40,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
         this.gameRoom = gameRoom;
         godControllersMap = new HashMap<>();
         visitor = new VisitorController(this);
+        WORKER_NUMBER = 2;
     }
 
     /**
@@ -109,22 +111,26 @@ public class Game extends Observable<EventForClient> implements GameObserver {
         @Override
         public void run() {
             try {
-                for (int player = 0; player < gameRoom.getPlayers().size(); player++){
+                for (int player = 0; player < gameRoom.getPlayers().size(); player++) {
                     int workerNum = 1;
-                    while (workerNum < 3){
+                    while (workerNum <= WORKER_NUMBER) {
                         Game.this.notify(new ChooseWorkerPosition(actualPlayer.getNickname(), workerNum));
 
-                        while (position == null){
-                            synchronized (this){
+                        while (position == null) {
+                            synchronized (this) {
                                 wait();
                             }
                         }
-
-                        Square square = gameRoom.getBoardMap().getSquare(position.getX(), position.getY());
-                        if (!square.isPresentWorker()){
-                            actualPlayer.addWorker(new Worker(actualPlayer.getNickname(), square));
+                        try {
+                            Square square = gameRoom.getBoardMap().getSquare(position.getX(), position.getY());
+                            if (!square.isPresentWorker()) {
+                                actualPlayer.addWorker(new Worker(actualPlayer.getNickname(), square));
+                                position = null;
+                                workerNum++;
+                            }
+                        } catch (OutOfMapException e) {
+                            Game.this.notify(new UnsuccessfulOperation(actualPlayer.getNickname()));
                             position = null;
-                            workerNum++;
                         }
                     }
 
@@ -133,7 +139,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
 
                 finalizeGameSetting();
                 getActualController().start();
-            } catch (InterruptedException | OutOfMapException e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
@@ -203,6 +209,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
                 }else {
                     actualPlayer = gameRoom.getNextPlayer();
                     notify(new Win(actualPlayer.getNickname()));
+                    notify(new EndEvent());
                 }
                 break;
             case WINNER:
@@ -213,6 +220,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
                 for (Player player : gameRoom.getPlayers()){
                     notify(new Lose(player.getNickname()));
                 }
+                notify(new EndEvent());
                 break;
         }
     }

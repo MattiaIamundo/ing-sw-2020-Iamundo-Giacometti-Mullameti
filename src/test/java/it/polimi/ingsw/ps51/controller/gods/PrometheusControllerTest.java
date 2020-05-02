@@ -1,9 +1,7 @@
 package it.polimi.ingsw.ps51.controller.gods;
 
 import it.polimi.ingsw.ps51.events.ControllerToGame;
-import it.polimi.ingsw.ps51.events.events_for_client.ChooseMove;
-import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
-import it.polimi.ingsw.ps51.events.events_for_client.MakeDecision;
+import it.polimi.ingsw.ps51.events.events_for_client.*;
 import it.polimi.ingsw.ps51.events.events_for_server.EventForServer;
 import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
 import it.polimi.ingsw.ps51.model.*;
@@ -52,9 +50,30 @@ public class PrometheusControllerTest {
 
         private EventForClient event;
 
+        private List<EventForClient> buffer = new ArrayList<>();
+
         @Override
         public void update(EventForClient message) {
             event = message;
+            buffer.add(message);
+        }
+    }
+
+    private class FailureCard extends Prometheus{
+        private int count = 0;
+
+        @Override
+        public List<Coordinates> checkMoves(Player player, Worker worker, Map map) {
+            List<Coordinates> coord = new ArrayList<>();
+
+            if (count == 1){
+                return super.checkMoves(player, worker, map);
+            }else {
+                coord.add(new Coordinates(5,3));
+                coord.addAll(super.checkMoves(player, worker, map));
+                count++;
+                return coord;
+            }
         }
     }
 
@@ -142,6 +161,41 @@ public class PrometheusControllerTest {
         assertNotNull(receiver.event);
         assertTrue(receiver.event instanceof ChooseMove);
         assertEquals(expected, ((ChooseMove) receiver.event).getValidChoices());
+    }
+
+    @Test
+    public void preBuildTest_CoordinatesOutOfTheMap_RequestForCoordinatesRedone(){
+        controller.selectedWorker = worker;
+        controller.preBuild(new Coordinates(5,2), Level.FIRST);
+
+        assertEquals(2, receiver.buffer.size());
+        assertTrue(receiver.buffer.get(0) instanceof UnsuccessfulOperation);
+        assertTrue(receiver.buffer.get(1) instanceof ChooseBuild);
+    }
+
+    @Test
+    public void removeMoveUpTest_TryToGetInvalidCoordinates_RecallTheMethod(){
+        controller = new PrometheusController(new FailureCard(), map, player);
+        controller.addGame(game);
+        controller.addObserver(receiver);
+        controller.selectedWorker = worker;
+        controller.decisionManager(true);
+        receiver.event = null;
+
+        controller.searchForMoves();
+        assertNotNull(receiver.event);
+        assertTrue(receiver.event instanceof ChooseMove);
+    }
+
+    @Test
+    public void manageWorkerChoiceTest_TryToGetInvalidCoordinates_RecallTheMethod(){
+        controller = new PrometheusController(new FailureCard(), map, player);
+        controller.addGame(game);
+        controller.addObserver(receiver);
+        controller.manageWorkerChoice(worker);
+
+        assertNotNull(receiver.event);
+        assertTrue(receiver.event instanceof MakeDecision);
     }
 
     @Test

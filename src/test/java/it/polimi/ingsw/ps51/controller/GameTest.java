@@ -172,6 +172,66 @@ public class GameTest {
     }
 
     @Test
+    public void phaseThree_OutOfMapCoordinates_RequestToRedoTheAction(){
+        phaseTwo();
+
+        assertTrue(stub.event instanceof ChooseWorkerPosition);
+        assertEquals(1, ((ChooseWorkerPosition) stub.event).getWorkerNum());
+        assertEquals(player1.getNickname(), ((ChooseWorkerPosition) stub.event).getReceiver());
+        stub.notify(new WorkerPosition(new Coordinates(2,2)));
+        waitForEventBeApplied();
+        assertEquals(new Coordinates(2,2), player1.getWorkers().get(0).getPosition().getCoordinates());
+
+        assertTrue(stub.event instanceof ChooseWorkerPosition);
+        assertEquals(2, ((ChooseWorkerPosition) stub.event).getWorkerNum());
+        assertEquals(player1.getNickname(), ((ChooseWorkerPosition) stub.event).getReceiver());
+        stub.notify(new WorkerPosition(new Coordinates(1,2)));
+        waitForEventBeApplied();
+        assertEquals(new Coordinates(1,2), player1.getWorkers().get(1).getPosition().getCoordinates());
+
+        assertTrue(stub.event instanceof ChooseWorkerPosition);
+        assertEquals(1, ((ChooseWorkerPosition) stub.event).getWorkerNum());
+        assertEquals(player2.getNickname(), ((ChooseWorkerPosition) stub.event).getReceiver());
+        stub.clearBuffer();
+        stub.notify(new WorkerPosition(new Coordinates(2,5)));
+        waitForEventBeApplied();
+        assertEquals(2, stub.buffer.size());
+        assertTrue(stub.buffer.get(0) instanceof UnsuccessfulOperation);
+        assertTrue(stub.buffer.get(1) instanceof ChooseWorkerPosition);
+        stub.notify(new WorkerPosition(new Coordinates(3,2)));
+        waitForEventBeApplied();
+        assertEquals(new Coordinates(3,2), player2.getWorkers().get(0).getPosition().getCoordinates());
+
+        assertTrue(stub.event instanceof ChooseWorkerPosition);
+        assertEquals(2, ((ChooseWorkerPosition) stub.event).getWorkerNum());
+        assertEquals(player2.getNickname(), ((ChooseWorkerPosition) stub.event).getReceiver());
+        stub.notify(new WorkerPosition(new Coordinates(4,3)));
+        waitForEventBeApplied();
+        assertEquals(new Coordinates(4,3), player2.getWorkers().get(1).getPosition().getCoordinates());
+
+        assertTrue(stub.event instanceof ChooseWorkerPosition);
+        assertEquals(1, ((ChooseWorkerPosition) stub.event).getWorkerNum());
+        assertEquals(player3.getNickname(), ((ChooseWorkerPosition) stub.event).getReceiver());
+        stub.notify(new WorkerPosition(new Coordinates(3,3)));
+        waitForEventBeApplied();
+        assertEquals(new Coordinates(3,3), player3.getWorkers().get(0).getPosition().getCoordinates());
+
+        assertTrue(stub.event instanceof ChooseWorkerPosition);
+        assertEquals(2, ((ChooseWorkerPosition) stub.event).getWorkerNum());
+        assertEquals(player3.getNickname(), ((ChooseWorkerPosition) stub.event).getReceiver());
+        stub.notify(new WorkerPosition(new Coordinates(2,2)));
+        waitForEventBeApplied();
+        assertEquals(1, player3.getWorkers().size());
+
+        assertTrue(stub.event instanceof ChooseWorkerPosition);
+        assertEquals(2, ((ChooseWorkerPosition) stub.event).getWorkerNum());
+        assertEquals(player3.getNickname(), ((ChooseWorkerPosition) stub.event).getReceiver());
+        stub.notify(new WorkerPosition(new Coordinates(0,0)));
+        waitForEventBeApplied();
+        assertEquals(new Coordinates(0,0), player3.getWorkers().get(1).getPosition().getCoordinates());
+    }
+
+    @Test
     public void updateTest_LoserEvent3Player_PlayerRemovedGameContinues(){
         phaseThree();
         stub.clearBuffer();
@@ -192,9 +252,10 @@ public class GameTest {
         stub.clearBuffer();
         controller.notifyToGame(ControllerToGame.LOSER);
 
-        assertEquals(2, stub.buffer.size());
+        assertEquals(3, stub.buffer.size());
         assertTrue(stub.buffer.get(0) instanceof Lose);
         assertTrue(stub.buffer.get(1) instanceof Win);
+        assertTrue(stub.buffer.get(2) instanceof EndEvent);
         assertEquals("Player1", stub.buffer.get(0).getReceiver());
         assertEquals("Player3", stub.buffer.get(1).getReceiver());
     }
@@ -215,18 +276,19 @@ public class GameTest {
         stub.clearBuffer();
         controller.notifyToGame(ControllerToGame.WINNER);
 
-        assertEquals(3, stub.buffer.size());
+        assertEquals(4, stub.buffer.size());
         assertTrue(stub.buffer.get(0) instanceof Win);
         assertEquals("Player1", stub.buffer.get(0).getReceiver());
         assertTrue(stub.buffer.get(1) instanceof Lose);
         assertEquals("Player2", stub.buffer.get(1).getReceiver());
         assertTrue(stub.buffer.get(2) instanceof Lose);
         assertEquals("Player3", stub.buffer.get(2).getReceiver());
+        assertTrue(stub.buffer.get(3) instanceof EndEvent);
     }
 
     private void waitForEventBeApplied(){
         try {
-            Thread.sleep(60);
+            Thread.sleep(70);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

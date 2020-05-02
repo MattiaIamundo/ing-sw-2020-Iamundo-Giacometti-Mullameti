@@ -10,6 +10,7 @@ import org.javatuples.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * This calls is a generic game turn controller, it implement the mechanics to manage a normal game turn, firstly the
@@ -20,6 +21,7 @@ public class NormalGodsController extends GodControllerObservable implements God
     Map map;
     Player player;
     Worker selectedWorker;
+    private final static Logger LOGGER = Logger.getLogger(NormalGodsController.class.getName());
 
     public NormalGodsController(Card card, Map map, Player player) {
         this.card = card;
@@ -41,7 +43,7 @@ public class NormalGodsController extends GodControllerObservable implements God
                 try {
                     validWorkers.add((Worker) worker.clone());
                 } catch (CloneNotSupportedException e) {
-                    e.printStackTrace();
+                    LOGGER.severe("Impossible to clone worker of: "+player.getNickname());
                 }
             }
         }
@@ -70,22 +72,24 @@ public class NormalGodsController extends GodControllerObservable implements God
      * the {@code Game} is advised of this
      * @param moveTo the coordinates where the worker must be moved
      */
-    public void effectuateMove(Coordinates moveTo){
+    public void performMove(Coordinates moveTo){
         try {
             Square square = map.getSquare(moveTo.getX(), moveTo.getY());
             card.move(player, selectedWorker, square, map);
             if (isWinner()){
                 notifyToGame(ControllerToGame.WINNER);
+            }else {
+                searchForBuild();
             }
-            searchForBuild();
         } catch (OutOfMapException e) {
-            e.printStackTrace();
+            notify(new UnsuccessfulOperation(player.getNickname()));
+            searchForMoves();
         }
     }
 
     /**
      * The method implements the search of the square where a new level can be built and send the information to the player
-     * @see #effectuateMove(Coordinates)
+     * @see #performMove(Coordinates)
      */
     public void searchForBuild(){
         List<Pair<Coordinates, List<Level>>> validBuilds;
@@ -110,7 +114,8 @@ public class NormalGodsController extends GodControllerObservable implements God
                 notifyToGame(ControllerToGame.END_TURN);
             }
         } catch (OutOfMapException e) {
-            e.printStackTrace();
+            notify(new UnsuccessfulOperation(player.getNickname()));
+            searchForBuild();
         }
     }
 
@@ -134,11 +139,7 @@ public class NormalGodsController extends GodControllerObservable implements God
      */
     @Override
     public void manageWorkerChoice(Worker worker) {
-        for (Worker worker1 : player.getWorkers()){
-            if (worker1.equals(worker)){
-                selectedWorker = worker1;
-            }
-        }
+        selectedWorker = player.getWorkers().get(player.getWorkers().indexOf(worker));
         searchForMoves();
     }
 
@@ -149,7 +150,7 @@ public class NormalGodsController extends GodControllerObservable implements God
      */
     @Override
     public void manageMoveChoice(Coordinates moveTo) {
-        effectuateMove(moveTo);
+        performMove(moveTo);
     }
 
     /**

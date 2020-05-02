@@ -4,6 +4,7 @@ import it.polimi.ingsw.ps51.events.ControllerToGame;
 import it.polimi.ingsw.ps51.events.events_for_client.ChooseBuild;
 import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
 import it.polimi.ingsw.ps51.events.events_for_client.MakeDecision;
+import it.polimi.ingsw.ps51.events.events_for_client.UnsuccessfulOperation;
 import it.polimi.ingsw.ps51.events.events_for_server.EventForServer;
 import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
 import it.polimi.ingsw.ps51.model.*;
@@ -39,9 +40,12 @@ public class DemeterControllerTest {
 
         private EventForClient event;
 
+        private List<EventForClient> buffer = new ArrayList<>();
+
         @Override
         public void update(EventForClient message) {
             event = message;
+            buffer.add(message);
         }
     }
 
@@ -159,6 +163,15 @@ public class DemeterControllerTest {
 
         Assert.assertNotNull(game.event);
         Assert.assertEquals(ControllerToGame.END_TURN, game.event);
+    }
+
+    @Test
+    public void buildTest_InvalidCoordinates_ExceptionHandledRequestRedone(){
+        controller.build(new Coordinates(5,4), Level.FIRST);
+
+        Assert.assertEquals(2, receiver.buffer.size());
+        Assert.assertTrue(receiver.buffer.get(0) instanceof UnsuccessfulOperation);
+        Assert.assertTrue(receiver.buffer.get(1) instanceof ChooseBuild);
     }
 
     @Test

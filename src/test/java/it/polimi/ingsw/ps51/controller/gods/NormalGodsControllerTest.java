@@ -1,10 +1,7 @@
 package it.polimi.ingsw.ps51.controller.gods;
 
 import it.polimi.ingsw.ps51.events.ControllerToGame;
-import it.polimi.ingsw.ps51.events.events_for_client.ChooseBuild;
-import it.polimi.ingsw.ps51.events.events_for_client.ChooseMove;
-import it.polimi.ingsw.ps51.events.events_for_client.ChooseWorker;
-import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
+import it.polimi.ingsw.ps51.events.events_for_client.*;
 import it.polimi.ingsw.ps51.events.events_for_server.EventForServer;
 import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
 import it.polimi.ingsw.ps51.model.*;
@@ -17,8 +14,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 public class NormalGodsControllerTest {
 
@@ -35,9 +34,12 @@ public class NormalGodsControllerTest {
 
         private EventForClient event;
 
+        private List<EventForClient> buffer = new ArrayList<>();
+
         @Override
         public void update(EventForClient message) {
             event = message;
+            buffer.add(message);
         }
     }
 
@@ -136,7 +138,7 @@ public class NormalGodsControllerTest {
     }
 
     @Test
-    public void testEffectuateMove_MoveToX3Y3_WorkerIsMovedSendChooseBuildEvent() {
+    public void testPerformMove_MoveToX3Y3_WorkerIsMovedSendChooseBuildEvent() {
         controller.selectedWorker = worker1;
         controller.manageMoveChoice(new Coordinates(3,3));
 
@@ -147,7 +149,7 @@ public class NormalGodsControllerTest {
     }
 
     @Test
-    public void testEffectuateMove_MoveToX3Y3Winning_WorkerIsMovedGameAdvisedOfWinning() {
+    public void testPerformMove_MoveToX3Y3Winning_WorkerIsMovedGameAdvisedOfWinning() {
         try {
             map.getSquare(3,3).setLevel(Level.THIRD);
             map.getSquare(3,2).setLevel(Level.SECOND);
@@ -160,6 +162,16 @@ public class NormalGodsControllerTest {
         Assert.assertEquals(new Coordinates(3,3), worker1.getPosition().getCoordinates());
         Assert.assertNotNull(game.event);
         Assert.assertEquals(ControllerToGame.WINNER, game.event);
+    }
+
+    @Test
+    public void preformMoveTest_OutOfMapCoordinates_AskedToRedoAction(){
+        controller.selectedWorker = worker1;
+        controller.manageMoveChoice(new Coordinates(4,5));
+
+        Assert.assertEquals(2, receiver.buffer.size());
+        Assert.assertTrue(receiver.buffer.get(0) instanceof UnsuccessfulOperation);
+        Assert.assertTrue(receiver.buffer.get(1) instanceof ChooseMove);
     }
 
     @Test
@@ -182,6 +194,16 @@ public class NormalGodsControllerTest {
     }
 
     @Test
+    public void buildTest_OutOfMapCoordinates_AskedToRedoAction(){
+        controller.selectedWorker = worker1;
+        controller.manageBuildChoice(new Coordinates(6,7), Level.FIRST);
+
+        Assert.assertEquals(2, receiver.buffer.size());
+        Assert.assertTrue(receiver.buffer.get(0) instanceof UnsuccessfulOperation);
+        Assert.assertTrue(receiver.buffer.get(1) instanceof ChooseBuild);
+    }
+
+    @Test
     public void testIsWinner_OneWorkerWinner_ReturnTrue() {
         worker1.setInWinningCondition(true);
 
@@ -192,5 +214,6 @@ public class NormalGodsControllerTest {
     public void testIsWinner_NoWinningWorker_ReturnFalse() {
 
         Assert.assertFalse(controller.isWinner());
+
     }
 }

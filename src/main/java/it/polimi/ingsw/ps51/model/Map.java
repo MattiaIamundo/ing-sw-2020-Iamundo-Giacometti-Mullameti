@@ -69,6 +69,18 @@ public class Map implements Serializable, Iterable<Square>, Cloneable{
         }
     }
 
+    public Square getSquare(Coordinates coordinates) throws OutOfMapException{
+        return getSquare(coordinates.getX(), coordinates.getY());
+    }
+
+    public int getMaxX(){
+        return effectiveMap[0].length - 1;
+    }
+
+    public int getMaxY(){
+        return effectiveMap.length - 1;
+    }
+
     /**
      * Get the list of the near squares in a precise order
      * @param square whose neighbors are wanted
@@ -155,7 +167,7 @@ public class Map implements Serializable, Iterable<Square>, Cloneable{
          */
         @Override
         public Square next() {
-            if (x < map[y].length - 1){
+            if ((y < map.length) && (x < map[y].length - 1)){
                 Square square = map[y][x];
                 x++;
                 return square;
