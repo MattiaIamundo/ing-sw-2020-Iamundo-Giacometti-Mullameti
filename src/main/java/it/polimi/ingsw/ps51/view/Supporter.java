@@ -28,6 +28,7 @@ abstract public class Supporter extends Observable<EventForServer> implements Ru
     private Map map;
     private List<Worker> workers;
     private String decision;
+    private String ack;
 
 
     public Supporter() {
@@ -42,7 +43,7 @@ abstract public class Supporter extends Observable<EventForServer> implements Ru
         map = new Map();
         workers = new ArrayList<>();
         decision="";
-
+        ack="";
     }
 
     public void setTypeOfEvent(String typeOfEvent) {
@@ -84,5 +85,8 @@ abstract public class Supporter extends Observable<EventForServer> implements Ru
 
     public String getDecision(){return decision;}
     public void setDecision(String decision){this.decision = decision;}
+
+    public String getOperationConfirmed(){return ack;}
+    public void setOperationConfirmed(String ack){this.ack=ack;}
 
 }

@@ -15,6 +15,6 @@ public class Ack extends SpecificUserEvent implements EventForClient{
 
     @Override
     public String acceptVisitor(VisitorClient visitor) {
-        return null;
+        return visitor.visitAck(this);
     }
 }

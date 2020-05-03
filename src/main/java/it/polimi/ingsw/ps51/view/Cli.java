@@ -64,7 +64,6 @@ public class Cli extends Supporter {
                             EventForFirstPhase eventNickname = new Nickname(nickname);
                             notify(eventNickname);
                             break;
-                        //continue by yourself :* <3
                         case"NUMBEROFPLAYER" :
                             int numberOfPlayers = numberOfPlayers();
                             EventForFirstPhase eventNumberOfPlayers = new NumberOfPlayers(numberOfPlayers);
@@ -111,6 +110,12 @@ public class Cli extends Supporter {
                             boolean decision = makeDecision();
                             EventForServer eventDecisionTaken = new DecisionTaken(decision);
                             notify(eventDecisionTaken);
+                            break;
+                        case "ACK":
+                            ack();
+                            break;
+                        case "UNSUCCESSFULOPERATION":
+                            unsuccessfulOperation();
                             break;
                         case "WIN":
                             winGame();
@@ -299,12 +304,13 @@ public class Cli extends Supporter {
         int choice = 0;
         Worker worker;
         ok =  false;
+        int count = 1;
         printer.println(printer.colorToAnsi(Color.BLUE) + "Which worker do you want to use ?");
-        printer.println(printer.colorToAnsi(Color.BLUE) + "1.The Worker in position ["+(getValidChoicesWorkers().get(0).getPosition().getCoordinates().getX()+1)+"]" +
-                "["+(getValidChoicesWorkers().get(0).getPosition().getCoordinates().getY()+1)+"]");
-        printer.println(printer.colorToAnsi(Color.BLUE) + "2.The Worker in position ["+(getValidChoicesWorkers().get(1).getPosition().getCoordinates().getX()+1)+"]" +
-                "["+(getValidChoicesWorkers().get(1).getPosition().getCoordinates().getY()+1)+"]");
-        printer.println(printer.colorToAnsi(Color.BLUE) + "Enter 1 or 2 !!");
+        for(Worker workers : getValidChoicesWorkers()) {
+            printer.println(printer.colorToAnsi(Color.BLUE) + count +".The Worker in position [" + (workers.getPosition().getCoordinates().getX() + 1) + "]" +
+                    "[" + (workers.getPosition().getCoordinates().getY() + 1) + "]");
+            count = count + 1;
+        }
         while(!ok){
             try{
                 choice = reader.nextInt();
@@ -407,9 +413,6 @@ public class Cli extends Supporter {
                     ok = false;
                 }
             }
-
-
-
             for(Pair<Coordinates, List<Level>> validBuilds : getValidChoicesBuild()) {
                 if (validBuilds.getValue0().getX() == (x - 1) && validBuilds.getValue0().getY() == (y - 1)) {
                     for (Level validLevel : validBuilds.getValue1()) {
@@ -420,13 +423,18 @@ public class Cli extends Supporter {
 
                             notAvailable = true;
                             break;
-                        } else {
+                        } /*else {
                             printer.println(printer.colorToAnsi(Color.RED) + "This level is NOT AVAILABLE !!");
                             printer.println(printer.colorToAnsi(Color.RED) + "Enter another level !!");
                             notAvailable = false;
-                        }
+                        }*/
                     }
                 }
+            }
+            if(!notAvailable){
+                printer.println(printer.colorToAnsi(Color.RED) + "This level is NOT AVAILABLE !!");
+                printer.println(printer.colorToAnsi(Color.RED) + "Enter another level !!");
+                notAvailable = false;
             }
         }
         buildOn = new Pair<>(coordinates,level);
@@ -453,8 +461,13 @@ public class Cli extends Supporter {
 
 
     }
-
-
+    public void ack(){
+        printer.println(printer.colorToAnsi(Color.PURPLE)+"Your "+getOperationConfirmed()+" event is received by server...");
+    }
+    public void unsuccessfulOperation(){
+        printer.println(printer.colorToAnsi(Color.RED) + "Sorry , something went wrong server side...");
+        printer.println(printer.colorToAnsi(Color.GREEN) + "Repeat your last action !");
+    }
     public void winGame(){
         printer.println(printer.colorToAnsi(Color.GREEN) + "Congratulations , YOU WON !!");
     }
@@ -468,6 +481,10 @@ public class Cli extends Supporter {
 
     public void endGame(){
         printer.println(printer.colorToAnsi(Color.RED) + "End Game");
+    }
+
+    public void outOfRoom() {
+        printer.println(printer.colorToAnsi(Color.RED) + "The game is already started, try again later...");
     }
 
     private int  coordinateCheck(String car){
@@ -493,7 +510,5 @@ public class Cli extends Supporter {
         return coordinate;
     }
 
-    public void outOfRoom() {
-        printer.println(printer.colorToAnsi(Color.RED) + "The game is already started, try again later...");
-    }
+
 }

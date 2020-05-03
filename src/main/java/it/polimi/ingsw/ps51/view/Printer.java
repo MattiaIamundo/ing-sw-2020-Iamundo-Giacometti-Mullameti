@@ -113,14 +113,17 @@ public class Printer {
             e.printStackTrace();
         }
 
-
-
     }
 
     public  void board(Map map , List<Worker> workerList) throws OutOfMapException {
 
-
+        ArrayList<String> players = new ArrayList<>();
         String[][] board = new String[16][16];
+
+        for(Worker worker : workerList){
+            if(!players.contains(worker.getNamePlayer()))
+                players.add(worker.getNamePlayer());
+        }
 
         for (int i = 0; i < 16; i++)
             for (int j = 0; j < 16; j++)
@@ -171,10 +174,17 @@ public class Printer {
                     board[2 * i + i + 1][2 * j + j + 1] = " D ";
                 }
 
-                if(map.getSquare(j, i).isPresentWorker()) {
-                    board[2 * i + i + 2][2 * j + j + 2] = " W ";
+                if(map.getSquare(j, i).isPresentWorker())
+                    for (Worker worker : workerList)
+                        if (worker.getPosition().getCoordinates().getX() == j && worker.getPosition().getCoordinates().getY() == i)
+                            if (worker.getNamePlayer().equals(players.get(0)))
+                                board[2 * i + i + 2][2 * j + j + 2] = " W0";
+                            else if (worker.getNamePlayer().equals(players.get(1)))
+                                board[2 * i + i + 2][2 * j + j + 2] = " W1";
+                            else
+                                board[2 * i + i + 2][2 * j + j + 2] = " W2";
 
-                }
+
 
 
             }
@@ -191,8 +201,12 @@ public class Printer {
                     print(colorToAnsi(Color.PURPLE)+board[i][j]);
                 else if(board[i][j].equals(" D "))
                     print(colorToAnsi(Color.BLUE)+board[i][j]);
-                else if(board[i][j].equals(" W "))
-                    print(colorToAnsi(Color.RED)+board[i][j]);
+                else if(board[i][j].equals(" W0"))
+                    print(colorToAnsi(Color.RED)+" W ");
+                else if(board[i][j].equals(" W1"))
+                    print(colorToAnsi(Color.BLUE)+" W ");
+                else if(board[i][j].equals(" W2"))
+                    print(colorToAnsi(Color.GREEN)+" W ");
                 else
                     print(colorToAnsi(Color.GREEN) + board[i][j]);
 

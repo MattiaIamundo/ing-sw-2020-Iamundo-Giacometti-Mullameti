@@ -102,11 +102,12 @@ public class VisitorView implements VisitorClient {
     @Override
     public String visitUnsuccessfulOperation(UnsuccessfulOperation event) {
         //TODO alert the player that something went wrong on the server and his move wasn't be applied, and he must re do it
-        return "UNSUCCESSOPERATION";
+        return "UNSUCCESSFULOPERATION";
     }
 
     @Override
     public String visitAck(Ack event) {
+        s.setOperationConfirmed(event.getOperationConfirmed());
         return "ACK";
     }
 }
