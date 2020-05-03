@@ -292,6 +292,9 @@ public class Cli extends Supporter {
         return coordinates;
     }
 
+    //da mettere apposto il fatto che non sempre ci sono due worker disponibili a muoversi
+    //a volte uno dei due non può muoversi ma ciò non vuol dire che il giocatore abbia perso
+    //infatti può continuare a giocare anche se può muovere e costruire con solo uno dei suoi worker
     public Worker chooseWorker(){
         int choice = 0;
         Worker worker;
@@ -353,6 +356,8 @@ public class Cli extends Supporter {
         return coordinates;
     }
 
+    //mettere apposto il fatto che se scrivo un livello diverso da quelli che posso costruire, si blocca tutto
+    //togliere il ramo else o meglio non far stampare perché se ho first and dome, e scelgo dome, il livello è valido
     public Pair<Coordinates, Level> askBuild(){
 
         int x;
@@ -365,7 +370,7 @@ public class Cli extends Supporter {
         Pair<Coordinates, Level> buildOn;
 
 
-        printer.println(printer.colorToAnsi(Color.BLUE) + "Where do you want your worker to move ?");
+        printer.println(printer.colorToAnsi(Color.BLUE) + "Where do you want your worker to build ?");
         printer.println(printer.colorToAnsi(Color.BLUE) + "These are the available coordinates :");
         for(Pair<Coordinates, List<Level>> validBuilds : getValidChoicesBuild()){
            for(Level l : validBuilds.getValue1())
@@ -458,7 +463,7 @@ public class Cli extends Supporter {
         printer.println(printer.colorToAnsi(Color.RED) + "Sorry , you lost ...");
     }
     public void disconnectGame(){
-        printer.println(printer.colorToAnsi(Color.BLUE) + "Disconnecting Game.....");
+        printer.println(printer.colorToAnsi(Color.BLUE) + "A player disconected himself so everyone is disconnected...");
     }
 
     public void endGame(){
