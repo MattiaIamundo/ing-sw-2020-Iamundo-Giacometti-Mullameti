@@ -103,6 +103,7 @@ public class GameTest {
         assertTrue(stub.event instanceof ChooseGod);
         assertEquals(Collections.singletonList(Gods.ARTEMIS), ((ChooseGod) stub.event).getAvailableGods());
 
+        stub.clearBuffer();
         stub.notify(new GodChoice(Gods.ARTEMIS));
         assertNotNull(player3.getGod());
         assertTrue(player3.getGod() instanceof Artemis);
@@ -114,13 +115,14 @@ public class GameTest {
                 e.printStackTrace();
             }
         }
-        assertTrue(stub.event instanceof ChooseWorkerPosition);
+        assertEquals(2, stub.buffer.size());
+        assertTrue(stub.buffer.get(0) instanceof MapUpdate);
+        assertTrue(stub.buffer.get(1) instanceof ChooseWorkerPosition);
     }
 
     @Test
     public void phaseThree(){
         phaseTwo();
-
         assertTrue(stub.event instanceof ChooseWorkerPosition);
         assertEquals(1, ((ChooseWorkerPosition) stub.event).getWorkerNum());
         assertEquals(player1.getNickname(), ((ChooseWorkerPosition) stub.event).getReceiver());

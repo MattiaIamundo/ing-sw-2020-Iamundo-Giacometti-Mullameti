@@ -1,10 +1,7 @@
 package it.polimi.ingsw.ps51.controller.gods;
 
 import it.polimi.ingsw.ps51.events.ControllerToGame;
-import it.polimi.ingsw.ps51.events.events_for_client.ChooseBuild;
-import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
-import it.polimi.ingsw.ps51.events.events_for_client.MakeDecision;
-import it.polimi.ingsw.ps51.events.events_for_client.UnsuccessfulOperation;
+import it.polimi.ingsw.ps51.events.events_for_client.*;
 import it.polimi.ingsw.ps51.events.events_for_server.EventForServer;
 import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
 import it.polimi.ingsw.ps51.model.*;
@@ -48,8 +45,6 @@ public class DemeterControllerTest {
             buffer.add(message);
         }
     }
-
-    private class SimpleGod extends CommonAction {}
 
     private class PhantomGame implements GameObserver {
 
@@ -105,6 +100,8 @@ public class DemeterControllerTest {
     public void buildTest_OnlyOnce_TurnEndAfterOnebuild() {
         controller.build(new Coordinates(2,1), Level.FIRST);
 
+        Assert.assertEquals(3, receiver.buffer.size());
+        Assert.assertTrue(receiver.buffer.get(1) instanceof Ack);
         Assert.assertNotNull(receiver.event);
         Assert.assertTrue(receiver.event instanceof MakeDecision);
 
@@ -117,6 +114,8 @@ public class DemeterControllerTest {
     public void buildTest_BuildDouble_TurnEndAfterTwobuild() {
         controller.build(new Coordinates(2,1), Level.FIRST);
 
+        Assert.assertEquals(3, receiver.buffer.size());
+        Assert.assertTrue(receiver.buffer.get(1) instanceof Ack);
         Assert.assertNotNull(receiver.event);
         Assert.assertTrue(receiver.event instanceof MakeDecision);
 
@@ -131,6 +130,8 @@ public class DemeterControllerTest {
 
         controller.build(new Coordinates(1,2), Level.FIRST);
 
+        Assert.assertNotNull(receiver.event);
+        Assert.assertTrue(receiver.event instanceof Ack);
         Assert.assertNotNull(game.event);
         Assert.assertEquals(ControllerToGame.END_TURN, game.event);
     }
@@ -140,6 +141,8 @@ public class DemeterControllerTest {
         worker1.setInWinningCondition(true);
         controller.build(new Coordinates(2,1), Level.FIRST);
 
+        Assert.assertNotNull(receiver.event);
+        Assert.assertTrue(receiver.event instanceof Ack);
         Assert.assertNotNull(game.event);
         Assert.assertEquals(ControllerToGame.WINNER, game.event);
     }
@@ -161,6 +164,8 @@ public class DemeterControllerTest {
         controller.build(new Coordinates(2,1), Level.FIRST);
 
 
+        Assert.assertNotNull(receiver.event);
+        Assert.assertTrue(receiver.event instanceof Ack);
         Assert.assertNotNull(game.event);
         Assert.assertEquals(ControllerToGame.END_TURN, game.event);
     }

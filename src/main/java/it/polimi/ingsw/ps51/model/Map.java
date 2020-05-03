@@ -215,7 +215,7 @@ public class Map implements Serializable, Iterable<Square>, Cloneable{
     }
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
+    public Object clone() throws CloneNotSupportedException {
         Map newMap = (Map) super.clone();
         newMap.effectiveMap = new Square[this.effectiveMap.length][this.effectiveMap[0].length];
         for (int y = 0; y < newMap.effectiveMap.length; y++){

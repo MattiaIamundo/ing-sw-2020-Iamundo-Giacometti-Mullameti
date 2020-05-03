@@ -1,6 +1,7 @@
 package it.polimi.ingsw.ps51.controller.gods;
 
 import it.polimi.ingsw.ps51.events.ControllerToGame;
+import it.polimi.ingsw.ps51.events.events_for_client.Ack;
 import it.polimi.ingsw.ps51.events.events_for_client.ChooseBuild;
 import it.polimi.ingsw.ps51.events.events_for_client.MakeDecision;
 import it.polimi.ingsw.ps51.events.events_for_client.UnsuccessfulOperation;
@@ -38,6 +39,7 @@ public class DemeterController extends NormalGodsController implements GodContro
             try {
                 Square square = map.getSquare(buildOn.getX(), buildOn.getY());
                 card.build(selectedWorker, square, level, map);
+                notify(new Ack(player.getNickname(), "First Build"));
                 if (isWinner()){
                     notifyToGame(ControllerToGame.WINNER);
                     return;

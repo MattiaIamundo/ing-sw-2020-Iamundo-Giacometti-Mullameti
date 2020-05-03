@@ -33,4 +33,6 @@ public interface VisitorClient {
     String visitOutOfRoom (OutOfRoom event);
 
     String visitUnsuccessfulOperation(UnsuccessfulOperation event);
+
+    String visitAck(Ack event);
 }

@@ -132,6 +132,8 @@ public class NormalGodsControllerTest {
     public void testSearchForMoves_SelectedWorker1_SetWorker1AsChosenWorker() {
         controller.manageWorkerChoice(worker1);
 
+        Assert.assertEquals(2, receiver.buffer.size());
+        Assert.assertTrue(receiver.buffer.get(0) instanceof Ack);
         Assert.assertNotNull(receiver.event);
         Assert.assertTrue(receiver.event instanceof ChooseMove);
         Assert.assertEquals(card.checkMoves(player, worker1, map), ((ChooseMove) receiver.event).getValidChoices());
@@ -143,6 +145,8 @@ public class NormalGodsControllerTest {
         controller.manageMoveChoice(new Coordinates(3,3));
 
         Assert.assertEquals(new Coordinates(3,3), worker1.getPosition().getCoordinates());
+        Assert.assertEquals(3, receiver.buffer.size());
+        Assert.assertTrue(receiver.buffer.get(1) instanceof Ack);
         Assert.assertNotNull(receiver.event);
         Assert.assertTrue(receiver.event instanceof ChooseBuild);
         Assert.assertEquals(card.checkBuild(worker1, map), ((ChooseBuild) receiver.event).getValidChoices());
@@ -160,6 +164,8 @@ public class NormalGodsControllerTest {
         controller.manageMoveChoice(new Coordinates(3,3));
 
         Assert.assertEquals(new Coordinates(3,3), worker1.getPosition().getCoordinates());
+        Assert.assertNotNull(receiver.event);
+        Assert.assertTrue(receiver.event instanceof Ack);
         Assert.assertNotNull(game.event);
         Assert.assertEquals(ControllerToGame.WINNER, game.event);
     }
@@ -179,6 +185,8 @@ public class NormalGodsControllerTest {
         controller.selectedWorker = worker1;
         controller.manageBuildChoice(new Coordinates(3,3), Level.FIRST);
 
+        Assert.assertEquals(2, receiver.buffer.size());
+        Assert.assertTrue(receiver.buffer.get(1) instanceof Ack);
         Assert.assertNotNull(game.event);
         Assert.assertEquals(ControllerToGame.END_TURN, game.event);
     }
@@ -189,6 +197,8 @@ public class NormalGodsControllerTest {
         worker1.setInWinningCondition(true);
         controller.manageBuildChoice(new Coordinates(3,3), Level.FIRST);
 
+        Assert.assertNotNull(receiver.event);
+        Assert.assertTrue(receiver.event instanceof Ack);
         Assert.assertNotNull(game.event);
         Assert.assertEquals(ControllerToGame.WINNER, game.event);
     }

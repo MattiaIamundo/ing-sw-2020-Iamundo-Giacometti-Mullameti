@@ -32,7 +32,7 @@ abstract public class Supporter extends Observable<EventForServer> implements Ru
 
     public Supporter() {
         typeOfEvent = "DEFAULT";
-        events = new ArrayBlockingQueue<>(10);
+        events = new ArrayBlockingQueue<>(20);
         godsNum = 0;
         availableGods = new ArrayList<>();
         workerNum = 0;

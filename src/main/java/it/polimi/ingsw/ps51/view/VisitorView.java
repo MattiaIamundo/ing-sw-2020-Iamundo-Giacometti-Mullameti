@@ -104,5 +104,10 @@ public class VisitorView implements VisitorClient {
         //TODO alert the player that something went wrong on the server and his move wasn't be applied, and he must re do it
         return "UNSUCCESSOPERATION";
     }
+
+    @Override
+    public String visitAck(Ack event) {
+        return "ACK";
+    }
 }
 

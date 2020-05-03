@@ -145,6 +145,8 @@ public class PrometheusControllerTest {
         controller.selectedWorker = worker;
         controller.preBuild(new Coordinates(1,0), Level.FIRST);
 
+        assertNotNull(receiver.event);
+        assertTrue(receiver.event instanceof Ack);
         assertNotNull(game.event);
         assertEquals(ControllerToGame.WINNER, game.event);
     }
@@ -154,10 +156,13 @@ public class PrometheusControllerTest {
         List<Coordinates> expected = new ArrayList<>();
         controller.selectedWorker = worker;
         controller.decisionManager(true);
+        receiver.buffer = new ArrayList<>();
         controller.preBuild(new Coordinates(1,0), Level.FIRST);
 
         expected.add(new Coordinates(1,1));
 
+        assertEquals(3, receiver.buffer.size());
+        assertTrue(receiver.buffer.get(1) instanceof Ack);
         assertNotNull(receiver.event);
         assertTrue(receiver.event instanceof ChooseMove);
         assertEquals(expected, ((ChooseMove) receiver.event).getValidChoices());
@@ -202,6 +207,8 @@ public class PrometheusControllerTest {
     public void manageWorkerChoice_IsPossibleToUseGodPower_PlayerAskedToDecideIfUseGodPower() {
         controller.manageWorkerChoice(worker);
 
+        assertEquals(2, receiver.buffer.size());
+        assertTrue(receiver.buffer.get(0) instanceof Ack);
         assertEquals(worker, controller.selectedWorker);
         assertNotNull(receiver.event);
         assertTrue(receiver.event instanceof MakeDecision);
@@ -221,6 +228,8 @@ public class PrometheusControllerTest {
         expected.add(new Coordinates(1,1));
         expected.add(new Coordinates(0,1));
 
+        assertEquals(2, receiver.buffer.size());
+        assertTrue(receiver.buffer.get(0) instanceof Ack);
         assertEquals(worker, controller.selectedWorker);
         assertNotNull(receiver.event);
         assertTrue(receiver.event instanceof ChooseMove);
@@ -231,8 +240,11 @@ public class PrometheusControllerTest {
     public void manageBuildChoice_UseGodPower_GoOnWithMoveAction() {
         controller.selectedWorker = worker;
         controller.decisionManager(true);
+        receiver.buffer = new ArrayList<>();
         controller.manageBuildChoice(new Coordinates(1,1), Level.FIRST);
 
+        assertEquals(3, receiver.buffer.size());
+        assertTrue(receiver.buffer.get(1) instanceof Ack);
         assertNotNull(receiver.event);
         assertTrue(receiver.event instanceof ChooseMove);
     }
@@ -243,6 +255,8 @@ public class PrometheusControllerTest {
         controller.decisionManager(false);
         controller.manageBuildChoice(new Coordinates(1,1), Level.FIRST);
 
+        assertNotNull(receiver.event);
+        assertTrue(receiver.event instanceof Ack);
         assertNotNull(game.event);
         assertEquals(ControllerToGame.END_TURN, game.event);
     }

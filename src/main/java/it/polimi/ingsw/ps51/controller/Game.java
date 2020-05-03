@@ -18,6 +18,7 @@ import it.polimi.ingsw.ps51.utility.Observer;
 
 import java.util.*;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * The class manage a game match, from its setup to the end of it
@@ -31,6 +32,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
     private Map<Player, GodController> godControllersMap;
     private final int WORKER_NUMBER;
     protected ThirdPhase thirdPhase;
+    private final static Logger logger = Logger.getLogger(Game.class.getName());
 
     /**
      * This is the constructor of the class
@@ -112,6 +114,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
         @Override
         public void run() {
             try {
+                Game.this.notify(new MapUpdate((it.polimi.ingsw.ps51.model.Map) gameRoom.getBoardMap().clone(), new ArrayList<>()));
                 for (int player = 0; player < gameRoom.getPlayers().size(); player++) {
                     int workerNum = 1;
                     while (workerNum <= WORKER_NUMBER) {
@@ -128,6 +131,8 @@ public class Game extends Observable<EventForClient> implements GameObserver {
                                 actualPlayer.addWorker(new Worker(actualPlayer.getNickname(), square));
                                 position = null;
                                 workerNum++;
+                            }else {
+                                position = null;
                             }
                         } catch (OutOfMapException e) {
                             Game.this.notify(new UnsuccessfulOperation(actualPlayer.getNickname()));
@@ -140,8 +145,8 @@ public class Game extends Observable<EventForClient> implements GameObserver {
 
                 finalizeGameSetting();
                 getActualController().start();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            } catch (InterruptedException | CloneNotSupportedException e) {
+                logger.severe("Something went wrong during workers collocations on the map");
             }
         }
 
