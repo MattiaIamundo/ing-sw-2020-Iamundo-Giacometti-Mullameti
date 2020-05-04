@@ -110,5 +110,15 @@ public class VisitorView implements VisitorClient {
         s.setOperationConfirmed(event.getOperationConfirmed());
         return "ACK";
     }
+
+    @Override
+    public String visitGameIsStarting(GameIsStarting event) {
+        return "GAME_IS_STARTING";
+    }
+
+    @Override
+    public String visitTurnIsEnd(TurnIsEnd event) {
+        return "TURN_IS_END";
+    }
 }
 

@@ -45,33 +45,8 @@ public class MapTest {
     }
 
     @Test
-    public void getMaxXTest(){
-        int out = map.getMaxX();
-
-        Assert.assertEquals(4, out);
-    }
-
-    @Test
-    public void getMaxXTest_With7x4Map(){
-        map = new Map(7, 4);
-        int out = map.getMaxX();
-
-        Assert.assertEquals(6, out);
-    }
-
-    @Test
-    public void getMaxYTest(){
-        int out = map.getMaxY();
-
-        Assert.assertEquals(4, out);
-    }
-
-    @Test
-    public void getMaxYTest_With7x4Map(){
-        map = new Map(7,4);
-        int out = map.getMaxY();
-
-        Assert.assertEquals(3, out);
+    public void getMaxCoordinateTest(){
+        Assert.assertEquals(4, map.getMaxCoordinate());
     }
 
     @Test

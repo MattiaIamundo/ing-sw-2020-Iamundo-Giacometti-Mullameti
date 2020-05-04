@@ -15,6 +15,7 @@ import it.polimi.ingsw.ps51.model.gods.Gods;
 import it.polimi.ingsw.ps51.utility.GameObserver;
 import it.polimi.ingsw.ps51.utility.Observable;
 import it.polimi.ingsw.ps51.utility.Observer;
+import org.javatuples.Pair;
 
 import java.util.*;
 import java.util.Map;
@@ -145,6 +146,11 @@ public class Game extends Observable<EventForClient> implements GameObserver {
                 }
 
                 finalizeGameSetting();
+                List<Pair<String, Gods>> chosenGods = new ArrayList<>();
+                for (Player player : gameRoom.getPlayers()){
+                    chosenGods.add(new Pair<>(player.getNickname(), Gods.getGodFromCard(player.getGod())));
+                }
+                Game.this.notify(new GameIsStarting(chosenGods));
                 getActualController().start();
             } catch (InterruptedException | CloneNotSupportedException e) {
                 logger.severe("Something went wrong during workers collocations on the map");
@@ -203,6 +209,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
     public void update(ControllerToGame message) {
         switch (message){
             case END_TURN:
+                notify(new TurnIsEnd(actualPlayer.getNickname()));
                 actualPlayer = gameRoom.getNextPlayer();
                 getActualController().start();
                 break;

@@ -35,4 +35,8 @@ public interface VisitorClient {
     String visitUnsuccessfulOperation(UnsuccessfulOperation event);
 
     String visitAck(Ack event);
+
+    String visitGameIsStarting(GameIsStarting event);
+
+    String visitTurnIsEnd(TurnIsEnd event);
 }

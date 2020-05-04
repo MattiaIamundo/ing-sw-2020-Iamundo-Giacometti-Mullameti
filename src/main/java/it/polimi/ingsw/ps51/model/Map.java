@@ -73,11 +73,7 @@ public class Map implements Serializable, Iterable<Square>, Cloneable{
         return getSquare(coordinates.getX(), coordinates.getY());
     }
 
-    public int getMaxX(){
-        return effectiveMap[0].length - 1;
-    }
-
-    public int getMaxY(){
+    public int getMaxCoordinate(){
         return effectiveMap.length - 1;
     }
 
