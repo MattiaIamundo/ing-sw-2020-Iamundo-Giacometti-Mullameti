@@ -116,7 +116,7 @@ public class Printer {
 
     }
 
-    public  void board(Map map , List<Worker> workerList ) throws OutOfMapException {
+    public  void board(Map map , List<Worker> workerList , List<Pair<String, Gods>> chosenGods) throws OutOfMapException {
 
         ArrayList<String> players = new ArrayList<>();
         int maxCoordinate = map.getMaxCoordinate() + 1;
@@ -197,7 +197,7 @@ public class Printer {
         for(int i=0 ; i<dim ;i++){
             for(int j=0 ; j<dim ;j++) {
                 if(board[i][j] .equals( "  G  "))
-                    print(colorToAnsi(Color.WHITE)+board[i][j]);
+                    print(colorToAnsi(Color.CYAN)+board[i][j]);
                 else if(board[i][j] .equals("  F  "))
                     print(colorToAnsi(Color.GREEN)+board[i][j]);
                 else if(board[i][j] .equals("  S  "))
@@ -211,44 +211,66 @@ public class Printer {
                 else if(board[i][j].equals("  W1 "))
                     print(colorToAnsi(Color.BLUE)+"  W  ");
                 else if(board[i][j].equals("  W2 "))
-                    print(colorToAnsi(Color.PURPLE)+"  W  ");
+                    print(colorToAnsi(Color.WHITE)+"  W  ");
                 else
-                    print(colorToAnsi(Color.PURPLE) + board[i][j]);
+                    print(colorToAnsi(Color.GREEN) + board[i][j]);
 
             }
 
 
             println("");
         }
-        //printLegend(chosenGods);
+        printLegend(chosenGods);
 
     }
-    public void printLegend(List<Pair<String, Gods>> chosenGod){
+    public void printLegend(List<Pair<String, Gods>> chosenGod) {
 
-        ArrayList<String> legend = new ArrayList<>();
+        if (chosenGod.isEmpty()) {
+            print("");
+        } else {
+            
+            for (int i = 0; i < 2; i++)
+                print(colorToAnsi(Color.GREEN) + "┌──────────────────────────┐");
+            println("");
+            println(colorToAnsi(Color.WHITE) + "  LEGEND");
 
-        legend.add(0,"┌────────────────────────────┐");
-        legend.add(1,"          LEGENDS             ");
-        legend.add(2,"      [x,y] = Coordinates     ");
-        legend.add(3,"          G = Ground          ");
-        legend.add(4,"          F = First           ");
-        legend.add(5,"          S = Second          ");
-        legend.add(6,"          S = Second          ");
-        legend.add(7,"          S = Second          ");
-        legend.add(8,"          S = Second          ");
-        legend.add(9,"          S = Second          ");
-
-        println(colorToAnsi(Color.WHITE)+ " [x,y] = Coordinates");
-
+            print(colorToAnsi(Color.WHITE) + "  [x,y] = Coordinates");
+            space1(" [x,y] = Coordinates");
+            println(colorToAnsi(Color.RED) + "  Player1 : " + chosenGod.get(0).getValue0());
+            print(colorToAnsi(Color.CYAN) + "  G = Ground");
+            space1(" G = Ground");
+            println(colorToAnsi(Color.BLUE) + "  Player2 : " + chosenGod.get(1).getValue0());
+            print(colorToAnsi(Color.GREEN) + "  F = First");
+            space1(" F = First");
+            if(chosenGod.size()==3)
+                print(colorToAnsi(Color.WHITE) + "  Player3 : " + chosenGod.get(2).getValue0());
+            println("");
+            print(colorToAnsi(Color.YELLOW) + "  S = Second");
+            space1(" S = Second");
+            println(colorToAnsi(Color.RED) + "  "+chosenGod.get(0).getValue0() + " -> " + chosenGod.get(0).getValue1());
+            print(colorToAnsi(Color.PURPLE) + "  T = Third");
+            space1(" T = Third");
+            println(colorToAnsi(Color.BLUE) +"  " +chosenGod.get(1).getValue0() + " -> " + chosenGod.get(1).getValue1());
+            print(colorToAnsi(Color.BLUE) + "  D = Dome");
+            space1(" T = Third");
+            if(chosenGod.size()==3)
+                println(colorToAnsi(Color.WHITE) + "  " + chosenGod.get(2).getValue0() + " -> " + chosenGod.get(2).getValue1());
+            println("");
+            for (int i = 0; i < 2; i++)
+                print(colorToAnsi(Color.GREEN) + "└──────────────────────────┘");
+        }
         println("");
-        println(colorToAnsi(Color.WHITE)+ " G = Ground");
-        println(colorToAnsi(Color.GREEN)+ " F = First");
-        println(colorToAnsi(Color.YELLOW)+ " S = Second");
-        println(colorToAnsi(Color.PURPLE)+ " T = Third");
-        println(colorToAnsi(Color.BLUE)+ " D = Dome");
-        for(int i=0 ; i<2 ; i++)
-            println(colorToAnsi(Color.PURPLE) + "└────────────────────────────┘   ");
     }
+
+        public static void space1(String string){
+
+            int length = string.length();
+            String spaces;
+
+            for(int i=0 ;i<30-length;i++){
+                System.out.print(" ");
+            }
+        }
     public void println(String toPrint){
         AnsiConsole.out.println(toPrint);
     }
@@ -267,9 +289,11 @@ public class Printer {
             case GREEN:
                 return "\u001B[0;32m";
             case PURPLE:
-                return "\u001B[0;36m";
+                return "\u001B[0;35m";
             case WHITE:
                 return "\u001B[0;37m";
+            case CYAN:
+                return "\u001b[0;36m";
             default:
                 return "\u001B[0;37m";
         }
