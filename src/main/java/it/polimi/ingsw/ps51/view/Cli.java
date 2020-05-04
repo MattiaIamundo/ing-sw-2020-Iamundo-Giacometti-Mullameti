@@ -54,9 +54,8 @@ public class Cli extends Supporter {
             while (!ok) {
                 ok = true;
                 try {
-                    setTypeOfEvent(stringFuture.get(1, TimeUnit.SECONDS));
 
-                    switch (getTypeOfEvent()) {
+                    switch (stringFuture.get()) {
 
                         case "NICKNAME":
 
@@ -140,7 +139,7 @@ public class Cli extends Supporter {
                             break;
 
                     }
-                } catch (InterruptedException | TimeoutException | ExecutionException | OutOfMapException e) {
+                } catch (InterruptedException | ExecutionException | OutOfMapException e) {
                     // e.printStackTrace();
                     ok=false;
                 }
