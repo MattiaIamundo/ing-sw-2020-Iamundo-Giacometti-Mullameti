@@ -77,10 +77,8 @@ public class NormalGodsController extends GodControllerObservable implements God
             Square square = map.getSquare(moveTo.getX(), moveTo.getY());
             card.move(player, selectedWorker, square, map);
             if (isWinner()){
-                notify(new Ack(player.getNickname(), "Move"));
                 notifyToGame(ControllerToGame.WINNER);
             }else {
-                notify(new Ack(player.getNickname(), "Move"));
                 searchForBuild();
             }
         } catch (OutOfMapException e) {
@@ -111,10 +109,8 @@ public class NormalGodsController extends GodControllerObservable implements God
             Square square = map.getSquare(buildOn.getX(), buildOn.getY());
             card.build(selectedWorker, square, level, map);
             if (isWinner()){
-                notify(new Ack(player.getNickname(), "Build"));
                 notifyToGame(ControllerToGame.WINNER);
             }else {
-                notify(new Ack(player.getNickname(), "Build"));
                 notifyToGame(ControllerToGame.END_TURN);
             }
         } catch (OutOfMapException e) {
@@ -143,8 +139,8 @@ public class NormalGodsController extends GodControllerObservable implements God
      */
     @Override
     public void manageWorkerChoice(Worker worker) {
-        selectedWorker = player.getWorkers().get(player.getWorkers().indexOf(worker));
         notify(new Ack(player.getNickname(), "Worker choice"));
+        selectedWorker = player.getWorkers().get(player.getWorkers().indexOf(worker));
         searchForMoves();
     }
 
@@ -155,6 +151,7 @@ public class NormalGodsController extends GodControllerObservable implements God
      */
     @Override
     public void manageMoveChoice(Coordinates moveTo) {
+        notify(new Ack(player.getNickname(), "Move"));
         performMove(moveTo);
     }
 
@@ -166,6 +163,7 @@ public class NormalGodsController extends GodControllerObservable implements God
      */
     @Override
     public void manageBuildChoice(Coordinates buildOn, Level level) {
+        notify(new Ack(player.getNickname(), "Build"));
         build(buildOn, level);
     }
 

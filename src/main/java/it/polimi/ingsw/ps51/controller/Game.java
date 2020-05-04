@@ -129,6 +129,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
                             Square square = gameRoom.getBoardMap().getSquare(position.getX(), position.getY());
                             if (!square.isPresentWorker()) {
                                 actualPlayer.addWorker(new Worker(actualPlayer.getNickname(), square));
+                                gameRoom.mapUpdated();
                                 position = null;
                                 workerNum++;
                             }else {

@@ -59,7 +59,6 @@ public class PrometheusController extends NormalGodsController implements GodCon
         try {
             Square square = map.getSquare(buildOn.getX(), buildOn.getY());
             card.build(selectedWorker, square, level, map);
-            notify(new Ack(player.getNickname(), "Build before Move"));
             if (isWinner()){
                 notifyToGame(ControllerToGame.WINNER);
             }else {
@@ -99,6 +98,7 @@ public class PrometheusController extends NormalGodsController implements GodCon
      */
     @Override
     public void manageWorkerChoice(Worker worker) {
+        notify(new Ack(player.getNickname(), "Worker choice"));
         List<Coordinates> validPositions;
         //Assign the chosen worker
         for (Worker worker1 : player.getWorkers()){
@@ -113,7 +113,6 @@ public class PrometheusController extends NormalGodsController implements GodCon
                 Level workerLevel = selectedWorker.getPosition().getLevel();
                 Level positionLevel = map.getSquare(coordinates).getLevel();
                 if (workerLevel.ordinal() - positionLevel.ordinal() >= 0){
-                    notify(new Ack(player.getNickname(), "Worker choice"));
                     notify(new MakeDecision(player.getNickname(), "Do you want to build before move?, If you do this you can't move up"));
                     return;
                 }
@@ -122,7 +121,6 @@ public class PrometheusController extends NormalGodsController implements GodCon
                 return; ////this abort the previous call to this method that raise the exception
             }
         }
-        notify(new Ack(player.getNickname(), "Worker choice"));
         searchForMoves();
     }
 
@@ -149,6 +147,7 @@ public class PrometheusController extends NormalGodsController implements GodCon
      */
     @Override
     public void manageBuildChoice(Coordinates buildOn, Level level) {
+        notify(new Ack(player.getNickname(), "Build"));
         if (useGodPower){
             preBuild(buildOn, level);
         }else {

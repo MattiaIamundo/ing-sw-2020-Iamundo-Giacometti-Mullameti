@@ -98,10 +98,10 @@ public class DemeterControllerTest {
 
     @Test
     public void buildTest_OnlyOnce_TurnEndAfterOnebuild() {
-        controller.build(new Coordinates(2,1), Level.FIRST);
+        controller.manageBuildChoice(new Coordinates(2,1), Level.FIRST);
 
         Assert.assertEquals(3, receiver.buffer.size());
-        Assert.assertTrue(receiver.buffer.get(1) instanceof Ack);
+        Assert.assertTrue(receiver.buffer.get(0) instanceof Ack);
         Assert.assertNotNull(receiver.event);
         Assert.assertTrue(receiver.event instanceof MakeDecision);
 
@@ -112,10 +112,10 @@ public class DemeterControllerTest {
 
     @Test
     public void buildTest_BuildDouble_TurnEndAfterTwobuild() {
-        controller.build(new Coordinates(2,1), Level.FIRST);
+        controller.manageBuildChoice(new Coordinates(2,1), Level.FIRST);
 
         Assert.assertEquals(3, receiver.buffer.size());
-        Assert.assertTrue(receiver.buffer.get(1) instanceof Ack);
+        Assert.assertTrue(receiver.buffer.get(0) instanceof Ack);
         Assert.assertNotNull(receiver.event);
         Assert.assertTrue(receiver.event instanceof MakeDecision);
 
@@ -128,10 +128,11 @@ public class DemeterControllerTest {
         Assert.assertTrue(receiver.event instanceof ChooseBuild);
         Assert.assertEquals(excepctedSecondBuild, ((ChooseBuild) receiver.event).getValidChoices());
 
-        controller.build(new Coordinates(1,2), Level.FIRST);
+        receiver.buffer = new ArrayList<>();
+        controller.manageBuildChoice(new Coordinates(1,2), Level.FIRST);
 
-        Assert.assertNotNull(receiver.event);
-        Assert.assertTrue(receiver.event instanceof Ack);
+        Assert.assertEquals(2, receiver.buffer.size());
+        Assert.assertTrue(receiver.buffer.get(0) instanceof Ack);
         Assert.assertNotNull(game.event);
         Assert.assertEquals(ControllerToGame.END_TURN, game.event);
     }
@@ -139,10 +140,10 @@ public class DemeterControllerTest {
     @Test
     public void buildTest_GoOnWinningCondition_TurnEndGameAdvised() {
         worker1.setInWinningCondition(true);
-        controller.build(new Coordinates(2,1), Level.FIRST);
+        controller.manageBuildChoice(new Coordinates(2,1), Level.FIRST);
 
-        Assert.assertNotNull(receiver.event);
-        Assert.assertTrue(receiver.event instanceof Ack);
+        Assert.assertEquals(2, receiver.buffer.size());
+        Assert.assertTrue(receiver.buffer.get(0) instanceof Ack);
         Assert.assertNotNull(game.event);
         Assert.assertEquals(ControllerToGame.WINNER, game.event);
     }
@@ -161,11 +162,11 @@ public class DemeterControllerTest {
             e.printStackTrace();
         }
 
-        controller.build(new Coordinates(2,1), Level.FIRST);
+        controller.manageBuildChoice(new Coordinates(2,1), Level.FIRST);
 
 
-        Assert.assertNotNull(receiver.event);
-        Assert.assertTrue(receiver.event instanceof Ack);
+        Assert.assertEquals(2, receiver.buffer.size());
+        Assert.assertTrue(receiver.buffer.get(0) instanceof Ack);
         Assert.assertNotNull(game.event);
         Assert.assertEquals(ControllerToGame.END_TURN, game.event);
     }

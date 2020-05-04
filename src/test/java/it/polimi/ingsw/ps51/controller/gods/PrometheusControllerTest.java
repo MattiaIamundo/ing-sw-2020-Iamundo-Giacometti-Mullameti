@@ -143,10 +143,11 @@ public class PrometheusControllerTest {
     public void preBuild_WorkerInWinningCondition_TurnEndedGameAdvised() {
         worker.setInWinningCondition(true);
         controller.selectedWorker = worker;
-        controller.preBuild(new Coordinates(1,0), Level.FIRST);
+        controller.decisionManager(true);
+        controller.manageBuildChoice(new Coordinates(1,0), Level.FIRST);
 
-        assertNotNull(receiver.event);
-        assertTrue(receiver.event instanceof Ack);
+        assertEquals(3, receiver.buffer.size());
+        assertTrue(receiver.buffer.get(1) instanceof Ack);
         assertNotNull(game.event);
         assertEquals(ControllerToGame.WINNER, game.event);
     }
@@ -157,12 +158,12 @@ public class PrometheusControllerTest {
         controller.selectedWorker = worker;
         controller.decisionManager(true);
         receiver.buffer = new ArrayList<>();
-        controller.preBuild(new Coordinates(1,0), Level.FIRST);
+        controller.manageBuildChoice(new Coordinates(1,0), Level.FIRST);
 
         expected.add(new Coordinates(1,1));
 
         assertEquals(3, receiver.buffer.size());
-        assertTrue(receiver.buffer.get(1) instanceof Ack);
+        assertTrue(receiver.buffer.get(0) instanceof Ack);
         assertNotNull(receiver.event);
         assertTrue(receiver.event instanceof ChooseMove);
         assertEquals(expected, ((ChooseMove) receiver.event).getValidChoices());
@@ -244,7 +245,7 @@ public class PrometheusControllerTest {
         controller.manageBuildChoice(new Coordinates(1,1), Level.FIRST);
 
         assertEquals(3, receiver.buffer.size());
-        assertTrue(receiver.buffer.get(1) instanceof Ack);
+        assertTrue(receiver.buffer.get(0) instanceof Ack);
         assertNotNull(receiver.event);
         assertTrue(receiver.event instanceof ChooseMove);
     }
@@ -253,10 +254,11 @@ public class PrometheusControllerTest {
     public void manageBuildChoice_DoNotUseGodPower_EndTurn() {
         controller.selectedWorker = worker;
         controller.decisionManager(false);
+        receiver.buffer = new ArrayList<>();
         controller.manageBuildChoice(new Coordinates(1,1), Level.FIRST);
 
-        assertNotNull(receiver.event);
-        assertTrue(receiver.event instanceof Ack);
+        assertEquals(2, receiver.buffer.size());
+        assertTrue(receiver.buffer.get(0) instanceof Ack);
         assertNotNull(game.event);
         assertEquals(ControllerToGame.END_TURN, game.event);
     }

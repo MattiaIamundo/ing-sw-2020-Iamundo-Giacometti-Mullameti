@@ -39,7 +39,6 @@ public class DemeterController extends NormalGodsController implements GodContro
             try {
                 Square square = map.getSquare(buildOn.getX(), buildOn.getY());
                 card.build(selectedWorker, square, level, map);
-                notify(new Ack(player.getNickname(), "First Build"));
                 if (isWinner()){
                     notifyToGame(ControllerToGame.WINNER);
                     return;
