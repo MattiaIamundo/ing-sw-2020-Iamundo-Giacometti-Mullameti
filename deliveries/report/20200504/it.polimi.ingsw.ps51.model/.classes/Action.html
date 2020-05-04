@@ -1,0 +1,122 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Action</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Action (it.polimi.ingsw.ps51.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Action</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/ 6)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;/**
+<i>4</i>&nbsp; * @author Luca
+<i>5</i>&nbsp; * This class represents an abstraction of the possible actions of this game,
+<i>6</i>&nbsp; * it is abstract because it exists only to group the common methods and attribute
+<i>7</i>&nbsp; * of the real actions {@link Move} and {@link Build} which extend this class
+<i>8</i>&nbsp; */
+<i>9</i>&nbsp;abstract class Action {
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;    private boolean isUsingGod;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;    /**
+<i>14</i>&nbsp;     * Constructor of the class
+<i>15</i>&nbsp;     * @param isUsageGod it represents if the move is done with the power of the player&#39;s god
+<i>16</i>&nbsp;     */
+<b class="fc"><i>17</i>&nbsp;    public Action(boolean isUsageGod) {</b>
+<b class="fc"><i>18</i>&nbsp;        this.isUsingGod = isUsageGod;</b>
+<b class="fc"><i>19</i>&nbsp;    }</b>
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    /**
+<i>22</i>&nbsp;     * Getter of isUsingGod
+<i>23</i>&nbsp;     * @return a boolean which indicates if this action was performed
+<i>24</i>&nbsp;     *         with the usage of the player&#39;s god
+<i>25</i>&nbsp;     */
+<i>26</i>&nbsp;    public boolean getIsUsingGod(){
+<b class="fc"><i>27</i>&nbsp;        return this.isUsingGod;</b>
+<i>28</i>&nbsp;    }
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    /**
+<i>31</i>&nbsp;     * Setter of isUsingGod
+<i>32</i>&nbsp;     * @param state it indicates if the action was performed with the
+<i>33</i>&nbsp;     *              usage of the player&#39;s god
+<i>34</i>&nbsp;     */
+<i>35</i>&nbsp;    public void setIsUsingGod(boolean state){
+<b class="fc"><i>36</i>&nbsp;        this.isUsingGod = state;</b>
+<b class="fc"><i>37</i>&nbsp;    }</b>
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-04 20:47</div>
+</div>
+</body>
+</html>

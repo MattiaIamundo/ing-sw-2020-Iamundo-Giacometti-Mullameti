@@ -29,7 +29,7 @@ abstract public class Supporter extends Observable<EventForServer> implements Ru
     private List<Worker> workers;
     private String decision;
     private String ack;
-
+    private List<Pair<String, Gods>> chosenGods;
 
     public Supporter() {
         typeOfEvent = "DEFAULT";
@@ -42,8 +42,9 @@ abstract public class Supporter extends Observable<EventForServer> implements Ru
         validChoicesBuild = new ArrayList<>();
         map = new Map();
         workers = new ArrayList<>();
-        decision="";
-        ack="";
+        decision = "";
+        ack = "";
+        chosenGods = new ArrayList<>();
     }
 
     public void setTypeOfEvent(String typeOfEvent) {
@@ -89,4 +90,8 @@ abstract public class Supporter extends Observable<EventForServer> implements Ru
     public String getOperationConfirmed(){return ack;}
     public void setOperationConfirmed(String ack){this.ack=ack;}
 
+    public List<Pair<String, Gods>> getChosenGods() {
+        return chosenGods;
+    }
+    public void setChosenGods(List<Pair<String, Gods>> chosenGods){this.chosenGods=chosenGods;}
 }

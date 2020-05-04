@@ -6,6 +6,7 @@ import it.polimi.ingsw.ps51.model.Map;
 import it.polimi.ingsw.ps51.model.Worker;
 import it.polimi.ingsw.ps51.model.gods.Gods;
 import org.fusesource.jansi.AnsiConsole;
+import org.javatuples.Pair;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -115,106 +116,139 @@ public class Printer {
 
     }
 
-    public  void board(Map map , List<Worker> workerList) throws OutOfMapException {
+    public  void board(Map map , List<Worker> workerList ) throws OutOfMapException {
 
         ArrayList<String> players = new ArrayList<>();
-        String[][] board = new String[16][16];
+        int maxCoordinate = map.getMaxCoordinate() + 1;
+        int dim = 3*maxCoordinate + 1;
+        String[][] board = new String[dim][dim];
 
         for(Worker worker : workerList){
             if(!players.contains(worker.getNamePlayer()))
                 players.add(worker.getNamePlayer());
         }
 
-        for (int i = 0; i < 16; i++)
-            for (int j = 0; j < 16; j++)
-                board[i][j] = "   ";
+        for (int i = 0; i < dim; i++)
+            for (int j = 0; j < dim; j++)
+                board[i][j] = "     ";
 
 
-        for (int row = 0; row < 16; row++) {
+        for (int row = 0 ;row < dim ; row++) {
             if (row % 3 == 0) {
-                for (int col = 0; col < 16; col++) {
-                    board[row][col] = "───";
-                    if (col % 3 == 0)
+                for (int col = 0; col < dim; col++) {
+                    board[row][col] = "─────";
+                    if(col%3==0)
                         board[row][col] = "┼";
-                    if (row == 0 && col % 3 == 0)
+                    if( row==0 && col%3==0)
                         board[row][col] = "┬";
-                    if (row == 15 && col % 3 == 0)
+                    if( row==dim-1 && col%3==0)
                         board[row][col] = "┴";
-                    if (col == 0)
+                    if (col==0)
                         board[row][col] = "├";
-                    if (col == 15)
+                    if (col==dim-1)
                         board[row][col] = "┤";
                 }
 
-            } else {
-                for (int col = 0; col < 16; col++) {
+            }else{
+                for (int col = 0; col < dim; col++) {
                     if (col % 3 == 0)
                         board[row][col] = "|";
 
                 }
             }
         }
-        board[0][0] = "┌";
-        board[0][15] = "┐";
-        board[15][0] = "└";
-        board[15][15] = "┘";
+        board[0][0]="┌";
+        board[0][dim-1]="┐";
+        board[dim-1][0]="└";
+        board[dim-1][dim-1]="┘";
 
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
+        for (int i = 0; i < maxCoordinate ; i++) {
+            for (int j = 0; j < maxCoordinate; j++) {
 
                 if (map.getSquare(j,i).getLevel()== Level.GROUND) {
-                    board[2 * i + i + 1][2 * j + j + 1] = " G ";
+                    board[2 * i + i + 1][2 * j + j + 1] = "  G  ";
                 } else if (map.getSquare(j,i).getLevel()== Level.FIRST) {
-                    board[2 * i + i + 1][2 * j + j + 1] = " F ";
+                    board[2 * i + i + 1][2 * j + j + 1] = "  F  ";
                 } else if (map.getSquare(j,i).getLevel()== Level.SECOND) {
-                    board[2 * i + i + 1][2 * j + j + 1] = " S ";
+                    board[2 * i + i + 1][2 * j + j + 1] = "  S  ";
                 } else if (map.getSquare(j,i).getLevel()== Level.THIRD) {
-                    board[2 * i + i + 1][2 * j + j + 1] = " T ";
+                    board[2 * i + i + 1][2 * j + j + 1] = "  T  ";
                 } else if (map.getSquare(j,i).getLevel()== Level.DOME) {
-                    board[2 * i + i + 1][2 * j + j + 1] = " D ";
+                    board[2 * i + i + 1][2 * j + j + 1] = "  D  ";
                 }
 
-                if(map.getSquare(j, i).isPresentWorker())
-                    for (Worker worker : workerList)
-                        if (worker.getPosition().getCoordinates().getX() == j && worker.getPosition().getCoordinates().getY() == i)
+                if(map.getSquare(j, i).isPresentWorker()) {
+                    for (Worker worker : workerList) {
+                        if (worker.getPosition().getCoordinates().getX() == j && worker.getPosition().getCoordinates().getY() == i) {
                             if (worker.getNamePlayer().equals(players.get(0)))
-                                board[2 * i + i + 2][2 * j + j + 2] = " W0";
+                                board[2 * i + i + 2][2 * j + j + 2] = "  W0 ";
                             else if (worker.getNamePlayer().equals(players.get(1)))
-                                board[2 * i + i + 2][2 * j + j + 2] = " W1";
+                                board[2 * i + i + 2][2 * j + j + 2] = "  W1 ";
                             else
-                                board[2 * i + i + 2][2 * j + j + 2] = " W2";
+                                board[2 * i + i + 2][2 * j + j + 2] = "  W2 ";
+                        }
+                    }
+                }
 
-
-
-
+                board[2 * i + i + 2][2 * j + j + 1] = "["+(j+1)+","+(i+1)+"]";
+                            
             }
         }
-        for(int i=0 ; i<16 ;i++){
-            for(int j=0 ; j<16 ;j++) {
-                if(board[i][j] .equals( " G "))
+        for(int i=0 ; i<dim ;i++){
+            for(int j=0 ; j<dim ;j++) {
+                if(board[i][j] .equals( "  G  "))
                     print(colorToAnsi(Color.WHITE)+board[i][j]);
-                else if(board[i][j] .equals(" F "))
+                else if(board[i][j] .equals("  F  "))
+                    print(colorToAnsi(Color.GREEN)+board[i][j]);
+                else if(board[i][j] .equals("  S  "))
                     print(colorToAnsi(Color.YELLOW)+board[i][j]);
-                else if(board[i][j] .equals(" S "))
-                    print(colorToAnsi(Color.YELLOW)+board[i][j]);
-                else if(board[i][j].equals(" T "))
+                else if(board[i][j].equals("  T  "))
                     print(colorToAnsi(Color.PURPLE)+board[i][j]);
-                else if(board[i][j].equals(" D "))
+                else if(board[i][j].equals("  D  "))
                     print(colorToAnsi(Color.BLUE)+board[i][j]);
-                else if(board[i][j].equals(" W0"))
-                    print(colorToAnsi(Color.RED)+" W ");
-                else if(board[i][j].equals(" W1"))
-                    print(colorToAnsi(Color.BLUE)+" W ");
-                else if(board[i][j].equals(" W2"))
-                    print(colorToAnsi(Color.GREEN)+" W ");
+                else if(board[i][j].equals("  W0 "))
+                    print(colorToAnsi(Color.RED)+"  W  ");
+                else if(board[i][j].equals("  W1 "))
+                    print(colorToAnsi(Color.BLUE)+"  W  ");
+                else if(board[i][j].equals("  W2 "))
+                    print(colorToAnsi(Color.PURPLE)+"  W  ");
                 else
-                    print(colorToAnsi(Color.GREEN) + board[i][j]);
+                    print(colorToAnsi(Color.PURPLE) + board[i][j]);
 
             }
+
+
             println("");
         }
-    }
+        //printLegend(chosenGods);
 
+    }
+    public void printLegend(List<Pair<String, Gods>> chosenGod){
+
+        ArrayList<String> legend = new ArrayList<>();
+
+        legend.add(0,"┌────────────────────────────┐");
+        legend.add(1,"          LEGENDS             ");
+        legend.add(2,"      [x,y] = Coordinates     ");
+        legend.add(3,"          G = Ground          ");
+        legend.add(4,"          F = First           ");
+        legend.add(5,"          S = Second          ");
+        legend.add(6,"          S = Second          ");
+        legend.add(7,"          S = Second          ");
+        legend.add(8,"          S = Second          ");
+        legend.add(9,"          S = Second          ");
+
+        println(colorToAnsi(Color.WHITE)+ " [x,y] = Coordinates");
+
+        println("");
+        println(colorToAnsi(Color.WHITE)+ " G = Ground");
+        println(colorToAnsi(Color.GREEN)+ " F = First");
+        println(colorToAnsi(Color.YELLOW)+ " S = Second");
+        println(colorToAnsi(Color.PURPLE)+ " T = Third");
+        println(colorToAnsi(Color.BLUE)+ " D = Dome");
+        for(int i=0 ; i<2 ; i++)
+            println(colorToAnsi(Color.PURPLE) + "└────────────────────────────┘   ");
+    }
     public void println(String toPrint){
         AnsiConsole.out.println(toPrint);
     }

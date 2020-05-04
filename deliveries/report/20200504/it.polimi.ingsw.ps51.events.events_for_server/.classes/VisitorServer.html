@@ -1,0 +1,68 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: VisitorServer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.events.events_for_server</a> ]
+</div>
+
+<h1>Coverage Summary for Class: VisitorServer (it.polimi.ingsw.ps51.events.events_for_server)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">VisitorServer</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.events.events_for_server;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;/**
+<i>4</i>&nbsp; * Interface used to implements the visitor pattern for the events received by the server
+<i>5</i>&nbsp; */
+<i>6</i>&nbsp;public interface VisitorServer {
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;    void visitBuild(Build event);
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;    void visitDecisionTaken(DecisionTaken event);
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    void visitGodChoice(GodChoice event);
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    void visitGodsDeck(GodsDeck event);
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    void visitMoveChoice(MoveChoice event);
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    void visitWorkerChoice(WorkerChoice event);
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    void visitWorkerPosition(WorkerPosition event);
+<i>21</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-04 20:47</div>
+</div>
+</body>
+</html>
