@@ -13,6 +13,8 @@ public class GodsControllerFactory {
                 return new DemeterController(card, map, player);
             case PROMETHEUS:
                 return new PrometheusController(card, map, player);
+            case ARTEMIS:
+                return new ArtemisController(card, map, player);
             default:
                 return new NormalGodsController(card, map, player);
         }

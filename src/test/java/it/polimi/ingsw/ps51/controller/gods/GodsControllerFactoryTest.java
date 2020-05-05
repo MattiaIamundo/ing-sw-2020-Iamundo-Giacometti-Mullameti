@@ -73,11 +73,11 @@ public class GodsControllerFactoryTest {
     }
 
     @Test
-    public void getControllerTest_Artemis_NormalGodsControllerReturned() {
+    public void getControllerTest_Artemis_ArtemisControllerReturned() {
         card = CardFactory.getCard(Gods.ARTEMIS);
         controller = GodsControllerFactory.getController(Gods.ARTEMIS, player, map, card);
 
-        assertTrue(controller instanceof NormalGodsController);
+        assertTrue(controller instanceof ArtemisController);
     }
 
     @Test
