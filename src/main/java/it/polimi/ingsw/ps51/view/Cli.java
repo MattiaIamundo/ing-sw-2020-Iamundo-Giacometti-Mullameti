@@ -134,7 +134,7 @@ public class Cli extends Supporter {
                             outOfRoom();
                             isFinish = true;
                             break;
-                        case "DISCONNECT":
+                        case "DISCONNECTION":
                             disconnectGame();
                             isFinish = true;
                             break;
