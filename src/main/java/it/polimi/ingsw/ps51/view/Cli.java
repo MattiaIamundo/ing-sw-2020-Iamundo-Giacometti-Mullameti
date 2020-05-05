@@ -161,7 +161,7 @@ public class Cli extends Supporter {
     }
 
     private void gameIsStarting(){
-
+        printer.println(printer.colorToAnsi(Color.GREEN) + "The game is started!!");
     }
 
     public void launch(){
@@ -429,8 +429,10 @@ public class Cli extends Supporter {
 
                         try {
                             z = reader.nextLine();
-                            while (z.equals(""))
+                            while (z.equals("")) {
+                                System.out.println("Don't press enter without write something!");
                                 z = reader.nextLine();
+                            }
                             z = z.toUpperCase();
                             ok = true;
                             Level.valueOf(z);
