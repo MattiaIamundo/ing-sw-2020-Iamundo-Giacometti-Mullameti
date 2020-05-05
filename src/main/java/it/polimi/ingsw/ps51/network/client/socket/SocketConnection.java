@@ -45,7 +45,7 @@ public class SocketConnection implements ClientInterface {
             this.oos.writeObject(event);
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("The server is down...");
         }
         return false;
     }
@@ -68,17 +68,17 @@ public class SocketConnection implements ClientInterface {
         try {
             this.oos.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("The object output stream is already closed by server...");
         }
         try {
             this.ois.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("The object input stream is already closed...");
         }
         try {
             this.connection.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("The socket connection is already closed...");
         }
     }
 }
