@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 public class Cli extends Supporter {
 
@@ -147,11 +145,11 @@ public class Cli extends Supporter {
 
                     }
                 } catch (InterruptedException | ExecutionException | OutOfMapException e) {
-                    ok=false;
+                    ok = false;
                 }
             }
         }
-        System.exit(0);
+        this.mh.getEx().shutdown();
     }
 
     private void turnIsEnd() {
@@ -508,7 +506,8 @@ public class Cli extends Supporter {
         printer.println(printer.colorToAnsi(Color.RED) + "Sorry , you lost ...");
     }
     public void disconnectGame(){
-        printer.println(printer.colorToAnsi(Color.BLUE) + "A player disconected himself so everyone is disconnected...");
+        printer.println(printer.colorToAnsi(Color.BLUE) + "The server is shutting down for some reasons or");
+        printer.println(printer.colorToAnsi(Color.BLUE) + "A player disconnected himself so everyone is disconnected...");
     }
 
     public void endGame(){

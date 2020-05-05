@@ -21,6 +21,10 @@ public class MessageHandler {
         visitorClient = new VisitorView(s);
     }
 
+    public ExecutorService getEx() {
+        return this.ex;
+    }
+
     public Future<String> handleTheFuture() {
         return ex.submit( () -> {
 
