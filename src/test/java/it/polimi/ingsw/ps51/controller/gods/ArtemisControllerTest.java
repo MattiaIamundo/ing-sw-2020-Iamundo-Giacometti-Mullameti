@@ -1,7 +1,5 @@
 package it.polimi.ingsw.ps51.controller.gods;
 
-import it.polimi.ingsw.ps51.controller.Game;
-import it.polimi.ingsw.ps51.controller.VisitorController;
 import it.polimi.ingsw.ps51.events.ControllerToGame;
 import it.polimi.ingsw.ps51.events.events_for_client.*;
 import it.polimi.ingsw.ps51.events.events_for_server.EventForServer;
