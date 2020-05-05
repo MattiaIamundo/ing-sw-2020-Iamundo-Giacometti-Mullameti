@@ -252,7 +252,7 @@ public class Printer {
             space1(" T = Third");
             println(colorToAnsi(Color.BLUE) +"  " +chosenGod.get(1).getValue0() + " -> " + chosenGod.get(1).getValue1());
             print(colorToAnsi(Color.BLUE) + "  D = Dome");
-            space1(" T = Third");
+            space1(" D = Dome");
             if(chosenGod.size()==3)
                 println(colorToAnsi(Color.WHITE) + "  " + chosenGod.get(2).getValue0() + " -> " + chosenGod.get(2).getValue1());
             println("");
