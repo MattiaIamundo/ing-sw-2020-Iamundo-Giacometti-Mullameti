@@ -1,6 +1,8 @@
 package it.polimi.ingsw.ps51.network.server.socket;
 
 import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
+import it.polimi.ingsw.ps51.events.events_for_client.NumberOfPlayer;
+import it.polimi.ingsw.ps51.events.events_for_client.Ping;
 import it.polimi.ingsw.ps51.events.events_for_server.*;
 import it.polimi.ingsw.ps51.network.server.MainServer;
 import it.polimi.ingsw.ps51.network.server.Room;
@@ -17,7 +19,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
- * This class represents the socket connection created by the server to communicate with the client
+ * This class represents the {@link ServerInterface} with socket created by the server to communicate with the client
  * @author Luca Giacometti
  */
 public class SocketConnection implements Runnable, ServerInterface {
@@ -70,8 +72,8 @@ public class SocketConnection implements Runnable, ServerInterface {
      * Access to the {@link MainServer} in a synchronized mode
      * to call the checkName method and if it is a good nickname
      * call the addNickname method to add this client
-     * @return true if the nickname is a valid one
-     *          false if it is not
+     * @return true if the nickname is a valid one and it is set
+     *         false if it is not
      */
     public boolean checkName(String nickname) {
         boolean ok;
@@ -117,7 +119,10 @@ public class SocketConnection implements Runnable, ServerInterface {
                 this.oos.writeObject(event);
             }
         } catch (IOException e) {
-            //e.printStackTrace();
+            if (this.nickname != null)
+                System.out.println("Cannot send event to " + this.nickname + "because he/she is disconnected...");
+            else
+                System.out.println("Cannot send event to the client because he/she is disconnected...");
         }
     }
 
@@ -144,7 +149,8 @@ public class SocketConnection implements Runnable, ServerInterface {
 
     /**
      * Start a new thread {@link PingThread} to send
-     * to the client a {@link it.polimi.ingsw.ps51.events.events_for_client.Ping} event
+     * to the client a {@link Ping} event after
+     * the timeout divided by two
      */
     public void startPingThread() {
         Thread t = new Thread(this.pingThread);
@@ -167,6 +173,11 @@ public class SocketConnection implements Runnable, ServerInterface {
         this.ok = status;
     }
 
+    /**
+     * Checks if is present a room in the {@link MainServer}
+     * @return true if there is already a room
+     *         false otherwise
+     */
     public boolean checkIfIsAlreadyPresentARoom() {
         boolean present;
         synchronized (this.mainServer.getObjectToSynchronized()) {
@@ -175,6 +186,10 @@ public class SocketConnection implements Runnable, ServerInterface {
         return present;
     }
 
+    /**
+     * Setter of isFinish attribute
+     * @param status the status of the game
+     */
     public void setFinish(boolean status) {
         this.isFinish = status;
     }
@@ -185,17 +200,26 @@ public class SocketConnection implements Runnable, ServerInterface {
         try {
             this.oos.close();
         } catch (IOException e) {
-            //e.printStackTrace();
+            if (this.nickname != null)
+                System.out.println("The output stream of" + this.nickname + "is already closed by the client disconnection...");
+            else
+                System.out.println("The output stream of a client is already closed by the himself disconnection...");
         }
         try {
             this.ois.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            if (this.nickname != null)
+                System.out.println("The input stream of" + this.nickname + "is already closed by the client disconnection...");
+            else
+                System.out.println("The input stream of a client is already closed by the himself disconnection...");
         }
         try {
             this.connection.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            if (this.nickname != null)
+                System.out.println("The socket of" + this.nickname + "is already closed by the client disconnection...");
+            else
+                System.out.println("The socket of a client is already closed by the himself disconnection...");
         }
     }
 
@@ -206,8 +230,10 @@ public class SocketConnection implements Runnable, ServerInterface {
      * server list of nicknames creating the link between this nickname and this class.
      * If the client is the first one, requests the number of player of the game and then
      * it sets up that number.
+     * If the first one to be accepted in the game is disconnected but the game is not already started,
+     * the {@link NumberOfPlayer} event is send to the next player.
      * After that, it starts the normal phase of the game.
-     * In every phase, it sends continually a {@link it.polimi.ingsw.ps51.events.events_for_client.Ping} event
+     * In every phase, it sends continually a {@link Ping} event
      * to verify if the client is on or not
      */
     @Override
@@ -223,7 +249,7 @@ public class SocketConnection implements Runnable, ServerInterface {
             }
 
         } catch (IOException | ClassNotFoundException e) {
-            //e.printStackTrace();
+
             synchronized (this.mainServer.getObjectToSynchronized()) {
                 if (this.nickname != null) {
                     this.mainServer.reAskNumberIfIWasTheFirstOneAndOtherAreConnected(this.nickname);
@@ -234,13 +260,13 @@ public class SocketConnection implements Runnable, ServerInterface {
         }
 
         try {
-            //connection.setSoTimeout(timeOut);
+
             while(!isFinish) {
                 EventForServer event = (EventForServer) this.ois.readObject();
                 event.acceptVisitor(visitorPong);
             }
         } catch (IOException | ClassNotFoundException e) {
-            //e.printStackTrace();
+
             if (gameRoom != null) {
                 this.gameRoom.update(new it.polimi.ingsw.ps51.events.events_for_server.Disconnection(this.nickname));
             }

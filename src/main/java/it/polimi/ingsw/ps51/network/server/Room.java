@@ -11,8 +11,9 @@ import java.util.*;
 
 /**
  * This class represents the container which has:
- * the controller and the model of the game,
- * and the references to the server interfaces
+ * the controller and the model of one game,
+ * and the references to the {@link ServerInterface}
+ * which represent the clients
  * @author Luca Giacometti
  */
 public class Room extends Observable<EventForServer> implements Runnable, RoomObserver {
@@ -47,10 +48,11 @@ public class Room extends Observable<EventForServer> implements Runnable, RoomOb
     }
 
     /**
-     * With this method the notification are send to the client/s
-     * accessing to the map which contains the links.
+     * With this method the notifications are send to the client/s
+     * accessing to the map which contains the references.
      * And if the game is finished, it is captured here
-     * @param message the event which have to be updated
+     * and the room turns down himself
+     * @param message the event which has to be send to client/s
      */
     @Override
     public void update(EventForClient message) {
@@ -71,7 +73,8 @@ public class Room extends Observable<EventForServer> implements Runnable, RoomOb
 
     /**
      * Here the game is started and the room is continuing sleeping
-     * until the end of the game or a disconnection of a player
+     * until the end of the game or a disconnection of a player.
+     * After it all the {@link ServerInterface} are closed
      */
     @Override
     public void run() {
@@ -79,9 +82,9 @@ public class Room extends Observable<EventForServer> implements Runnable, RoomOb
 
         while (!isFinish) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println("The thread Room is interrupted but is continuing to run");
             }
         }
 
@@ -91,8 +94,8 @@ public class Room extends Observable<EventForServer> implements Runnable, RoomOb
     }
 
     /**
-     * This update create a Disconnection event for each client
-     * and set the condition to finish the game
+     * This update creates a Disconnection event for each client still alive
+     * and sets the condition to stop this thread
      * @param disconnection the event which contains the nickname of the player which is
      *                      disconnected by the game
      */

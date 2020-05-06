@@ -5,16 +5,19 @@ import it.polimi.ingsw.ps51.events.events_for_client.NumberOfPlayer;
 import it.polimi.ingsw.ps51.events.events_for_client.OutOfRoom;
 import it.polimi.ingsw.ps51.model.Player;
 import it.polimi.ingsw.ps51.model.Playground;
+import it.polimi.ingsw.ps51.network.client.ClientInterface;
 import it.polimi.ingsw.ps51.network.server.socket.ServerSocket;
 
 import java.util.*;
 
 /**
  * This class represents the central server which handles:
- * the creation of the room
- * the setting of the controller game
- * the setting of the model
- * And here there are all the nicknames of all the players
+ * the creation of the room,
+ * the setting of the controller game,
+ * the setting of the model,
+ * and it handles the {@link ClientInterface}
+ * In fact, here there are all the nicknames of all the players,
+ * the nickname which are searching for a room,
  * and all the references between the nicknames and the connections used by the clients
  * @author Luca Giacometti
  */
@@ -39,6 +42,10 @@ public class MainServer implements Runnable{
         this.mapOfNicknameAndServerInterface = new HashMap<>();
     }
 
+    /**
+     * Getter of listOfRoom
+     * @return the reference of listOfRoom
+     */
     public synchronized List<Room> getListOfRoom() {
         return this.listOfRoom;
     }
@@ -88,12 +95,12 @@ public class MainServer implements Runnable{
      * This method obtains a synchronize access to the list of nicknames
      * which are waiting to start a game, and to the number of player
      * to be processed before to start the game.
-     * If there are no player it sets the numberOfPlayer to 0.
+     * If there are no players it sets the numberOfPlayer to 0.
      * If the number is different from 0, it checks if there are
      * enough players to start the game.
      * @return true if the number of nicknames are under the right number or
-     *          the number is 0
-     *          false if there are enough nicknames
+     *         the number is 0
+     *         false if there are enough nicknames
      */
     public synchronized boolean computeTheSizeOfList() {
         synchronized ( getObjectToSynchronized() ) {
@@ -122,7 +129,7 @@ public class MainServer implements Runnable{
      * already used or not inside the list of all nickname present
      * @param nickToCheck the nickname to be checked
      * @return true if the nickname is not already present
-     *          false if it is already present
+     *         false if it is already present
      */
     public synchronized boolean checkName(String nickToCheck) {
         for (String s : getAllNicknamesOfPlayers()) {
@@ -156,7 +163,7 @@ public class MainServer implements Runnable{
     }
 
     /**
-     * This method removes the nickname from all the list which contains it
+     * This method removes the nickname from all the lists which contain it
      * @param nickname the nickname to remove from the server
      */
     public synchronized void removeNickname(String nickname) {
@@ -167,10 +174,21 @@ public class MainServer implements Runnable{
         mapOfNicknameAndServerInterface.remove(nickname, si);
     }
 
+    /**
+     * This method checks if the listOfRoom is empty or not
+     * @return true if the list is not empty
+     *         false otherwise
+     */
     public boolean checkIfThereIsAlreadyARoom() {
         return !getListOfRoom().isEmpty();
     }
 
+    /**
+     * If the client which is disconnected is the first one and there are others waiting
+     * this method sets the number of player to 0 and asks to the next client the number of player
+     * for this game
+     * @param nickname the nickname of the client disconnected
+     */
     public void reAskNumberIfIWasTheFirstOneAndOtherAreConnected(String nickname) {
         if ( actualNicknameInSearchOfRoom.size() > 1 && actualNicknameInSearchOfRoom.get(0).equals(nickname)) {
             numberOfPlayer = 0;
@@ -238,7 +256,10 @@ public class MainServer implements Runnable{
      * Here is launched the {@link ServerSocket} as thread.
      * When this thread is running, it waits the right number of players.
      * After it controls if there are out of room players and
-     * when the number of players is right, it starts to set a new Room.
+     * when the number of players is right:
+     * it stops the {@link ServerSocket}, sets a new Room,
+     * clear the actual nickname in search of room list,
+     * and terminates
      */
     @Override
     public void run() {
@@ -258,9 +279,7 @@ public class MainServer implements Runnable{
         synchronized ( getObjectToSynchronized() ) {
 
             cleanFromOutOfRoomPlayers();
-
             createGame();
-
             this.actualNicknameInSearchOfRoom.clear();
             this.numberOfPlayer = 0;
         }

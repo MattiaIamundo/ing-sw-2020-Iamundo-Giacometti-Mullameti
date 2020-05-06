@@ -5,7 +5,7 @@ import it.polimi.ingsw.ps51.network.server.MainServer;
 import java.io.IOException;
 
 /**
- * This class represents the Server which creates the socket connections
+ * This class represents the Server which creates the {@link SocketConnection}
  * @author Luca Giacometti
  */
 public class ServerSocket implements Runnable{
@@ -16,24 +16,29 @@ public class ServerSocket implements Runnable{
     /**
      * Constructor
      * @param mainServer the central server
-     * @throws IOException it is thrown if the server socket has got some problem with the port number
+     * @throws IOException it is thrown if the {@link java.net.ServerSocket} has got some problem with the port number
      */
     public ServerSocket(MainServer mainServer, Integer port) throws IOException {
         this.mainServer = mainServer;
         this.ss = new java.net.ServerSocket(port);
     }
 
+    /**
+     * Here the {@link java.net.ServerSocket} is closed
+     */
     public void stopSS() {
         try {
             this.ss.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("The ServerSocket is already closed...");
         }
     }
 
     /**
-     * Here the server socket creates the socket connection with the clients
+     * Here the {@link java.net.ServerSocket} creates the {@link java.net.Socket} to be inserted
+     * in the {@link SocketConnection}
      * until the number of player for the creation of a room is reached up
+     * then this thread is terminated
      */
     @Override
     public void run() {
@@ -45,7 +50,6 @@ public class ServerSocket implements Runnable{
                     t.start();
                 }
             } catch (IOException e) {
-                //e.printStackTrace();
                 System.out.println("The server socket is down...");
         }
     }
