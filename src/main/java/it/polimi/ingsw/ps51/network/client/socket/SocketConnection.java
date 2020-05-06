@@ -11,7 +11,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
- * This class represents the connection with the socket
+ * This class represents the {@link ClientInterface} with the socket
  * here there are:
  * the socket,
  * the streams to communicate with the server,

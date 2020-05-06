@@ -1,6 +1,8 @@
 package it.polimi.ingsw.ps51.network.client;
 
+import it.polimi.ingsw.ps51.StartApplicationClient;
 import it.polimi.ingsw.ps51.network.client.socket.SocketConnection;
+import it.polimi.ingsw.ps51.network.server.socket.ServerSocket;
 import it.polimi.ingsw.ps51.view.Cli;
 import it.polimi.ingsw.ps51.view.Supporter;
 
@@ -8,7 +10,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 /**
- * This class represents the client starter
+ * This class represents the client starter launched by {@link StartApplicationClient}
  * @author Luca Giacometti
  */
 public class Client implements Runnable {
@@ -22,7 +24,7 @@ public class Client implements Runnable {
      * Constructor
      * @param i it is a 0 if the user wants a {@link Cli}
      * @param url it is the String which represent the url of the server
-     * @param port it is the port on which the {@link it.polimi.ingsw.ps51.network.server.socket.ServerSocket} is on
+     * @param port it is the port on which the {@link ServerSocket} is on
      * @param timeoutSocket this integer represents the countdown for the socket
      */
     public Client(Integer i, String url, Integer port, Integer timeoutSocket) {
@@ -46,6 +48,7 @@ public class Client implements Runnable {
      * {@link Supporter} s,
      * and the observers are set up.
      * At the end the {@link Handler} and {@link Supporter} are launched.
+     * If the server is down the exception is catch and this fact is printed
      */
     @Override
     public void run() {

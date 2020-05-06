@@ -12,7 +12,7 @@ import it.polimi.ingsw.ps51.view.Supporter;
 public interface ClientInterface {
 
     /**
-     * The event for the server are send towards this method
+     * The events for the server are send towards this method
      * @param eventForServer the event to send to the server
      * @return true if the event was send
      *          false if not
@@ -28,7 +28,7 @@ public interface ClientInterface {
     EventForClient receiveEvent();
 
     /**
-     * The call to this method generate the closure to the connection
+     * The call to this method generates the closure to the connection
      */
     void closeConnection();
 }
