@@ -1,12 +1,18 @@
 package it.polimi.ingsw.ps51.visitor;
 
+import it.polimi.ingsw.ps51.events.events_for_client.Ping;
 import it.polimi.ingsw.ps51.events.events_for_server.*;
+import it.polimi.ingsw.ps51.network.server.MainServer;
 import it.polimi.ingsw.ps51.network.server.socket.SocketConnection;
 
 public class VisitorPong implements VisitorForPong {
 
     SocketConnection socketConnection;
 
+    /**
+     * Constructor
+     * @param socketConnection the socket connection which has this as attribute
+     */
     public VisitorPong (SocketConnection socketConnection) {
         this.socketConnection = socketConnection;
     }
@@ -46,11 +52,19 @@ public class VisitorPong implements VisitorForPong {
         socketConnection.getGameRoom().notify(event);
     }
 
+    /**
+     * Call a socket connection method to create a thread to send a {@link Ping} event
+     * @param event the pong event received from the client
+     */
     @Override
     public void visitPong(Pong event) {
         socketConnection.startPingThread();
     }
 
+    /**
+     * Call a socket connection method to set on the {@link MainServer} the number chosen by first client
+     * @param event the number of player event received from the client
+     */
     @Override
     public void visitNumberOfPlayers(NumberOfPlayers event) {
         socketConnection.setOnServerNumberOfPlayer(event.getPlayerNumber());
