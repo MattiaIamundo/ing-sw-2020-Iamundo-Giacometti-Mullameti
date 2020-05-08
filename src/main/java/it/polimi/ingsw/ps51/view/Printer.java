@@ -8,9 +8,7 @@ import it.polimi.ingsw.ps51.model.gods.Gods;
 import org.fusesource.jansi.AnsiConsole;
 import org.javatuples.Pair;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -31,52 +29,118 @@ public class Printer {
        println(colorToAnsi(Color.BLUE)+"     |  /      \\  |   \\ |      |      |      | |     \\   |  |   \\ |  |");
        println(colorToAnsi(Color.BLUE)+" ────  /        \\ |    \\|      |       ──────  |      \\  |  |    \\|  |");
     }
-    public void printDeck(){
 
-        String line;
-        int k;
 
-        for(int j=0 ; j<3 ;j++) {
-            for (int i = j*18; i <(j*18+6); i++) {
-                if (i == j*18) {
-                    for(int l=0 ; l<3 ; l++)
-                        print(colorToAnsi(Color.BLUE) + "┌─────────────────────────────────────────────┐   ");
-                    println("");
-                }
-                try {
-                    print("  ");
-                    line = Files.readAllLines(Paths.get("src/main/resources/Gods.txt")).get(i);
-                    print(colorToAnsi(Color.WHITE)+line);
-                    space(line);
-                    k = i + 6;
-                    line = Files.readAllLines(Paths.get("src/main/resources/Gods.txt")).get(k);
-                    print(colorToAnsi(Color.WHITE)+line);
-                    space(line);
-                    k = i + 2*6;
-                    line = Files.readAllLines(Paths.get("src/main/resources/Gods.txt")).get(k);
-                    print(colorToAnsi(Color.WHITE)+line);
-                    println("");
+    /**
+     * This represent the structure of a god loaded from the Gods.txt file.
+     */
+    private class GodRepresentation{
+        String name;
+        String godOf;
+        String description1;
+        String description2;
+        String description3;
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                if (i == j*18) {
-                    for(int l=0 ; l<3 ; l++)
-                        print(colorToAnsi(Color.BLUE) + "├─────────────────────────────────────────────┤   ");
-
-                    println("");
-                }else if (i == (j*18+5)) {
-                    for(int l=0 ; l<3 ; l++)
-                        print(colorToAnsi(Color.BLUE) + "└─────────────────────────────────────────────┘   ");
-
-                    println("");
-
-                }
-            }
-            System.out.println();
+        public GodRepresentation(String name, String godOf, String description1, String description2, String description3) {
+            this.name = name;
+            this.godOf = godOf;
+            this.description1 = description1;
+            this.description2 = description2;
+            this.description3 = description3;
         }
 
+        public String getName() {
+            return name;
+        }
+
+        public String getGodOf() {
+            return godOf;
+        }
+
+        public String getDescription1() {
+            return description1;
+        }
+
+        public String getDescription2() {
+            return description2;
+        }
+
+        public String getDescription3() {
+            return description3;
+        }
+    }
+
+    /**
+     * This method load the list of all the gods supported by the game and then display them to the user
+     * who must chosen some of them
+     */
+    public void printDeck(){
+        InputStream in = getClass().getResourceAsStream("/Gods.txt");
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
+
+        try {
+            List<GodRepresentation> gods = new ArrayList<>();
+            String line = bufferedReader.readLine();
+            while (line != null){
+                String name = line;
+                String godOf = bufferedReader.readLine();
+                String description1 = bufferedReader.readLine();
+                String description2 = bufferedReader.readLine();
+                String description3 = bufferedReader.readLine();
+                GodRepresentation god = new GodRepresentation(name, godOf, description1, description2, description3);
+                gods.add(god);
+                bufferedReader.readLine();
+                line = bufferedReader.readLine();
+            }
+
+            int lines = ((gods.size() / 3) + gods.size()%3);
+
+            for (int x = 0; x < gods.size(); x++){
+                if (x % 3 == 0){
+                    for (int t = 0; t < 3; t++){
+                        print(colorToAnsi(Color.BLUE) + "┌─────────────────────────────────────────────┐   ");
+                    }
+                    print("\n ");
+                    for (int t = 0; t < 3; t++){
+                        print(gods.get(x+t).getName());
+                        space(gods.get(x+t).getName());
+                    }
+                    print("\n");
+                    for (int t = 0; t < 3; t++){
+                        print(colorToAnsi(Color.BLUE) + "├─────────────────────────────────────────────┤   ");
+                    }
+                    print("\n ");
+                    for (int t = 0; t < 3; t++){
+                        print(gods.get(x+t).getGodOf());
+                        space(gods.get(x+t).getGodOf());
+                    }
+                    print("\n ");
+                    for (int t = 0; t < 3; t++){
+                        print(gods.get(x+t).getDescription1());
+                        space(gods.get(x+t).getDescription1());
+                    }
+                    print("\n ");
+                    for (int t = 0; t < 3; t++){
+                        print(gods.get(x+t).getDescription2());
+                        space(gods.get(x+t).getDescription2());
+                    }
+                    print("\n ");
+                    for (int t = 0; t < 3; t++){
+                        print(gods.get(x+t).getDescription3());
+                        space(gods.get(x+t).getDescription3());
+                    }
+                    print("\n");
+                    for (int t = 0; t < 3; t++){
+                        print(colorToAnsi(Color.BLUE) + "└─────────────────────────────────────────────┘   ");
+                    }
+                    println("");
+                }else {
+                    continue;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     public void printGods(List<Gods>gods){
 
@@ -87,8 +151,8 @@ public class Printer {
         String line;
 
         try {
-            FileReader reader = new FileReader("src/main/resources/Gods.txt");
-            BufferedReader bufferedReader = new BufferedReader(reader);
+            InputStream in = getClass().getResourceAsStream("/Gods.txt");
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
 
 
             while ((line = bufferedReader.readLine()) != null) {
@@ -108,7 +172,6 @@ public class Printer {
                     }
                 }
             }
-            reader.close();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -298,13 +361,13 @@ public class Printer {
                 return "\u001B[0;37m";
         }
     }
-    public  void space(String string){
+    public void space(String string){
 
         int length = string.length();
-        String spaces;
+        String spaces = new String();
 
         for(int i=0 ;i<50-length;i++){
-            System.out.print(" ");
+            print(" ");
         }
     }
 }
