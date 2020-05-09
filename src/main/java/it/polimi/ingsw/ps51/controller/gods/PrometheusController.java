@@ -5,6 +5,8 @@ import it.polimi.ingsw.ps51.events.events_for_client.Ack;
 import it.polimi.ingsw.ps51.events.events_for_client.ChooseMove;
 import it.polimi.ingsw.ps51.events.events_for_client.MakeDecision;
 import it.polimi.ingsw.ps51.events.events_for_client.UnsuccessfulOperation;
+import it.polimi.ingsw.ps51.events.events_for_server.DecisionTaken;
+import it.polimi.ingsw.ps51.events.events_for_server.WorkerChoice;
 import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
 import it.polimi.ingsw.ps51.model.*;
 import it.polimi.ingsw.ps51.model.gods.Card;
@@ -25,7 +27,7 @@ public class PrometheusController extends NormalGodsController implements GodCon
     }
 
     /**
-     * The method retrieves the list of the coordinates where the worker can be moved and send a {@code ChooseMove}
+     * The method retrieves the list of the coordinates where the worker can be moved and send a {@link ChooseMove}
      * event to the player with this list.
      * If the power of the god is used, before sending the list to the player the coordinates that impose to the worker
      * to moves up are removed from the list and set back the attribute {@code useGodPower} to false
@@ -71,8 +73,8 @@ public class PrometheusController extends NormalGodsController implements GodCon
     }
 
     /**
-     * The method removes from a list of {@code Coordinates} that ones that force the selected worker to moves up
-     * @param positions the list of {@code Coordinates}
+     * The method removes from a list of {@link Coordinates} that ones that force the selected worker to moves up
+     * @param positions the list of {@link Coordinates}
      */
     private void removeMoveUp(List<Coordinates> positions) throws OutOfMapException {
         List<Coordinates> temp = new ArrayList<>();
@@ -90,9 +92,9 @@ public class PrometheusController extends NormalGodsController implements GodCon
 
 
     /**
-     * The method is called as a consequence of receiving a {@code WorkerChoice} event that specifies which of the player's
+     * The method is called as a consequence of receiving a {@link WorkerChoice} event that specifies which of the player's
      * workers must be selected to perform the turn.
-     * Then check if the worker can be moved without moving it up, if it's possible, send to the player a {@code MakeDecision}
+     * Then check if the worker can be moved without moving it up, if it's possible, send to the player a {@link MakeDecision}
      * event to ask him if wants to use or not the god's power
      * @param worker the selected worker
      */
@@ -125,7 +127,7 @@ public class PrometheusController extends NormalGodsController implements GodCon
     }
 
     /**
-     * The method is called as a consequence of receiving a {@code DecisionTaken} event, the decision is about building
+     * The method is called as a consequence of receiving a {@link DecisionTaken} event, the decision is about building
      * before moving or not
      * @param takenDecision is true if the player want to build before moving, false if the player want to play a
      *                      classical turn
@@ -140,7 +142,7 @@ public class PrometheusController extends NormalGodsController implements GodCon
     }
 
     /**
-     * The method is called as a consequence of receiving a {@code Build} event, if {@code useGodPower} is true this is
+     * The method is called as a consequence of receiving a {@link Build} event, if {@code useGodPower} is true this is
      * the build done before moving, so the method preBuild() will be called,otherwise the standard build() method will be called
      * @param buildOn the coordinates where the new level must be built
      * @param level the level that must be built

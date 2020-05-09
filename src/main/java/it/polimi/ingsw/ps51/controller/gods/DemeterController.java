@@ -1,10 +1,12 @@
 package it.polimi.ingsw.ps51.controller.gods;
 
+import it.polimi.ingsw.ps51.controller.Game;
 import it.polimi.ingsw.ps51.events.ControllerToGame;
 import it.polimi.ingsw.ps51.events.events_for_client.Ack;
 import it.polimi.ingsw.ps51.events.events_for_client.ChooseBuild;
 import it.polimi.ingsw.ps51.events.events_for_client.MakeDecision;
 import it.polimi.ingsw.ps51.events.events_for_client.UnsuccessfulOperation;
+import it.polimi.ingsw.ps51.events.events_for_server.DecisionTaken;
 import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
 import it.polimi.ingsw.ps51.model.*;
 import it.polimi.ingsw.ps51.model.gods.Card;
@@ -25,7 +27,7 @@ public class DemeterController extends NormalGodsController implements GodContro
      * The method is modified to cope with the gods power of Demeter that permits to build twice, but not on the same
      * square. The first build is activated as normal, but at the end of the procedure, if the player doesn't win,
      * the list of the possible square where a level can be built, excluding the just built one, is saved into {@code secondBuildPositions}
-     * a {@code MakeDecision} event will be sent to ask if the player want to build one more level.
+     * a {@link MakeDecision} event will be sent to ask if the player want to build one more level.
      * For the second build the {@code secondBuild} will be set back to false and the super() method will be called
      * @param buildOn the coordinates where the new level must be built
      * @param level the level that must be built
@@ -58,10 +60,10 @@ public class DemeterController extends NormalGodsController implements GodContro
     }
 
     /**
-     * The method is called as the consequence of receiving a {@code DecisionTaken} event, if the decision is true the
-     * boolean {@code secondBuild} is set to true and a {@code ChooseBuild} event is sent to the player using as list of
+     * The method is called as the consequence of receiving a {@link DecisionTaken} event, if the decision is true the
+     * boolean {@code secondBuild} is set to true and a {@link ChooseBuild} event is sent to the player using as list of
      * valid positions the previously saved list by method build(Coordinates, Level). If the decision received is false
-     * the {@code Game} will be notified that the turn is ended
+     * the {@link Game} will be notified that the turn is ended
      */
     public void decisionManager(boolean takenDecision){
         if (takenDecision){

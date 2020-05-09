@@ -4,6 +4,7 @@ import it.polimi.ingsw.ps51.events.ControllerToGame;
 import it.polimi.ingsw.ps51.events.events_for_client.ChooseMove;
 import it.polimi.ingsw.ps51.events.events_for_client.MakeDecision;
 import it.polimi.ingsw.ps51.events.events_for_client.UnsuccessfulOperation;
+import it.polimi.ingsw.ps51.events.events_for_server.DecisionTaken;
 import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
 import it.polimi.ingsw.ps51.model.Coordinates;
 import it.polimi.ingsw.ps51.model.Map;
@@ -22,6 +23,10 @@ public class ArtemisController extends NormalGodsController implements GodContro
         super(card, map, player);
     }
 
+    /**
+     * if the user chose to use the power, and so this is the second move action, from the list of the
+     * valid coordinates will be removed that one from which the worker was moved from before
+     */
     @Override
     public void searchForMoves() {
         if (!usePower){
@@ -34,6 +39,12 @@ public class ArtemisController extends NormalGodsController implements GodContro
         }
     }
 
+    /**
+     * this method move the selected worker to the chosen coordinates, if this is the first move action in this turn, a
+     * {@link MakeDecision} event will be sent to the user. If this is the second move action in the same turn, it will
+     * be performed normally
+     * @param moveTo the coordinates where the worker must be moved
+     */
     @Override
     public void performMove(Coordinates moveTo) {
         if (!usePower){
@@ -58,7 +69,11 @@ public class ArtemisController extends NormalGodsController implements GodContro
         }
     }
 
-
+    /**
+     * The method is called as a consequence of receiving a {@link DecisionTaken} event, the decision is about move the
+     * selected worker again or not
+     * @param takenDecision is true if the player decided to move again the worker, false otherwise
+     */
     @Override
     public void decisionManager(boolean takenDecision) {
         if (takenDecision){

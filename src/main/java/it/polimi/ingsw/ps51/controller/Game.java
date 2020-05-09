@@ -37,7 +37,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
 
     /**
      * This is the constructor of the class
-     * @param gameRoom it's the {@code Playground} that gives to the controller the access to the model
+     * @param gameRoom it's the {@link Playground} that gives to the controller the access to the model
      */
     public Game(Playground gameRoom) {
         this.gameRoom = gameRoom;
