@@ -145,7 +145,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
                     actualPlayer = gameRoom.getNextPlayer();
                 }
 
-                finalizeGameSetting();
+                finalizeGameSettings();
                 List<Pair<String, Gods>> chosenGods = new ArrayList<>();
                 for (Player player : gameRoom.getPlayers()){
                     chosenGods.add(new Pair<>(player.getNickname(), Gods.getGodFromCard(player.getGod())));
@@ -160,7 +160,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
         /**
          * The method initialize correctly all the observers for the God's cards
          */
-        private void finalizeGameSetting(){
+        private void finalizeGameSettings(){
             for (Player player : gameRoom.getPlayers()){
                 for (Player opponent : gameRoom.getPlayers()){
                     if (!opponent.equals(player)){
