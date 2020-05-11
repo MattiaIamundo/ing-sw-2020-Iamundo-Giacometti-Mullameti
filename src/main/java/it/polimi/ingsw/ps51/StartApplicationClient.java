@@ -2,6 +2,9 @@ package it.polimi.ingsw.ps51;
 
 import it.polimi.ingsw.ps51.network.client.Client;
 
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 /**
  * This class represents the first class to be launched from the client,
  * it admits the user to start the thread {@link Client}
@@ -11,29 +14,30 @@ public class StartApplicationClient {
 
     public static void main(String[] args) {
         System.out.println("Welcome to our SANTORINI game!");
-        /*
+        int typeOfSupporter = 0;
+        String url = "127.0.0.1";
+
         System.out.println("Do you want to use a Cli or a Gui");
         System.out.println("Press respectively 0 or 1");
 
         Scanner scanner = new Scanner(System.in);
         boolean ok = false;
-        Integer i = 0
 
         while(!ok) {
             try {
-                i = scanner.nextInt();
-                if (i != 0 && i != 1) new NoGoodNumberException();
-                ok = true;
+                typeOfSupporter = scanner.nextInt();
+                if (typeOfSupporter == 0 || typeOfSupporter == 1)
+                    ok = true;
+                else
+                    System.out.println("Insert 0 for Cli or 1 for Gui...");
+
             } catch (InputMismatchException e) {
                 System.out.println("Please, insert 0 or 1, no a string!");
-            } catch (NoGoodNumberException n) {
-                System.out.println("Please, insert 0 or 1, no an another number!");
+                scanner.nextLine();
             }
         }
-        */
-        int typeOfSupporter;
-        String url;
 
+        /*
         try {
             if (args[1].equals("1"))
                 typeOfSupporter = 1;
@@ -53,6 +57,8 @@ public class StartApplicationClient {
             typeOfSupporter = 0;
             url = "127.0.0.1";
         }
+
+         */
 
         Client client = new Client(typeOfSupporter, url, 20000, 20000);
         Thread t = new Thread(client);
