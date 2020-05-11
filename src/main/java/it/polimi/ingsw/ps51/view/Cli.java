@@ -532,6 +532,8 @@ public class Cli extends Supporter {
                     printer.println(printer.colorToAnsi(Color.BLUE) + "Enter a VALID coordinate !! ");
                     ok = false;
                 }
+
+                reader.nextLine();
             } catch (InputMismatchException e) {
                 printer.println(printer.colorToAnsi(Color.RED) + "What you entered is NOT OK !!");
                 printer.println(printer.colorToAnsi(Color.RED) + "Enter a number!!");
