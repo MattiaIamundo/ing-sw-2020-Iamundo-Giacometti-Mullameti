@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class represents the {@link ServerInterface} with socket created by the server to communicate with the client
@@ -38,6 +40,7 @@ public class SocketConnection implements Runnable, ServerInterface {
     PingThread pingThread;
     int timeOut;
     VisitorForPong visitorPong;
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
 
     /**
      * Constructor
@@ -119,10 +122,7 @@ public class SocketConnection implements Runnable, ServerInterface {
                 this.oos.writeObject(event);
             }
         } catch (IOException e) {
-            if (this.nickname != null)
-                System.out.println("Cannot send event to " + this.nickname + "because he/she is disconnected...");
-            else
-                System.out.println("Cannot send event to the client because he/she is disconnected...");
+            logger.log(Level.FINER, "Here could be one of these: normal end of game or disconnections");
         }
     }
 
@@ -201,25 +201,25 @@ public class SocketConnection implements Runnable, ServerInterface {
             this.oos.close();
         } catch (IOException e) {
             if (this.nickname != null)
-                System.out.println("The output stream of" + this.nickname + "is already closed by the client disconnection...");
+                logger.log(Level.FINER, "The output stream of " + this.nickname + " is already closed by the client disconnection...");
             else
-                System.out.println("The output stream of a client is already closed by the himself disconnection...");
+                logger.log(Level.FINER, "The output stream of a client is already closed by the client disconnection...");
         }
         try {
             this.ois.close();
         } catch (IOException e) {
             if (this.nickname != null)
-                System.out.println("The input stream of" + this.nickname + "is already closed by the client disconnection...");
+                logger.log(Level.FINER, "The input stream of " + this.nickname + " is already closed by the client disconnection...");
             else
-                System.out.println("The input stream of a client is already closed by the himself disconnection...");
+                logger.log(Level.FINER, "The input stream of a client is already closed by the client disconnection...");
         }
         try {
             this.connection.close();
         } catch (IOException e) {
             if (this.nickname != null)
-                System.out.println("The socket of" + this.nickname + "is already closed by the client disconnection...");
+                logger.log(Level.FINER,"The socket of " + this.nickname + " is already closed by the himself disconnection...");
             else
-                System.out.println("The socket of a client is already closed by the himself disconnection...");
+                logger.log(Level.FINER,"The socket of a client is already closed by the himself disconnection...");
         }
     }
 
