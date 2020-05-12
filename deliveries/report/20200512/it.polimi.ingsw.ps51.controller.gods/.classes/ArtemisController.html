@@ -1,0 +1,170 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ArtemisController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.controller.gods</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ArtemisController (it.polimi.ingsw.ps51.controller.gods)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ArtemisController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (31/ 31)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.controller.gods;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.ps51.events.ControllerToGame;
+<i>4</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_client.ChooseMove;
+<i>5</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_client.MakeDecision;
+<i>6</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_client.UnsuccessfulOperation;
+<i>7</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_server.DecisionTaken;
+<i>8</i>&nbsp;import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
+<i>9</i>&nbsp;import it.polimi.ingsw.ps51.model.Coordinates;
+<i>10</i>&nbsp;import it.polimi.ingsw.ps51.model.Map;
+<i>11</i>&nbsp;import it.polimi.ingsw.ps51.model.Player;
+<i>12</i>&nbsp;import it.polimi.ingsw.ps51.model.Square;
+<i>13</i>&nbsp;import it.polimi.ingsw.ps51.model.gods.Card;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;import java.util.List;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;public class ArtemisController extends NormalGodsController implements GodControllerWithDecision{
+<i>18</i>&nbsp;
+<b class="fc"><i>19</i>&nbsp;    private boolean usePower = false;</b>
+<i>20</i>&nbsp;    private Coordinates movedFrom;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    public ArtemisController(Card card, Map map, Player player) {
+<b class="fc"><i>23</i>&nbsp;        super(card, map, player);</b>
+<b class="fc"><i>24</i>&nbsp;    }</b>
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    /**
+<i>27</i>&nbsp;     * if the user chose to use the power, and so this is the second move action, from the list of the
+<i>28</i>&nbsp;     * valid coordinates will be removed that one from which the worker was moved from before
+<i>29</i>&nbsp;     */
+<i>30</i>&nbsp;    @Override
+<i>31</i>&nbsp;    public void searchForMoves() {
+<b class="fc"><i>32</i>&nbsp;        if (!usePower){</b>
+<b class="fc"><i>33</i>&nbsp;            super.searchForMoves();</b>
+<i>34</i>&nbsp;        }else {
+<i>35</i>&nbsp;            List&lt;Coordinates&gt; validSquares;
+<b class="fc"><i>36</i>&nbsp;            validSquares = card.checkMoves(player, selectedWorker, map);</b>
+<b class="fc"><i>37</i>&nbsp;            validSquares.remove(movedFrom);</b>
+<b class="fc"><i>38</i>&nbsp;            notify(new ChooseMove(validSquares, player.getNickname()));</b>
+<i>39</i>&nbsp;        }
+<b class="fc"><i>40</i>&nbsp;    }</b>
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    /**
+<i>43</i>&nbsp;     * this method move the selected worker to the chosen coordinates, if this is the first move action in this turn, a
+<i>44</i>&nbsp;     * {@link MakeDecision} event will be sent to the user. If this is the second move action in the same turn, it will
+<i>45</i>&nbsp;     * be performed normally
+<i>46</i>&nbsp;     * @param moveTo the coordinates where the worker must be moved
+<i>47</i>&nbsp;     */
+<i>48</i>&nbsp;    @Override
+<i>49</i>&nbsp;    public void performMove(Coordinates moveTo) {
+<b class="fc"><i>50</i>&nbsp;        if (!usePower){</b>
+<i>51</i>&nbsp;            try {
+<b class="fc"><i>52</i>&nbsp;                Square square = map.getSquare(moveTo.getX(), moveTo.getY());</b>
+<b class="fc"><i>53</i>&nbsp;                movedFrom = selectedWorker.getPosition().getCoordinates();</b>
+<b class="fc"><i>54</i>&nbsp;                card.move(player, selectedWorker, square, map);</b>
+<b class="fc"><i>55</i>&nbsp;                if (isWinner()){</b>
+<b class="fc"><i>56</i>&nbsp;                    movedFrom = null;</b>
+<b class="fc"><i>57</i>&nbsp;                    notifyToGame(ControllerToGame.WINNER);</b>
+<i>58</i>&nbsp;                }else {
+<b class="fc"><i>59</i>&nbsp;                    notify(new MakeDecision(player.getNickname(), &quot;Do you want to move once more, not back to your previous position?&quot;));</b>
+<i>60</i>&nbsp;                }
+<b class="fc"><i>61</i>&nbsp;            } catch (OutOfMapException e) {</b>
+<b class="fc"><i>62</i>&nbsp;                notify(new UnsuccessfulOperation(player.getNickname()));</b>
+<b class="fc"><i>63</i>&nbsp;                searchForMoves();</b>
+<b class="fc"><i>64</i>&nbsp;            }</b>
+<i>65</i>&nbsp;        }else {
+<b class="fc"><i>66</i>&nbsp;            usePower = false;</b>
+<b class="fc"><i>67</i>&nbsp;            movedFrom = null;</b>
+<b class="fc"><i>68</i>&nbsp;            super.performMove(moveTo);</b>
+<i>69</i>&nbsp;        }
+<b class="fc"><i>70</i>&nbsp;    }</b>
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    /**
+<i>73</i>&nbsp;     * The method is called as a consequence of receiving a {@link DecisionTaken} event, the decision is about move the
+<i>74</i>&nbsp;     * selected worker again or not
+<i>75</i>&nbsp;     * @param takenDecision is true if the player decided to move again the worker, false otherwise
+<i>76</i>&nbsp;     */
+<i>77</i>&nbsp;    @Override
+<i>78</i>&nbsp;    public void decisionManager(boolean takenDecision) {
+<b class="fc"><i>79</i>&nbsp;        if (takenDecision){</b>
+<b class="fc"><i>80</i>&nbsp;            usePower = true;</b>
+<b class="fc"><i>81</i>&nbsp;            searchForMoves();</b>
+<i>82</i>&nbsp;        }else {
+<b class="fc"><i>83</i>&nbsp;            movedFrom = null;</b>
+<b class="fc"><i>84</i>&nbsp;            searchForBuild();</b>
+<i>85</i>&nbsp;        }
+<b class="fc"><i>86</i>&nbsp;    }</b>
+<i>87</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-12 12:56</div>
+</div>
+</body>
+</html>

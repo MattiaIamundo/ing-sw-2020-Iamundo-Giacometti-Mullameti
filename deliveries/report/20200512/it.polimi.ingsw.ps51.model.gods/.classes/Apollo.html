@@ -1,0 +1,144 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Apollo</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.model.gods</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Apollo (it.polimi.ingsw.ps51.model.gods)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Apollo</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (27/ 27)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.model.gods;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.ps51.model.*;
+<i>4</i>&nbsp;import org.javatuples.Pair;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import java.util.ArrayList;
+<i>7</i>&nbsp;import java.util.List;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;/**
+<i>10</i>&nbsp; * This class implement the god&#39;s power of Apollo
+<i>11</i>&nbsp; */
+<b class="fc"><i>12</i>&nbsp;public class Apollo extends CommonAction{</b>
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    @Override
+<i>15</i>&nbsp;    public List&lt;Coordinates&gt; checkMoves(Player player, Worker worker, Map map) {
+<b class="fc"><i>16</i>&nbsp;        Square workerPosition = worker.getPosition();</b>
+<b class="fc"><i>17</i>&nbsp;        List&lt;Square&gt; adjacentSquares = map.getAdjacentSquare(workerPosition);</b>
+<b class="fc"><i>18</i>&nbsp;        List&lt;Coordinates&gt; validCoordinates = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>19</i>&nbsp;        for (Square square : adjacentSquares){</b>
+<b class="fc"><i>20</i>&nbsp;            if ((square != null) &amp;&amp; (square.getLevel().ordinal() - worker.getPosition().getLevel().ordinal() &lt;= 1)</b>
+<b class="fc"><i>21</i>&nbsp;                    &amp;&amp; !square.getLevel().equals(Level.DOME)){</b>
+<i>22</i>&nbsp;
+<b class="fc"><i>23</i>&nbsp;                if (square.isPresentWorker() &amp;&amp; isAlliedWorker(player.getWorkers(), square)){</b>
+<b class="fc"><i>24</i>&nbsp;                    continue;</b>
+<i>25</i>&nbsp;                }
+<b class="fc"><i>26</i>&nbsp;                validCoordinates.add(square.getCoordinates());</b>
+<i>27</i>&nbsp;            }
+<b class="fc"><i>28</i>&nbsp;        }</b>
+<b class="fc"><i>29</i>&nbsp;        return clearPositions(validCoordinates, worker, map);</b>
+<i>30</i>&nbsp;    }
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    /**
+<i>33</i>&nbsp;     * In case of a square where there is an opponent&#39;s worker their positions are swapped
+<i>34</i>&nbsp;     * @param worker the selected worker
+<i>35</i>&nbsp;     * @param position the position where the worker must be moved
+<i>36</i>&nbsp;     * @param map the game map
+<i>37</i>&nbsp;     */
+<i>38</i>&nbsp;    @Override
+<i>39</i>&nbsp;    public synchronized void move(Player player, Worker worker, Square position, Map map) {
+<b class="fc"><i>40</i>&nbsp;        if (checkMoves(player, worker, map).contains(position.getCoordinates())){</b>
+<b class="fc"><i>41</i>&nbsp;            if (position.isPresentWorker()){</b>
+<b class="fc"><i>42</i>&nbsp;                Square oldPosition = worker.getPosition();</b>
+<b class="fc"><i>43</i>&nbsp;                worker.setPosition(position);</b>
+<b class="fc"><i>44</i>&nbsp;                notify(new Pair&lt;Square, Square&gt;(position, oldPosition));</b>
+<b class="fc"><i>45</i>&nbsp;                position.setPresentWorker(true);</b>
+<b class="fc"><i>46</i>&nbsp;                position.notifyChange();</b>
+<b class="fc"><i>47</i>&nbsp;            }else {</b>
+<b class="fc"><i>48</i>&nbsp;                super.move(player, worker, position, map);</b>
+<i>49</i>&nbsp;            }
+<i>50</i>&nbsp;        }
+<b class="fc"><i>51</i>&nbsp;    }</b>
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    private boolean isAlliedWorker(List&lt;Worker&gt; workers, Square position){
+<b class="fc"><i>54</i>&nbsp;        for (Worker worker : workers){</b>
+<b class="fc"><i>55</i>&nbsp;            if (worker.getPosition().equals(position)){</b>
+<b class="fc"><i>56</i>&nbsp;                return true;</b>
+<i>57</i>&nbsp;            }
+<b class="fc"><i>58</i>&nbsp;        }</b>
+<b class="fc"><i>59</i>&nbsp;        return false;</b>
+<i>60</i>&nbsp;    }
+<i>61</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-12 12:56</div>
+</div>
+</body>
+</html>

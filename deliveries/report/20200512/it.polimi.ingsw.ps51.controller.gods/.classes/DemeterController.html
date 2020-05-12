@@ -1,0 +1,159 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DemeterController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.controller.gods</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DemeterController (it.polimi.ingsw.ps51.controller.gods)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DemeterController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (26/ 26)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.controller.gods;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.ps51.controller.Game;
+<i>4</i>&nbsp;import it.polimi.ingsw.ps51.events.ControllerToGame;
+<i>5</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_client.Ack;
+<i>6</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_client.ChooseBuild;
+<i>7</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_client.MakeDecision;
+<i>8</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_client.UnsuccessfulOperation;
+<i>9</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_server.DecisionTaken;
+<i>10</i>&nbsp;import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
+<i>11</i>&nbsp;import it.polimi.ingsw.ps51.model.*;
+<i>12</i>&nbsp;import it.polimi.ingsw.ps51.model.gods.Card;
+<i>13</i>&nbsp;import org.javatuples.Pair;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;import java.util.List;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;public class DemeterController extends NormalGodsController implements GodControllerWithDecision{
+<i>18</i>&nbsp;
+<b class="fc"><i>19</i>&nbsp;    private boolean secondBuild = false;</b>
+<i>20</i>&nbsp;    private List&lt;Pair&lt;Coordinates, List&lt;Level&gt;&gt;&gt; secondBuildPositions;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    public DemeterController(Card card, Map map, Player player) {
+<b class="fc"><i>23</i>&nbsp;        super(card, map, player);</b>
+<b class="fc"><i>24</i>&nbsp;    }</b>
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    /**
+<i>27</i>&nbsp;     * The method is modified to cope with the gods power of Demeter that permits to build twice, but not on the same
+<i>28</i>&nbsp;     * square. The first build is activated as normal, but at the end of the procedure, if the player doesn&#39;t win,
+<i>29</i>&nbsp;     * the list of the possible square where a level can be built, excluding the just built one, is saved into {@code secondBuildPositions}
+<i>30</i>&nbsp;     * a {@link MakeDecision} event will be sent to ask if the player want to build one more level.
+<i>31</i>&nbsp;     * For the second build the {@code secondBuild} will be set back to false and the super() method will be called
+<i>32</i>&nbsp;     * @param buildOn the coordinates where the new level must be built
+<i>33</i>&nbsp;     * @param level the level that must be built
+<i>34</i>&nbsp;     */
+<i>35</i>&nbsp;    @Override
+<i>36</i>&nbsp;    public void build(Coordinates buildOn, Level level) {
+<b class="fc"><i>37</i>&nbsp;        if (secondBuild){</b>
+<b class="fc"><i>38</i>&nbsp;            secondBuild = false;</b>
+<b class="fc"><i>39</i>&nbsp;            super.build(buildOn, level);</b>
+<i>40</i>&nbsp;        }else {
+<i>41</i>&nbsp;            try {
+<b class="fc"><i>42</i>&nbsp;                Square square = map.getSquare(buildOn.getX(), buildOn.getY());</b>
+<b class="fc"><i>43</i>&nbsp;                card.build(selectedWorker, square, level, map);</b>
+<b class="fc"><i>44</i>&nbsp;                if (isWinner()){</b>
+<b class="fc"><i>45</i>&nbsp;                    notifyToGame(ControllerToGame.WINNER);</b>
+<b class="fc"><i>46</i>&nbsp;                    return;</b>
+<i>47</i>&nbsp;                }
+<b class="fc"><i>48</i>&nbsp;                secondBuildPositions = card.checkBuild(selectedWorker, map);</b>
+<b class="fc"><i>49</i>&nbsp;                secondBuildPositions.removeIf(c -&gt; c.getValue0().equals(buildOn));</b>
+<b class="fc"><i>50</i>&nbsp;                if (secondBuildPositions.isEmpty()){</b>
+<b class="fc"><i>51</i>&nbsp;                    notifyToGame(ControllerToGame.END_TURN);</b>
+<i>52</i>&nbsp;                }else {
+<b class="fc"><i>53</i>&nbsp;                    notify(new MakeDecision(player.getNickname(), &quot;Do you want to build again?&quot;));</b>
+<i>54</i>&nbsp;                }
+<b class="fc"><i>55</i>&nbsp;            } catch (OutOfMapException e) {</b>
+<b class="fc"><i>56</i>&nbsp;                notify(new UnsuccessfulOperation(player.getNickname()));</b>
+<b class="fc"><i>57</i>&nbsp;                searchForBuild();</b>
+<b class="fc"><i>58</i>&nbsp;            }</b>
+<i>59</i>&nbsp;        }
+<b class="fc"><i>60</i>&nbsp;    }</b>
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    /**
+<i>63</i>&nbsp;     * The method is called as the consequence of receiving a {@link DecisionTaken} event, if the decision is true the
+<i>64</i>&nbsp;     * boolean {@code secondBuild} is set to true and a {@link ChooseBuild} event is sent to the player using as list of
+<i>65</i>&nbsp;     * valid positions the previously saved list by method build(Coordinates, Level). If the decision received is false
+<i>66</i>&nbsp;     * the {@link Game} will be notified that the turn is ended
+<i>67</i>&nbsp;     */
+<i>68</i>&nbsp;    public void decisionManager(boolean takenDecision){
+<b class="fc"><i>69</i>&nbsp;        if (takenDecision){</b>
+<b class="fc"><i>70</i>&nbsp;            secondBuild = true;</b>
+<b class="fc"><i>71</i>&nbsp;            notify(new ChooseBuild(secondBuildPositions, player.getNickname()));</b>
+<i>72</i>&nbsp;        }else {
+<b class="fc"><i>73</i>&nbsp;            notifyToGame(ControllerToGame.END_TURN);</b>
+<i>74</i>&nbsp;        }
+<b class="fc"><i>75</i>&nbsp;    }</b>
+<i>76</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-12 12:56</div>
+</div>
+</body>
+</html>
