@@ -36,4 +36,9 @@ public class OpponentAthena implements OpponentTurnGodsManager {
         }
         return newPositions;
     }
+
+    @Override
+    public boolean isValidWin(Worker worker, Map map) {
+        return true;
+    }
 }

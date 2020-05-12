@@ -129,6 +129,12 @@ public class Map implements Serializable, Iterable<Square>, Cloneable{
                 || (coordinates.getY() == effectiveMap[0].length - 1);
     }
 
+    public boolean isThisPerimeterSquare(Coordinates coordinates){
+
+        return (coordinates.getX() == 0) || (coordinates.getY() == 0) || (coordinates.getX() == effectiveMap.length - 1)
+                || (coordinates.getY() == effectiveMap[0].length - 1);
+    }
+
 
     /**
      * The class create an iterator for the map that scans it from left to right top down

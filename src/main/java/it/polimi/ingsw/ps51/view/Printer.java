@@ -93,49 +93,50 @@ public class Printer {
                 line = bufferedReader.readLine();
             }
 
-            int lines = ((gods.size() / 3) + gods.size()%3);
+            int ITEM_PER_LINE = 3;
 
             for (int x = 0; x < gods.size(); x++){
-                if (x % 3 == 0){
-                    for (int t = 0; t < 3; t++){
+                if (x % ITEM_PER_LINE == 0){
+                    if ((gods.size() - x) < ITEM_PER_LINE){
+                        ITEM_PER_LINE = gods.size() - x;
+                    }
+                    for (int t = 0; t < ITEM_PER_LINE; t++){
                         print(colorToAnsi(Color.BLUE) + "┌─────────────────────────────────────────────┐   ");
                     }
                     print("\n ");
-                    for (int t = 0; t < 3; t++){
+                    for (int t = 0; t < ITEM_PER_LINE; t++){
                         print(gods.get(x+t).getName());
                         space(gods.get(x+t).getName());
                     }
                     print("\n");
-                    for (int t = 0; t < 3; t++){
+                    for (int t = 0; t < ITEM_PER_LINE; t++){
                         print(colorToAnsi(Color.BLUE) + "├─────────────────────────────────────────────┤   ");
                     }
                     print("\n ");
-                    for (int t = 0; t < 3; t++){
+                    for (int t = 0; t < ITEM_PER_LINE; t++){
                         print(gods.get(x+t).getGodOf());
                         space(gods.get(x+t).getGodOf());
                     }
                     print("\n ");
-                    for (int t = 0; t < 3; t++){
+                    for (int t = 0; t < ITEM_PER_LINE; t++){
                         print(gods.get(x+t).getDescription1());
                         space(gods.get(x+t).getDescription1());
                     }
                     print("\n ");
-                    for (int t = 0; t < 3; t++){
+                    for (int t = 0; t < ITEM_PER_LINE; t++){
                         print(gods.get(x+t).getDescription2());
                         space(gods.get(x+t).getDescription2());
                     }
                     print("\n ");
-                    for (int t = 0; t < 3; t++){
+                    for (int t = 0; t < ITEM_PER_LINE; t++){
                         print(gods.get(x+t).getDescription3());
                         space(gods.get(x+t).getDescription3());
                     }
                     print("\n");
-                    for (int t = 0; t < 3; t++){
+                    for (int t = 0; t < ITEM_PER_LINE; t++){
                         print(colorToAnsi(Color.BLUE) + "└─────────────────────────────────────────────┘   ");
                     }
                     println("");
-                }else {
-                    continue;
                 }
             }
         } catch (IOException e) {

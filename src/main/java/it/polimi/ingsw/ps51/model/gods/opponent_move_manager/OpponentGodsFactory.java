@@ -16,7 +16,10 @@ public class OpponentGodsFactory {
         switch (god){
             case ATHENA:
                 return new OpponentAthena();
+            case HERA:
+                return new OpponentHera();
+            default:
+                return null;
         }
-        return null;
     }
 }

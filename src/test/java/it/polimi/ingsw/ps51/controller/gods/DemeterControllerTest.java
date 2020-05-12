@@ -6,7 +6,6 @@ import it.polimi.ingsw.ps51.events.events_for_server.EventForServer;
 import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
 import it.polimi.ingsw.ps51.model.*;
 import it.polimi.ingsw.ps51.model.gods.Card;
-import it.polimi.ingsw.ps51.model.gods.CommonAction;
 import it.polimi.ingsw.ps51.model.gods.Demeter;
 import it.polimi.ingsw.ps51.utility.GameObserver;
 import it.polimi.ingsw.ps51.utility.Observer;
@@ -21,8 +20,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 public class DemeterControllerTest {
     private Map map;
     private PhantomGame game;
@@ -30,10 +27,10 @@ public class DemeterControllerTest {
     private Player player;
     private Worker worker1;
     private Worker worker2;
-    private MessageReceiver receiver;
+    private Stub stub;
     private DemeterController controller;
 
-    private class MessageReceiver implements Observer<EventForClient> {
+    private class Stub implements Observer<EventForClient> {
 
         private EventForClient event;
 
@@ -76,12 +73,12 @@ public class DemeterControllerTest {
         player.setWorkers(Arrays.asList(worker1, worker2));
         game = new PhantomGame();
         card = new Demeter();
-        receiver = new MessageReceiver();
+        stub = new Stub();
         controller = new DemeterController(card, map, player);
         controller.addGame(game);
-        controller.addObserver(receiver);
+        controller.addObserver(stub);
         controller.selectedWorker = worker1;
-        playground.addObserver(receiver);
+        playground.addObserver(stub);
     }
 
     @After
@@ -92,7 +89,7 @@ public class DemeterControllerTest {
         player = null;
         worker1 = null;
         worker2 = null;
-        receiver = null;
+        stub = null;
         controller = null;
     }
 
@@ -100,10 +97,10 @@ public class DemeterControllerTest {
     public void buildTest_OnlyOnce_TurnEndAfterOnebuild() {
         controller.manageBuildChoice(new Coordinates(2,1), Level.FIRST);
 
-        Assert.assertEquals(3, receiver.buffer.size());
-        Assert.assertTrue(receiver.buffer.get(0) instanceof Ack);
-        Assert.assertNotNull(receiver.event);
-        Assert.assertTrue(receiver.event instanceof MakeDecision);
+        Assert.assertEquals(3, stub.buffer.size());
+        Assert.assertTrue(stub.buffer.get(0) instanceof Ack);
+        Assert.assertNotNull(stub.event);
+        Assert.assertTrue(stub.event instanceof MakeDecision);
 
         controller.decisionManager(false);
         Assert.assertNotNull(game.event);
@@ -114,25 +111,25 @@ public class DemeterControllerTest {
     public void buildTest_BuildDouble_TurnEndAfterTwobuild() {
         controller.manageBuildChoice(new Coordinates(2,1), Level.FIRST);
 
-        Assert.assertEquals(3, receiver.buffer.size());
-        Assert.assertTrue(receiver.buffer.get(0) instanceof Ack);
-        Assert.assertNotNull(receiver.event);
-        Assert.assertTrue(receiver.event instanceof MakeDecision);
+        Assert.assertEquals(3, stub.buffer.size());
+        Assert.assertTrue(stub.buffer.get(0) instanceof Ack);
+        Assert.assertNotNull(stub.event);
+        Assert.assertTrue(stub.event instanceof MakeDecision);
 
         controller.decisionManager(true);
         List<Pair<Coordinates, List<Level>>> excepctedSecondBuild = card.checkBuild(worker1, map);
         excepctedSecondBuild.remove(new Pair<>(new Coordinates(2,1), Arrays.asList(Level.SECOND)));
 
 
-        Assert.assertNotNull(receiver.event);
-        Assert.assertTrue(receiver.event instanceof ChooseBuild);
-        Assert.assertEquals(excepctedSecondBuild, ((ChooseBuild) receiver.event).getValidChoices());
+        Assert.assertNotNull(stub.event);
+        Assert.assertTrue(stub.event instanceof ChooseBuild);
+        Assert.assertEquals(excepctedSecondBuild, ((ChooseBuild) stub.event).getValidChoices());
 
-        receiver.buffer = new ArrayList<>();
+        stub.buffer = new ArrayList<>();
         controller.manageBuildChoice(new Coordinates(1,2), Level.FIRST);
 
-        Assert.assertEquals(2, receiver.buffer.size());
-        Assert.assertTrue(receiver.buffer.get(0) instanceof Ack);
+        Assert.assertEquals(2, stub.buffer.size());
+        Assert.assertTrue(stub.buffer.get(0) instanceof Ack);
         Assert.assertNotNull(game.event);
         Assert.assertEquals(ControllerToGame.END_TURN, game.event);
     }
@@ -142,8 +139,8 @@ public class DemeterControllerTest {
         worker1.setInWinningCondition(true);
         controller.manageBuildChoice(new Coordinates(2,1), Level.FIRST);
 
-        Assert.assertEquals(2, receiver.buffer.size());
-        Assert.assertTrue(receiver.buffer.get(0) instanceof Ack);
+        Assert.assertEquals(2, stub.buffer.size());
+        Assert.assertTrue(stub.buffer.get(0) instanceof Ack);
         Assert.assertNotNull(game.event);
         Assert.assertEquals(ControllerToGame.WINNER, game.event);
     }
@@ -165,8 +162,8 @@ public class DemeterControllerTest {
         controller.manageBuildChoice(new Coordinates(2,1), Level.FIRST);
 
 
-        Assert.assertEquals(2, receiver.buffer.size());
-        Assert.assertTrue(receiver.buffer.get(0) instanceof Ack);
+        Assert.assertEquals(2, stub.buffer.size());
+        Assert.assertTrue(stub.buffer.get(0) instanceof Ack);
         Assert.assertNotNull(game.event);
         Assert.assertEquals(ControllerToGame.END_TURN, game.event);
     }
@@ -175,17 +172,17 @@ public class DemeterControllerTest {
     public void buildTest_InvalidCoordinates_ExceptionHandledRequestRedone(){
         controller.build(new Coordinates(5,4), Level.FIRST);
 
-        Assert.assertEquals(2, receiver.buffer.size());
-        Assert.assertTrue(receiver.buffer.get(0) instanceof UnsuccessfulOperation);
-        Assert.assertTrue(receiver.buffer.get(1) instanceof ChooseBuild);
+        Assert.assertEquals(2, stub.buffer.size());
+        Assert.assertTrue(stub.buffer.get(0) instanceof UnsuccessfulOperation);
+        Assert.assertTrue(stub.buffer.get(1) instanceof ChooseBuild);
     }
 
     @Test
     public void decisionManager_True_ChooseBuildEventSent() {
         controller.decisionManager(true);
 
-        Assert.assertNotNull(receiver.event);
-        Assert.assertTrue(receiver.event instanceof ChooseBuild);
+        Assert.assertNotNull(stub.event);
+        Assert.assertTrue(stub.event instanceof ChooseBuild);
     }
 
     @Test

@@ -24,6 +24,10 @@ public class GodsControllerFactory {
                 return new PrometheusController(card, map, player);
             case ARTEMIS:
                 return new ArtemisController(card, map, player);
+            case HESTIA:
+                return new HestiaController(card, map, player);
+            case POSEIDON:
+                return new PoseidonController(card, map, player);
             default:
                 return new NormalGodsController(card, map, player);
         }
