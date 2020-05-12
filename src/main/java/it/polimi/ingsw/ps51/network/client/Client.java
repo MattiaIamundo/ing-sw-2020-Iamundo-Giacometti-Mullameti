@@ -4,6 +4,7 @@ import it.polimi.ingsw.ps51.StartApplicationClient;
 import it.polimi.ingsw.ps51.network.client.socket.SocketConnection;
 import it.polimi.ingsw.ps51.network.server.socket.ServerSocket;
 import it.polimi.ingsw.ps51.view.Cli;
+import it.polimi.ingsw.ps51.view.Gui.MainGui;
 import it.polimi.ingsw.ps51.view.Supporter;
 
 import java.io.IOException;
@@ -34,9 +35,9 @@ public class Client implements Runnable {
 
         if (i == 0)
             s = new Cli();
- /*       else if (i == 1)
-            s = new Gui();
-        else
+        else if (i == 1)
+            s = new MainGui();
+  /*      else
             s = new Bot();
   */
     }
