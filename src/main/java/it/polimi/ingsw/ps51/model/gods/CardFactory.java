@@ -31,6 +31,16 @@ public class CardFactory {
                 return new Minotaur();
             case HEPHAESTUS:
                 return new Hephaestus();
+            case ZEUS:
+                return new Zeus();
+            case HESTIA:
+                return new Hestia();
+            case HERA:
+                return new Hera();
+            case POSEIDON:
+                return new Poseidon();
+            case TRITON:
+                return new Triton();
             default:
                 return null;
         }

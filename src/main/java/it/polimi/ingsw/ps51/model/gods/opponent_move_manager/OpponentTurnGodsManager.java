@@ -21,4 +21,5 @@ public interface OpponentTurnGodsManager {
      */
     List<Coordinates> epurateMove(List<Coordinates> validPositions, Worker worker, Map map);
 
+    boolean isValidWin(Worker worker, Map map);
 }

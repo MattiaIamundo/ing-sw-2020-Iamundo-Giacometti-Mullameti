@@ -18,7 +18,12 @@ public enum Gods {
     HEPHAESTUS,
     MINOTAUR,
     PAN,
-    PROMETHEUS;
+    PROMETHEUS,
+    HESTIA,
+    HERA,
+    POSEIDON,
+    TRITON,
+    ZEUS;
 
     private static final List<String> opponetsTurnEffect = new ArrayList<>();
     private static final Map<String, Gods> CARD_TO_GODS = new HashMap<>();
@@ -33,10 +38,16 @@ public enum Gods {
         CARD_TO_GODS.put(new Minotaur().getGodName(), MINOTAUR);
         CARD_TO_GODS.put(new Pan().getGodName(), PAN);
         CARD_TO_GODS.put(new Prometheus().getGodName(), PROMETHEUS);
+        CARD_TO_GODS.put(new Hestia().getGodName(), HESTIA);
+        CARD_TO_GODS.put(new Hera().getGodName(), HERA);
+        CARD_TO_GODS.put(new Poseidon().getGodName(), POSEIDON);
+        CARD_TO_GODS.put(new Triton().getGodName(), TRITON);
+        CARD_TO_GODS.put(new Zeus().getGodName(), ZEUS);
     }
 
     static {
         opponetsTurnEffect.add(Athena.class.getName());
+        opponetsTurnEffect.add(Hera.class.getName());
     }
 
     /**

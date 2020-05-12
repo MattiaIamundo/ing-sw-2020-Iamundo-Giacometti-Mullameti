@@ -65,7 +65,7 @@ public abstract class CommonAction extends Observable implements Card {
             Square oldPosition = worker.getPosition();
             worker.setPosition(position);
             position.notifyChange();
-            if (position.getLevel().equals(Level.THIRD) && oldPosition.getLevel().ordinal() < Level.THIRD.ordinal()){
+            if (position.getLevel().equals(Level.THIRD) && oldPosition.getLevel().ordinal() < Level.THIRD.ordinal() && clearWin(worker, map)){
                 worker.setInWinningCondition(true);
             }
         }
@@ -94,9 +94,27 @@ public abstract class CommonAction extends Observable implements Card {
         OpponentGodsFactory factory = new OpponentGodsFactory();
         for (Gods god : worker.getActiveGods()){
             manager = factory.getGod(god);
-            positions = manager.epurateMove(positions, worker, map);
+            if (manager != null){
+                positions = manager.epurateMove(positions, worker, map);
+            }
         }
         return positions;
+    }
+
+    protected boolean clearWin(Worker worker, Map map){
+        OpponentTurnGodsManager manager;
+        OpponentGodsFactory factory = new OpponentGodsFactory();
+
+        for (Gods god : worker.getActiveGods()){
+            manager = factory.getGod(god);
+            if (manager.isValidWin(worker, map)){
+                continue;
+            }else {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public String getGodName(){

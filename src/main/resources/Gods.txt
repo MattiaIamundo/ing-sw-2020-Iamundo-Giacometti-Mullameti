@@ -52,3 +52,33 @@ Your Turn: If your Worker does
 not move up, it may build both
 before and after moving.
 
+ZEUS
+God of the Sky
+Your Build: Your Worker may
+build a block under itself
+
+
+HESTIA
+Goddess of Heart and Home
+Your Build: Your Worker may
+build one additional time, but this
+cannot be on a perimeter space
+
+HERA
+Goddess of Marriage
+Opponent's Turn: An opponent
+cannot win by moving into a
+perimeter space
+
+POSEIDON
+God of the Sea
+End of Your Turn: If your unmoved
+Worker is on the ground level,
+it may build up to three times
+
+TRITON
+God of the Waves
+Your Move: Each time your Worker
+moves into a perimeter space,
+it may immediately move again
+
