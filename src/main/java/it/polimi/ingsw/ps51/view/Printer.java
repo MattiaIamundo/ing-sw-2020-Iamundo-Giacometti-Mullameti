@@ -37,16 +37,12 @@ public class Printer {
     private class GodRepresentation{
         String name;
         String godOf;
-        String description1;
-        String description2;
-        String description3;
+        List<String> description;
 
-        public GodRepresentation(String name, String godOf, String description1, String description2, String description3) {
+        public GodRepresentation(String name, String godOf, List<String> description) {
             this.name = name;
             this.godOf = godOf;
-            this.description1 = description1;
-            this.description2 = description2;
-            this.description3 = description3;
+            this.description = description;
         }
 
         public String getName() {
@@ -57,16 +53,8 @@ public class Printer {
             return godOf;
         }
 
-        public String getDescription1() {
-            return description1;
-        }
-
-        public String getDescription2() {
-            return description2;
-        }
-
-        public String getDescription3() {
-            return description3;
+        public List<String> getDescription() {
+            return description;
         }
     }
 
@@ -78,22 +66,24 @@ public class Printer {
         InputStream in = getClass().getResourceAsStream("/Gods.txt");
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
 
+        int DESCRIPTION_LINES = 4;
+        int ITEM_PER_LINE = 3;
+
         try {
             List<GodRepresentation> gods = new ArrayList<>();
             String line = bufferedReader.readLine();
             while (line != null){
+                List<String> description = new ArrayList<>();
                 String name = line;
                 String godOf = bufferedReader.readLine();
-                String description1 = bufferedReader.readLine();
-                String description2 = bufferedReader.readLine();
-                String description3 = bufferedReader.readLine();
-                GodRepresentation god = new GodRepresentation(name, godOf, description1, description2, description3);
+                for (int i = 0; i < DESCRIPTION_LINES; i++){
+                    description.add(bufferedReader.readLine());
+                }
+                GodRepresentation god = new GodRepresentation(name, godOf, description);
                 gods.add(god);
                 bufferedReader.readLine();
                 line = bufferedReader.readLine();
             }
-
-            int ITEM_PER_LINE = 3;
 
             for (int x = 0; x < gods.size(); x++){
                 if (x % ITEM_PER_LINE == 0){
@@ -117,20 +107,12 @@ public class Printer {
                         print(gods.get(x+t).getGodOf());
                         space(gods.get(x+t).getGodOf());
                     }
-                    print("\n ");
-                    for (int t = 0; t < ITEM_PER_LINE; t++){
-                        print(gods.get(x+t).getDescription1());
-                        space(gods.get(x+t).getDescription1());
-                    }
-                    print("\n ");
-                    for (int t = 0; t < ITEM_PER_LINE; t++){
-                        print(gods.get(x+t).getDescription2());
-                        space(gods.get(x+t).getDescription2());
-                    }
-                    print("\n ");
-                    for (int t = 0; t < ITEM_PER_LINE; t++){
-                        print(gods.get(x+t).getDescription3());
-                        space(gods.get(x+t).getDescription3());
+                    for (int i = 0; i < DESCRIPTION_LINES; i++) {
+                        print("\n ");
+                        for (int t = 0; t < ITEM_PER_LINE; t++){
+                            print(gods.get(x+t).getDescription().get(i));
+                            space(gods.get(x+t).getDescription().get(i));
+                        }
                     }
                     print("\n");
                     for (int t = 0; t < ITEM_PER_LINE; t++){

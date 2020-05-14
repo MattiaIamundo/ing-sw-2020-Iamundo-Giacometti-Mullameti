@@ -4,11 +4,13 @@ Your Move: Your Worker may move into an
 opponent Worker’s space by forcing their
 Worker to the space yours just vacated.
 
+
 ARTEMIS
 Goddess of the Hunt
 Your Move: Your Worker may
 move one additional time, but not
 back to its initial space.
+
 
 ATHENA
 Goddess of Wisdom
@@ -16,10 +18,12 @@ Opponent’s Turn: If one of your Workers
 moved up on your last turn, opponent
 Workers cannot move up this turn.
 
+
 ATLAS
 Titan Shouldering the Heavens
 Your Build: Your Worker may
 build a dome at any level.
+
 
 
 DEMETER
@@ -28,11 +32,13 @@ Your Build: Your Worker may
 build one additional time, but not
 on the same space.
 
+
 HEPHAESTUS
 God of Blacksmiths
 Your Build: Your Worker may
 build one additional block (not
 dome) on top of your first block.
+
 
 MINOTAUR
 Bull-headed Monster
@@ -40,11 +46,13 @@ Your Move: Your Worker may move into
 an opponent Worker’s space,if their Worker
 can be forced one space straight backwards
 to an unoccupied space at any level.
+
 PAN
 God of the Wild
 Win Condition: You also win if
 your Worker moves down two or
 more levels.
+
 
 PROMETHEUS
 Titan Benefactor of Mankind
@@ -52,10 +60,12 @@ Your Turn: If your Worker does
 not move up, it may build both
 before and after moving.
 
+
 ZEUS
 God of the Sky
 Your Build: Your Worker may
 build a block under itself
+
 
 
 HESTIA
@@ -64,11 +74,13 @@ Your Build: Your Worker may
 build one additional time, but this
 cannot be on a perimeter space
 
+
 HERA
 Goddess of Marriage
 Opponent's Turn: An opponent
 cannot win by moving into a
 perimeter space
+
 
 POSEIDON
 God of the Sea
@@ -76,9 +88,11 @@ End of Your Turn: If your unmoved
 Worker is on the ground level,
 it may build up to three times
 
+
 TRITON
 God of the Waves
 Your Move: Each time your Worker
 moves into a perimeter space,
 it may immediately move again
+
 
