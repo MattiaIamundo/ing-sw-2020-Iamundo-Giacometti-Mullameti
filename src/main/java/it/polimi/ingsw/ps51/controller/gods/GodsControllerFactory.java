@@ -28,6 +28,8 @@ public class GodsControllerFactory {
                 return new HestiaController(card, map, player);
             case POSEIDON:
                 return new PoseidonController(card, map, player);
+            case TRITON:
+                return new TritonController(card, map, player);
             default:
                 return new NormalGodsController(card, map, player);
         }
