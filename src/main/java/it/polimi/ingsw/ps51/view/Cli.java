@@ -339,10 +339,7 @@ public class Cli extends Supporter {
                 reader.nextLine();
             }
         }
-        if(getValidChoicesWorkers().size()==1)
-            worker = getValidChoicesWorkers().get(choice);
-        else
-            worker = getValidChoicesWorkers().get(choice-1);
+        worker = getValidChoicesWorkers().get(choice-1);
         return worker;
     }
 
