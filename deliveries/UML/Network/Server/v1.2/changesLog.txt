@@ -1,0 +1,12 @@
+Modifies introduced in the server UML:
+
+	*	Add the method stopSS in ServerSocket to stop 
+		his execution during the accept method
+	*	Delete firstPhase attribute in SocketConnection
+		and add a logger, and some methods to control
+		the presence of a Room in the MainServer
+	*	Add in MainServer a list of Room attribute to
+		make possible the addition of the FA MultiGames
+	*	Add some methods in the MainServer to verify the
+		presence of Room and to ask again the number of players
+		if it is necessary
