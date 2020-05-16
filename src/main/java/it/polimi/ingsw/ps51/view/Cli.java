@@ -10,14 +10,19 @@ import it.polimi.ingsw.ps51.model.gods.Gods;
 import it.polimi.ingsw.ps51.utility.MessageHandler;
 import org.javatuples.Pair;
 
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Cli extends Supporter {
 
@@ -79,30 +84,40 @@ public class Cli extends Supporter {
                             notify(eventGodChoice);
                             break;
                         case "WORKERPOSITION" :
-                            Coordinates workerCoordinates = placeWorkers();
-                            EventForServer eventWorkerPosition = new WorkerPosition(workerCoordinates);
+                            EventForServer eventWorkerPosition;
+                            do {
+                                Coordinates workerCoordinates = placeWorkers();
+                                eventWorkerPosition = new WorkerPosition(workerCoordinates);
+                            } while (!undo());
                             notify(eventWorkerPosition);
                             break;
 
                         case "WORKER" :
-                            Worker worker = chooseWorker();
-                            EventForServer eventWorkerChoice = new WorkerChoice(worker);
+                            EventForServer eventWorkerChoice;
+                            do {
+                                Worker worker = chooseWorker();
+                                eventWorkerChoice = new WorkerChoice(worker);
+                            } while (!undo());
                             notify(eventWorkerChoice);
                             break;
                         case "MOVE":
-                            Coordinates coordinates = askMove();
-                            EventForServer eventMoveChoice = new MoveChoice(coordinates);
+                            EventForServer eventMoveChoice;
+                            do {
+                                Coordinates coordinates = askMove();
+                                eventMoveChoice = new MoveChoice(coordinates);
+                            } while (!undo());
                             notify(eventMoveChoice);
                             break;
                         case "BUILD":
-                            Pair<Coordinates, Level> buildOn =askBuild();
-                            EventForServer eventBuild = new Build(buildOn);
+                            EventForServer eventBuild;
+                            do {
+                                Pair<Coordinates, Level> buildOn =askBuild();
+                                eventBuild = new Build(buildOn);
+                            } while (!undo());
                             notify(eventBuild);
                             break;
                         case "MAP":
-
                             updateMap();
-
                             break;
                         case "DECISION" :
                             boolean decision = makeDecision();
@@ -339,6 +354,7 @@ public class Cli extends Supporter {
                 reader.nextLine();
             }
         }
+        reader.nextLine();
         worker = getValidChoicesWorkers().get(choice-1);
         return worker;
     }
@@ -485,9 +501,49 @@ public class Cli extends Supporter {
             }
         }
         return answer.equals("Y");
-
-
     }
+
+    public boolean undo(){
+        boolean ok = false;
+        printer.println(printer.colorToAnsi(Color.CYAN)+"Do you confirm your choice, press Y for yes, or N to abort and redo your last action");
+        while (!ok) {
+
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            FutureTask<String> userChoice = new FutureTask<>(() -> reader.nextLine());
+            executor.execute(userChoice);
+            try {
+                switch (userChoice.get(5, TimeUnit.SECONDS).toLowerCase()){
+                    case "y":
+                        printer.println(printer.colorToAnsi(Color.GREEN)+"Decided to accept");
+                        executor.shutdown();
+                        return true;
+                    case "n":
+                        printer.println(printer.colorToAnsi(Color.RED)+"Decided to redo");
+                        executor.shutdown();
+                        return false;
+                    default:
+                        printer.println(printer.colorToAnsi(Color.RED)+"Invalid input, please redo your selection");
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            } catch (TimeoutException e){
+                try {
+                    //System.setProperty("java.awt.headless", "false");
+                    Robot robot = new Robot();
+                    printer.println(printer.colorToAnsi(Color.RED)+"Time out, action automatically accepted");
+                    robot.keyPress(KeyEvent.VK_ENTER);
+                    robot.keyRelease(KeyEvent.VK_ENTER);
+                    executor.shutdown();
+                    return true;
+                } catch (AWTException awtException) {
+                    awtException.printStackTrace();
+                }
+            }
+            executor.shutdown();
+        }
+        return false;
+    }
+
     public void ack(){
         printer.println(printer.colorToAnsi(Color.PURPLE)+"Your "+getOperationConfirmed()+" event is received by server...");
     }
