@@ -13,6 +13,7 @@ import it.polimi.ingsw.ps51.view.Supporter;
 import org.javatuples.Pair;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Scanner;
@@ -72,7 +73,7 @@ public class MainGui  extends Supporter {
                             gui.chooseGodsPlayers();
                             break;
                         case "WORKERPOSITION" :
-
+                            gui.placeWorkers();
                             break;
 
                         case "WORKER" :
@@ -125,7 +126,7 @@ public class MainGui  extends Supporter {
                             break;
 
                     }
-                } catch (InterruptedException | TimeoutException | ExecutionException e) {
+                } catch (InterruptedException | TimeoutException | ExecutionException | IOException e) {
                     // e.printStackTrace();
                     ok=false;
                 }

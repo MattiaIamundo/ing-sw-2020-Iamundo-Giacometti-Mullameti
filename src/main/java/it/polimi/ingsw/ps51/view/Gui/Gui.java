@@ -2,16 +2,21 @@ package it.polimi.ingsw.ps51.view.Gui;
 
 
 import it.polimi.ingsw.ps51.events.events_for_server.*;
+import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
+import it.polimi.ingsw.ps51.model.Coordinates;
 import it.polimi.ingsw.ps51.model.gods.Gods;
 import it.polimi.ingsw.ps51.view.Supporter;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +25,14 @@ public class Gui  {
     private JFrame frame ;
     private boolean first = true;
     private ChooseGodsPanel chooseGodsPanel ;
-
+    private MapPanel mapPanel;
     private int buttonNumber;
     private List<Gods> chosenGods;
     private Gods chosenGod;
     private Supporter s;
+    private JButton[][] borderButtons;
+    private JLabel worker;
+    private   Coordinates workersCoord ;
 
     public Gui(Supporter supporter){
         s = supporter;
@@ -208,17 +216,61 @@ public class Gui  {
 
 
     }
-/*
+
+    public void placeWorkers() throws IOException {
+
+        frame.getContentPane().removeAll();
+        frame.setSize(1400, 800);
+
+        BufferedImage myImage = ImageIO.read(new File("src/main/resources/SantoriniBoard.png"));
+        mapPanel = new MapPanel(myImage);
+
+        borderButtons = mapPanel.getSquareButtons();
+        mapPanel.setChat("Place your workers");
+
+        mapPanel.setChat("Choose a square to place "+s.getWorkerNum()+"ª worker");
+        mapPanel.setWorkerImages(s.getWorkerNum()-1);
+        worker=mapPanel.getWorkerImages(s.getWorkerNum()-1);
+
+        for(int i=0 ; i<5 ;i++) {
+                for (int j = 0; j < 5; j++) {
+                    borderButtons[i][j].addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            for (int i = 0; i < 5; i++) {
+                                for (int j = 0; j < 5; j++) {
+                                    if (e.getSource() == borderButtons[i][j]) {
+
+                                        borderButtons[i][j].add(worker);
+                                        workersCoord = new Coordinates(i,j);
+                                        SwingUtilities.invokeLater(new Runnable() {
+                                            public void run() {
+                                                EventForServer eventWorkerPosition = new WorkerPosition(workersCoord);
+                                                s.notify(eventWorkerPosition);
+                                            }
+                                        });
+                                    }
+                                }
+
+                            }
+                        }
+                    });
+
+
+                }
+
+            }
+        frame.getContentPane().add(mapPanel);
+        frame.setVisible(true);
+
+
+
+    }
     public void updateMap() throws OutOfMapException {
 
 
     }
-
-    public Coordinates placeWorkers(){
-
-
-    }
-
+/*
 
     public Worker chooseWorker(){
 
