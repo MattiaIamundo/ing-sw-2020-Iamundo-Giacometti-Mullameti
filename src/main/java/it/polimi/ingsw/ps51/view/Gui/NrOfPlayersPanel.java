@@ -5,16 +5,13 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class NrOfPlayersPanel extends JPanel {
-    private JTextField insNickname;
-    private JLabel nicknameError;
+
     private JButton[] nrButton;
-    private BufferedImage image;
+
     private Container container;
-    private JTextField ip;
-    private boolean nicknameErr;
     private JLabel welcome;
     private JLabel enterNrOfPlayers;
-    private JTextField nickname;
+
     public NrOfPlayersPanel() {
 
         this.setLayout(new BorderLayout());

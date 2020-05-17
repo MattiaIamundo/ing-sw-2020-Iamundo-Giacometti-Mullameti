@@ -12,7 +12,7 @@ import java.io.IOException;
 public class MapPanel extends JPanel {
 
     GridBagConstraints gbc = new GridBagConstraints();
-
+    BoardContainer boardContainer ;
     private Image background;
 
 
@@ -37,11 +37,10 @@ public class MapPanel extends JPanel {
 
         this.background = background;
         this.setLayout(new GridBagLayout());
-
+        boardContainer = new BoardContainer();
         defineSantoriniText();
         defineButton();
         defineChatLabel();
-        defineBoardContainer();
         definePlayerContainer();
         defineWorkerImages();
         defineLevelImages();
@@ -99,7 +98,7 @@ public class MapPanel extends JPanel {
 
         gbc.gridx = 3;
         gbc.gridy = 0;
-        add(buttonContainer, gbc);
+        add(boardContainer, gbc);
 
 
         //ADD UNDO , EXIT BUTTON AND SANTORINI
@@ -137,6 +136,7 @@ public class MapPanel extends JPanel {
         //ADD GOD PICTURES
 
         gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.NONE;
         gbc.gridwidth = 2;
         gbc.gridheight = 3;
 
@@ -180,31 +180,6 @@ public class MapPanel extends JPanel {
         super.paintComponent(g);
 
         g.drawImage(background, 0, 0,this.getWidth(),this.getHeight(), this);
-    }
-    private void defineBoardContainer(){
-        buttonContainer = new Container();
-        buttonContainer.setPreferredSize(new Dimension(865*2/3,830*2/3));
-        buttonContainer.setLayout(new GridLayout(5,5));
-
-        squareButtons = new JButton[5][5];
-
-        for(int i=0 ; i<5 ; i++){
-            for(int j=0 ; j<5 ; j++){
-                squareButtons[i][j] = new JButton();
-                squareButtons[i][j].setSize(865*2/15,830*2/15);
-                squareButtons[i][j].setText("[" + (i+1)+","+(j+1) + "]");
-                squareButtons[i][j].setHorizontalAlignment(SwingConstants.RIGHT);
-                squareButtons[i][j].setVerticalAlignment(SwingConstants.NORTH);
-                squareButtons[i][j].setFont(new Font("Times New Roman", Font.BOLD, 18));
-                squareButtons[i][j].setForeground(new Color(0 ,102,0));
-                //button[i][j].setOpaque(false);
-                squareButtons[i][j].setContentAreaFilled(false);
-                //button[i][j].setBorderPainted(false);
-                squareButtons[i][j].setBorder(BorderFactory.createLineBorder(Color.RED,2));
-                buttonContainer.add(squareButtons[i][j]);
-            }
-        }
-        this.add(buttonContainer);
     }
     private void defineEmptySpaces(){
         emptySpaces = new JLabel[3];
@@ -383,7 +358,11 @@ public class MapPanel extends JPanel {
 
     public JButton[][] getSquareButtons(){return squareButtons;}
 
-  /*  public static void main(String[] args) throws IOException {
+    public Container getButtonContainer() {
+        return buttonContainer;
+    }
+
+    public static void main(String[] args) throws IOException {
 
         JFrame frame = new JFrame("Start");
         BufferedImage myImage = ImageIO.read(new File("src/main/resources/SantoriniBoard.png"));
@@ -392,5 +371,5 @@ public class MapPanel extends JPanel {
         frame.setResizable(true);
         frame.setVisible(true);
 
-    }*/
+    }
 }
