@@ -1,0 +1,220 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MainGui</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.view.Gui</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MainGui (it.polimi.ingsw.ps51.view.Gui)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MainGui</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 47)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.view.Gui;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
+<i>4</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_server.*;
+<i>5</i>&nbsp;import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
+<i>6</i>&nbsp;import it.polimi.ingsw.ps51.model.Coordinates;
+<i>7</i>&nbsp;import it.polimi.ingsw.ps51.model.Level;
+<i>8</i>&nbsp;import it.polimi.ingsw.ps51.model.Worker;
+<i>9</i>&nbsp;import it.polimi.ingsw.ps51.model.gods.Gods;
+<i>10</i>&nbsp;import it.polimi.ingsw.ps51.utility.MessageHandler;
+<i>11</i>&nbsp;import it.polimi.ingsw.ps51.view.Printer;
+<i>12</i>&nbsp;import it.polimi.ingsw.ps51.view.Supporter;
+<i>13</i>&nbsp;import org.javatuples.Pair;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;import java.io.BufferedReader;
+<i>16</i>&nbsp;import java.io.IOException;
+<i>17</i>&nbsp;import java.io.InputStreamReader;
+<i>18</i>&nbsp;import java.util.List;
+<i>19</i>&nbsp;import java.util.Scanner;
+<i>20</i>&nbsp;import java.util.concurrent.ExecutionException;
+<i>21</i>&nbsp;import java.util.concurrent.Future;
+<i>22</i>&nbsp;import java.util.concurrent.TimeUnit;
+<i>23</i>&nbsp;import java.util.concurrent.TimeoutException;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;public class MainGui  extends Supporter {
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    private Gui gui;
+<i>28</i>&nbsp;    private boolean ok;
+<i>29</i>&nbsp;    boolean isFinish;
+<i>30</i>&nbsp;    MessageHandler mh;
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    public MainGui() {
+<b class="nc"><i>34</i>&nbsp;        super();</b>
+<b class="nc"><i>35</i>&nbsp;        gui = new Gui(this);</b>
+<b class="nc"><i>36</i>&nbsp;        ok = false;</b>
+<b class="nc"><i>37</i>&nbsp;        isFinish = false;</b>
+<b class="nc"><i>38</i>&nbsp;        mh = new MessageHandler(this);</b>
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;    }
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    @Override
+<i>43</i>&nbsp;    public void update(EventForClient message) {
+<b class="nc"><i>44</i>&nbsp;        getEvents().add(message);</b>
+<i>45</i>&nbsp;    }
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    @Override
+<i>48</i>&nbsp;    public void run() {
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;
+<b class="nc"><i>51</i>&nbsp;        while(!isFinish) {</b>
+<i>52</i>&nbsp;
+<b class="nc"><i>53</i>&nbsp;            Future&lt;String&gt; stringFuture = mh.handleTheFuture();</b>
+<b class="nc"><i>54</i>&nbsp;            ok = false;</b>
+<b class="nc"><i>55</i>&nbsp;            while (!ok) {</b>
+<b class="nc"><i>56</i>&nbsp;                ok = true;</b>
+<i>57</i>&nbsp;                try {
+<b class="nc"><i>58</i>&nbsp;                    setTypeOfEvent(stringFuture.get(1, TimeUnit.SECONDS));</b>
+<i>59</i>&nbsp;
+<b class="nc"><i>60</i>&nbsp;                    switch (getTypeOfEvent()) {</b>
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;                        case &quot;NICKNAME&quot;:
+<b class="nc"><i>63</i>&nbsp;                            gui.logIn();</b>
+<b class="nc"><i>64</i>&nbsp;                            break;</b>
+<i>65</i>&nbsp;                        case&quot;NUMBEROFPLAYER&quot; :
+<b class="nc"><i>66</i>&nbsp;                            gui.numberOfPlayers();</b>
+<b class="nc"><i>67</i>&nbsp;                            break;</b>
+<i>68</i>&nbsp;                        case &quot;GODSDECK&quot;:
+<b class="nc"><i>69</i>&nbsp;                            gui.chooseGodsDeck();</b>
+<b class="nc"><i>70</i>&nbsp;                            break;</b>
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;                        case &quot;GOD&quot; :
+<b class="nc"><i>73</i>&nbsp;                            gui.chooseGodsPlayers();</b>
+<b class="nc"><i>74</i>&nbsp;                            break;</b>
+<i>75</i>&nbsp;                        case &quot;WORKERPOSITION&quot; :
+<b class="nc"><i>76</i>&nbsp;                            gui.placeWorkers();</b>
+<b class="nc"><i>77</i>&nbsp;                            break;</b>
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;                        case &quot;WORKER&quot; :
+<i>80</i>&nbsp;
+<b class="nc"><i>81</i>&nbsp;                            break;</b>
+<i>82</i>&nbsp;                        case &quot;MOVE&quot;:
+<i>83</i>&nbsp;
+<b class="nc"><i>84</i>&nbsp;                            break;</b>
+<i>85</i>&nbsp;                        case &quot;BUILD&quot;:
+<i>86</i>&nbsp;
+<b class="nc"><i>87</i>&nbsp;                            break;</b>
+<i>88</i>&nbsp;                        case &quot;MAP&quot;:
+<b class="nc"><i>89</i>&nbsp;                            gui.updateMap();</b>
+<b class="nc"><i>90</i>&nbsp;                            break;</b>
+<i>91</i>&nbsp;                        case &quot;DECISION&quot; :
+<i>92</i>&nbsp;
+<b class="nc"><i>93</i>&nbsp;                            break;</b>
+<i>94</i>&nbsp;                        case &quot;ACK&quot;:
+<i>95</i>&nbsp;
+<b class="nc"><i>96</i>&nbsp;                            break;</b>
+<i>97</i>&nbsp;                        case &quot;UNSUCCESSFULOPERATION&quot;:
+<i>98</i>&nbsp;
+<b class="nc"><i>99</i>&nbsp;                            break;</b>
+<i>100</i>&nbsp;                        case &quot;GAME_IS_STARTING&quot;:
+<i>101</i>&nbsp;
+<b class="nc"><i>102</i>&nbsp;                            break;</b>
+<i>103</i>&nbsp;                        case &quot;TURN_IS_END&quot;:
+<i>104</i>&nbsp;
+<b class="nc"><i>105</i>&nbsp;                            break;</b>
+<i>106</i>&nbsp;                        case &quot;WIN&quot;:
+<i>107</i>&nbsp;
+<b class="nc"><i>108</i>&nbsp;                            break;</b>
+<i>109</i>&nbsp;                        case &quot;LOSE&quot;:
+<i>110</i>&nbsp;
+<b class="nc"><i>111</i>&nbsp;                            break;</b>
+<i>112</i>&nbsp;                        case &quot;ROOM&quot;:
+<i>113</i>&nbsp;
+<b class="nc"><i>114</i>&nbsp;                            isFinish = true;</b>
+<b class="nc"><i>115</i>&nbsp;                            break;</b>
+<i>116</i>&nbsp;                        case &quot;DISCONNECT&quot;:
+<i>117</i>&nbsp;
+<b class="nc"><i>118</i>&nbsp;                            isFinish = true;</b>
+<b class="nc"><i>119</i>&nbsp;                            break;</b>
+<i>120</i>&nbsp;                        case &quot;END&quot;:
+<i>121</i>&nbsp;
+<b class="nc"><i>122</i>&nbsp;                            isFinish = true;</b>
+<b class="nc"><i>123</i>&nbsp;                            break;</b>
+<i>124</i>&nbsp;                        default:
+<b class="nc"><i>125</i>&nbsp;                            ok = false;</b>
+<i>126</i>&nbsp;                            break;
+<i>127</i>&nbsp;
+<i>128</i>&nbsp;                    }
+<b class="nc"><i>129</i>&nbsp;                } catch (InterruptedException | TimeoutException | OutOfMapException | ExecutionException | IOException e) {</b>
+<i>130</i>&nbsp;                    // e.printStackTrace();
+<b class="nc"><i>131</i>&nbsp;                    ok=false;</b>
+<b class="nc"><i>132</i>&nbsp;                }</b>
+<i>133</i>&nbsp;            }
+<b class="nc"><i>134</i>&nbsp;        }</b>
+<b class="nc"><i>135</i>&nbsp;        System.exit(0);</b>
+<i>136</i>&nbsp;    }
+<i>137</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-18 22:46</div>
+</div>
+</body>
+</html>

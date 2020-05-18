@@ -1,0 +1,155 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Client</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.network.client</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Client (it.polimi.ingsw.ps51.network.client)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Client</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 20)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.network.client;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.ps51.StartApplicationClient;
+<i>4</i>&nbsp;import it.polimi.ingsw.ps51.network.client.socket.SocketConnection;
+<i>5</i>&nbsp;import it.polimi.ingsw.ps51.network.server.socket.ServerSocket;
+<i>6</i>&nbsp;import it.polimi.ingsw.ps51.view.Cli;
+<i>7</i>&nbsp;import it.polimi.ingsw.ps51.view.Gui.MainGui;
+<i>8</i>&nbsp;import it.polimi.ingsw.ps51.view.Supporter;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;import java.io.IOException;
+<i>11</i>&nbsp;import java.net.Socket;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;/**
+<i>14</i>&nbsp; * This class represents the client starter launched by {@link StartApplicationClient}
+<i>15</i>&nbsp; * @author Luca Giacometti
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;public class Client implements Runnable {
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;    private Supporter s;
+<i>20</i>&nbsp;    String url;
+<i>21</i>&nbsp;    Integer port;
+<i>22</i>&nbsp;    Integer timeoutSocket;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    /**
+<i>25</i>&nbsp;     * Constructor
+<i>26</i>&nbsp;     * @param i it is a 0 if the user wants a {@link Cli}
+<i>27</i>&nbsp;     * @param url it is the String which represent the url of the server
+<i>28</i>&nbsp;     * @param port it is the port on which the {@link ServerSocket} is on
+<i>29</i>&nbsp;     * @param timeoutSocket this integer represents the countdown for the socket
+<i>30</i>&nbsp;     */
+<b class="nc"><i>31</i>&nbsp;    public Client(Integer i, String url, Integer port, Integer timeoutSocket) {</b>
+<b class="nc"><i>32</i>&nbsp;        this.url = url;</b>
+<b class="nc"><i>33</i>&nbsp;        this.port = port;</b>
+<b class="nc"><i>34</i>&nbsp;        this.timeoutSocket = timeoutSocket;</b>
+<i>35</i>&nbsp;
+<b class="nc"><i>36</i>&nbsp;        if (i == 0)</b>
+<b class="nc"><i>37</i>&nbsp;            s = new Cli();</b>
+<b class="nc"><i>38</i>&nbsp;        else if (i == 1)</b>
+<b class="nc"><i>39</i>&nbsp;            s = new MainGui();</b>
+<i>40</i>&nbsp;  /*      else
+<i>41</i>&nbsp;            s = new Bot();
+<i>42</i>&nbsp;  */
+<i>43</i>&nbsp;    }
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;    /**
+<i>46</i>&nbsp;     * Here there is the creation of three object:
+<i>47</i>&nbsp;     * {@link ClientInterface} in this case only SocketConnection is possible,
+<i>48</i>&nbsp;     * {@link Handler} h,
+<i>49</i>&nbsp;     * {@link Supporter} s,
+<i>50</i>&nbsp;     * and the observers are set up.
+<i>51</i>&nbsp;     * At the end the {@link Handler} and {@link Supporter} are launched.
+<i>52</i>&nbsp;     * If the server is down the exception is catch and this fact is printed
+<i>53</i>&nbsp;     */
+<i>54</i>&nbsp;    @Override
+<i>55</i>&nbsp;    public void run() {
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;        try {
+<b class="nc"><i>58</i>&nbsp;            Socket socket = new Socket(url, port);</b>
+<b class="nc"><i>59</i>&nbsp;            ClientInterface ci = new SocketConnection(socket, timeoutSocket);</b>
+<b class="nc"><i>60</i>&nbsp;            Handler h = new Handler(ci);</b>
+<b class="nc"><i>61</i>&nbsp;            h.addObserver(s);</b>
+<b class="nc"><i>62</i>&nbsp;            s.addObserver(h);</b>
+<b class="nc"><i>63</i>&nbsp;            Thread thread = new Thread(h);</b>
+<b class="nc"><i>64</i>&nbsp;            Thread t = new Thread(s);</b>
+<b class="nc"><i>65</i>&nbsp;            t.start();</b>
+<b class="nc"><i>66</i>&nbsp;            thread.start();</b>
+<b class="nc"><i>67</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>68</i>&nbsp;            System.out.println(&quot;The server is down at the moment...&quot;);</b>
+<b class="nc"><i>69</i>&nbsp;        }</b>
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;    }
+<i>72</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-18 22:46</div>
+</div>
+</body>
+</html>

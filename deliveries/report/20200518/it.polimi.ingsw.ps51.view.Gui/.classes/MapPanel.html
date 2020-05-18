@@ -1,0 +1,512 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MapPanel</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.view.Gui</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MapPanel (it.polimi.ingsw.ps51.view.Gui)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MapPanel</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 19)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 214)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">MapPanel$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 6)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 21)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 220)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.view.Gui;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import javax.imageio.ImageIO;
+<i>4</i>&nbsp;import javax.swing.*;
+<i>5</i>&nbsp;import java.awt.*;
+<i>6</i>&nbsp;import java.awt.event.ActionEvent;
+<i>7</i>&nbsp;import java.awt.event.ActionListener;
+<i>8</i>&nbsp;import java.awt.image.BufferedImage;
+<i>9</i>&nbsp;import java.io.File;
+<i>10</i>&nbsp;import java.io.IOException;
+<i>11</i>&nbsp;import java.util.List;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;public class MapPanel extends JPanel {
+<i>14</i>&nbsp;
+<b class="nc"><i>15</i>&nbsp;    GridBagConstraints gbc = new GridBagConstraints();</b>
+<i>16</i>&nbsp;    private BoardContainer boardContainer ;
+<i>17</i>&nbsp;    private Image background;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;    private JLabel chat ;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    private JLabel santorini;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;    private JLabel[] godPic;
+<i>24</i>&nbsp;    private JLabel[] playerName;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    private ImageIcon[] workerImages;
+<i>27</i>&nbsp;    private JLabel[] workers;
+<i>28</i>&nbsp;    private JLabel[] levelImages;
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    private JLabel [] emptySpaces;
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    private JButton[] button;
+<i>33</i>&nbsp;
+<b class="nc"><i>34</i>&nbsp;    public MapPanel(Image background) {</b>
+<i>35</i>&nbsp;
+<b class="nc"><i>36</i>&nbsp;        this.background = background;</b>
+<b class="nc"><i>37</i>&nbsp;        this.setLayout(new GridBagLayout());</b>
+<b class="nc"><i>38</i>&nbsp;        boardContainer = new BoardContainer();</b>
+<b class="nc"><i>39</i>&nbsp;        defineSantoriniText();</b>
+<b class="nc"><i>40</i>&nbsp;        defineButton();</b>
+<b class="nc"><i>41</i>&nbsp;        defineChatLabel();</b>
+<b class="nc"><i>42</i>&nbsp;        definePlayerContainer();</b>
+<b class="nc"><i>43</i>&nbsp;        defineWorkerImages();</b>
+<b class="nc"><i>44</i>&nbsp;        defineLevelImages();</b>
+<b class="nc"><i>45</i>&nbsp;        defineEmptySpaces();</b>
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;        //ADD LEVEL
+<i>48</i>&nbsp;
+<b class="nc"><i>49</i>&nbsp;        gbc.gridx = 2;</b>
+<b class="nc"><i>50</i>&nbsp;        gbc.gridy = 4;</b>
+<b class="nc"><i>51</i>&nbsp;        add(levelImages[3], gbc);</b>
+<i>52</i>&nbsp;
+<b class="nc"><i>53</i>&nbsp;        gbc.gridx = 2;</b>
+<b class="nc"><i>54</i>&nbsp;        gbc.gridy = 5;</b>
+<b class="nc"><i>55</i>&nbsp;        add(levelImages[2], gbc);</b>
+<i>56</i>&nbsp;
+<b class="nc"><i>57</i>&nbsp;        gbc.gridx = 2;</b>
+<b class="nc"><i>58</i>&nbsp;        gbc.gridy = 6;</b>
+<b class="nc"><i>59</i>&nbsp;        add(levelImages[1], gbc);</b>
+<i>60</i>&nbsp;
+<b class="nc"><i>61</i>&nbsp;        gbc.gridx = 2;</b>
+<b class="nc"><i>62</i>&nbsp;        gbc.gridy = 7;</b>
+<b class="nc"><i>63</i>&nbsp;        add(levelImages[0], gbc);</b>
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;        //ADD GOD BUTTON , EMPTY SPACES
+<b class="nc"><i>66</i>&nbsp;        gbc.gridx = 2;</b>
+<b class="nc"><i>67</i>&nbsp;        gbc.gridy = 2;</b>
+<b class="nc"><i>68</i>&nbsp;        add(button[2], gbc);</b>
+<i>69</i>&nbsp;
+<b class="nc"><i>70</i>&nbsp;        gbc.gridx = 10;</b>
+<b class="nc"><i>71</i>&nbsp;        gbc.gridy = 1;</b>
+<b class="nc"><i>72</i>&nbsp;        add(button[3], gbc);</b>
+<i>73</i>&nbsp;
+<b class="nc"><i>74</i>&nbsp;        gbc.gridx = 10;</b>
+<b class="nc"><i>75</i>&nbsp;        gbc.gridy = 5;</b>
+<b class="nc"><i>76</i>&nbsp;        add(button[4], gbc);</b>
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;
+<b class="nc"><i>79</i>&nbsp;        gbc.gridx = 10;</b>
+<b class="nc"><i>80</i>&nbsp;        gbc.gridy = 3;</b>
+<b class="nc"><i>81</i>&nbsp;        add(emptySpaces[0], gbc);</b>
+<i>82</i>&nbsp;
+<b class="nc"><i>83</i>&nbsp;        gbc.gridx = 2;</b>
+<b class="nc"><i>84</i>&nbsp;        gbc.gridy = 0;</b>
+<b class="nc"><i>85</i>&nbsp;        add(emptySpaces[1], gbc);</b>
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;
+<b class="nc"><i>88</i>&nbsp;        gbc.gridx = 10;</b>
+<b class="nc"><i>89</i>&nbsp;        gbc.gridy = 0;</b>
+<b class="nc"><i>90</i>&nbsp;        add(emptySpaces[2], gbc);</b>
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;        //ADD BUTTON CONTAINER
+<i>93</i>&nbsp;
+<b class="nc"><i>94</i>&nbsp;        gbc.gridwidth = 7;</b>
+<b class="nc"><i>95</i>&nbsp;        gbc.gridheight = 8;</b>
+<i>96</i>&nbsp;
+<b class="nc"><i>97</i>&nbsp;        gbc.gridx = 3;</b>
+<b class="nc"><i>98</i>&nbsp;        gbc.gridy = 0;</b>
+<b class="nc"><i>99</i>&nbsp;        add(boardContainer, gbc);</b>
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;        //ADD UNDO , EXIT BUTTON AND SANTORINI
+<b class="nc"><i>103</i>&nbsp;        gbc.gridwidth = 2;</b>
+<b class="nc"><i>104</i>&nbsp;        gbc.gridheight = 1;</b>
+<i>105</i>&nbsp;
+<b class="nc"><i>106</i>&nbsp;        gbc.fill = GridBagConstraints.BOTH;</b>
+<i>107</i>&nbsp;
+<b class="nc"><i>108</i>&nbsp;        gbc.gridx = 0;</b>
+<b class="nc"><i>109</i>&nbsp;        gbc.gridy = 8;</b>
+<b class="nc"><i>110</i>&nbsp;        add(button[0], gbc);</b>
+<i>111</i>&nbsp;
+<b class="nc"><i>112</i>&nbsp;        gbc.gridx = 11;</b>
+<b class="nc"><i>113</i>&nbsp;        gbc.gridy = 8;</b>
+<b class="nc"><i>114</i>&nbsp;        add(button[1], gbc);</b>
+<i>115</i>&nbsp;
+<b class="nc"><i>116</i>&nbsp;        gbc.gridx = 0;</b>
+<b class="nc"><i>117</i>&nbsp;        gbc.gridy = 0;</b>
+<b class="nc"><i>118</i>&nbsp;        add(santorini, gbc);</b>
+<i>119</i>&nbsp;
+<i>120</i>&nbsp;        //ADD PLAYER&#39;S NAMES
+<i>121</i>&nbsp;
+<b class="nc"><i>122</i>&nbsp;        gbc.gridx = 0;</b>
+<b class="nc"><i>123</i>&nbsp;        gbc.gridy = 1;</b>
+<b class="nc"><i>124</i>&nbsp;        add(playerName[0], gbc);</b>
+<i>125</i>&nbsp;
+<b class="nc"><i>126</i>&nbsp;        gbc.gridx = 11;</b>
+<b class="nc"><i>127</i>&nbsp;        gbc.gridy = 0;</b>
+<b class="nc"><i>128</i>&nbsp;        add(playerName[1], gbc);</b>
+<i>129</i>&nbsp;
+<b class="nc"><i>130</i>&nbsp;        gbc.gridx = 11;</b>
+<b class="nc"><i>131</i>&nbsp;        gbc.gridy = 4;</b>
+<b class="nc"><i>132</i>&nbsp;        add(playerName[2], gbc);</b>
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;        //ADD GOD PICTURES
+<i>135</i>&nbsp;
+<b class="nc"><i>136</i>&nbsp;        gbc.anchor = GridBagConstraints.CENTER;</b>
+<b class="nc"><i>137</i>&nbsp;        gbc.fill = GridBagConstraints.NONE;</b>
+<b class="nc"><i>138</i>&nbsp;        gbc.gridwidth = 2;</b>
+<b class="nc"><i>139</i>&nbsp;        gbc.gridheight = 3;</b>
+<i>140</i>&nbsp;
+<b class="nc"><i>141</i>&nbsp;        gbc.gridx = 0;</b>
+<b class="nc"><i>142</i>&nbsp;        gbc.gridy = 2;</b>
+<b class="nc"><i>143</i>&nbsp;        add(godPic[0], gbc);</b>
+<i>144</i>&nbsp;
+<b class="nc"><i>145</i>&nbsp;        gbc.gridx = 11;</b>
+<b class="nc"><i>146</i>&nbsp;        gbc.gridy = 1;</b>
+<b class="nc"><i>147</i>&nbsp;        add(godPic[1], gbc);</b>
+<i>148</i>&nbsp;
+<b class="nc"><i>149</i>&nbsp;        gbc.gridx = 11;</b>
+<b class="nc"><i>150</i>&nbsp;        gbc.gridy = 5;</b>
+<b class="nc"><i>151</i>&nbsp;        add(godPic[2], gbc);</b>
+<i>152</i>&nbsp;
+<i>153</i>&nbsp;
+<i>154</i>&nbsp;        //ADD CHAT
+<i>155</i>&nbsp;
+<b class="nc"><i>156</i>&nbsp;        gbc.gridwidth =9;</b>
+<b class="nc"><i>157</i>&nbsp;        gbc.gridheight = 1;</b>
+<b class="nc"><i>158</i>&nbsp;        gbc.fill = 1;</b>
+<b class="nc"><i>159</i>&nbsp;        gbc.gridx = 2;</b>
+<b class="nc"><i>160</i>&nbsp;        gbc.gridy = 8;</b>
+<b class="nc"><i>161</i>&nbsp;        add(chat, gbc);</b>
+<i>162</i>&nbsp;
+<i>163</i>&nbsp;        //ADD WORKERS
+<i>164</i>&nbsp;
+<b class="nc"><i>165</i>&nbsp;        gbc.gridwidth = 1;</b>
+<b class="nc"><i>166</i>&nbsp;        gbc.gridheight = 2;</b>
+<b class="nc"><i>167</i>&nbsp;        gbc.fill = 0;</b>
+<b class="nc"><i>168</i>&nbsp;        gbc.gridx = 1;</b>
+<b class="nc"><i>169</i>&nbsp;        gbc.gridy = 6;</b>
+<i>170</i>&nbsp;
+<b class="nc"><i>171</i>&nbsp;        add(workers[0], gbc);</b>
+<b class="nc"><i>172</i>&nbsp;        gbc.gridx = 0;</b>
+<b class="nc"><i>173</i>&nbsp;        gbc.gridy = 5;</b>
+<b class="nc"><i>174</i>&nbsp;        add(workers[1], gbc);</b>
+<i>175</i>&nbsp;    }
+<i>176</i>&nbsp;
+<i>177</i>&nbsp;    @Override
+<i>178</i>&nbsp;    protected void paintComponent(Graphics g) {
+<b class="nc"><i>179</i>&nbsp;        super.paintComponent(g);</b>
+<i>180</i>&nbsp;
+<b class="nc"><i>181</i>&nbsp;        g.drawImage(background, 0, 0,this.getWidth(),this.getHeight(), this);</b>
+<i>182</i>&nbsp;    }
+<i>183</i>&nbsp;    private void defineEmptySpaces(){
+<b class="nc"><i>184</i>&nbsp;        emptySpaces = new JLabel[3];</b>
+<i>185</i>&nbsp;
+<b class="nc"><i>186</i>&nbsp;        for(int i=0 ; i&lt;3 ; i++) {</b>
+<i>187</i>&nbsp;
+<b class="nc"><i>188</i>&nbsp;            emptySpaces[i] = new JLabel();</b>
+<i>189</i>&nbsp;
+<b class="nc"><i>190</i>&nbsp;            emptySpaces[i].setHorizontalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>191</i>&nbsp;            emptySpaces[i].setVerticalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>192</i>&nbsp;            emptySpaces[i].setPreferredSize(new Dimension(1300/13,700/9));</b>
+<i>193</i>&nbsp;
+<i>194</i>&nbsp;        }
+<i>195</i>&nbsp;
+<b class="nc"><i>196</i>&nbsp;        ImageIcon cloud1 = new ImageIcon((new ImageIcon(&quot;src/main/resources/Levels/cloudright.png&quot;).getImage().getScaledInstance(1300/13,700/9,Image.SCALE_DEFAULT)));</b>
+<b class="nc"><i>197</i>&nbsp;        emptySpaces[1].setIcon(cloud1);</b>
+<b class="nc"><i>198</i>&nbsp;        ImageIcon cloud2 = new ImageIcon((new ImageIcon(&quot;src/main/resources/Levels/cloudleft.png&quot;).getImage().getScaledInstance(1300/13,700/9,Image.SCALE_DEFAULT)));</b>
+<b class="nc"><i>199</i>&nbsp;        emptySpaces[2].setIcon(cloud2);</b>
+<i>200</i>&nbsp;    }
+<i>201</i>&nbsp;    private void defineChatLabel(){
+<b class="nc"><i>202</i>&nbsp;        chat = new JLabel();</b>
+<b class="nc"><i>203</i>&nbsp;        chat.setText(&quot;It&#39;s your Turn !!&quot;);</b>
+<b class="nc"><i>204</i>&nbsp;        chat.setHorizontalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>205</i>&nbsp;        chat.setVerticalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>206</i>&nbsp;        chat.setForeground(new Color(0 ,0 ,153));</b>
+<b class="nc"><i>207</i>&nbsp;        chat.setFont(new Font (&quot;Times new Roman&quot; , Font.ITALIC , 18));</b>
+<b class="nc"><i>208</i>&nbsp;        chat.setBackground(new Color(51,204,255));</b>
+<b class="nc"><i>209</i>&nbsp;        chat.setBorder(BorderFactory.createMatteBorder(5,5,5,5, new Color(0 ,0 ,153)));</b>
+<i>210</i>&nbsp;
+<i>211</i>&nbsp;
+<i>212</i>&nbsp;    }
+<i>213</i>&nbsp;    private void definePlayerContainer(){
+<b class="nc"><i>214</i>&nbsp;        godPic = new JLabel[3];</b>
+<b class="nc"><i>215</i>&nbsp;        playerName = new JLabel[3];</b>
+<i>216</i>&nbsp;
+<b class="nc"><i>217</i>&nbsp;        for (int i=0 ; i&lt;3 ; i++){</b>
+<b class="nc"><i>218</i>&nbsp;            playerName[i] = new JLabel();</b>
+<b class="nc"><i>219</i>&nbsp;            playerName[i].setHorizontalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>220</i>&nbsp;            playerName[i].setVerticalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>221</i>&nbsp;            playerName[i].setFont(new Font (&quot;Times new Roman&quot; , Font.BOLD , 36));</b>
+<b class="nc"><i>222</i>&nbsp;            playerName[i].setVisible(false);</b>
+<i>223</i>&nbsp;        }
+<i>224</i>&nbsp;
+<b class="nc"><i>225</i>&nbsp;        playerName[0].setText(&quot;Meri&quot;);</b>
+<b class="nc"><i>226</i>&nbsp;        playerName[0].setForeground(new Color(204,0 , 0));</b>
+<i>227</i>&nbsp;
+<b class="nc"><i>228</i>&nbsp;        playerName[1].setText(&quot;Luca&quot;);</b>
+<b class="nc"><i>229</i>&nbsp;        playerName[1].setForeground(Color.GREEN);</b>
+<i>230</i>&nbsp;
+<i>231</i>&nbsp;
+<b class="nc"><i>232</i>&nbsp;        playerName[2].setText(&quot;Mattia&quot;);</b>
+<b class="nc"><i>233</i>&nbsp;        playerName[2].setForeground(Color.BLUE);</b>
+<i>234</i>&nbsp;
+<i>235</i>&nbsp;
+<b class="nc"><i>236</i>&nbsp;        for(int i=0 ; i&lt;3 ; i++) {</b>
+<i>237</i>&nbsp;
+<b class="nc"><i>238</i>&nbsp;            godPic[i] = new JLabel();</b>
+<i>239</i>&nbsp;
+<b class="nc"><i>240</i>&nbsp;            godPic[i].setHorizontalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>241</i>&nbsp;            godPic[i].setVerticalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>242</i>&nbsp;            godPic[i].setPreferredSize(new Dimension(1300*3/26,700*3/9));</b>
+<b class="nc"><i>243</i>&nbsp;            godPic[i].setVisible(false);</b>
+<i>244</i>&nbsp;
+<i>245</i>&nbsp;        }
+<b class="nc"><i>246</i>&nbsp;        ImageIcon godImage1 = new ImageIcon((new ImageIcon(&quot;src/main/resources/GodCards/apollo.png&quot;).getImage().getScaledInstance(1300*3/26,700*3/9,Image.SCALE_DEFAULT)));</b>
+<b class="nc"><i>247</i>&nbsp;        godPic[0].setIcon(godImage1);</b>
+<b class="nc"><i>248</i>&nbsp;        ImageIcon godImage2 = new ImageIcon((new ImageIcon(&quot;src/main/resources/GodCards/pan.png&quot;).getImage().getScaledInstance(1300*3/26,700*3/9,Image.SCALE_DEFAULT)));</b>
+<b class="nc"><i>249</i>&nbsp;        godPic[1].setIcon(godImage2);</b>
+<b class="nc"><i>250</i>&nbsp;        ImageIcon godImage3 = new ImageIcon((new ImageIcon(&quot;src/main/resources/GodCards/artemis.png&quot;).getImage().getScaledInstance(1300*3/26,700*3/9,Image.SCALE_DEFAULT)));</b>
+<b class="nc"><i>251</i>&nbsp;        godPic[2].setIcon(godImage3);</b>
+<i>252</i>&nbsp;
+<i>253</i>&nbsp;    }
+<i>254</i>&nbsp;    private void defineLevelImages(){
+<i>255</i>&nbsp;
+<b class="nc"><i>256</i>&nbsp;        levelImages = new JLabel[4];</b>
+<i>257</i>&nbsp;
+<b class="nc"><i>258</i>&nbsp;        for(int i=0 ; i&lt;4 ; i++) {</b>
+<i>259</i>&nbsp;
+<b class="nc"><i>260</i>&nbsp;            levelImages[i] = new JLabel();</b>
+<i>261</i>&nbsp;
+<b class="nc"><i>262</i>&nbsp;            levelImages[i].setHorizontalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>263</i>&nbsp;            levelImages[i].setVerticalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>264</i>&nbsp;            levelImages[i].setPreferredSize(new Dimension(1300/13,700/9));</b>
+<b class="nc"><i>265</i>&nbsp;            levelImages[i].setVisible(false);</b>
+<i>266</i>&nbsp;        }
+<i>267</i>&nbsp;
+<b class="nc"><i>268</i>&nbsp;        ImageIcon levelImages1 = new ImageIcon((new ImageIcon(&quot;src/main/resources/Levels/first.png&quot;).getImage().getScaledInstance(1300*2/39,700*2/27,Image.SCALE_DEFAULT)));</b>
+<b class="nc"><i>269</i>&nbsp;        levelImages[0].setIcon(levelImages1);</b>
+<b class="nc"><i>270</i>&nbsp;        ImageIcon levelImages2 = new ImageIcon((new ImageIcon(&quot;src/main/resources/Levels/second.png&quot;).getImage().getScaledInstance(1300*2/39,700*2/27,Image.SCALE_DEFAULT)));</b>
+<b class="nc"><i>271</i>&nbsp;        levelImages[1].setIcon(levelImages2);</b>
+<b class="nc"><i>272</i>&nbsp;        ImageIcon levelImages3 = new ImageIcon((new ImageIcon(&quot;src/main/resources/Levels/third.png&quot;).getImage().getScaledInstance(1300*2/39,700*2/27,Image.SCALE_DEFAULT)));</b>
+<b class="nc"><i>273</i>&nbsp;        levelImages[2].setIcon(levelImages3);</b>
+<b class="nc"><i>274</i>&nbsp;        ImageIcon levelImages4 = new ImageIcon((new ImageIcon(&quot;src/main/resources/Levels/dome.png&quot;).getImage().getScaledInstance(1300/39,700/27,Image.SCALE_DEFAULT)));</b>
+<b class="nc"><i>275</i>&nbsp;        levelImages[3].setIcon(levelImages4);</b>
+<i>276</i>&nbsp;
+<i>277</i>&nbsp;    }
+<i>278</i>&nbsp;    private void defineButton(){
+<i>279</i>&nbsp;
+<b class="nc"><i>280</i>&nbsp;        button = new JButton[5];</b>
+<i>281</i>&nbsp;
+<b class="nc"><i>282</i>&nbsp;        for (int i=0 ; i&lt;5 ;i++) {</b>
+<b class="nc"><i>283</i>&nbsp;            button[i] = new JButton();</b>
+<b class="nc"><i>284</i>&nbsp;            button[i].setVerticalTextPosition(SwingConstants.CENTER);</b>
+<b class="nc"><i>285</i>&nbsp;            button[i].setHorizontalTextPosition(SwingConstants.CENTER);</b>
+<b class="nc"><i>286</i>&nbsp;            button[i].setSize(1300 * 2 / 13, 700 / 9);</b>
+<b class="nc"><i>287</i>&nbsp;            button[i].setFont(new Font(&quot;Times New Roman&quot;, Font.BOLD, 24));</b>
+<b class="nc"><i>288</i>&nbsp;            button[i].setForeground(Color.WHITE);</b>
+<b class="nc"><i>289</i>&nbsp;            button[i].setOpaque(false);</b>
+<b class="nc"><i>290</i>&nbsp;            button[i].setContentAreaFilled(false);</b>
+<b class="nc"><i>291</i>&nbsp;            button[i].setBorderPainted(false);</b>
+<b class="nc"><i>292</i>&nbsp;            button[i].setBorder(null);</b>
+<i>293</i>&nbsp;        }
+<b class="nc"><i>294</i>&nbsp;        ImageIcon undoImage = new ImageIcon((new ImageIcon(&quot;src/main/resources/Buttons/btn_coral.png&quot;).getImage().getScaledInstance(1300 * 2 / 13, 700 / 9, Image.SCALE_DEFAULT)));</b>
+<b class="nc"><i>295</i>&nbsp;        button[0].setIcon(undoImage);</b>
+<b class="nc"><i>296</i>&nbsp;        button[0].setText(&quot;UNDO&quot;);</b>
+<b class="nc"><i>297</i>&nbsp;        ImageIcon exitImage = new ImageIcon((new ImageIcon(&quot;src/main/resources/Buttons/btn_blue.png&quot;).getImage().getScaledInstance(1300 * 2 / 13, 700 / 9, Image.SCALE_DEFAULT)));</b>
+<b class="nc"><i>298</i>&nbsp;        button[1].setIcon(exitImage);</b>
+<b class="nc"><i>299</i>&nbsp;        button[1].setText(&quot;EXIT&quot;);</b>
+<b class="nc"><i>300</i>&nbsp;        ImageIcon buttonImage = new ImageIcon((new ImageIcon(&quot;src/main/resources/Buttons/btn_god.png&quot;).getImage().getScaledInstance(1300  / 26, 700 / 18, Image.SCALE_DEFAULT)));</b>
+<b class="nc"><i>301</i>&nbsp;        for(int i=2 ; i&lt;5 ; i++) {</b>
+<b class="nc"><i>302</i>&nbsp;            button[i].setIcon(buttonImage);</b>
+<b class="nc"><i>303</i>&nbsp;            button[i].setVisible(false);</b>
+<b class="nc"><i>304</i>&nbsp;            button[i].addActionListener(new ActionListener() {</b>
+<i>305</i>&nbsp;                @Override
+<i>306</i>&nbsp;                public void actionPerformed(ActionEvent e) {
+<b class="nc"><i>307</i>&nbsp;                    for (int i = 2; i &lt; 5; i++) {</b>
+<b class="nc"><i>308</i>&nbsp;                        if (e.getSource() == button[i]) {</b>
+<i>309</i>&nbsp;
+<b class="nc"><i>310</i>&nbsp;                            if(godPic[i-2].isVisible())</b>
+<b class="nc"><i>311</i>&nbsp;                                godPic[i-2].setVisible(false);</b>
+<i>312</i>&nbsp;                            else
+<b class="nc"><i>313</i>&nbsp;                                godPic[i-2].setVisible(true);</b>
+<i>314</i>&nbsp;
+<i>315</i>&nbsp;                        }
+<i>316</i>&nbsp;                    }
+<i>317</i>&nbsp;                }
+<i>318</i>&nbsp;            });
+<i>319</i>&nbsp;
+<i>320</i>&nbsp;        }
+<i>321</i>&nbsp;    }
+<i>322</i>&nbsp;    private void defineWorkerImages(){
+<i>323</i>&nbsp;
+<b class="nc"><i>324</i>&nbsp;        workerImages = new ImageIcon[2];</b>
+<b class="nc"><i>325</i>&nbsp;        workerImages[0] =  new ImageIcon((new ImageIcon(&quot;src/main/resources/Workers/red_female_worker.png&quot;).getImage().getScaledInstance(1300/13,700*2/9,Image.SCALE_DEFAULT)));</b>
+<i>326</i>&nbsp;
+<b class="nc"><i>327</i>&nbsp;        workerImages[1] = new ImageIcon((new ImageIcon(&quot;src/main/resources/Workers/red_male_worker.png&quot;).getImage().getScaledInstance(1300/13,700*2/9,Image.SCALE_DEFAULT)));</b>
+<i>328</i>&nbsp;
+<b class="nc"><i>329</i>&nbsp;        workers = new JLabel[2];</b>
+<i>330</i>&nbsp;
+<b class="nc"><i>331</i>&nbsp;        for(int i=0 ; i&lt;2 ; i++) {</b>
+<i>332</i>&nbsp;
+<i>333</i>&nbsp;
+<b class="nc"><i>334</i>&nbsp;            workers[i] = new JLabel();</b>
+<b class="nc"><i>335</i>&nbsp;            workers[i].setHorizontalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>336</i>&nbsp;            workers[i].setVerticalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>337</i>&nbsp;            workers[i].setPreferredSize(new Dimension(1300/13,700*2/9));</b>
+<b class="nc"><i>338</i>&nbsp;            workers[i].setIcon(workerImages[i]);</b>
+<i>339</i>&nbsp;        }
+<i>340</i>&nbsp;
+<i>341</i>&nbsp;
+<i>342</i>&nbsp;    }
+<i>343</i>&nbsp;    private void defineSantoriniText(){
+<i>344</i>&nbsp;
+<b class="nc"><i>345</i>&nbsp;        santorini = new JLabel(&quot;Santorini&quot;);</b>
+<b class="nc"><i>346</i>&nbsp;        santorini.setVerticalAlignment(0);</b>
+<b class="nc"><i>347</i>&nbsp;        santorini.setHorizontalAlignment(0);</b>
+<b class="nc"><i>348</i>&nbsp;        santorini.setForeground(Color.WHITE);</b>
+<b class="nc"><i>349</i>&nbsp;        santorini.setFont(new Font(&quot;Times new Roman&quot; ,Font.BOLD , 42));</b>
+<i>350</i>&nbsp;
+<i>351</i>&nbsp;    }
+<i>352</i>&nbsp;
+<i>353</i>&nbsp;    public void setChat(String command){
+<b class="nc"><i>354</i>&nbsp;        chat.setText(command);</b>
+<i>355</i>&nbsp;    }
+<i>356</i>&nbsp;
+<i>357</i>&nbsp;    public void setBoardContainer(BoardContainer boardContainer) {
+<b class="nc"><i>358</i>&nbsp;        this.boardContainer = boardContainer;</b>
+<i>359</i>&nbsp;    }
+<i>360</i>&nbsp;
+<i>361</i>&nbsp;    public void setWorkerImages(int nr ){
+<b class="nc"><i>362</i>&nbsp;        workers[nr].setBorder(BorderFactory.createLineBorder(Color.RED , 2));</b>
+<i>363</i>&nbsp;    }
+<i>364</i>&nbsp;    public ImageIcon getWorkerImages(int nr){
+<b class="nc"><i>365</i>&nbsp;        return workerImages[nr];</b>
+<i>366</i>&nbsp;    }
+<i>367</i>&nbsp;
+<i>368</i>&nbsp;    public BoardContainer getBoardContainer() {
+<b class="nc"><i>369</i>&nbsp;        return boardContainer;</b>
+<i>370</i>&nbsp;    }
+<i>371</i>&nbsp;
+<i>372</i>&nbsp;    public JLabel getChat() {
+<b class="nc"><i>373</i>&nbsp;        return chat;</b>
+<i>374</i>&nbsp;    }
+<i>375</i>&nbsp;
+<i>376</i>&nbsp;    public JLabel[] getGodPic() {
+<b class="nc"><i>377</i>&nbsp;        return godPic;</b>
+<i>378</i>&nbsp;    }
+<i>379</i>&nbsp;
+<i>380</i>&nbsp;    public JLabel[] getPlayerName() {
+<b class="nc"><i>381</i>&nbsp;        return playerName;</b>
+<i>382</i>&nbsp;    }
+<i>383</i>&nbsp;
+<i>384</i>&nbsp;    public void setPlayerName(List&lt;String&gt; name){
+<b class="nc"><i>385</i>&nbsp;        System.out.println(name.size());</b>
+<b class="nc"><i>386</i>&nbsp;        for(int i=0 ; i &lt; name.size() ; i++){</b>
+<b class="nc"><i>387</i>&nbsp;            System.out.println(name.get(i));</b>
+<b class="nc"><i>388</i>&nbsp;            playerName[i].setText(name.get(i));</b>
+<b class="nc"><i>389</i>&nbsp;            playerName[i].setVisible(true);</b>
+<i>390</i>&nbsp;        }
+<i>391</i>&nbsp;    }
+<i>392</i>&nbsp;
+<i>393</i>&nbsp;    public static void main(String[] args) throws IOException {
+<i>394</i>&nbsp;
+<b class="nc"><i>395</i>&nbsp;        JFrame frame = new JFrame(&quot;Start&quot;);</b>
+<b class="nc"><i>396</i>&nbsp;        BufferedImage myImage = ImageIO.read(new File(&quot;src/main/resources/SantoriniBoard.png&quot;));</b>
+<b class="nc"><i>397</i>&nbsp;        frame.setContentPane(new MapPanel(myImage));</b>
+<b class="nc"><i>398</i>&nbsp;        frame.setSize(1400, 800);</b>
+<b class="nc"><i>399</i>&nbsp;        frame.setResizable(true);</b>
+<b class="nc"><i>400</i>&nbsp;        frame.setVisible(true);</b>
+<i>401</i>&nbsp;
+<i>402</i>&nbsp;    }
+<i>403</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-18 22:46</div>
+</div>
+</body>
+</html>

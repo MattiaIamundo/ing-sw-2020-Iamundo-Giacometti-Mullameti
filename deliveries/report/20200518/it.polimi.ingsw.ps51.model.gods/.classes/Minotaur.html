@@ -1,0 +1,159 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Minotaur</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.model.gods</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Minotaur (it.polimi.ingsw.ps51.model.gods)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Minotaur</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (31/ 31)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.model.gods;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.ps51.model.*;
+<i>4</i>&nbsp;import org.javatuples.Pair;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import java.util.ArrayList;
+<i>7</i>&nbsp;import java.util.List;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;/**
+<i>10</i>&nbsp; * This class implements the god&#39;s power of Minotaur
+<i>11</i>&nbsp; */
+<b class="fc"><i>12</i>&nbsp;public class Minotaur extends CommonAction{</b>
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    @Override
+<i>15</i>&nbsp;    public List&lt;Coordinates&gt; checkMoves(Player player, Worker worker, Map map) {
+<b class="fc"><i>16</i>&nbsp;        Square workerPosition = worker.getPosition();</b>
+<b class="fc"><i>17</i>&nbsp;        List&lt;Square&gt; adjacentSquares = map.getAdjacentSquare(workerPosition);</b>
+<b class="fc"><i>18</i>&nbsp;        List&lt;Coordinates&gt; validCoordinates = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>19</i>&nbsp;        for (int i = 0; i &lt; adjacentSquares.size(); i++){</b>
+<b class="fc"><i>20</i>&nbsp;            Square square = adjacentSquares.get(i);</b>
+<b class="fc"><i>21</i>&nbsp;            if ((square != null) &amp;&amp; (square.getLevel().ordinal() - worker.getPosition().getLevel().ordinal() &lt;= 1)</b>
+<b class="fc"><i>22</i>&nbsp;                    &amp;&amp; (!square.getLevel().equals(Level.DOME))</b>
+<b class="fc"><i>23</i>&nbsp;                    &amp;&amp; (!(square.isPresentWorker()) || (square.isPresentWorker() &amp;&amp; isValidSquareWithWorker(square, i, map)))){</b>
+<i>24</i>&nbsp;
+<b class="fc"><i>25</i>&nbsp;                if (square.isPresentWorker() &amp;&amp; isAlliedWorker(player.getWorkers(), square)){</b>
+<b class="fc"><i>26</i>&nbsp;                    continue;</b>
+<i>27</i>&nbsp;                }
+<b class="fc"><i>28</i>&nbsp;                validCoordinates.add(square.getCoordinates());</b>
+<i>29</i>&nbsp;            }
+<i>30</i>&nbsp;        }
+<b class="fc"><i>31</i>&nbsp;        return clearPositions(validCoordinates, worker, map);</b>
+<i>32</i>&nbsp;    }
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    @Override
+<i>35</i>&nbsp;    public synchronized void move(Player player, Worker worker, Square position, Map map) {
+<b class="fc"><i>36</i>&nbsp;        if (position.isPresentWorker()){</b>
+<b class="fc"><i>37</i>&nbsp;            int dir = map.getAdjacentSquare(worker.getPosition()).indexOf(position);</b>
+<b class="fc"><i>38</i>&nbsp;            Square newPos = map.getAdjacentSquare(position).get(dir);</b>
+<i>39</i>&nbsp;
+<b class="fc"><i>40</i>&nbsp;            notify(new Pair&lt;Square, Square&gt;(position, newPos));</b>
+<b class="fc"><i>41</i>&nbsp;            worker.setPosition(position);</b>
+<b class="fc"><i>42</i>&nbsp;            position.notifyChange();</b>
+<b class="fc"><i>43</i>&nbsp;        }else {</b>
+<b class="fc"><i>44</i>&nbsp;            super.move(player, worker, position, map);</b>
+<i>45</i>&nbsp;        }
+<b class="fc"><i>46</i>&nbsp;    }</b>
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    /**
+<i>49</i>&nbsp;     * Check if the worker on opponentPosition can be moved in the same direction, identified by the position i in the
+<i>50</i>&nbsp;     * list of the adjacent squares
+<i>51</i>&nbsp;     * @param opponentPosition the square where is present an opponent&#39;s worker
+<i>52</i>&nbsp;     * @param direction the direction in which the worker of the actual player must be moved to encounter the opponent&#39;s
+<i>53</i>&nbsp;     *                  worker, the direction refers to the position into the list of the adjacent squares retrieved from
+<i>54</i>&nbsp;     *                  the actual player&#39;s worker position
+<i>55</i>&nbsp;     * @param map the game map
+<i>56</i>&nbsp;     * @return true if the opponent&#39;s worker can be moved in the same direction of the actual player&#39;s worker, without
+<i>57</i>&nbsp;     *              restrictions on the difference in the height of the two involved squares. False otherwise
+<i>58</i>&nbsp;     */
+<i>59</i>&nbsp;    private boolean isValidSquareWithWorker(Square opponentPosition, int direction, Map map){
+<b class="fc"><i>60</i>&nbsp;        List&lt;Square&gt; adjacentSquares = map.getAdjacentSquare(opponentPosition);</b>
+<b class="fc"><i>61</i>&nbsp;        if (adjacentSquares.get(direction) == null){</b>
+<b class="fc"><i>62</i>&nbsp;            return false;</b>
+<i>63</i>&nbsp;        }else {
+<b class="fc"><i>64</i>&nbsp;            return adjacentSquares.get(direction).isFreeSquare();</b>
+<i>65</i>&nbsp;        }
+<i>66</i>&nbsp;    }
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    private boolean isAlliedWorker(List&lt;Worker&gt; workers, Square position){
+<b class="fc"><i>69</i>&nbsp;        for (Worker worker : workers){</b>
+<b class="fc"><i>70</i>&nbsp;            if (worker.getPosition().equals(position)){</b>
+<b class="fc"><i>71</i>&nbsp;                return true;</b>
+<i>72</i>&nbsp;            }
+<b class="fc"><i>73</i>&nbsp;        }</b>
+<b class="fc"><i>74</i>&nbsp;        return false;</b>
+<i>75</i>&nbsp;    }
+<i>76</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-18 22:46</div>
+</div>
+</body>
+</html>

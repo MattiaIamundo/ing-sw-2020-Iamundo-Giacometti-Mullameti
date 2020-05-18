@@ -1,0 +1,153 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: WinPanel</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.view.Gui</a> ]
+</div>
+
+<h1>Coverage Summary for Class: WinPanel (it.polimi.ingsw.ps51.view.Gui)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">WinPanel</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 31)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.view.Gui;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import javax.imageio.ImageIO;
+<i>4</i>&nbsp;import javax.swing.*;
+<i>5</i>&nbsp;import java.awt.*;
+<i>6</i>&nbsp;import java.awt.image.BufferedImage;
+<i>7</i>&nbsp;import java.io.File;
+<i>8</i>&nbsp;import java.io.IOException;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;public class WinPanel extends JPanel {
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    private Image background;
+<i>13</i>&nbsp;    private JLabel[] trumpets ;
+<i>14</i>&nbsp;    private JLabel text;
+<i>15</i>&nbsp;
+<b class="nc"><i>16</i>&nbsp;    public WinPanel(Image background){</b>
+<b class="nc"><i>17</i>&nbsp;        this.background = background;</b>
+<b class="nc"><i>18</i>&nbsp;        this.setLayout(new BorderLayout());</b>
+<b class="nc"><i>19</i>&nbsp;        defineTrumpets();</b>
+<b class="nc"><i>20</i>&nbsp;        text = new JLabel();</b>
+<b class="nc"><i>21</i>&nbsp;        text.setText(&quot;You Won !&quot;);</b>
+<b class="nc"><i>22</i>&nbsp;        text.setFont(new Font(&quot;Times new roman&quot; , Font.BOLD , 48));</b>
+<b class="nc"><i>23</i>&nbsp;        text.setForeground(Color.RED);</b>
+<b class="nc"><i>24</i>&nbsp;        text.setHorizontalAlignment(0);</b>
+<b class="nc"><i>25</i>&nbsp;        text.setVerticalAlignment(0);</b>
+<b class="nc"><i>26</i>&nbsp;        add(text, BorderLayout.CENTER);</b>
+<b class="nc"><i>27</i>&nbsp;        add(trumpets[0], BorderLayout.WEST);</b>
+<b class="nc"><i>28</i>&nbsp;        add(trumpets[1], BorderLayout.EAST);</b>
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    }
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    @Override
+<i>34</i>&nbsp;    protected void paintComponent(Graphics g) {
+<b class="nc"><i>35</i>&nbsp;        super.paintComponent(g);</b>
+<i>36</i>&nbsp;
+<b class="nc"><i>37</i>&nbsp;        g.drawImage(background, 0, 0,this.getWidth(),this.getHeight(), this);</b>
+<i>38</i>&nbsp;    }
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;    private void defineTrumpets(){
+<i>41</i>&nbsp;
+<b class="nc"><i>42</i>&nbsp;        trumpets = new JLabel[2];</b>
+<i>43</i>&nbsp;
+<b class="nc"><i>44</i>&nbsp;        for(int i=0 ; i&lt;2 ; i++) {</b>
+<i>45</i>&nbsp;
+<b class="nc"><i>46</i>&nbsp;            trumpets[i] = new JLabel();</b>
+<i>47</i>&nbsp;
+<b class="nc"><i>48</i>&nbsp;            trumpets[i].setHorizontalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>49</i>&nbsp;            trumpets[i].setVerticalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>50</i>&nbsp;            trumpets[i].setPreferredSize(new Dimension(415/2,460/2));</b>
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;        }
+<b class="nc"><i>53</i>&nbsp;        ImageIcon trumpets1 = new ImageIcon((new ImageIcon(&quot;src/main/resources/victorytrumpet1.png&quot;).getImage().getScaledInstance(415/2,460/2,Image.SCALE_DEFAULT)));</b>
+<b class="nc"><i>54</i>&nbsp;        trumpets[0].setIcon(trumpets1);</b>
+<b class="nc"><i>55</i>&nbsp;        ImageIcon trumpets2 = new ImageIcon((new ImageIcon(&quot;src/main/resources/victorytrumpet2.png&quot;).getImage().getScaledInstance(415/2,460/2,Image.SCALE_DEFAULT)));</b>
+<b class="nc"><i>56</i>&nbsp;        trumpets[1].setIcon(trumpets2);</b>
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;    }
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;    public static void main(String[] args) throws IOException {
+<i>61</i>&nbsp;
+<b class="nc"><i>62</i>&nbsp;        JFrame frame = new JFrame(&quot;Start&quot;);</b>
+<b class="nc"><i>63</i>&nbsp;        BufferedImage myImage = ImageIO.read(new File(&quot;src/main/resources/winBackground.jpg&quot;));</b>
+<b class="nc"><i>64</i>&nbsp;        frame.setContentPane(new WinPanel(myImage));</b>
+<b class="nc"><i>65</i>&nbsp;        frame.setSize(625*3/2, 415*3/2);</b>
+<b class="nc"><i>66</i>&nbsp;        frame.setResizable(true);</b>
+<b class="nc"><i>67</i>&nbsp;        frame.setVisible(true);</b>
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;    }
+<i>70</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-18 22:46</div>
+</div>
+</body>
+</html>
