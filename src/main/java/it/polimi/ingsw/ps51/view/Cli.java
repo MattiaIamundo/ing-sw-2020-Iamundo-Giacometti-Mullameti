@@ -7,6 +7,7 @@ import it.polimi.ingsw.ps51.model.Coordinates;
 import it.polimi.ingsw.ps51.model.Level;
 import it.polimi.ingsw.ps51.model.Worker;
 import it.polimi.ingsw.ps51.model.gods.Gods;
+import it.polimi.ingsw.ps51.utility.InterruptibleInputStream;
 import it.polimi.ingsw.ps51.utility.MessageHandler;
 import org.javatuples.Pair;
 
@@ -14,6 +15,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -504,22 +506,22 @@ public class Cli extends Supporter {
     }
 
     public boolean undo(){
-        boolean ok = false;
         printer.println(printer.colorToAnsi(Color.CYAN)+"Do you confirm your choice, press Y for yes, or N to abort and redo your last action");
-        while (!ok) {
+        while (true) {
 
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            FutureTask<String> userChoice = new FutureTask<>(() -> reader.nextLine());
-            executor.execute(userChoice);
+            FutureTask<String> userChoice = new FutureTask<>(() -> {
+                BufferedReader in = new BufferedReader(new InputStreamReader(new InterruptibleInputStream(System.in)));
+                return in.readLine();
+            });
+            Thread thread = new Thread(userChoice, "ReaderForUserChoice");
+            thread.start();
             try {
                 switch (userChoice.get(5, TimeUnit.SECONDS).toLowerCase()){
                     case "y":
                         printer.println(printer.colorToAnsi(Color.GREEN)+"Decided to accept");
-                        executor.shutdown();
                         return true;
                     case "n":
                         printer.println(printer.colorToAnsi(Color.RED)+"Decided to redo");
-                        executor.shutdown();
                         return false;
                     default:
                         printer.println(printer.colorToAnsi(Color.RED)+"Invalid input, please redo your selection");
@@ -527,21 +529,11 @@ public class Cli extends Supporter {
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             } catch (TimeoutException e){
-                try {
-                    //System.setProperty("java.awt.headless", "false");
-                    Robot robot = new Robot();
-                    printer.println(printer.colorToAnsi(Color.RED)+"Time out, action automatically accepted");
-                    robot.keyPress(KeyEvent.VK_ENTER);
-                    robot.keyRelease(KeyEvent.VK_ENTER);
-                    executor.shutdown();
-                    return true;
-                } catch (AWTException awtException) {
-                    awtException.printStackTrace();
-                }
+                printer.println(printer.colorToAnsi(Color.RED)+"Time out, action automatically accepted");
+                thread.interrupt();
+                return true;
             }
-            executor.shutdown();
         }
-        return false;
     }
 
     public void ack(){

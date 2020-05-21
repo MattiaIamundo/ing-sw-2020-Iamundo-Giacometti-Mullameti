@@ -99,3 +99,5 @@ santorini.iml
 src/main/java/Cli-MANIFEST/
 
 src/main/java/Server-MANIFEST/
+
+src/main/java/it/polimi/ingsw/ps51/testMain.java
