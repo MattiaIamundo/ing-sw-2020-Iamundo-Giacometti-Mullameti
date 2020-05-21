@@ -1,8 +1,11 @@
 package it.polimi.ingsw.ps51;
 
 import it.polimi.ingsw.ps51.network.client.Client;
+import org.javatuples.Pair;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -16,14 +19,30 @@ public class StartApplicationClient {
         System.out.println("Welcome to our SANTORINI game!");
         int typeOfSupporter = 0;
         String url = "127.0.0.1";
+        int port = 20000;
 
-        if (args.length == 2) {
-            url = args[0];
-
-            if (Integer.parseInt(args[1]) == 0 || Integer.parseInt(args[1]) == 1){
-                typeOfSupporter = Integer.parseInt(args[1]);
-            }else {
-                typeOfSupporter = 0;
+        if (args.length % 2 == 0) {
+            List<Pair<String, String>> inputArgument = new ArrayList<>();
+            for (int i = 0; i < args.length; i++){
+                String command = args[i];
+                i++;
+                String value = args[i];
+                inputArgument.add(new Pair<>(command, value));
+            }
+            for (Pair<String, String> pair : inputArgument){
+                switch (pair.getValue0()){
+                    case "-ip":
+                        url = pair.getValue1();
+                        break;
+                    case "-p":
+                        port = Integer.parseInt(pair.getValue1());
+                        break;
+                    case "-i":
+                        typeOfSupporter = Integer.parseInt(pair.getValue1());
+                        break;
+                    default:
+                        System.out.println("\u001B[0;31m"+pair.getValue1()+" isn't a valid command\u001B[0;37m");
+                }
             }
         } else {
             System.out.println("Do you want to use a Cli or a Gui");
@@ -47,7 +66,7 @@ public class StartApplicationClient {
             }
         }
 
-        Client client = new Client(typeOfSupporter, url, 20000, 20000);
+        Client client = new Client(typeOfSupporter, url, port, 20000);
         Thread t = new Thread(client);
         t.start();
     }

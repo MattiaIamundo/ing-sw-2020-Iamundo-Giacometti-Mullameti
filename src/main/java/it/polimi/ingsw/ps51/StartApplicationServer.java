@@ -15,7 +15,12 @@ public class StartApplicationServer {
     public static void main(String[] args) {
         try {
             MainServer mainServer = new MainServer();
-            ServerSocket ss = new ServerSocket(mainServer, 20000);
+            ServerSocket ss;
+            if (args.length == 1){
+                ss = new ServerSocket(mainServer, Integer.parseInt(args[0]));
+            }else {
+                ss = new ServerSocket(mainServer, 20000);
+            }
             mainServer.setSS(ss);
             Thread t1 = new Thread(mainServer);
             t1.start();
