@@ -21,7 +21,7 @@ public class StartApplicationClient {
         String url = "127.0.0.1";
         int port = 20000;
 
-        if (args.length % 2 == 0) {
+        if (args.length % 2 == 0 && args.length != 0) {
             List<Pair<String, String>> inputArgument = new ArrayList<>();
             for (int i = 0; i < args.length; i++){
                 String command = args[i];

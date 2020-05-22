@@ -91,6 +91,7 @@ public class Room extends Observable<EventForServer> implements Runnable, RoomOb
         for( String s : this.nicknames) {
             this.mapOfNicknameAndServerInterface.get(s).closeConnection();
         }
+        System.out.println("The game room is shutting down...");
     }
 
     /**
