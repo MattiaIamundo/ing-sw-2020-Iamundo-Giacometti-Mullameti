@@ -307,8 +307,8 @@ public class Gui {
         for (int i = 0; i < maxCoordinate; i++) {
             for (int j = 0; j < maxCoordinate; j++) {
 
-                if(map.getSquare(j, i).getLevel().ordinal()>0)
-                    boardButtons[j][i].setLevel(map.getSquare(j, i).getLevel().ordinal()-1);
+                if (map.getSquare(j, i).getLevel().ordinal() > 0)
+                    boardButtons[j][i].setLevel(map.getSquare(j, i).getLevel().ordinal() - 1);
 
 
                 if (map.getSquare(j, i).isPresentWorker()) {
@@ -405,7 +405,7 @@ public class Gui {
 //                            chosenWorker.setBorder(null);
                             availableMoveButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));
                             //availableMoveButtons.get(i).setWorker(chosenWorker.getWorker().);
-                            chosenCoordinates=s.getValidChoicesMoves().get(i);
+                            chosenCoordinates = s.getValidChoicesMoves().get(i);
                             EventForServer eventMoveChoice = new MoveChoice(chosenCoordinates);
                             s.notify(eventMoveChoice);
                         }
@@ -418,6 +418,69 @@ public class Gui {
         //frame.setVisible(true);
     }
 
+    public void askBuild() {
+
+        mapPanel.setChat("BUILD");
+
+
+        List<BoardButton> availableBuildButtons = new ArrayList<>();
+        List<JLabel> availableLevels = new ArrayList<>();
+
+
+        for (Pair<Coordinates, List<Level>> validBuilds : s.getValidChoicesBuild()) {
+            availableBuildButtons.add(board.getSpecificButtons(validBuilds.getValue0().getX(), validBuilds.getValue0().getY()));
+        }
+
+        for (int i = 0; i < availableBuildButtons.size(); i++) {
+            availableBuildButtons.get(i).setBorder(BorderFactory.createLineBorder(new Color(255, 153, 0), 2));
+
+            availableBuildButtons.get(i).addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                    for (int i = 0; i < availableBuildButtons.size(); i++) {
+
+                        if (e.getSource() == availableBuildButtons.get(i)) {
+
+                            availableBuildButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));
+                            chosenPair = s.getValidChoicesBuild().get(i);
+
+                            for (Pair<Coordinates, List<Level>> validBuilds : s.getValidChoicesBuild()) {
+
+                                if (validBuilds.getValue0().equals(chosenPair.getValue0())) {
+
+                                    for (Level validLevel : validBuilds.getValue1()) {
+                                        mapPanel.setLevelImages(validLevel.ordinal() - 1);
+                                        availableLevels.add(mapPanel.getLevel(validLevel.ordinal() - 1));
+                                    }
+                                }
+                            }
+
+                            for (int j = 0; j < availableLevels.size(); j++) {
+                                availableLevels.get(j).addMouseListener(new MouseAdapter() {
+                                    @Override
+                                    public void mouseClicked(MouseEvent m) {
+                                        for (int j = 0; j < availableLevels.size(); j++) {
+                                            if (m.getSource() == availableLevels.get(j)) {
+
+                                                EventForServer eventBuild = new Build(new Pair<>(chosenPair.getValue0(), Level.valueOf(availableLevels.get(j).getText().toUpperCase())));
+                                                s.notify(eventBuild);
+
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+            });
+
+
+        }
+
+
+    }
+
 
 }
-
