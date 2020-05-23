@@ -11,20 +11,13 @@ import it.polimi.ingsw.ps51.utility.InterruptibleInputStream;
 import it.polimi.ingsw.ps51.utility.MessageHandler;
 import org.javatuples.Pair;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class Cli extends Supporter {
 
@@ -155,6 +148,11 @@ public class Cli extends Supporter {
                         case "END":
                             endGame();
                             isFinish = true;
+                            break;
+                        case "COLOR":
+                            Color colorChoice = chooseColor();
+                            ColorChoice colorChoiceEvent = new ColorChoice(colorChoice);
+                            notify(colorChoiceEvent);
                             break;
                         default:
                             ok = false;
@@ -586,6 +584,44 @@ public class Cli extends Supporter {
             }
         }
         return coordinate;
+    }
+
+    public Color chooseColor() {
+        boolean ok = false;
+        String choice;
+        Color userChoice = getAvailableColors().get(0);
+
+        while (!ok) {
+
+            printer.println(printer.colorToAnsi(Color.GREEN) + "What color do you want?");
+            for (Color c: getAvailableColors()) {
+                printer.println(printer.colorToAnsi(c) + c.toString().toUpperCase());
+            }
+
+            printer.println(printer.colorToAnsi(Color.GREEN) + "Write the color you want:");
+            choice = reader.nextLine();
+            choice = choice.toUpperCase();
+
+            for (Color c: getAvailableColors()) {
+                if (choice.equals(c.toString().toUpperCase())) {
+                    userChoice = c;
+                    ok = true;
+                }
+            }
+
+            if (!ok) {
+                try {
+                    Color.valueOf(choice);
+                    printer.println(printer.colorToAnsi(Color.RED) + "This color exist but not in the available colors!!");
+                } catch (IllegalArgumentException e) {
+                    printer.println(printer.colorToAnsi(Color.RED) + "What your typed is not a color!");
+                }
+                printer.println(printer.colorToAnsi(Color.RED) + "Write a color now please!!");
+            }
+
+        }
+
+        return userChoice;
     }
 
 }

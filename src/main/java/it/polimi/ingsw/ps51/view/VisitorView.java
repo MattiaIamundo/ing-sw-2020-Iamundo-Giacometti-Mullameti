@@ -124,6 +124,7 @@ public class VisitorView implements VisitorClient {
 
     @Override
     public String visitChooseColor(ChooseColor event) {
+        s.setAvailableColors(event.getAvailableColor());
         return "COLOR";
     }
 

@@ -30,6 +30,7 @@ abstract public class Supporter extends Observable<EventForServer> implements Ru
     private String decision;
     private String ack;
     private List<Pair<String, Gods>> chosenGods;
+    private List<Color> availableColors;
 
     public Supporter() {
         typeOfEvent = "DEFAULT";
@@ -45,6 +46,7 @@ abstract public class Supporter extends Observable<EventForServer> implements Ru
         decision = "";
         ack = "";
         chosenGods = new ArrayList<>();
+        availableColors = new ArrayList<>();
     }
 
     public void setTypeOfEvent(String typeOfEvent) {
@@ -94,4 +96,11 @@ abstract public class Supporter extends Observable<EventForServer> implements Ru
         return chosenGods;
     }
     public void setChosenGods(List<Pair<String, Gods>> chosenGods){this.chosenGods=chosenGods;}
+
+    public List<Color> getAvailableColors() {
+        return this.availableColors;
+    }
+    public void setAvailableColors(List<Color> availableColors) {
+        this.availableColors = availableColors;
+    }
 }
