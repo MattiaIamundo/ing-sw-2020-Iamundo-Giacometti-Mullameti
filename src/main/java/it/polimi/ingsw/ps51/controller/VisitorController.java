@@ -32,6 +32,11 @@ public class VisitorController implements VisitorServer {
     }
 
     @Override
+    public void visitColorChoice(ColorChoice event) {
+        //TODO handle the color chosen by the client, putting that into the player class as an attribute
+    }
+
+    @Override
     public void visitDecisionTaken(DecisionTaken event) {
         ((GodControllerWithDecision) game.getActualController()).decisionManager(event.isDecided());
     }

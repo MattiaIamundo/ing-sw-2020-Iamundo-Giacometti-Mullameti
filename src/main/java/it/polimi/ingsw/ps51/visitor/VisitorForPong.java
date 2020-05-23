@@ -1,6 +1,7 @@
 package it.polimi.ingsw.ps51.visitor;
 
 import it.polimi.ingsw.ps51.events.events_for_server.*;
+import it.polimi.ingsw.ps51.view.Color;
 
 /**
  * This interface represents the visitor which handles the game phase
@@ -60,4 +61,10 @@ public interface VisitorForPong {
      * @param event the number of player event received from the client
      */
     void visitNumberOfPlayers(NumberOfPlayers event);
+
+    /**
+     * To handle the {@link ColorChoice} event
+     * @param event the color choice event received from the client
+     */
+    void visitColorChoice(ColorChoice event);
 }

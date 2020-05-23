@@ -39,4 +39,6 @@ public interface VisitorClient {
     String visitGameIsStarting(GameIsStarting event);
 
     String visitTurnIsEnd(TurnIsEnd event);
+
+    String visitChooseColor(ChooseColor event);
 }

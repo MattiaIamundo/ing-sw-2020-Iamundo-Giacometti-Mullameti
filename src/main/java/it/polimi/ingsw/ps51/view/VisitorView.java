@@ -121,5 +121,11 @@ public class VisitorView implements VisitorClient {
     public String visitTurnIsEnd(TurnIsEnd event) {
         return "TURN_IS_END";
     }
+
+    @Override
+    public String visitChooseColor(ChooseColor event) {
+        return "COLOR";
+    }
+
 }
 

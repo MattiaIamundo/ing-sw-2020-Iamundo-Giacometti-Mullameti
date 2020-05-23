@@ -70,5 +70,9 @@ public class VisitorPong implements VisitorForPong {
         socketConnection.setOnServerNumberOfPlayer(event.getPlayerNumber());
     }
 
+    @Override
+    public void visitColorChoice(ColorChoice event) {
+        socketConnection.getGameRoom().notify(event);
+    }
 
 }

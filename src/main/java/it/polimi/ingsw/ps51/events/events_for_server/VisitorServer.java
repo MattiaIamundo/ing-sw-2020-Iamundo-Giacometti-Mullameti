@@ -18,4 +18,6 @@ public interface VisitorServer {
     void visitWorkerChoice(WorkerChoice event);
 
     void visitWorkerPosition(WorkerPosition event);
+
+    void visitColorChoice(ColorChoice event);
 }
