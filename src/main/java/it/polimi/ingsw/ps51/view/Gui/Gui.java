@@ -307,8 +307,8 @@ public class Gui {
         for (int i = 0; i < maxCoordinate; i++) {
             for (int j = 0; j < maxCoordinate; j++) {
 
-                if (map.getSquare(j, i).getLevel().ordinal() > 0)
-                    boardButtons[j][i].setLevel(map.getSquare(j, i).getLevel().ordinal() - 1);
+                if(map.getSquare(j, i).getLevel().ordinal()>0)
+                    boardButtons[j][i].setLevel(map.getSquare(j, i).getLevel().ordinal()-1);
 
 
                 if (map.getSquare(j, i).isPresentWorker()) {
@@ -405,7 +405,7 @@ public class Gui {
 //                            chosenWorker.setBorder(null);
                             availableMoveButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));
                             //availableMoveButtons.get(i).setWorker(chosenWorker.getWorker().);
-                            chosenCoordinates = s.getValidChoicesMoves().get(i);
+                            chosenCoordinates=s.getValidChoicesMoves().get(i);
                             EventForServer eventMoveChoice = new MoveChoice(chosenCoordinates);
                             s.notify(eventMoveChoice);
                         }
@@ -463,7 +463,7 @@ public class Gui {
                                         for (int j = 0; j < availableLevels.size(); j++) {
                                             if (m.getSource() == availableLevels.get(j)) {
 
-                                                EventForServer eventBuild = new Build(new Pair<>(chosenPair.getValue0(), Level.valueOf(availableLevels.get(j).getText().toUpperCase())));
+                                                EventForServer  eventBuild = new Build(new Pair<>(chosenPair.getValue0(),Level.valueOf(availableLevels.get(j).getText().toUpperCase())));
                                                 s.notify(eventBuild);
 
                                             }
@@ -483,4 +483,76 @@ public class Gui {
     }
 
 
+    public void makeDecision(){
+        mapPanel.makeDecision(s.getDecision());
+
+        JButton yes = mapPanel.getYes();
+        JButton no = mapPanel.getNo();
+        yes.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource() == yes) {
+                    EventForServer eventDecisionTaken = new DecisionTaken(true);
+                    s.notify(eventDecisionTaken);
+                }
+            }
+        });
+
+        no.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource() == no) {
+                    EventForServer eventDecisionTaken = new DecisionTaken(false);
+                    s.notify(eventDecisionTaken);
+                }
+            }
+        });
+    }
+    public void ack(){
+        mapPanel.setChat("Your "+s.getOperationConfirmed()+" event is received by server...");
+    }
+    public void unsuccessfulOperation(){
+        mapPanel.setChat("Sorry , something went wrong server side..."
+        +"Repeat your last action !");
+    }
+    public void winGame() throws IOException {
+        frame.getContentPane().removeAll();
+        frame.setSize(625*3/2, 415*3/2);
+        Image winImage;
+
+        winImage = ImageIO.read(new File("src/main/resources/winBackground.png"));
+
+
+        WinPanel winPanel = new WinPanel(winImage);
+
+        frame.getContentPane().add(winPanel);
+        frame.setVisible(true);
+    }
+
+    public void loseGame(){
+        frame.getContentPane().removeAll();
+        frame.setSize(625*3/2, 415*3/2);
+
+        LosePanel losePanel = new LosePanel();
+
+        frame.getContentPane().add(losePanel);
+        frame.setVisible(true);
+    }
+    public void disconnectGame(){}
+
+    public void endGame(){}
+
+    public void outOfRoom() {}
+
+
+    public void turnIsEnd() {
+        mapPanel.setChat( "Your turn has ended !");
+    }
+
+    public void gameIsStarting(){
+        mapPanel.setChat( "The game is started!!");
+    }
+
+
 }
+
