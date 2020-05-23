@@ -77,16 +77,16 @@ public class MainGui  extends Supporter {
                             break;
 
                         case "WORKER" :
-
+                            gui.chooseWorker();
                             break;
                         case "MOVE":
-
+                            gui.askMove();
                             break;
                         case "BUILD":
-
+                            
                             break;
                         case "MAP":
-
+                            gui.updateMap();
                             break;
                         case "DECISION" :
 
@@ -126,7 +126,7 @@ public class MainGui  extends Supporter {
                             break;
 
                     }
-                } catch (InterruptedException | TimeoutException | ExecutionException | IOException e) {
+                } catch (InterruptedException | TimeoutException | OutOfMapException | ExecutionException | IOException e) {
                     // e.printStackTrace();
                     ok=false;
                 }

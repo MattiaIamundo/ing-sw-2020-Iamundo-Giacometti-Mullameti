@@ -34,18 +34,18 @@ public class BoardButton extends JButton {
             level[k].setPreferredSize(new Dimension(865/30,830/30));
             level[k].setVisible(false);
             gbc.gridx = 0;
-            gbc.gridy = k;
+            gbc.gridy = 4-k;
             buttonContainer.add(level[k] ,gbc);
         }
 
         ImageIcon dome = new ImageIcon((new ImageIcon("src/main/resources/Levels/dome.png").getImage().getScaledInstance(865/50,830/50,Image.SCALE_DEFAULT)));
-        level[0].setIcon(dome);
+        level[3].setIcon(dome);
         ImageIcon third = new ImageIcon((new ImageIcon("src/main/resources/Levels/third.png").getImage().getScaledInstance(865/30,830/30,Image.SCALE_DEFAULT)));
-        level[1].setIcon(third);
+        level[2].setIcon(third);
         ImageIcon second = new ImageIcon((new ImageIcon("src/main/resources/Levels/second.png").getImage().getScaledInstance(865/30,830/30,Image.SCALE_DEFAULT)));
-        level[2].setIcon(second);
+        level[1].setIcon(second);
         ImageIcon first = new ImageIcon((new ImageIcon("src/main/resources/Levels/first.png").getImage().getScaledInstance(865/30,830/30,Image.SCALE_DEFAULT)));
-        level[3].setIcon(first);
+        level[0].setIcon(first);
 
         worker = new JLabel();
         worker.setPreferredSize(new Dimension(865*3/60,830*3/30));
@@ -59,8 +59,8 @@ public class BoardButton extends JButton {
 
     }
 
-    public void setLevel(String levelName) {
-
+    public void setLevel(int nr) {
+        level[nr].setVisible(true);
     }
 
     public void setWorker(ImageIcon icon) {

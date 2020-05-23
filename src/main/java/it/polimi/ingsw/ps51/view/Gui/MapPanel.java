@@ -181,11 +181,15 @@ public class MapPanel extends JPanel {
 
         levelContainer = new Container();
         levelContainer.setLayout(new GridBagLayout());
-        levelContainer.setSize(120,340);
+        levelContainer.setSize(120,400);
 
         levels = new JLabel[4];
         levelImages = new ImageIcon[4];
 
+        levels[0] = new JLabel("First");
+        levels[1] = new JLabel("Second");
+        levels[2] = new JLabel("Third");
+        levels[3] = new JLabel("Dome");
 
 
         levelImages[0] = new ImageIcon((new ImageIcon("src/main/resources/Levels/"+ Level.getByValue(1)+".png").getImage().getScaledInstance(235/2,215/2,Image.SCALE_DEFAULT)));
@@ -195,10 +199,12 @@ public class MapPanel extends JPanel {
 
         for(int i=0 ; i<4 ; i++) {
 
-            levels[i] = new JLabel();
+
             levels[i].setIcon(levelImages[i]);
             levels[i].setHorizontalAlignment(SwingConstants.CENTER);
             levels[i].setVerticalAlignment(SwingConstants.CENTER);
+            levels[i].setHorizontalTextPosition(SwingConstants.CENTER);
+            levels[i].setVerticalTextPosition(SwingConstants.BOTTOM);
             levels[i].setSize(levels[i].getIcon().getIconWidth(),levels[i].getIcon().getIconHeight());
 
         }
@@ -254,7 +260,7 @@ public class MapPanel extends JPanel {
         return levelImages[nr];
     }
 
-   /* public static void main(String[] args) throws IOException {
+    /*public static void main(String[] args) throws IOException {
 
         JFrame frame = new JFrame("Start");
         BufferedImage myImage = ImageIO.read(new File("src/main/resources/SantoriniBoard.png"));
