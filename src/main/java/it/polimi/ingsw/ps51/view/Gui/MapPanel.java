@@ -1,5 +1,7 @@
 package it.polimi.ingsw.ps51.view.Gui;
 
+import it.polimi.ingsw.ps51.model.Level;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -8,171 +10,43 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class MapPanel extends JPanel {
 
     GridBagConstraints gbc = new GridBagConstraints();
-    BoardContainer boardContainer ;
+
+    private BoardContainer boardContainer ;
     private Image background;
-
-
-    private JButton[][] squareButtons;
-    private Container buttonContainer;
 
     private JLabel chat ;
 
-    private JLabel santorini;
-
+    private Container[] playerContainer;
     private JLabel[] godPic;
     private JLabel[] playerName;
-
-    private JLabel[] workerImages;
-    private JLabel[] levelImages;
-
-    private JLabel [] emptySpaces;
-
+    private Container workerContainer;
+    private ImageIcon[] workerImages;
+    private JLabel[] workers;
+    private Container levelContainer;
+    private JLabel[] levels;
+    private ImageIcon[] levelImages;
     private JButton[] button;
 
     public MapPanel(Image background) {
 
+        this.setLayout(null);
         this.background = background;
-        this.setLayout(new GridBagLayout());
+
         boardContainer = new BoardContainer();
-        defineSantoriniText();
-        defineButton();
+        boardContainer.setLocation(395, 50);
+        boardContainer.setSize(865 * 2 / 3, 880 * 2 / 3);
+        this.add(boardContainer);
+
         defineChatLabel();
+        defineButton();
         definePlayerContainer();
-        defineWorkerImages();
+        defineWorkerContainer();
         defineLevelImages();
-        defineEmptySpaces();
-
-        //ADD LEVEL
-
-        gbc.gridx = 2;
-        gbc.gridy = 4;
-        add(levelImages[3], gbc);
-
-        gbc.gridx = 2;
-        gbc.gridy = 5;
-        add(levelImages[2], gbc);
-
-        gbc.gridx = 2;
-        gbc.gridy = 6;
-        add(levelImages[1], gbc);
-
-        gbc.gridx = 2;
-        gbc.gridy = 7;
-        add(levelImages[0], gbc);
-
-        //ADD GOD BUTTON , EMPTY SPACES
-        gbc.gridx = 2;
-        gbc.gridy = 2;
-        add(button[2], gbc);
-
-        gbc.gridx = 10;
-        gbc.gridy = 1;
-        add(button[3], gbc);
-
-        gbc.gridx = 10;
-        gbc.gridy = 5;
-        add(button[4], gbc);
-
-
-        gbc.gridx = 10;
-        gbc.gridy = 3;
-        add(emptySpaces[0], gbc);
-
-        gbc.gridx = 2;
-        gbc.gridy = 0;
-        add(emptySpaces[1], gbc);
-
-
-        gbc.gridx = 10;
-        gbc.gridy = 0;
-        add(emptySpaces[2], gbc);
-
-        //ADD BUTTON CONTAINER
-
-        gbc.gridwidth = 7;
-        gbc.gridheight = 8;
-
-        gbc.gridx = 3;
-        gbc.gridy = 0;
-        add(boardContainer, gbc);
-
-
-        //ADD UNDO , EXIT BUTTON AND SANTORINI
-        gbc.gridwidth = 2;
-        gbc.gridheight = 1;
-
-        gbc.fill = GridBagConstraints.BOTH;
-
-        gbc.gridx = 0;
-        gbc.gridy = 8;
-        add(button[0], gbc);
-
-        gbc.gridx = 11;
-        gbc.gridy = 8;
-        add(button[1], gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        add(santorini, gbc);
-
-        //ADD PLAYER'S NAMES
-
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        add(playerName[0], gbc);
-
-        gbc.gridx = 11;
-        gbc.gridy = 0;
-        add(playerName[1], gbc);
-
-        gbc.gridx = 11;
-        gbc.gridy = 4;
-        add(playerName[2], gbc);
-
-        //ADD GOD PICTURES
-
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.gridwidth = 2;
-        gbc.gridheight = 3;
-
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        add(godPic[0], gbc);
-
-        gbc.gridx = 11;
-        gbc.gridy = 1;
-        add(godPic[1], gbc);
-
-        gbc.gridx = 11;
-        gbc.gridy = 5;
-        add(godPic[2], gbc);
-
-
-        //ADD CHAT
-
-        gbc.gridwidth =9;
-        gbc.gridheight = 1;
-        gbc.gridx = 2;
-        gbc.gridy = 8;
-        add(chat, gbc);
-
-        //ADD WORKERS
-
-        gbc.gridwidth = 1;
-        gbc.gridheight = 2;
-
-        gbc.gridx = 1;
-        gbc.gridy = 6;
-
-        add(workerImages[0], gbc);
-        gbc.gridx = 0;
-        gbc.gridy = 5;
-        add(workerImages[1], gbc);
     }
 
     @Override
@@ -181,26 +55,10 @@ public class MapPanel extends JPanel {
 
         g.drawImage(background, 0, 0,this.getWidth(),this.getHeight(), this);
     }
-    private void defineEmptySpaces(){
-        emptySpaces = new JLabel[3];
-
-        for(int i=0 ; i<3 ; i++) {
-
-            emptySpaces[i] = new JLabel();
-
-            emptySpaces[i].setHorizontalAlignment(SwingConstants.CENTER);
-            emptySpaces[i].setVerticalAlignment(SwingConstants.CENTER);
-            emptySpaces[i].setPreferredSize(new Dimension(1300/13,700/9));
-
-        }
-
-        ImageIcon cloud1 = new ImageIcon((new ImageIcon("src/main/resources/Levels/cloudright.png").getImage().getScaledInstance(1300/13,700/9,Image.SCALE_DEFAULT)));
-        emptySpaces[1].setIcon(cloud1);
-        ImageIcon cloud2 = new ImageIcon((new ImageIcon("src/main/resources/Levels/cloudleft.png").getImage().getScaledInstance(1300/13,700/9,Image.SCALE_DEFAULT)));
-        emptySpaces[2].setIcon(cloud2);
-    }
     private void defineChatLabel(){
         chat = new JLabel();
+        chat.setLocation(395,650);
+        chat.setSize(865 * 2 / 3, 70);
         chat.setText("It's your Turn !!");
         chat.setHorizontalAlignment(SwingConstants.CENTER);
         chat.setVerticalAlignment(SwingConstants.CENTER);
@@ -208,76 +66,15 @@ public class MapPanel extends JPanel {
         chat.setFont(new Font ("Times new Roman" , Font.ITALIC , 18));
         chat.setBackground(new Color(51,204,255));
         chat.setBorder(BorderFactory.createMatteBorder(5,5,5,5, new Color(0 ,0 ,153)));
-
-
-    }
-    private void definePlayerContainer(){
-        godPic = new JLabel[3];
-        playerName = new JLabel[3];
-
-        for (int i=0 ; i<3 ; i++){
-            playerName[i] = new JLabel();
-            playerName[i].setHorizontalAlignment(SwingConstants.CENTER);
-            playerName[i].setVerticalAlignment(SwingConstants.CENTER);
-            playerName[i].setFont(new Font ("Times new Roman" , Font.BOLD , 36));
-        }
-
-        playerName[0].setText("Meri");
-        playerName[0].setForeground(new Color(204,0 , 0));
-
-        playerName[1].setText("Luca");
-        playerName[1].setForeground(Color.GREEN);
-
-
-        playerName[2].setText("Mattia");
-        playerName[2].setForeground(Color.BLUE);
-
-
-        for(int i=0 ; i<3 ; i++) {
-
-            godPic[i] = new JLabel();
-
-            godPic[i].setHorizontalAlignment(SwingConstants.CENTER);
-            godPic[i].setVerticalAlignment(SwingConstants.CENTER);
-            godPic[i].setPreferredSize(new Dimension(1300*3/26,700*3/9));
-
-        }
-        ImageIcon godImage1 = new ImageIcon((new ImageIcon("src/main/resources/GodCards/apollo.png").getImage().getScaledInstance(1300*3/26,700*3/9,Image.SCALE_DEFAULT)));
-        godPic[0].setIcon(godImage1);
-        ImageIcon godImage2 = new ImageIcon((new ImageIcon("src/main/resources/GodCards/pan.png").getImage().getScaledInstance(1300*3/26,700*3/9,Image.SCALE_DEFAULT)));
-        godPic[1].setIcon(godImage2);
-        ImageIcon godImage3 = new ImageIcon((new ImageIcon("src/main/resources/GodCards/artemis.png").getImage().getScaledInstance(1300*3/26,700*3/9,Image.SCALE_DEFAULT)));
-        godPic[2].setIcon(godImage3);
+        this.add(chat);
 
     }
-    private void defineLevelImages(){
 
-        levelImages = new JLabel[4];
-
-        for(int i=0 ; i<4 ; i++) {
-
-            levelImages[i] = new JLabel();
-
-            levelImages[i].setHorizontalAlignment(SwingConstants.CENTER);
-            levelImages[i].setVerticalAlignment(SwingConstants.CENTER);
-            levelImages[i].setPreferredSize(new Dimension(1300/13,700/9));
-        }
-
-        ImageIcon levelImages1 = new ImageIcon((new ImageIcon("src/main/resources/Levels/first.png").getImage().getScaledInstance(1300*2/39,700*2/27,Image.SCALE_DEFAULT)));
-        levelImages[0].setIcon(levelImages1);
-        ImageIcon levelImages2 = new ImageIcon((new ImageIcon("src/main/resources/Levels/second.png").getImage().getScaledInstance(1300*2/39,700*2/27,Image.SCALE_DEFAULT)));
-        levelImages[1].setIcon(levelImages2);
-        ImageIcon levelImages3 = new ImageIcon((new ImageIcon("src/main/resources/Levels/third.png").getImage().getScaledInstance(1300*2/39,700*2/27,Image.SCALE_DEFAULT)));
-        levelImages[2].setIcon(levelImages3);
-        ImageIcon levelImages4 = new ImageIcon((new ImageIcon("src/main/resources/Levels/dome.png").getImage().getScaledInstance(1300/39,700/27,Image.SCALE_DEFAULT)));
-        levelImages[3].setIcon(levelImages4);
-
-    }
     private void defineButton(){
 
-        button = new JButton[5];
+        button = new JButton[2];
 
-        for (int i=0 ; i<5 ;i++) {
+        for (int i=0 ; i<2 ;i++) {
             button[i] = new JButton();
             button[i].setVerticalTextPosition(SwingConstants.CENTER);
             button[i].setHorizontalTextPosition(SwingConstants.CENTER);
@@ -292,56 +89,132 @@ public class MapPanel extends JPanel {
         ImageIcon undoImage = new ImageIcon((new ImageIcon("src/main/resources/Buttons/btn_coral.png").getImage().getScaledInstance(1300 * 2 / 13, 700 / 9, Image.SCALE_DEFAULT)));
         button[0].setIcon(undoImage);
         button[0].setText("UNDO");
+        button[0].setLocation(50,650);
+        this.add(button[0]);
         ImageIcon exitImage = new ImageIcon((new ImageIcon("src/main/resources/Buttons/btn_blue.png").getImage().getScaledInstance(1300 * 2 / 13, 700 / 9, Image.SCALE_DEFAULT)));
         button[1].setIcon(exitImage);
         button[1].setText("EXIT");
-        ImageIcon buttonImage = new ImageIcon((new ImageIcon("src/main/resources/Buttons/btn_god.png").getImage().getScaledInstance(1300  / 26, 700 / 18, Image.SCALE_DEFAULT)));
-        for(int i=2 ; i<5 ; i++) {
-            button[i].setIcon(buttonImage);
-            button[i].addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    for (int i = 2; i < 5; i++) {
-                        if (e.getSource() == button[i]) {
+        button[1].setLocation(1100,650);
+        this.add(button[1]);
 
-                            if(godPic[i-2].isVisible())
-                                godPic[i-2].setVisible(false);
-                            else
-                                godPic[i-2].setVisible(true);
+    }
 
-                        }
-                    }
-                }
-            });
+    private void definePlayerContainer(){
+
+        playerContainer = new Container[3];
+        godPic = new JLabel[3];
+        playerName = new JLabel[3];
+
+        for (int i=0 ; i<3 ; i++){
+            playerContainer[i] = new Container();
+            playerContainer[i].setSize(200,300);
+            playerContainer[i].setLayout(new GridBagLayout());
+            playerName[i] = new JLabel();
+            playerName[i].setSize(200,500);
+            playerName[i].setHorizontalAlignment(SwingConstants.CENTER);
+            playerName[i].setVerticalAlignment(SwingConstants.CENTER);
+            playerName[i].setFont(new Font ("Times new Roman" , Font.BOLD , 36));
+            //playerName[i].setText("Meri");
+            godPic[i] = new JLabel();
+            godPic[i].setHorizontalAlignment(SwingConstants.CENTER);
+            godPic[i].setVerticalAlignment(SwingConstants.CENTER);
+            godPic[i].setPreferredSize(new Dimension(1300*3/26,700*3/9));
+
+            gbc.anchor = 10;
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            playerContainer[i].add(playerName[i] , gbc);
+            gbc.gridy = 1;
+            playerContainer[i].add(godPic[i] , gbc);
 
         }
-    }
-    private void defineWorkerImages(){
 
-        workerImages = new JLabel[2];
+        playerName[0].setForeground(new Color(204,0 , 0));
+        playerName[1].setForeground(Color.GREEN);
+        playerName[2].setForeground(Color.BLUE);
+
+        /*ImageIcon godImage1 = new ImageIcon((new ImageIcon("src/main/resources/GodCards/apollo.png").getImage().getScaledInstance(1300*3/26,700*3/9,Image.SCALE_DEFAULT)));
+        godPic[0].setIcon(godImage1);
+        ImageIcon godImage2 = new ImageIcon((new ImageIcon("src/main/resources/GodCards/pan.png").getImage().getScaledInstance(1300*3/26,700*3/9,Image.SCALE_DEFAULT)));
+        godPic[1].setIcon(godImage2);
+        ImageIcon godImage3 = new ImageIcon((new ImageIcon("src/main/resources/GodCards/artemis.png").getImage().getScaledInstance(1300*3/26,700*3/9,Image.SCALE_DEFAULT)));
+        godPic[2].setIcon(godImage3);*/
+
+        playerContainer[0].setLocation(50,50);
+        this.add(playerContainer[0]);
+        playerContainer[1].setLocation(1100,50);
+        this.add(playerContainer[1]);
+        playerContainer[2].setLocation(1100,350);
+        this.add(playerContainer[2]);
+
+    }
+
+    private void defineWorkerContainer(){
+
+        workerContainer = new Container();
+        workerContainer.setLayout(new GridBagLayout());
+        workerContainer.setSize(200,700*2/9);
+        workerImages = new ImageIcon[2];
+
+
+        workers = new JLabel[2];
 
         for(int i=0 ; i<2 ; i++) {
 
-            workerImages[i] = new JLabel();
-
-            workerImages[i].setHorizontalAlignment(SwingConstants.CENTER);
-            workerImages[i].setVerticalAlignment(SwingConstants.CENTER);
-            workerImages[i].setPreferredSize(new Dimension(1300/13,700*2/9));
-
+            workers[i] = new JLabel();
+            workers[i].setHorizontalAlignment(SwingConstants.CENTER);
+            workers[i].setVerticalAlignment(SwingConstants.CENTER);
+            workers[i].setPreferredSize(new Dimension(1300/13,700*2/9));
+            workerImages[i] =  new ImageIcon((new ImageIcon("src/main/resources/Workers/red_female_worker.png").getImage().getScaledInstance(1300/13,700*2/9,Image.SCALE_DEFAULT)));
+            workers[i].setIcon(workerImages[i]);
+            gbc.gridx=i;
+            gbc.gridy=0;
+            workerContainer.add(workers[i],gbc);
         }
-        ImageIcon workerImages1 = new ImageIcon((new ImageIcon("src/main/resources/Workers/red_female_worker.png").getImage().getScaledInstance(1300/13,700*2/9,Image.SCALE_DEFAULT)));
-        workerImages[0].setIcon(workerImages1);
-        ImageIcon workerImages2 = new ImageIcon((new ImageIcon("src/main/resources/Workers/red_male_worker.png").getImage().getScaledInstance(1300/13,700*2/9,Image.SCALE_DEFAULT)));
-        workerImages[1].setIcon(workerImages2);
+
+        workerContainer.setLocation(50 , 400);
+        this.add(workerContainer);
 
     }
-    private void defineSantoriniText(){
 
-        santorini = new JLabel("Santorini");
-        santorini.setVerticalAlignment(0);
-        santorini.setHorizontalAlignment(0);
-        santorini.setForeground(Color.WHITE);
-        santorini.setFont(new Font("Times new Roman" ,Font.BOLD , 42));
+    private void defineLevelImages(){
+
+        levelContainer = new Container();
+        levelContainer.setLayout(new GridBagLayout());
+        levelContainer.setSize(120,340);
+
+        levels = new JLabel[4];
+        levelImages = new ImageIcon[4];
+
+
+
+        levelImages[0] = new ImageIcon((new ImageIcon("src/main/resources/Levels/"+ Level.getByValue(1)+".png").getImage().getScaledInstance(235/2,215/2,Image.SCALE_DEFAULT)));
+        levelImages[1] = new ImageIcon((new ImageIcon("src/main/resources/Levels/"+ Level.getByValue(2)+".png").getImage().getScaledInstance(200/2,170/2,Image.SCALE_DEFAULT)));
+        levelImages[2] = new ImageIcon((new ImageIcon("src/main/resources/Levels/"+ Level.getByValue(3)+".png").getImage().getScaledInstance(200/2,110/2,Image.SCALE_DEFAULT)));
+        levelImages[3] = new ImageIcon((new ImageIcon("src/main/resources/Levels/"+ Level.getByValue(4)+".png").getImage().getScaledInstance(120/2,85/2,Image.SCALE_DEFAULT)));
+
+        for(int i=0 ; i<4 ; i++) {
+
+            levels[i] = new JLabel();
+            levels[i].setIcon(levelImages[i]);
+            levels[i].setHorizontalAlignment(SwingConstants.CENTER);
+            levels[i].setVerticalAlignment(SwingConstants.CENTER);
+            levels[i].setSize(levels[i].getIcon().getIconWidth(),levels[i].getIcon().getIconHeight());
+
+        }
+
+
+
+        gbc.insets = new Insets(5,0,5,0);
+
+        for(int i=0 ; i<4 ; i++) {
+
+            gbc.gridx = 0;
+            gbc.gridy = 4-i;
+            levelContainer.add(levels[i] , gbc);
+        }
+        levelContainer.setLocation(260 , 300);
+        this.add(levelContainer);
 
     }
 
@@ -350,26 +223,45 @@ public class MapPanel extends JPanel {
     }
 
     public void setWorkerImages(int nr ){
-        workerImages[nr].setBorder(BorderFactory.createLineBorder(Color.RED , 2));
+        workers[nr].setBorder(BorderFactory.createLineBorder(Color.RED , 2));
     }
-    public JLabel getWorkerImages(int nr){
+    public ImageIcon getWorkerImages(int nr){
         return workerImages[nr];
     }
 
-    public JButton[][] getSquareButtons(){return squareButtons;}
-
-    public Container getButtonContainer() {
-        return buttonContainer;
+    public BoardContainer getBoardContainer() {
+        return boardContainer;
     }
 
-    public static void main(String[] args) throws IOException {
+    public void setGodPic(String god , int index) {
+        ImageIcon godImage = new ImageIcon((new ImageIcon("src/main/resources/GodCards/"+god.toLowerCase()+".png").getImage().getScaledInstance(1300*3/30,700*3/10,Image.SCALE_DEFAULT)));
+        godPic[index].setIcon(godImage);
+        godPic[index].setVisible(true);
+    }
+    public void setPlayerName(String name , int index){
+        playerName[index].setText(name);
+    }
+
+
+    public void setLevelImages(int nr ){
+        levels[nr].setBorder(BorderFactory.createLineBorder(Color.RED , 2));
+    }
+
+    public JLabel getLevel(int nr){
+        return levels[nr];
+}
+    public ImageIcon getLevelImages(int nr){
+        return levelImages[nr];
+    }
+
+   /* public static void main(String[] args) throws IOException {
 
         JFrame frame = new JFrame("Start");
         BufferedImage myImage = ImageIO.read(new File("src/main/resources/SantoriniBoard.png"));
         frame.setContentPane(new MapPanel(myImage));
-        frame.setSize(1400, 800);
-        frame.setResizable(true);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setUndecorated(true);
         frame.setVisible(true);
 
-    }
+    }*/
 }
