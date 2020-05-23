@@ -11,9 +11,7 @@ public class LogInPanel extends JPanel {
 
     private JLabel nicknameError;
     private JButton submitButton;
-    private BufferedImage image;
     private Container container;
-    private boolean nicknameErr;
     private JLabel welcome;
     private JLabel enterNickname;
     private JTextField nickname;
@@ -40,7 +38,8 @@ public class LogInPanel extends JPanel {
         gbc.gridy = 0;
         container.add(enterNickname , gbc);
 
-        nickname = new JTextField(15);
+        nickname = new JTextField();
+        nickname.setPreferredSize(new Dimension(300,30));
         nickname.setFont(new Font("Times New Roman", Font.ITALIC, 24));
         nickname.setForeground(new Color(102,0,153));
 
@@ -92,15 +91,9 @@ public class LogInPanel extends JPanel {
 
     public void setNicknameError(Boolean err) {
         nicknameError.setVisible(err);
-        nicknameErr = !err;
     }
 
-
-    public boolean getNicknameErr() {
-        return nicknameErr;
-    }
-
-  /*  public static void main(String[] args) {
+   /* public static void main(String[] args) {
         JFrame frame = new JFrame("Start");
         LogInPanel logInPanel = new LogInPanel();
         frame.add(logInPanel);

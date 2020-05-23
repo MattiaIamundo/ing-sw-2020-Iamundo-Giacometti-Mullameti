@@ -35,10 +35,9 @@ public class Gui {
 
     private BufferedImage myImage;
     private String player;
-    private BoardButton chosenButton;
     private Coordinates chosenCoordinates;
     private Pair<Coordinates, List<Level>> chosenPair;
-    private Level chosenLevel;
+
 
     public Gui(Supporter supporter) {
         s = supporter;
@@ -77,13 +76,13 @@ public class Gui {
     public void logIn() {
 
         frame.getContentPane().removeAll();
-        frame.setSize(635, 635);
+        frame.setSize(650, 650);
 
         LogInPanel logInPanel = new LogInPanel();
         JButton submitButton = logInPanel.getSubmitButton();
         BorderLayout borderLayout = new BorderLayout();
         if (!first) {
-            logInPanel.setNicknameErr("Please insert another Nickname :");
+            logInPanel.setNicknameErr("Please insert a valid Nickname !");
         }
         submitButton.addActionListener(new ActionListener() {
             @Override

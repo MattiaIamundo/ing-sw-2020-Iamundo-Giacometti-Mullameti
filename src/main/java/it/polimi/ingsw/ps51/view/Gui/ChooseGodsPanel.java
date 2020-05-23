@@ -23,7 +23,7 @@ public class ChooseGodsPanel extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(15, 5, 50, 5);
         buttonContainer = new Container();
-        buttonContainer.setLayout(new GridLayout(1,9));
+        buttonContainer.setLayout(new GridLayout(2,7));
 
         chooseGods = new JLabel();
         chooseGods.setHorizontalTextPosition(JLabel.CENTER);
@@ -35,10 +35,10 @@ public class ChooseGodsPanel extends JPanel {
         background.add(chooseGods , gbc);
         godToString=Gods.values();
 
-        godButtons = new JButton[9];
+        godButtons = new JButton[14];
 
 
-        for( int i=0 ; i<9 ; i++) {
+        for( int i=0 ; i<14 ; i++) {
 
             ImageIcon godImage = new ImageIcon((new ImageIcon("src/main/resources/GodCards/"+ godToString[i].toString().toLowerCase() +".png").getImage().getScaledInstance(140, 240,Image.SCALE_DEFAULT)));
             godButtons[i] = new JButton(""+godToString[i].toString()+"");
@@ -68,7 +68,7 @@ public class ChooseGodsPanel extends JPanel {
         return chooseGods;
     }
 
-/* public static void main(String[] args) {
+ public static void main(String[] args) {
         JFrame frame = new JFrame("Start");
         ChooseGodsPanel chooseGodsPanel = new ChooseGodsPanel();
         frame.add(chooseGodsPanel);
@@ -76,5 +76,5 @@ public class ChooseGodsPanel extends JPanel {
         frame.setResizable(true);
         frame.setVisible(true);
 
-    }*/
+    }
 }
