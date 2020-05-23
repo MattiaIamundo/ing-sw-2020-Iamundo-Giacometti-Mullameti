@@ -1,22 +1,12 @@
 package it.polimi.ingsw.ps51.view.Gui;
 
 import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
-import it.polimi.ingsw.ps51.events.events_for_server.*;
 import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
-import it.polimi.ingsw.ps51.model.Coordinates;
-import it.polimi.ingsw.ps51.model.Level;
-import it.polimi.ingsw.ps51.model.Worker;
-import it.polimi.ingsw.ps51.model.gods.Gods;
 import it.polimi.ingsw.ps51.utility.MessageHandler;
-import it.polimi.ingsw.ps51.view.Printer;
 import it.polimi.ingsw.ps51.view.Supporter;
-import org.javatuples.Pair;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.List;
-import java.util.Scanner;
+
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -83,42 +73,42 @@ public class MainGui  extends Supporter {
                             gui.askMove();
                             break;
                         case "BUILD":
-                            
+                            gui.askBuild();
                             break;
                         case "MAP":
                             gui.updateMap();
                             break;
                         case "DECISION" :
-
+                            gui.makeDecision();
                             break;
                         case "ACK":
-
+                            gui.ack();
                             break;
                         case "UNSUCCESSFULOPERATION":
-
+                            gui.unsuccessfulOperation();
                             break;
                         case "GAME_IS_STARTING":
-
+                            gui.gameIsStarting();
                             break;
                         case "TURN_IS_END":
-
+                            gui.turnIsEnd();
                             break;
                         case "WIN":
-
+                            gui.winGame();
                             break;
                         case "LOSE":
-
+                            gui.loseGame();
                             break;
                         case "ROOM":
-
+                            gui.outOfRoom();
                             isFinish = true;
                             break;
                         case "DISCONNECT":
-
+                            gui.disconnectGame();
                             isFinish = true;
                             break;
                         case "END":
-
+                            gui.endGame();
                             isFinish = true;
                             break;
                         default:

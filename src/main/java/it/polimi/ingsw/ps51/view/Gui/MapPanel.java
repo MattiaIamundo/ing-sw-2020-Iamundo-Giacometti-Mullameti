@@ -5,8 +5,6 @@ import it.polimi.ingsw.ps51.model.Level;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +18,10 @@ public class MapPanel extends JPanel {
     private Image background;
 
     private JLabel chat ;
-
+    private JLabel decision;
+    private JButton yes;
+    private JButton no;
+    private Container decisionContainer;
     private Container[] playerContainer;
     private JLabel[] godPic;
     private JLabel[] playerName;
@@ -43,6 +44,7 @@ public class MapPanel extends JPanel {
         this.add(boardContainer);
 
         defineChatLabel();
+        defineDecision();
         defineButton();
         definePlayerContainer();
         defineWorkerContainer();
@@ -59,12 +61,10 @@ public class MapPanel extends JPanel {
         chat = new JLabel();
         chat.setLocation(395,650);
         chat.setSize(865 * 2 / 3, 70);
-        chat.setText("It's your Turn !!");
         chat.setHorizontalAlignment(SwingConstants.CENTER);
         chat.setVerticalAlignment(SwingConstants.CENTER);
         chat.setForeground(new Color(0 ,0 ,153));
         chat.setFont(new Font ("Times new Roman" , Font.ITALIC , 18));
-        chat.setBackground(new Color(51,204,255));
         chat.setBorder(BorderFactory.createMatteBorder(5,5,5,5, new Color(0 ,0 ,153)));
         this.add(chat);
 
@@ -224,6 +224,43 @@ public class MapPanel extends JPanel {
 
     }
 
+    private void defineDecision(){
+        decisionContainer = new Container();
+        decisionContainer.setSize(865*2/3 , 30);
+        decisionContainer.setLayout(new GridLayout(1,2));
+        yes = new JButton("YES");
+        yes.setSize(100,20);
+        yes.setForeground(new Color(0,102, 0));
+        yes.setFont(new Font ("Times new Roman" , Font.ITALIC , 18));
+        yes.setOpaque(false);
+        yes.setContentAreaFilled(false);
+        yes.setBorder(BorderFactory.createMatteBorder(5,5,5,5, new Color(0,102, 0)));
+
+        no = new JButton("NO");
+        no.setSize(100,20);
+        no.setForeground(new Color(153,0,0));
+        no.setFont(new Font ("Times new Roman" , Font.ITALIC , 18));
+        no.setOpaque(false);
+        no.setContentAreaFilled(false);
+        no.setBorder(BorderFactory.createMatteBorder(5,5,5,5, new Color(153,0,0)));
+
+        decision = new JLabel();
+        decision.setText("Enter Y for Yes or N for No !!");
+        decision.setLayout(new BorderLayout());
+        decision.setLocation(395,650);
+        decision.setSize(865 * 2 / 3, 70);
+        decision.setHorizontalAlignment(SwingConstants.CENTER);
+        decision.setVerticalAlignment(SwingConstants.NORTH);
+        decision.setForeground(Color.BLUE);
+        decision.setFont(new Font ("Times new Roman" , Font.ITALIC , 18));
+        decision.setBorder(BorderFactory.createMatteBorder(5,5,5,5, Color.BLUE));
+        decisionContainer.add(yes);
+        decisionContainer.add(no);
+        decision.add(decisionContainer , BorderLayout.PAGE_END);
+        decision.setVisible(false);
+        this.add(decision);
+    }
+
     public void setChat(String command){
         chat.setText(command);
     }
@@ -256,11 +293,22 @@ public class MapPanel extends JPanel {
     public JLabel getLevel(int nr){
         return levels[nr];
 }
-    public ImageIcon getLevelImages(int nr){
-        return levelImages[nr];
+
+    public void makeDecision(String string){
+        chat.setVisible(false);
+        decision.setVisible(true);
+        decision.setText(string);
     }
 
-    /*public static void main(String[] args) throws IOException {
+    public JButton getYes() {
+        return yes;
+    }
+
+    public JButton getNo() {
+        return no;
+    }
+
+    public static void main(String[] args) throws IOException {
 
         JFrame frame = new JFrame("Start");
         BufferedImage myImage = ImageIO.read(new File("src/main/resources/SantoriniBoard.png"));
@@ -269,5 +317,5 @@ public class MapPanel extends JPanel {
         frame.setUndecorated(true);
         frame.setVisible(true);
 
-    }*/
+    }
 }

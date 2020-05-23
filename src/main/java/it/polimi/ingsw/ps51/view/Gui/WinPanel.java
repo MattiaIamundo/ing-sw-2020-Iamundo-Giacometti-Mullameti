@@ -57,7 +57,7 @@ public class WinPanel extends JPanel {
 
     }
 
-    public static void main(String[] args) throws IOException {
+   /* public static void main(String[] args) throws IOException {
 
         JFrame frame = new JFrame("Start");
         BufferedImage myImage = ImageIO.read(new File("src/main/resources/winBackground.jpg"));
@@ -66,5 +66,5 @@ public class WinPanel extends JPanel {
         frame.setResizable(true);
         frame.setVisible(true);
 
-    }
+    }*/
 }
