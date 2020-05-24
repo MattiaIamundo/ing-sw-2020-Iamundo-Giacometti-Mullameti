@@ -1,0 +1,11 @@
+Modifies introduced in the event UML:
+
+	*	The visitors are moved in the Visitor UML
+	*	The Choose Color events are added
+	*	The Heartbeat events are added (Ping/Pong)
+	*	The interface EventForFirstPhase added because
+		there are events dedicated to the acquisition of the clients phase
+		for the server
+	*	The events OutOfRoom, Ack, TurnIsEnd and GameIsStarting are
+		added in the eventForClient to have a better handling
+		of the situations during the game 
