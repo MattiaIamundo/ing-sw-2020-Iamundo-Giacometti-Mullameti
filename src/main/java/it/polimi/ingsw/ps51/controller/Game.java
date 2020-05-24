@@ -102,6 +102,11 @@ public class Game extends Observable<EventForClient> implements GameObserver {
         colorMap.put(actualPlayer, color);
         actualPlayer = gameRoom.getNextPlayer();
         if (colorMap.containsKey(actualPlayer)){
+            List<Pair<String, Gods>> chosenGods = new ArrayList<>();
+            for (Player player : gameRoom.getPlayers()){
+                chosenGods.add(new Pair<>(player.getNickname(), Gods.getGodFromCard(player.getGod())));
+            }
+            Game.this.notify(new GameIsStarting(chosenGods));
             thirdPhase = new ThirdPhase();
             thirdPhase.start();
         }else {
@@ -164,11 +169,6 @@ public class Game extends Observable<EventForClient> implements GameObserver {
                 }
 
                 finalizeGameSettings();
-                List<Pair<String, Gods>> chosenGods = new ArrayList<>();
-                for (Player player : gameRoom.getPlayers()){
-                    chosenGods.add(new Pair<>(player.getNickname(), Gods.getGodFromCard(player.getGod())));
-                }
-                Game.this.notify(new GameIsStarting(chosenGods));
                 getActualController().start();
             } catch (InterruptedException | CloneNotSupportedException e) {
                 logger.severe("Something went wrong during workers collocations on the map");
