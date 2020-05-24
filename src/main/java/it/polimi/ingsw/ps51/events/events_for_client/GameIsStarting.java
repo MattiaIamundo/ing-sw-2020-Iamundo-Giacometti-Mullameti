@@ -4,6 +4,7 @@ import it.polimi.ingsw.ps51.model.WorkerColor;
 import it.polimi.ingsw.ps51.model.gods.Gods;
 import org.javatuples.Pair;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

@@ -4,6 +4,7 @@ import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
 import it.polimi.ingsw.ps51.model.Level;
 import it.polimi.ingsw.ps51.model.Map;
 import it.polimi.ingsw.ps51.model.Worker;
+import it.polimi.ingsw.ps51.model.WorkerColor;
 import it.polimi.ingsw.ps51.model.gods.Gods;
 import org.fusesource.jansi.AnsiConsole;
 import org.javatuples.Pair;
@@ -12,6 +13,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Printer {
@@ -162,7 +164,7 @@ public class Printer {
 
     }
 
-    public  void board(Map map , List<Worker> workerList , List<Pair<String, Gods>> chosenGods) throws OutOfMapException {
+    public  void board(Map map , List<Worker> workerList , List<Pair<String, Gods>> chosenGods, java.util.Map<String, WorkerColor> playerColor) throws OutOfMapException {
 
         ArrayList<String> players = new ArrayList<>();
         int maxCoordinate = map.getMaxCoordinate() + 1;
@@ -253,11 +255,11 @@ public class Printer {
                 else if(board[i][j].equals("  D  "))
                     print(colorToAnsi(Color.BLUE)+board[i][j]);
                 else if(board[i][j].equals("  W0 "))
-                    print(colorToAnsi(Color.RED)+"  W  ");
+                    print(colorToAnsi( Color.valueOf( playerColor.get(players.get(0)).toString().toUpperCase() ) ) + "  W  ");
                 else if(board[i][j].equals("  W1 "))
-                    print(colorToAnsi(Color.BLUE)+"  W  ");
+                    print(colorToAnsi( Color.valueOf( playerColor.get(players.get(1)).toString().toUpperCase() ) ) + "  W  ");
                 else if(board[i][j].equals("  W2 "))
-                    print(colorToAnsi(Color.WHITE)+"  W  ");
+                    print(colorToAnsi( Color.valueOf( playerColor.get(players.get(2)).toString().toUpperCase() ) ) + "  W  ");
                 else
                     print(colorToAnsi(Color.GREEN) + board[i][j]);
 
@@ -266,10 +268,10 @@ public class Printer {
 
             println("");
         }
-        printLegend(chosenGods);
+        printLegend(chosenGods, playerColor);
 
     }
-    public void printLegend(List<Pair<String, Gods>> chosenGod) {
+    public void printLegend(List<Pair<String, Gods>> chosenGod, java.util.Map<String, WorkerColor> playerColor) {
 
         if (chosenGod.isEmpty()) {
             print("");
@@ -282,25 +284,25 @@ public class Printer {
 
             print(colorToAnsi(Color.WHITE) + "  [x,y] = Coordinates");
             space1(" [x,y] = Coordinates");
-            println(colorToAnsi(Color.RED) + "  Player1 : " + chosenGod.get(0).getValue0());
+            println(colorToAnsi( Color.valueOf( playerColor.get(chosenGod.get(0).getValue0()).toString().toUpperCase() ) ) + "  Player1 : " + chosenGod.get(0).getValue0());
             print(colorToAnsi(Color.CYAN) + "  G = Ground");
             space1(" G = Ground");
-            println(colorToAnsi(Color.BLUE) + "  Player2 : " + chosenGod.get(1).getValue0());
+            println(colorToAnsi( Color.valueOf( playerColor.get(chosenGod.get(1).getValue0()).toString().toUpperCase() ) ) + "  Player2 : " + chosenGod.get(1).getValue0());
             print(colorToAnsi(Color.GREEN) + "  F = First");
             space1(" F = First");
             if(chosenGod.size()==3)
-                print(colorToAnsi(Color.WHITE) + "  Player3 : " + chosenGod.get(2).getValue0());
+                print(colorToAnsi( Color.valueOf( playerColor.get(chosenGod.get(2).getValue0()).toString().toUpperCase() ) ) + "  Player3 : " + chosenGod.get(2).getValue0());
             println("");
             print(colorToAnsi(Color.YELLOW) + "  S = Second");
             space1(" S = Second");
-            println(colorToAnsi(Color.RED) + "  "+chosenGod.get(0).getValue0() + " -> " + chosenGod.get(0).getValue1());
+            println(colorToAnsi( Color.valueOf( playerColor.get(chosenGod.get(0).getValue0()).toString().toUpperCase()) ) + "  "+chosenGod.get(0).getValue0() + " -> " + chosenGod.get(0).getValue1());
             print(colorToAnsi(Color.PURPLE) + "  T = Third");
             space1(" T = Third");
-            println(colorToAnsi(Color.BLUE) +"  " +chosenGod.get(1).getValue0() + " -> " + chosenGod.get(1).getValue1());
+            println(colorToAnsi( Color.valueOf( playerColor.get(chosenGod.get(1).getValue0()).toString().toUpperCase()) ) +"  " +chosenGod.get(1).getValue0() + " -> " + chosenGod.get(1).getValue1());
             print(colorToAnsi(Color.BLUE) + "  D = Dome");
             space1(" D = Dome");
             if(chosenGod.size()==3)
-                println(colorToAnsi(Color.WHITE) + "  " + chosenGod.get(2).getValue0() + " -> " + chosenGod.get(2).getValue1());
+                println(colorToAnsi( Color.valueOf( playerColor.get(chosenGod.get(2).getValue0()).toString().toUpperCase()) ) + "  " + chosenGod.get(2).getValue0() + " -> " + chosenGod.get(2).getValue1());
             println("");
             for (int i = 0; i < 2; i++)
                 print(colorToAnsi(Color.GREEN) + "└──────────────────────────┘");

@@ -114,6 +114,7 @@ public class VisitorView implements VisitorClient {
     @Override
     public String visitGameIsStarting(GameIsStarting event) {
         s.setChosenGods(event.getChosenGods());
+        s.setChosenColors(event.getColorMap());
         return "GAME_IS_STARTING";
     }
 

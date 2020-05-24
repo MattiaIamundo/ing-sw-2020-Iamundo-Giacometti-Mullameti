@@ -29,6 +29,7 @@ abstract public class Supporter extends Observable<EventForServer> implements Ru
     private String ack;
     private List<Pair<String, Gods>> chosenGods;
     private List<WorkerColor> availableColors;
+    private java.util.Map<String, WorkerColor> chosenColors;
 
     public Supporter() {
         typeOfEvent = "DEFAULT";
@@ -45,6 +46,7 @@ abstract public class Supporter extends Observable<EventForServer> implements Ru
         ack = "";
         chosenGods = new ArrayList<>();
         availableColors = new ArrayList<>();
+        chosenColors = new HashMap<>();
     }
 
     public void setTypeOfEvent(String typeOfEvent) {
@@ -100,5 +102,12 @@ abstract public class Supporter extends Observable<EventForServer> implements Ru
     }
     public void setAvailableColors(List<WorkerColor> availableColors) {
         this.availableColors = availableColors;
+    }
+
+    public java.util.Map<String, WorkerColor> getChosenColors() {
+        return this.chosenColors;
+    }
+    public void setChosenColors(java.util.Map<String, WorkerColor> chosenColor) {
+        this.chosenColors = chosenColor;
     }
 }

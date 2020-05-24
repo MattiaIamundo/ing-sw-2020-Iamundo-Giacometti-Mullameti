@@ -304,7 +304,7 @@ public class Cli extends Supporter {
 
     public void updateMap() throws OutOfMapException {
 
-        printer.board(getMap() , getWorkers() ,getChosenGods());
+        printer.board(getMap() , getWorkers() ,getChosenGods(), getChosenColors());
     }
 
     public Coordinates placeWorkers(){
