@@ -1,6 +1,6 @@
 package it.polimi.ingsw.ps51.events.events_for_server;
 
-import it.polimi.ingsw.ps51.view.Color;
+import it.polimi.ingsw.ps51.model.WorkerColor;
 import it.polimi.ingsw.ps51.visitor.VisitorForPong;
 
 /**
@@ -8,13 +8,13 @@ import it.polimi.ingsw.ps51.visitor.VisitorForPong;
  */
 public class ColorChoice implements EventForServer{
 
-    Color colorChoice;
+    WorkerColor colorChoice;
 
     /**
      * Constructor
      * @param colorChoice the color chosen
      */
-    public ColorChoice(Color colorChoice) {
+    public ColorChoice(WorkerColor colorChoice) {
         this.colorChoice = colorChoice;
     }
 
@@ -22,7 +22,7 @@ public class ColorChoice implements EventForServer{
      * Getter of colorChoice
      * @return the reference to the color chosen
      */
-    public Color getColorChoice() {
+    public WorkerColor getColorChoice() {
         return this.colorChoice;
     }
 

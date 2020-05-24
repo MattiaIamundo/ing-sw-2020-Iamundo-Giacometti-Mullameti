@@ -2,10 +2,8 @@ package it.polimi.ingsw.ps51.view;
 
 import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
 import it.polimi.ingsw.ps51.events.events_for_server.EventForServer;
-import it.polimi.ingsw.ps51.model.Coordinates;
-import it.polimi.ingsw.ps51.model.Level;
+import it.polimi.ingsw.ps51.model.*;
 import it.polimi.ingsw.ps51.model.Map;
-import it.polimi.ingsw.ps51.model.Worker;
 import it.polimi.ingsw.ps51.model.gods.Gods;
 import it.polimi.ingsw.ps51.utility.Observable;
 import it.polimi.ingsw.ps51.utility.Observer;
@@ -30,7 +28,7 @@ abstract public class Supporter extends Observable<EventForServer> implements Ru
     private String decision;
     private String ack;
     private List<Pair<String, Gods>> chosenGods;
-    private List<Color> availableColors;
+    private List<WorkerColor> availableColors;
 
     public Supporter() {
         typeOfEvent = "DEFAULT";
@@ -97,10 +95,10 @@ abstract public class Supporter extends Observable<EventForServer> implements Ru
     }
     public void setChosenGods(List<Pair<String, Gods>> chosenGods){this.chosenGods=chosenGods;}
 
-    public List<Color> getAvailableColors() {
+    public List<WorkerColor> getAvailableColors() {
         return this.availableColors;
     }
-    public void setAvailableColors(List<Color> availableColors) {
+    public void setAvailableColors(List<WorkerColor> availableColors) {
         this.availableColors = availableColors;
     }
 }

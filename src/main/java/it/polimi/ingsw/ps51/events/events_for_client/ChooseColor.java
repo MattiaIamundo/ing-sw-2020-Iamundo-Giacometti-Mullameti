@@ -1,6 +1,6 @@
 package it.polimi.ingsw.ps51.events.events_for_client;
 
-import it.polimi.ingsw.ps51.view.Color;
+import it.polimi.ingsw.ps51.model.WorkerColor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,14 +11,14 @@ import java.util.List;
  */
 public class ChooseColor extends SpecificUserEvent implements EventForClient{
 
-    private List<Color> availableColor;
+    private List<WorkerColor> availableColor;
 
     /**
      * Constructor
      * @param receiver the nickname of the client
      * @param availableColor the actual color available
      */
-    public ChooseColor(String receiver, List<Color> availableColor) {
+    public ChooseColor(String receiver, List<WorkerColor> availableColor) {
         super(receiver);
         this.availableColor = new ArrayList<>();
         this.availableColor = availableColor;
@@ -33,7 +33,7 @@ public class ChooseColor extends SpecificUserEvent implements EventForClient{
      * Getter of availableColor
      * @return the reference to the list of available color
      */
-    public List<Color> getAvailableColor() {
+    public List<WorkerColor> getAvailableColor() {
         return this.availableColor;
     }
 

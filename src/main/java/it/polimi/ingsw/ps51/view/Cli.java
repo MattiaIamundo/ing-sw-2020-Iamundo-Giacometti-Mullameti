@@ -6,6 +6,7 @@ import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
 import it.polimi.ingsw.ps51.model.Coordinates;
 import it.polimi.ingsw.ps51.model.Level;
 import it.polimi.ingsw.ps51.model.Worker;
+import it.polimi.ingsw.ps51.model.WorkerColor;
 import it.polimi.ingsw.ps51.model.gods.Gods;
 import it.polimi.ingsw.ps51.utility.InterruptibleInputStream;
 import it.polimi.ingsw.ps51.utility.MessageHandler;
@@ -150,7 +151,7 @@ public class Cli extends Supporter {
                             isFinish = true;
                             break;
                         case "COLOR":
-                            Color colorChoice = chooseColor();
+                            WorkerColor colorChoice = chooseColor();
                             ColorChoice colorChoiceEvent = new ColorChoice(colorChoice);
                             notify(colorChoiceEvent);
                             break;
@@ -586,23 +587,23 @@ public class Cli extends Supporter {
         return coordinate;
     }
 
-    public Color chooseColor() {
+    public WorkerColor chooseColor() {
         boolean ok = false;
         String choice;
-        Color userChoice = getAvailableColors().get(0);
+        WorkerColor userChoice = getAvailableColors().get(0);
 
         while (!ok) {
 
             printer.println(printer.colorToAnsi(Color.GREEN) + "What color do you want?");
-            for (Color c: getAvailableColors()) {
-                printer.println(printer.colorToAnsi(c) + c.toString().toUpperCase());
+            for (WorkerColor c: getAvailableColors()) {
+                printer.println(printer.colorToAnsi( Color.valueOf(c.toString().toUpperCase()) ) + c.toString().toUpperCase());
             }
 
             printer.println(printer.colorToAnsi(Color.GREEN) + "Write the color you want:");
             choice = reader.nextLine();
             choice = choice.toUpperCase();
 
-            for (Color c: getAvailableColors()) {
+            for (WorkerColor c: getAvailableColors()) {
                 if (choice.equals(c.toString().toUpperCase())) {
                     userChoice = c;
                     ok = true;
@@ -611,7 +612,7 @@ public class Cli extends Supporter {
 
             if (!ok) {
                 try {
-                    Color.valueOf(choice);
+                    WorkerColor.valueOf(choice);
                     printer.println(printer.colorToAnsi(Color.RED) + "This color exist but not in the available colors!!");
                 } catch (IllegalArgumentException e) {
                     printer.println(printer.colorToAnsi(Color.RED) + "What your typed is not a color!");
