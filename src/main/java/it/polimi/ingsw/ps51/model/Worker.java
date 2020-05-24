@@ -16,6 +16,7 @@ import java.util.List;
 public class Worker implements Serializable, WorkerObserver, Cloneable {
 
     private String namePlayer;
+    private WorkerColor color;
     private Square position;
     private boolean inWinningCondition = false;
     private List<Gods> activeGods = new ArrayList<>();
@@ -48,6 +49,22 @@ public class Worker implements Serializable, WorkerObserver, Cloneable {
      */
     public String getNamePlayer(){
         return this.namePlayer;
+    }
+
+    /**
+     * @return the color associated to the worker that the UI must show
+     */
+    public WorkerColor getColor() {
+        return color;
+    }
+
+    /**
+     * set the color, chosen by the player, associated to the player's workers in order to make
+     * them distinguishable from the opponent's workers
+     * @param color the color chosen by the player
+     */
+    public void setColor(WorkerColor color) {
+        this.color = color;
     }
 
     /**
