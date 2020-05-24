@@ -23,7 +23,7 @@ public class ChooseGodsPanel extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(15, 5, 50, 5);
         buttonContainer = new Container();
-        buttonContainer.setLayout(new GridLayout(2,7));
+        buttonContainer.setLayout(new GridLayout(2,7,10,10));
 
         chooseGods = new JLabel();
         chooseGods.setHorizontalTextPosition(JLabel.CENTER);
@@ -64,11 +64,21 @@ public class ChooseGodsPanel extends JPanel {
         return godButtons;
     }
 
+    public JButton getSpecificGod(int nr){
+        return godButtons[nr];
+    }
+
+    public void setGodBorder(int nr ){
+        godButtons[nr].setBorderPainted(true);
+        godButtons[nr].setBorder(BorderFactory.createLineBorder(Color.RED , 2));
+    }
+
+
     public JLabel getChooseGods() {
         return chooseGods;
     }
 
- public static void main(String[] args) {
+ /*   public static void main(String[] args) {
         JFrame frame = new JFrame("Start");
         ChooseGodsPanel chooseGodsPanel = new ChooseGodsPanel();
         frame.add(chooseGodsPanel);
@@ -76,5 +86,5 @@ public class ChooseGodsPanel extends JPanel {
         frame.setResizable(true);
         frame.setVisible(true);
 
-    }
+    }*/
 }

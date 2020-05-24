@@ -32,7 +32,7 @@ public class Gui {
     private Supporter s;
     private BoardButton[][] boardButtons;
     private ImageIcon workerPic;
-
+    private ColorPanel colorPanel ;
     private BufferedImage myImage;
     private String player;
     private Coordinates chosenCoordinates;
@@ -42,7 +42,7 @@ public class Gui {
     public Gui(Supporter supporter) {
         s = supporter;
         frame = new JFrame("Santorini");
-        chooseGodsPanel = new ChooseGodsPanel();
+
         buttonNumber = 0;
         chosenGods = new ArrayList<>();
 
@@ -52,6 +52,7 @@ public class Gui {
 
         }
 
+        colorPanel = new ColorPanel(myImage);
 
     }
 
@@ -142,11 +143,13 @@ public class Gui {
         frame.setVisible(true);
     }
 
+    
+
     public void chooseGodsDeck() {
         frame.getContentPane().removeAll();
         frame.setSize(1300, 700);
 
-
+        chooseGodsPanel = new ChooseGodsPanel();
         JLabel label = chooseGodsPanel.getChooseGods();
         label.setText("Choose " + s.getGodsNum() + " Gods");
         JButton[] godButtons = chooseGodsPanel.getGodButtons();
@@ -156,14 +159,12 @@ public class Gui {
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    for (int i = 0; i < 9; i++) {
+                    for (int i = 0; i < 14; i++) {
                         if (e.getSource() == godButtons[i]) {
                             godButtons[i].setBorder(BorderFactory.createLineBorder(new Color(102, 0, 153)));
                             chosenGods.add(Gods.getGodFromString(godButtons[i].getText()));
-
+                            godButtons[i].setVisible(false);
                             if (chosenGods.size() == s.getGodsNum()) {
-                                for (JButton button1 : godButtons)
-                                    button1.setEnabled(false);
                                 SwingUtilities.invokeLater(new Runnable() {
                                     public void run() {
                                         EventForServer eventGodsDeck = new GodsDeck(chosenGods);
@@ -185,32 +186,30 @@ public class Gui {
     public void chooseGodsPlayers() {
         frame.getContentPane().removeAll();
         frame.setSize(1300, 700);
-
+        chooseGodsPanel = new ChooseGodsPanel();
         JLabel label = chooseGodsPanel.getChooseGods();
         label.setText("Choose a God");
-        JButton[] godButtons = chooseGodsPanel.getGodButtons();
+        List<JButton> chosenButtons = new ArrayList<>();
 
         chosenGods = s.getAvailableGods();
 
-        for (JButton button : godButtons) {
-            button.setEnabled(false);
+        for (JButton button : chooseGodsPanel.getGodButtons()) {
+            button.setVisible(true);
         }
 
-        for (JButton button : godButtons) {
-            for (Gods god : chosenGods) {
-                if (button.getText().equals(god.toString()))
-                    button.setEnabled(true);
-            }
+        for (Gods god : s.getAvailableGods()) {
+           chosenButtons.add(chooseGodsPanel.getSpecificGod(god.ordinal()));
+           chooseGodsPanel.setGodBorder(god.ordinal());
         }
 
-        for (JButton button : godButtons) {
-            button.addActionListener(new ActionListener() {
+        for (int i=0 ; i<chosenButtons.size() ; i++) {
+            chosenButtons.get(i).addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    for (int i = 0; i < 9; i++) {
-                        if (e.getSource() == godButtons[i]) {
+                    for (int i = 0; i < chosenButtons.size(); i++) {
+                        if (e.getSource() == chosenButtons.get(i)) {
 
-                            chosenGod = Gods.getGodFromString(godButtons[i].getText());
+                            chosenGod = Gods.getGodFromString(chosenButtons.get(i).getText());
 
                         }
 
@@ -234,7 +233,7 @@ public class Gui {
     public void placeWorkers() throws IOException {
 
         mapPanel.setChat("Place your " + s.getWorkerNum() + "ª worker");
-        mapPanel.setWorkerImages(s.getWorkerNum() - 1);
+        mapPanel.setWorkerBorder(s.getWorkerNum() - 1);
         workerPic = mapPanel.getWorkerImages(s.getWorkerNum() - 1);
         boardButtons = board.getBoardButtons();
 
@@ -272,6 +271,7 @@ public class Gui {
         frame.getContentPane().removeAll();
         frame.setSize(1400, 800);
 
+        System.out.println("mapPanel");
         mapPanel = new MapPanel(myImage);
         board = mapPanel.getBoardContainer();
         mapPanel.setChat("Update map");
@@ -293,12 +293,12 @@ public class Gui {
         }
 
 
-        if (!chosenGods.isEmpty()) {
+      /*  if (!chosenGods.isEmpty()) {
             for (int i = 0; i < chosenGods.size(); i++) {
                 mapPanel.setPlayerName(players.get(i), i);
                 mapPanel.setGodPic(chosenGods.get(i).getValue1().toString(), i);
             }
-        }
+        }*/
 
 
         workerPic = mapPanel.getWorkerImages(1);
@@ -512,7 +512,7 @@ public class Gui {
     }
     public void unsuccessfulOperation(){
         mapPanel.setChat("Sorry , something went wrong server side..."
-        +"Repeat your last action !");
+                +"Repeat your last action !");
     }
     public void winGame() throws IOException {
         frame.getContentPane().removeAll();
@@ -549,9 +549,8 @@ public class Gui {
     }
 
     public void gameIsStarting(){
-        mapPanel.setChat( "The game is started!!");
+        //mapPanel.setChat( "The game is started!!");
     }
 
 
 }
-
