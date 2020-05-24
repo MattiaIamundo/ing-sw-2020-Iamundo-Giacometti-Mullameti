@@ -16,7 +16,7 @@ import java.util.List;
 public class Worker implements Serializable, WorkerObserver, Cloneable {
 
     private String namePlayer;
-    private WorkerColor color;
+    private WorkerColor color = null;
     private Square position;
     private boolean inWinningCondition = false;
     private List<Gods> activeGods = new ArrayList<>();

@@ -123,9 +123,10 @@ public class GameTest {
         stub.clearBuffer();
         stub.notify(new ColorChoice(WorkerColor.WHITE));
         waitForEventBeApplied();
-        assertEquals(2, stub.buffer.size());
-        assertTrue(stub.buffer.get(0) instanceof MapUpdate);
-        assertTrue(stub.buffer.get(1) instanceof ChooseWorkerPosition);
+        assertEquals(3, stub.buffer.size());
+        assertTrue(stub.buffer.get(0) instanceof GameIsStarting);
+        assertTrue(stub.buffer.get(1) instanceof MapUpdate);
+        assertTrue(stub.buffer.get(2) instanceof ChooseWorkerPosition);
     }
 
     @Test

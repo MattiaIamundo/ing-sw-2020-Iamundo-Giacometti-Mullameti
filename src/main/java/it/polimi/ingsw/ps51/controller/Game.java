@@ -106,7 +106,11 @@ public class Game extends Observable<EventForClient> implements GameObserver {
             for (Player player : gameRoom.getPlayers()){
                 chosenGods.add(new Pair<>(player.getNickname(), Gods.getGodFromCard(player.getGod())));
             }
-            Game.this.notify(new GameIsStarting(chosenGods));
+            Map<String, WorkerColor> colorMap1 = new HashMap<>();
+            for (Map.Entry<Player, WorkerColor> pair : colorMap.entrySet()){
+                colorMap1.put(pair.getKey().getNickname(), pair.getValue());
+            }
+            Game.this.notify(new GameIsStarting(chosenGods, colorMap1));
             thirdPhase = new ThirdPhase();
             thirdPhase.start();
         }else {
