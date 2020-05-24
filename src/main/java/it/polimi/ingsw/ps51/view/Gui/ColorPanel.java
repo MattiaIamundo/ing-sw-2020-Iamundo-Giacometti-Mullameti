@@ -67,18 +67,18 @@ public class ColorPanel extends JPanel {
             colors[i].setSize(140, 240);
             colors[i].setOpaque(false);
             colors[i].setContentAreaFilled(false);
-            colors[i].setBorderPainted(false);
-
+            //colors[i].setBorderPainted(false);
+            colors[i].setBorder(null);
 
             colorContainer.add(colors[i]);
         }
 
         colors[0].setForeground(Color.RED);
-        colors[0].setBorder(BorderFactory.createLineBorder(Color.RED,2));
+
         colors[1].setForeground(Color.BLUE);
-        colors[1].setBorder(BorderFactory.createLineBorder(Color.BLUE,2));
+
         colors[2].setForeground(Color.WHITE);
-        colors[2].setBorder(BorderFactory.createLineBorder(Color.WHITE,2));
+
 
         gbc.insets = new Insets(50,0,50,0);
         gbc.gridx = 0;
@@ -86,11 +86,10 @@ public class ColorPanel extends JPanel {
         add(colorContainer , gbc);
 
     }
-    
-    public void setBorderColor(int nr){
-        colors[nr].setBorderPainted(true);
-    }
 
+    public JButton getSpecificButton(int nr){
+        return colors[nr];
+    }
     public static void main(String[] args) throws IOException {
 
         JFrame frame = new JFrame("Start");

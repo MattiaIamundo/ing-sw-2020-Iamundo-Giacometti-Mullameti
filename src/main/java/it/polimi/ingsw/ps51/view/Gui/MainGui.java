@@ -1,7 +1,9 @@
 package it.polimi.ingsw.ps51.view.Gui;
 
 import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
+import it.polimi.ingsw.ps51.events.events_for_server.ColorChoice;
 import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
+import it.polimi.ingsw.ps51.model.WorkerColor;
 import it.polimi.ingsw.ps51.utility.MessageHandler;
 import it.polimi.ingsw.ps51.view.Supporter;
 
@@ -61,6 +63,10 @@ public class MainGui  extends Supporter {
 
                         case "GOD" :
                             gui.chooseGodsPlayers();
+                            break;
+                        case "COLOR":
+                            System.out.println("color");
+                            gui.chooseColor();
                             break;
                         case "WORKERPOSITION" :
                             gui.placeWorkers();

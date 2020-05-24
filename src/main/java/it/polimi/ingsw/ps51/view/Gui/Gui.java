@@ -143,7 +143,40 @@ public class Gui {
         frame.setVisible(true);
     }
 
-    
+    public void chooseColor(){
+        frame.getContentPane().removeAll();
+        frame.setSize(1400, 800);
+
+
+        List<JButton> colorButton = new ArrayList<>();
+
+        for(WorkerColor workerColor : s.getAvailableColors()){
+            colorButton.add(colorPanel.getSpecificButton(workerColor.ordinal()));
+        }
+
+        for (int i=0 ; i<colorButton.size();i++) {
+            colorButton.get(i).addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    for (int i = 0; i < colorButton.size(); i++) {
+                        if (e.getSource() == colorButton.get(i)) {
+
+                            colorButton.get(i).setBorder(BorderFactory.createLineBorder(Color.RED , 2));
+                            System.out.println(s.getAvailableColors().get(i));
+                            EventForServer eventColor = new ColorChoice(s.getAvailableColors().get(i));
+                            s.notify(eventColor);
+                        }
+
+
+                    }
+
+
+                }
+            });
+        }
+        frame.getContentPane().add(colorPanel);
+        frame.setVisible(true);
+    }
 
     public void chooseGodsDeck() {
         frame.getContentPane().removeAll();

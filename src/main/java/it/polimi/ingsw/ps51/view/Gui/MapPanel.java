@@ -265,7 +265,7 @@ public class MapPanel extends JPanel {
         chat.setText(command);
     }
 
-    public void setWorkerImages(int nr ){
+    public void setWorkerBorder(int nr ){
         workers[nr].setBorder(BorderFactory.createLineBorder(Color.RED , 2));
     }
     public ImageIcon getWorkerImages(int nr){
