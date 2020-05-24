@@ -31,6 +31,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
     private VisitorController visitor;
     private Player actualPlayer;
     private Map<Player, GodController> godControllersMap;
+    private Map<Player, WorkerColor> colorMap;
     private final int WORKER_NUMBER;
     protected ThirdPhase thirdPhase;
     private final static Logger logger = Logger.getLogger(Game.class.getName());
@@ -42,6 +43,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
     public Game(Playground gameRoom) {
         this.gameRoom = gameRoom;
         godControllersMap = new HashMap<>();
+        colorMap = new HashMap<>();
         visitor = new VisitorController(this);
         WORKER_NUMBER = 2;
     }
@@ -92,8 +94,22 @@ public class Game extends Observable<EventForClient> implements GameObserver {
             godsDeck.remove(god);
             notify(new ChooseGod(actualPlayer.getNickname(), godsDeck));
         }else {
+            notify(new ChooseColor(actualPlayer.getNickname(), WorkerColor.toList()));
+        }
+    }
+
+    public void colorAssignment(WorkerColor color){
+        colorMap.put(actualPlayer, color);
+        actualPlayer = gameRoom.getNextPlayer();
+        if (colorMap.containsKey(actualPlayer)){
             thirdPhase = new ThirdPhase();
             thirdPhase.start();
+        }else {
+            List<WorkerColor> availableColors = WorkerColor.toList();
+            for (Map.Entry<Player, WorkerColor> pair : colorMap.entrySet()){
+                availableColors.remove(pair.getValue());
+            }
+            notify(new ChooseColor(actualPlayer.getNickname(), availableColors));
         }
     }
 
@@ -129,7 +145,9 @@ public class Game extends Observable<EventForClient> implements GameObserver {
                         try {
                             Square square = gameRoom.getBoardMap().getSquare(position.getX(), position.getY());
                             if (!square.isPresentWorker()) {
-                                actualPlayer.addWorker(new Worker(actualPlayer.getNickname(), square));
+                                Worker worker = new Worker(actualPlayer.getNickname(), square);
+                                worker.setColor(colorMap.get(actualPlayer));
+                                actualPlayer.addWorker(worker);
                                 gameRoom.mapUpdated();
                                 position = null;
                                 workerNum++;

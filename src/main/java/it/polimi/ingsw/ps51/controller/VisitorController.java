@@ -33,7 +33,7 @@ public class VisitorController implements VisitorServer {
 
     @Override
     public void visitColorChoice(ColorChoice event) {
-        //TODO handle the color chosen by the client, putting that into the player class as an attribute
+        game.colorAssignment(event.getColorChoice());
     }
 
     @Override

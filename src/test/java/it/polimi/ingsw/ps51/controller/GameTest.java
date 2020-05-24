@@ -107,14 +107,22 @@ public class GameTest {
         stub.notify(new GodChoice(Gods.ARTEMIS));
         assertNotNull(player3.getGod());
         assertTrue(player3.getGod() instanceof Artemis);
-        stub.event = null;
-        while (stub.event == null){
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        assertTrue(stub.event instanceof ChooseColor);
+    }
+
+    @Test
+    public void colorAssignmentTest(){
+        phaseTwo();
+
+        stub.notify(new ColorChoice(WorkerColor.BLUE));
+        assertTrue(stub.event instanceof ChooseColor);
+
+        stub.notify(new ColorChoice(WorkerColor.RED));
+        assertTrue(stub.event instanceof ChooseColor);
+
+        stub.clearBuffer();
+        stub.notify(new ColorChoice(WorkerColor.WHITE));
+        waitForEventBeApplied();
         assertEquals(2, stub.buffer.size());
         assertTrue(stub.buffer.get(0) instanceof MapUpdate);
         assertTrue(stub.buffer.get(1) instanceof ChooseWorkerPosition);
@@ -122,7 +130,7 @@ public class GameTest {
 
     @Test
     public void phaseThree(){
-        phaseTwo();
+        colorAssignmentTest();
         assertTrue(stub.event instanceof ChooseWorkerPosition);
         assertEquals(1, ((ChooseWorkerPosition) stub.event).getWorkerNum());
         assertEquals(player1.getNickname(), ((ChooseWorkerPosition) stub.event).getReceiver());
@@ -177,7 +185,7 @@ public class GameTest {
 
     @Test
     public void phaseThree_OutOfMapCoordinates_RequestToRedoTheAction(){
-        phaseTwo();
+        colorAssignmentTest();
 
         assertTrue(stub.event instanceof ChooseWorkerPosition);
         assertEquals(1, ((ChooseWorkerPosition) stub.event).getWorkerNum());
@@ -297,7 +305,7 @@ public class GameTest {
 
     private void waitForEventBeApplied(){
         try {
-            Thread.sleep(70);
+            Thread.sleep(80);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
