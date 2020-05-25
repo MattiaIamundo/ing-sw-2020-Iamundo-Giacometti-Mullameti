@@ -162,7 +162,7 @@ public class Gui {
                         if (e.getSource() == colorButton.get(i)) {
 
                             colorButton.get(i).setBorder(BorderFactory.createLineBorder(Color.RED , 2));
-                            System.out.println(s.getAvailableColors().get(i));
+                            colorButton.get(i).setVisible(false);
                             EventForServer eventColor = new ColorChoice(s.getAvailableColors().get(i));
                             s.notify(eventColor);
                         }
@@ -263,11 +263,11 @@ public class Gui {
 
     }
 
-    public void placeWorkers() throws IOException {
+    public void placeWorkers()  {
 
         mapPanel.setChat("Place your " + s.getWorkerNum() + "ª worker");
         mapPanel.setWorkerBorder(s.getWorkerNum() - 1);
-        workerPic = mapPanel.getWorkerImages(s.getWorkerNum() - 1);
+        workerPic = mapPanel.getWorkerImages(s.getChosenColors().get(player).toString());
         boardButtons = board.getBoardButtons();
 
         for (int i = 0; i < 5; i++) {
@@ -298,13 +298,12 @@ public class Gui {
 
 
     }
-
     public void updateMap() throws OutOfMapException {
 
         frame.getContentPane().removeAll();
         frame.setSize(1400, 800);
 
-        System.out.println("mapPanel");
+
         mapPanel = new MapPanel(myImage);
         board = mapPanel.getBoardContainer();
         mapPanel.setChat("Update map");
@@ -313,51 +312,64 @@ public class Gui {
 
         Map map = s.getMap();
         List<Worker> workerList = s.getWorkers();
+
+
+        java.util.Map<String, WorkerColor> chosenColors = s.getChosenColors();
         List<Pair<String, Gods>> chosenGods = s.getChosenGods();
 
-
-        ArrayList<String> players = new ArrayList<>();
         int maxCoordinate = map.getMaxCoordinate() + 1;
 
 
-        for (Worker worker : workerList) {
-            if (!players.contains(worker.getNamePlayer()))
-                players.add(worker.getNamePlayer());
+        mapPanel.setPlayerName(player, 0 ,chosenColors.get(player).toString());
+        int k = 1;
+        for (Pair<String, Gods> pair : chosenGods) {
+
+            if (!pair.getValue0().equals(player)) {
+                System.out.println(k);
+                mapPanel.setPlayerName(pair.getValue0(), k ,chosenColors.get(pair.getValue0()).toString());
+                k = 2;
+
+            }
+
         }
 
 
-      /*  if (!chosenGods.isEmpty()) {
-            for (int i = 0; i < chosenGods.size(); i++) {
-                mapPanel.setPlayerName(players.get(i), i);
-                mapPanel.setGodPic(chosenGods.get(i).getValue1().toString(), i);
+        k=1;
+
+        for (Pair<String, Gods> god : chosenGods) {
+            if (god.getValue0().equals(player))
+                mapPanel.setGodPic(god.getValue1().toString(), 0);
+            else{
+                mapPanel.setGodPic(god.getValue1().toString(), k);
+                k = 2;
             }
-        }*/
+        }
 
+        mapPanel.setWorkerImages(chosenColors.get(player).toString());
 
-        workerPic = mapPanel.getWorkerImages(1);
 
         for (int i = 0; i < maxCoordinate; i++) {
             for (int j = 0; j < maxCoordinate; j++) {
 
-                if(map.getSquare(j, i).getLevel().ordinal()>0)
-                    boardButtons[j][i].setLevel(map.getSquare(j, i).getLevel().ordinal()-1);
+                if (map.getSquare(j, i).getLevel().ordinal() > 0)
+                    boardButtons[j][i].setLevel(map.getSquare(j, i).getLevel().ordinal() - 1);
 
 
                 if (map.getSquare(j, i).isPresentWorker()) {
-                    boardButtons[j][i].setWorker(workerPic);
-                   /* for (Worker worker : workerList) {
+
+                    for (Worker worker : workerList) {
                         if (worker.getPosition().getCoordinates().getX() == j && worker.getPosition().getCoordinates().getY() == i) {
-                            if (worker.getNamePlayer().equals(players.get(0)))
-                                boardButtons[i][j].setWorker(workerPic);
-                            else if (worker.getNamePlayer().equals(players.get(1)))
-                            //
-                            else
-                            //
-                        }*/
+                            for (Pair<String, Gods> pair : chosenGods)
+                                if (worker.getNamePlayer().equals(pair.getValue0())) {
+                                    boardButtons[j][i].setWorker(mapPanel.getWorkerImages(s.getChosenColors().get(pair.getValue0()).toString()));
+                                }
+                        }
+
+
+                    }
                 }
+
             }
-
-
         }
 
         frame.getContentPane().add(mapPanel);
@@ -365,6 +377,7 @@ public class Gui {
 
 
     }
+
 
 
     public void chooseWorker() {
@@ -375,7 +388,7 @@ public class Gui {
         //mapPanel = new MapPanel(myImage);
         //board = mapPanel.getBoardContainer();
         mapPanel.setChat("Choose Worker");
-
+        mapPanel.getWorkerContainer().setVisible(false);
         List<BoardButton> workerButtons = new ArrayList<>();
 
         for (Worker worker : s.getValidChoicesWorkers()) {
@@ -453,7 +466,7 @@ public class Gui {
     public void askBuild() {
 
         mapPanel.setChat("BUILD");
-
+        mapPanel.getLevelContainer().setVisible(true);
 
         List<BoardButton> availableBuildButtons = new ArrayList<>();
         List<JLabel> availableLevels = new ArrayList<>();
@@ -584,6 +597,26 @@ public class Gui {
     public void gameIsStarting(){
         //mapPanel.setChat( "The game is started!!");
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

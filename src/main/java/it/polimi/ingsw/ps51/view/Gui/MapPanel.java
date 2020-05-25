@@ -31,7 +31,8 @@ public class MapPanel extends JPanel {
     private Container levelContainer;
     private JLabel[] levels;
     private ImageIcon[] levelImages;
-    private JButton[] button;
+    private JButton exit;
+    private UndoContainer undoContainer;
 
     public MapPanel(Image background) {
 
@@ -42,7 +43,9 @@ public class MapPanel extends JPanel {
         boardContainer.setLocation(395, 50);
         boardContainer.setSize(865 * 2 / 3, 880 * 2 / 3);
         this.add(boardContainer);
-
+        undoContainer= new UndoContainer();
+        undoContainer.setLocation(20,650);
+        this.add(undoContainer);
         defineChatLabel();
         defineDecision();
         defineButton();
@@ -72,30 +75,23 @@ public class MapPanel extends JPanel {
 
     private void defineButton(){
 
-        button = new JButton[2];
+        exit = new JButton();
 
-        for (int i=0 ; i<2 ;i++) {
-            button[i] = new JButton();
-            button[i].setVerticalTextPosition(SwingConstants.CENTER);
-            button[i].setHorizontalTextPosition(SwingConstants.CENTER);
-            button[i].setSize(1300 * 2 / 13, 700 / 9);
-            button[i].setFont(new Font("Times New Roman", Font.BOLD, 24));
-            button[i].setForeground(Color.WHITE);
-            button[i].setOpaque(false);
-            button[i].setContentAreaFilled(false);
-            button[i].setBorderPainted(false);
-            button[i].setBorder(null);
-        }
-        ImageIcon undoImage = new ImageIcon((new ImageIcon("src/main/resources/Buttons/btn_coral.png").getImage().getScaledInstance(1300 * 2 / 13, 700 / 9, Image.SCALE_DEFAULT)));
-        button[0].setIcon(undoImage);
-        button[0].setText("UNDO");
-        button[0].setLocation(50,650);
-        this.add(button[0]);
+        exit.setVerticalTextPosition(SwingConstants.CENTER);
+        exit.setHorizontalTextPosition(SwingConstants.CENTER);
+        exit.setSize(1300 * 2 / 13, 700 / 9);
+        exit.setFont(new Font("Times New Roman", Font.BOLD, 24));
+        exit.setForeground(Color.WHITE);
+        exit.setOpaque(false);
+        exit.setContentAreaFilled(false);
+        exit.setBorderPainted(false);
+        exit.setBorder(null);
+
         ImageIcon exitImage = new ImageIcon((new ImageIcon("src/main/resources/Buttons/btn_blue.png").getImage().getScaledInstance(1300 * 2 / 13, 700 / 9, Image.SCALE_DEFAULT)));
-        button[1].setIcon(exitImage);
-        button[1].setText("EXIT");
-        button[1].setLocation(1100,650);
-        this.add(button[1]);
+        exit.setIcon(exitImage);
+        exit.setText("EXIT");
+        exit.setLocation(1100,650);
+        this.add(exit);
 
     }
 
@@ -129,9 +125,6 @@ public class MapPanel extends JPanel {
 
         }
 
-        playerName[0].setForeground(new Color(204,0 , 0));
-        playerName[1].setForeground(Color.GREEN);
-        playerName[2].setForeground(Color.BLUE);
 
         /*ImageIcon godImage1 = new ImageIcon((new ImageIcon("src/main/resources/GodCards/apollo.png").getImage().getScaledInstance(1300*3/26,700*3/9,Image.SCALE_DEFAULT)));
         godPic[0].setIcon(godImage1);
@@ -165,8 +158,6 @@ public class MapPanel extends JPanel {
             workers[i].setHorizontalAlignment(SwingConstants.CENTER);
             workers[i].setVerticalAlignment(SwingConstants.CENTER);
             workers[i].setPreferredSize(new Dimension(1300/13,700*2/9));
-            workerImages[i] =  new ImageIcon((new ImageIcon("src/main/resources/Workers/red_female_worker.png").getImage().getScaledInstance(1300/13,700*2/9,Image.SCALE_DEFAULT)));
-            workers[i].setIcon(workerImages[i]);
             gbc.gridx=i;
             gbc.gridy=0;
             workerContainer.add(workers[i],gbc);
@@ -209,7 +200,7 @@ public class MapPanel extends JPanel {
 
         }
 
-
+        levelContainer.setVisible(false);
 
         gbc.insets = new Insets(5,0,5,0);
 
@@ -219,7 +210,7 @@ public class MapPanel extends JPanel {
             gbc.gridy = 4-i;
             levelContainer.add(levels[i] , gbc);
         }
-        levelContainer.setLocation(260 , 300);
+        levelContainer.setLocation(260 , 200);
         this.add(levelContainer);
 
     }
@@ -268,8 +259,24 @@ public class MapPanel extends JPanel {
     public void setWorkerBorder(int nr ){
         workers[nr].setBorder(BorderFactory.createLineBorder(Color.RED , 2));
     }
-    public ImageIcon getWorkerImages(int nr){
-        return workerImages[nr];
+    public ImageIcon getWorkerImages(String color){
+        return new ImageIcon((new ImageIcon("src/main/resources/Workers/" + color.toLowerCase() + ".png").getImage().getScaledInstance(1300 / 13, 700 * 2 / 9, Image.SCALE_DEFAULT)));
+
+    }
+
+    public Container getWorkerContainer() {
+        return workerContainer;
+    }
+
+    public Container getLevelContainer() {
+        return levelContainer;
+    }
+
+    public void setWorkerImages(String color ){
+        for(int i=0 ; i<2 ;i++) {
+            workerImages[i] = new ImageIcon((new ImageIcon("src/main/resources/Workers/" + color.toLowerCase() + ".png").getImage().getScaledInstance(1300 / 13, 700 * 2 / 9, Image.SCALE_DEFAULT)));
+            workers[i].setIcon(workerImages[i]);
+        }
     }
 
     public BoardContainer getBoardContainer() {
@@ -281,8 +288,20 @@ public class MapPanel extends JPanel {
         godPic[index].setIcon(godImage);
         godPic[index].setVisible(true);
     }
-    public void setPlayerName(String name , int index){
-        playerName[index].setText(name);
+    public void setPlayerName(String name , int index , String color){
+        playerName[index].setText(name.toUpperCase());
+        switch (color){
+            case "RED" :
+                playerName[index].setForeground(Color.RED);
+                break;
+            case "BLUE" :
+                playerName[index].setForeground(Color.BLUE);
+                break;
+            case "WHITE" :
+                playerName[index].setForeground(Color.WHITE);
+                break;
+        }
+
     }
 
 
