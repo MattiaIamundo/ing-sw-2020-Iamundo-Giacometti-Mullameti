@@ -1,12 +1,11 @@
 package it.polimi.ingsw.ps51.view.Gui;
 
 import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
-import it.polimi.ingsw.ps51.events.events_for_server.ColorChoice;
 import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
-import it.polimi.ingsw.ps51.model.WorkerColor;
 import it.polimi.ingsw.ps51.utility.MessageHandler;
 import it.polimi.ingsw.ps51.view.Supporter;
 
+import javax.swing.*;
 import java.io.IOException;
 
 import java.util.concurrent.ExecutionException;
@@ -14,9 +13,9 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-public class MainGui  extends Supporter {
+public class MainGui extends Supporter {
 
-    private Gui gui;
+    Gui gui;
     private boolean ok;
     boolean isFinish;
     MessageHandler mh;
@@ -52,69 +51,78 @@ public class MainGui  extends Supporter {
                     switch (getTypeOfEvent()) {
 
                         case "NICKNAME":
-                            gui.logIn();
+                            SwingUtilities.invokeLater(() -> gui.logIn());
                             break;
                         case"NUMBEROFPLAYER" :
-                            gui.numberOfPlayers();
+                            SwingUtilities.invokeLater(() -> gui.numberOfPlayers());
                             break;
                         case "GODSDECK":
-                            gui.chooseGodsDeck();
+                            SwingUtilities.invokeLater(() -> gui.chooseGodsDeck());
                             break;
-
                         case "GOD" :
-                            gui.chooseGodsPlayers();
+                            SwingUtilities.invokeLater(() -> gui.chooseGodsPlayers());
                             break;
                         case "COLOR":
-                            System.out.println("color");
-                            gui.chooseColor();
+                            SwingUtilities.invokeLater(() -> gui.chooseColor());
                             break;
-                        case "WORKERPOSITION" :
-                            gui.placeWorkers();
+                        case "WORKERPOSITION":
+                            SwingUtilities.invokeLater(() -> gui.placeWorkers());
                             break;
-
-                        case "WORKER" :
-                            gui.chooseWorker();
+                        case "WORKER":
+                            SwingUtilities.invokeLater(() -> gui.chooseWorker());
                             break;
                         case "MOVE":
-                            gui.askMove();
+                            SwingUtilities.invokeLater(() -> gui.askMove());
                             break;
                         case "BUILD":
-                            gui.askBuild();
+                            SwingUtilities.invokeLater(() -> gui.askBuild());
                             break;
                         case "MAP":
-                            gui.updateMap();
+                            SwingUtilities.invokeLater(() -> {
+                                try {
+                                    gui.updateMap();
+                                } catch (OutOfMapException e) {
+                                    e.printStackTrace();
+                                }
+                            });
                             break;
                         case "DECISION" :
-                            gui.makeDecision();
+                            SwingUtilities.invokeLater(() -> gui.makeDecision());
                             break;
                         case "ACK":
-                            gui.ack();
+                            SwingUtilities.invokeLater(() -> gui.ack());
                             break;
                         case "UNSUCCESSFULOPERATION":
-                            gui.unsuccessfulOperation();
+                            SwingUtilities.invokeLater(() -> gui.unsuccessfulOperation());
                             break;
                         case "GAME_IS_STARTING":
-                            gui.gameIsStarting();
+                            SwingUtilities.invokeLater(() -> gui.gameIsStarting());
                             break;
                         case "TURN_IS_END":
-                            gui.turnIsEnd();
+                            SwingUtilities.invokeLater(() -> gui.turnIsEnd());
                             break;
                         case "WIN":
-                            gui.winGame();
+                            SwingUtilities.invokeLater(() -> {
+                                try {
+                                    gui.winGame();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            });
                             break;
                         case "LOSE":
-                            gui.loseGame();
+                            SwingUtilities.invokeLater(() -> gui.loseGame());
                             break;
                         case "ROOM":
-                            gui.outOfRoom();
+                            SwingUtilities.invokeLater(() -> gui.outOfRoom());
                             isFinish = true;
                             break;
                         case "DISCONNECT":
-                            gui.disconnectGame();
+                            SwingUtilities.invokeLater(() -> gui.disconnectGame());
                             isFinish = true;
                             break;
                         case "END":
-                            gui.endGame();
+                            SwingUtilities.invokeLater(() -> gui.endGame());
                             isFinish = true;
                             break;
                         default:
@@ -122,12 +130,11 @@ public class MainGui  extends Supporter {
                             break;
 
                     }
-                } catch (InterruptedException | TimeoutException | OutOfMapException | ExecutionException | IOException e) {
-                    // e.printStackTrace();
-                    ok=false;
+                } catch (InterruptedException | TimeoutException | ExecutionException e) {
+                    ok = false;
                 }
             }
         }
-        System.exit(0);
+        this.mh.getEx().shutdown();
     }
 }
