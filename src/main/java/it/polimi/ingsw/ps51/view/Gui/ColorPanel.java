@@ -1,24 +1,21 @@
 package it.polimi.ingsw.ps51.view.Gui;
 
-import it.polimi.ingsw.ps51.model.Level;
 import it.polimi.ingsw.ps51.model.WorkerColor;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 public class ColorPanel extends JPanel {
 
     GridBagConstraints gbc = new GridBagConstraints();
 
-    private Container colorContainer ;
-    private Image background;
+    Container colorContainer;
+    Image background;
     private JButton[] colors;
-    private JLabel chooseColor;
+    JLabel chooseColor;
 
     public ColorPanel(Image background) {
 
@@ -57,17 +54,21 @@ public class ColorPanel extends JPanel {
 
 
         for( int i=0 ; i<3 ; i++) {
-
-            ImageIcon colorImage = new ImageIcon((new ImageIcon("src/main/resources/Workers/"+ colorStrings[i].toString().toLowerCase() +".png").getImage().getScaledInstance(140, 240,Image.SCALE_DEFAULT)));
             colors[i] = new JButton(""+ colorStrings[i].toString()+"");
+            try {
+                BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Workers/" + colorStrings[i].toString().toLowerCase() + ".png"));
+                ImageIcon colorImage = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(140, 240,Image.SCALE_DEFAULT));
+                colors[i].setIcon(colorImage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             colors[i].setFont(new Font("Times New Roman", Font.BOLD,18 ));
             colors[i].setHorizontalTextPosition(JButton.CENTER);
             colors[i].setVerticalTextPosition(JButton.BOTTOM);
-            colors[i].setIcon(colorImage);
             colors[i].setSize(140, 240);
             colors[i].setOpaque(false);
             colors[i].setContentAreaFilled(false);
-            //colors[i].setBorderPainted(false);
             colors[i].setBorder(null);
 
             colorContainer.add(colors[i]);
@@ -90,7 +91,7 @@ public class ColorPanel extends JPanel {
     public JButton getSpecificButton(int nr){
         return colors[nr];
     }
-    public static void main(String[] args) throws IOException {
+  /*  public static void main(String[] args) throws IOException {
 
         JFrame frame = new JFrame("Start");
         BufferedImage myImage = ImageIO.read(new File("src/main/resources/SantoriniBoard.png"));
@@ -100,4 +101,5 @@ public class ColorPanel extends JPanel {
         frame.setVisible(true);
 
     }
+   */
 }

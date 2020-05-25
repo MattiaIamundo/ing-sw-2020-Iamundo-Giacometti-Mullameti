@@ -4,14 +4,13 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 public class WinPanel extends JPanel {
 
-    private Image background;
+    Image background;
     private JLabel[] trumpets ;
-    private JLabel text;
+    JLabel text;
 
     public WinPanel(Image background){
         this.background = background;
@@ -50,10 +49,17 @@ public class WinPanel extends JPanel {
             trumpets[i].setPreferredSize(new Dimension(415/2,460/2));
 
         }
-        ImageIcon trumpets1 = new ImageIcon((new ImageIcon("src/main/resources/victorytrumpet1.png").getImage().getScaledInstance(415/2,460/2,Image.SCALE_DEFAULT)));
-        trumpets[0].setIcon(trumpets1);
-        ImageIcon trumpets2 = new ImageIcon((new ImageIcon("src/main/resources/victorytrumpet2.png").getImage().getScaledInstance(415/2,460/2,Image.SCALE_DEFAULT)));
-        trumpets[1].setIcon(trumpets2);
+
+        try {
+            BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/victorytrumpet1.png"));
+            ImageIcon trumpets1 = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(415/2,460/2,Image.SCALE_DEFAULT));
+            trumpets[0].setIcon(trumpets1);
+            BufferedImage bufferedImage2 = ImageIO.read(getClass().getResourceAsStream("/victorytrumpet2.png"));
+            ImageIcon trumpets2 = new ImageIcon(new ImageIcon(bufferedImage2).getImage().getScaledInstance(415/2,460/2,Image.SCALE_DEFAULT));
+            trumpets[1].setIcon(trumpets2);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 

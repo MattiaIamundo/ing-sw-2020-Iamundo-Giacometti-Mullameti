@@ -1,20 +1,22 @@
 package it.polimi.ingsw.ps51.view.Gui;
 
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 
 public class LogInPanel extends JPanel {
 
 
-    private JLabel nicknameError;
-    private JButton submitButton;
-    private Container container;
-    private JLabel welcome;
-    private JLabel enterNickname;
-    private JTextField nickname;
+    JLabel nicknameError;
+    JButton submitButton;
+    Container container;
+    JLabel welcome;
+    JLabel enterNickname;
+    JTextField nickname;
 
 
     public LogInPanel() {
@@ -25,9 +27,13 @@ public class LogInPanel extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 0, 10);
 
-        ImageIcon welcomeImage = new ImageIcon((new ImageIcon("src/main/resources/welcome.png").getImage().getScaledInstance(520*2/3,585*2/3,Image.SCALE_DEFAULT)));
-
-        welcome = new JLabel(welcomeImage);
+        try {
+            BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/welcome.png"));
+            ImageIcon welcomeImage = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(520*2/3,585*2/3,Image.SCALE_DEFAULT));
+            welcome = new JLabel(welcomeImage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         add(welcome , BorderLayout.NORTH);
 
         enterNickname = new JLabel();
@@ -53,9 +59,14 @@ public class LogInPanel extends JPanel {
         gbc.gridy = 1;
         container.add(nicknameError , gbc);
 
-        ImageIcon purpleButton = new ImageIcon((new ImageIcon("src/main/resources/Buttons/btn_purple.png").getImage().getScaledInstance(415*2/3,105*2/3,Image.SCALE_DEFAULT)));
         submitButton = new JButton("Submit");
-        submitButton.setIcon(purpleButton);
+        try {
+            BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Buttons/btn_purple.png"));
+            ImageIcon purpleButton = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(415*2/3,105*2/3,Image.SCALE_DEFAULT));
+            submitButton.setIcon(purpleButton);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         submitButton.setSize(415*2/3,105*2/3);
         submitButton.setHorizontalTextPosition(JButton.CENTER);
         submitButton.setVerticalTextPosition(JButton.CENTER);

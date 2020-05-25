@@ -1,16 +1,18 @@
 package it.polimi.ingsw.ps51.view.Gui;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class NrOfPlayersPanel extends JPanel {
 
-    private JButton[] nrButton;
+    JButton[] nrButton;
 
-    private Container container;
-    private JLabel welcome;
-    private JLabel enterNrOfPlayers;
+    Container container;
+    JLabel welcome;
+    JLabel enterNrOfPlayers;
 
     public NrOfPlayersPanel() {
 
@@ -20,9 +22,13 @@ public class NrOfPlayersPanel extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 10, 5, 5);
 
-        ImageIcon welcomeImage = new ImageIcon((new ImageIcon("src/main/resources/welcome.png").getImage().getScaledInstance(520*2/3,585*2/3,Image.SCALE_DEFAULT)));
-
-        welcome = new JLabel(welcomeImage);
+        try {
+            BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/welcome.png"));
+            ImageIcon welcomeImage = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(520*2/3,585*2/3,Image.SCALE_DEFAULT));
+            welcome = new JLabel(welcomeImage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         add(welcome , BorderLayout.NORTH);
 
         enterNrOfPlayers = new JLabel();
@@ -36,9 +42,14 @@ public class NrOfPlayersPanel extends JPanel {
         nrButton = new JButton[2];
 
         for(int i=0 ; i<2 ;i++) {
-            ImageIcon purpleButton = new ImageIcon((new ImageIcon("src/main/resources/Buttons/btn_purple.png").getImage().getScaledInstance(415 / 4, 105 * 2 / 3, Image.SCALE_DEFAULT)));
             nrButton[i] =new JButton(""+(i+2)+"");
-            nrButton[i].setIcon(purpleButton);
+            try {
+                BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Buttons/btn_purple.png"));
+                ImageIcon purpleButton = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(415 / 4, 105 * 2 / 3, Image.SCALE_DEFAULT));
+                nrButton[i].setIcon(purpleButton);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             nrButton[i].setSize(415 / 4, 105 * 2 / 3);
             nrButton[i].setHorizontalTextPosition(JButton.CENTER);
             nrButton[i].setVerticalTextPosition(JButton.CENTER);

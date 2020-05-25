@@ -5,10 +5,10 @@ import java.awt.*;
 
 public class UndoContainer extends Container {
 
-    private JLabel text;
-    private JButton yes;
-    private JButton no;
-    private Container buttonContainer;
+    JLabel text;
+    JButton yes;
+    JButton no;
+    Container buttonContainer;
 
     public UndoContainer(){
 

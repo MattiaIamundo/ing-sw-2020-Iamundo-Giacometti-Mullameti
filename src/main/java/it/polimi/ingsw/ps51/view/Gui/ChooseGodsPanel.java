@@ -2,23 +2,30 @@ package it.polimi.ingsw.ps51.view.Gui;
 
 import it.polimi.ingsw.ps51.model.gods.Gods;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-
+import java.io.IOException;
 
 
 public class ChooseGodsPanel extends JPanel {
 
-    private JButton[] godButtons;
-    private Container buttonContainer;
-    private Gods[] godToString;
-    private JLabel background;
-    private JLabel chooseGods ;
+    JButton[] godButtons;
+    Container buttonContainer;
+    Gods[] godToString;
+    JLabel background;
+    JLabel chooseGods ;
 
     public ChooseGodsPanel() {
 
-        background = new JLabel(new ImageIcon((new ImageIcon("src/main/resources/GodCards/background.png").getImage().getScaledInstance(1300, 700,Image.SCALE_DEFAULT))));
+        try {
+            BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/GodCards/background.png"));
+            ImageIcon colorImage = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(1300, 700,Image.SCALE_DEFAULT));
+            background = new JLabel(colorImage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         background.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(15, 5, 50, 5);
@@ -40,12 +47,17 @@ public class ChooseGodsPanel extends JPanel {
 
         for( int i=0 ; i<14 ; i++) {
 
-            ImageIcon godImage = new ImageIcon((new ImageIcon("src/main/resources/GodCards/"+ godToString[i].toString().toLowerCase() +".png").getImage().getScaledInstance(140, 240,Image.SCALE_DEFAULT)));
             godButtons[i] = new JButton(""+godToString[i].toString()+"");
+            try {
+                BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/GodCards/" + godToString[i].toString().toLowerCase() + ".png"));
+                ImageIcon godImage = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(140, 240,Image.SCALE_DEFAULT));
+                godButtons[i].setIcon(godImage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             godButtons[i].setForeground(new Color(102,0,153));
             godButtons[i].setHorizontalTextPosition(JButton.CENTER);
             godButtons[i].setVerticalTextPosition(JButton.BOTTOM);
-            godButtons[i].setIcon(godImage);
             godButtons[i].setSize(140, 240);
             godButtons[i].setOpaque(false);
             godButtons[i].setContentAreaFilled(false);

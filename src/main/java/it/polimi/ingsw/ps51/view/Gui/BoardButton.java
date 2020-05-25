@@ -1,5 +1,6 @@
 package it.polimi.ingsw.ps51.view.Gui;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -38,14 +39,22 @@ public class BoardButton extends JButton {
             buttonContainer.add(level[k] ,gbc);
         }
 
-        ImageIcon dome = new ImageIcon((new ImageIcon("src/main/resources/Levels/dome.png").getImage().getScaledInstance(865/50,830/50,Image.SCALE_DEFAULT)));
-        level[3].setIcon(dome);
-        ImageIcon third = new ImageIcon((new ImageIcon("src/main/resources/Levels/third.png").getImage().getScaledInstance(865/30,830/30,Image.SCALE_DEFAULT)));
-        level[2].setIcon(third);
-        ImageIcon second = new ImageIcon((new ImageIcon("src/main/resources/Levels/second.png").getImage().getScaledInstance(865/30,830/30,Image.SCALE_DEFAULT)));
-        level[1].setIcon(second);
-        ImageIcon first = new ImageIcon((new ImageIcon("src/main/resources/Levels/first.png").getImage().getScaledInstance(865/30,830/30,Image.SCALE_DEFAULT)));
-        level[0].setIcon(first);
+        try {
+            BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/dome.png"));
+            ImageIcon dome = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(865/50,830/50,Image.SCALE_DEFAULT));
+            level[3].setIcon(dome);
+            bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/third.png"));
+            ImageIcon third = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(865/30,830/30,Image.SCALE_DEFAULT));
+            level[2].setIcon(third);
+            bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/second.png"));
+            ImageIcon second = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(865/30,830/30,Image.SCALE_DEFAULT));
+            level[1].setIcon(second);
+            bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/first.png"));
+            ImageIcon first = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(865/30,830/30,Image.SCALE_DEFAULT));
+            level[0].setIcon(first);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         worker = new JLabel();
         worker.setPreferredSize(new Dimension(865*3/60,830*3/30));

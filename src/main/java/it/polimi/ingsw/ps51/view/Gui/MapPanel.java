@@ -8,21 +8,20 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 public class MapPanel extends JPanel {
 
     GridBagConstraints gbc = new GridBagConstraints();
 
-    private BoardContainer boardContainer ;
-    private Image background;
+    BoardContainer boardContainer;
+    Image background;
 
     private JLabel chat ;
     private JLabel decision;
     private JButton yes;
     private JButton no;
-    private Container decisionContainer;
-    private Container[] playerContainer;
+    Container decisionContainer;
+    Container[] playerContainer;
     private JLabel[] godPic;
     private JLabel[] playerName;
     private Container workerContainer;
@@ -30,9 +29,9 @@ public class MapPanel extends JPanel {
     private JLabel[] workers;
     private Container levelContainer;
     private JLabel[] levels;
-    private ImageIcon[] levelImages;
-    private JButton exit;
-    private UndoContainer undoContainer;
+    ImageIcon[] levelImages;
+    JButton exit;
+    UndoContainer undoContainer;
 
     public MapPanel(Image background) {
 
@@ -87,8 +86,13 @@ public class MapPanel extends JPanel {
         exit.setBorderPainted(false);
         exit.setBorder(null);
 
-        ImageIcon exitImage = new ImageIcon((new ImageIcon("src/main/resources/Buttons/btn_blue.png").getImage().getScaledInstance(1300 * 2 / 13, 700 / 9, Image.SCALE_DEFAULT)));
-        exit.setIcon(exitImage);
+        try {
+            BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Buttons/btn_blue.png"));
+            ImageIcon exitImage = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(1300 * 2 / 13, 700 / 9, Image.SCALE_DEFAULT));
+            exit.setIcon(exitImage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         exit.setText("EXIT");
         exit.setLocation(1100,650);
         this.add(exit);
@@ -183,10 +187,18 @@ public class MapPanel extends JPanel {
         levels[3] = new JLabel("Dome");
 
 
-        levelImages[0] = new ImageIcon((new ImageIcon("src/main/resources/Levels/"+ Level.getByValue(1)+".png").getImage().getScaledInstance(235/2,215/2,Image.SCALE_DEFAULT)));
-        levelImages[1] = new ImageIcon((new ImageIcon("src/main/resources/Levels/"+ Level.getByValue(2)+".png").getImage().getScaledInstance(200/2,170/2,Image.SCALE_DEFAULT)));
-        levelImages[2] = new ImageIcon((new ImageIcon("src/main/resources/Levels/"+ Level.getByValue(3)+".png").getImage().getScaledInstance(200/2,110/2,Image.SCALE_DEFAULT)));
-        levelImages[3] = new ImageIcon((new ImageIcon("src/main/resources/Levels/"+ Level.getByValue(4)+".png").getImage().getScaledInstance(120/2,85/2,Image.SCALE_DEFAULT)));
+        try {
+            BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/" + Level.getByValue(1) + ".png"));
+            levelImages[0] = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(1300 * 2 / 13, 700 / 9, Image.SCALE_DEFAULT));
+            bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/" + Level.getByValue(2) + ".png"));
+            levelImages[1] = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(200/2,170/2,Image.SCALE_DEFAULT)));
+            bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/" + Level.getByValue(3) + ".png"));
+            levelImages[2] = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(200/2,110/2,Image.SCALE_DEFAULT)));
+            bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/" + Level.getByValue(4) + ".png"));
+            levelImages[3] = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(120/2,85/2,Image.SCALE_DEFAULT)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         for(int i=0 ; i<4 ; i++) {
 
@@ -260,8 +272,14 @@ public class MapPanel extends JPanel {
         workers[nr].setBorder(BorderFactory.createLineBorder(Color.RED , 2));
     }
     public ImageIcon getWorkerImages(String color){
-        return new ImageIcon((new ImageIcon("src/main/resources/Workers/" + color.toLowerCase() + ".png").getImage().getScaledInstance(1300 / 13, 700 * 2 / 9, Image.SCALE_DEFAULT)));
-
+        ImageIcon imageIcon = null;
+        try {
+            BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Workers/" + color.toLowerCase() + ".png"));
+            imageIcon = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(1300 / 13, 700 * 2 / 9, Image.SCALE_DEFAULT)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return imageIcon;
     }
 
     public Container getWorkerContainer() {
@@ -274,8 +292,13 @@ public class MapPanel extends JPanel {
 
     public void setWorkerImages(String color ){
         for(int i=0 ; i<2 ;i++) {
-            workerImages[i] = new ImageIcon((new ImageIcon("src/main/resources/Workers/" + color.toLowerCase() + ".png").getImage().getScaledInstance(1300 / 13, 700 * 2 / 9, Image.SCALE_DEFAULT)));
-            workers[i].setIcon(workerImages[i]);
+            try {
+                BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Workers/" + color.toLowerCase() + ".png"));
+                workerImages[i] = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(1300 / 13, 700 * 2 / 9, Image.SCALE_DEFAULT)));
+                workers[i].setIcon(workerImages[i]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -284,8 +307,13 @@ public class MapPanel extends JPanel {
     }
 
     public void setGodPic(String god , int index) {
-        ImageIcon godImage = new ImageIcon((new ImageIcon("src/main/resources/GodCards/"+god.toLowerCase()+".png").getImage().getScaledInstance(1300*3/30,700*3/10,Image.SCALE_DEFAULT)));
-        godPic[index].setIcon(godImage);
+        try {
+            BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/GodCards/"+god.toLowerCase()+".png"));
+            ImageIcon godImage = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(1300*3/30,700*3/10,Image.SCALE_DEFAULT)));
+            godPic[index].setIcon(godImage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         godPic[index].setVisible(true);
     }
     public void setPlayerName(String name , int index , String color){
@@ -327,7 +355,7 @@ public class MapPanel extends JPanel {
         return no;
     }
 
-    public static void main(String[] args) throws IOException {
+ /*   public static void main(String[] args) throws IOException {
 
         JFrame frame = new JFrame("Start");
         BufferedImage myImage = ImageIO.read(new File("src/main/resources/SantoriniBoard.png"));
@@ -337,4 +365,6 @@ public class MapPanel extends JPanel {
         frame.setVisible(true);
 
     }
+
+  */
 }
