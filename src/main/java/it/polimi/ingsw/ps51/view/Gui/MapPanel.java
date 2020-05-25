@@ -1,12 +1,10 @@
 package it.polimi.ingsw.ps51.view.Gui;
 
-import it.polimi.ingsw.ps51.model.Level;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 public class MapPanel extends JPanel {
@@ -188,13 +186,13 @@ public class MapPanel extends JPanel {
 
 
         try {
-            BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/" + Level.getByValue(1) + ".png"));
+            BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/first.png"));
             levelImages[0] = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(1300 * 2 / 13, 700 / 9, Image.SCALE_DEFAULT));
-            bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/" + Level.getByValue(2) + ".png"));
+            bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/second.png"));
             levelImages[1] = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(200/2,170/2,Image.SCALE_DEFAULT)));
-            bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/" + Level.getByValue(3) + ".png"));
+            bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/third.png"));
             levelImages[2] = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(200/2,110/2,Image.SCALE_DEFAULT)));
-            bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/" + Level.getByValue(4) + ".png"));
+            bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/dome.png"));
             levelImages[3] = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(120/2,85/2,Image.SCALE_DEFAULT)));
         } catch (IOException e) {
             e.printStackTrace();

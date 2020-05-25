@@ -38,7 +38,7 @@ public class MainGui extends Supporter {
     @Override
     public void run() {
 
-
+        SwingUtilities.invokeLater(() -> gui.launch());
         while(!isFinish) {
 
             Future<String> stringFuture = mh.handleTheFuture();
