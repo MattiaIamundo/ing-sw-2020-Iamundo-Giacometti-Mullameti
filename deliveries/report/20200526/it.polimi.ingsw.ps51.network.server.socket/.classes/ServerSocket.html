@@ -1,0 +1,139 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ServerSocket</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.network.server.socket</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ServerSocket (it.polimi.ingsw.ps51.network.server.socket)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ServerSocket</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 15)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.network.server.socket;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.ps51.network.server.MainServer;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import java.io.IOException;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;/**
+<i>8</i>&nbsp; * This class represents the Server which creates the {@link SocketConnection}
+<i>9</i>&nbsp; * @author Luca Giacometti
+<i>10</i>&nbsp; */
+<i>11</i>&nbsp;public class ServerSocket implements Runnable{
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;    MainServer mainServer;
+<i>14</i>&nbsp;    java.net.ServerSocket ss;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    /**
+<i>17</i>&nbsp;     * Constructor
+<i>18</i>&nbsp;     * @param mainServer the central server
+<i>19</i>&nbsp;     * @throws IOException it is thrown if the {@link java.net.ServerSocket} has got some problem with the port number
+<i>20</i>&nbsp;     */
+<b class="nc"><i>21</i>&nbsp;    public ServerSocket(MainServer mainServer, Integer port) throws IOException {</b>
+<b class="nc"><i>22</i>&nbsp;        this.mainServer = mainServer;</b>
+<b class="nc"><i>23</i>&nbsp;        this.ss = new java.net.ServerSocket(port);</b>
+<i>24</i>&nbsp;    }
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    /**
+<i>27</i>&nbsp;     * Here the {@link java.net.ServerSocket} is closed
+<i>28</i>&nbsp;     */
+<i>29</i>&nbsp;    public void stopSS() {
+<i>30</i>&nbsp;        try {
+<b class="nc"><i>31</i>&nbsp;            this.ss.close();</b>
+<b class="nc"><i>32</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>33</i>&nbsp;            System.out.println(&quot;The ServerSocket is already closed...&quot;);</b>
+<b class="nc"><i>34</i>&nbsp;        }</b>
+<i>35</i>&nbsp;    }
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    /**
+<i>38</i>&nbsp;     * Here the {@link java.net.ServerSocket} creates the {@link java.net.Socket} to be inserted
+<i>39</i>&nbsp;     * in the {@link SocketConnection}
+<i>40</i>&nbsp;     * until the number of player for the creation of a room is reached up
+<i>41</i>&nbsp;     * then this thread is terminated
+<i>42</i>&nbsp;     */
+<i>43</i>&nbsp;    @Override
+<i>44</i>&nbsp;    public void run() {
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;            try {
+<b class="nc"><i>47</i>&nbsp;                while (this.mainServer.computeTheSizeOfList()) {</b>
+<b class="nc"><i>48</i>&nbsp;                    SocketConnection si = new SocketConnection(ss.accept(), this.mainServer);</b>
+<b class="nc"><i>49</i>&nbsp;                    Thread t = new Thread(si);</b>
+<b class="nc"><i>50</i>&nbsp;                    t.start();</b>
+<b class="nc"><i>51</i>&nbsp;                }</b>
+<b class="nc"><i>52</i>&nbsp;            } catch (IOException e) {</b>
+<b class="nc"><i>53</i>&nbsp;                System.out.println(&quot;The server socket is down...&quot;);</b>
+<b class="nc"><i>54</i>&nbsp;        }</b>
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-26 10:48</div>
+</div>
+</body>
+</html>

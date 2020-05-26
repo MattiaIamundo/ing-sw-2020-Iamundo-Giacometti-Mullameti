@@ -1,0 +1,216 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: VisitorView</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.view</a> ]
+</div>
+
+<h1>Coverage Summary for Class: VisitorView (it.polimi.ingsw.ps51.view)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">VisitorView</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 21)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 35)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.view;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_client.*;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;public class VisitorView implements VisitorClient {
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;    Supporter s;
+<i>9</i>&nbsp;
+<b class="nc"><i>10</i>&nbsp;    public VisitorView(Supporter supporter) {</b>
+<b class="nc"><i>11</i>&nbsp;        s = supporter;</b>
+<i>12</i>&nbsp;    }
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    @Override
+<i>15</i>&nbsp;    public String visitChooseBuild(ChooseBuild event) {
+<b class="nc"><i>16</i>&nbsp;        s.setValidChoicesBuild(event.getValidChoices());</b>
+<b class="nc"><i>17</i>&nbsp;        return &quot;BUILD&quot;;</b>
+<i>18</i>&nbsp;    }
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    @Override
+<i>21</i>&nbsp;    public String visitChooseGod(ChooseGod event) {
+<b class="nc"><i>22</i>&nbsp;        s.setAvailableGods(event.getAvailableGods());</b>
+<b class="nc"><i>23</i>&nbsp;        return &quot;GOD&quot;;</b>
+<i>24</i>&nbsp;    }
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    @Override
+<i>27</i>&nbsp;    public String visitChooseGodsDeck(ChooseGodsDeck event) {
+<b class="nc"><i>28</i>&nbsp;        s.setGodsNum(event.getGodsNum());</b>
+<b class="nc"><i>29</i>&nbsp;        return &quot;GODSDECK&quot;;</b>
+<i>30</i>&nbsp;    }
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    @Override
+<i>33</i>&nbsp;    public String visitChooseMove(ChooseMove event) {
+<b class="nc"><i>34</i>&nbsp;        s.setValidChoicesMoves(event.getValidChoices());</b>
+<b class="nc"><i>35</i>&nbsp;        return &quot;MOVE&quot;;</b>
+<i>36</i>&nbsp;    }
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    @Override
+<i>39</i>&nbsp;    public String visitChooseWorker(ChooseWorker event) {
+<i>40</i>&nbsp;
+<b class="nc"><i>41</i>&nbsp;        s.setValidChoicesWorkers(event.getValidChoices());</b>
+<b class="nc"><i>42</i>&nbsp;        return &quot;WORKER&quot;;</b>
+<i>43</i>&nbsp;    }
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;    @Override
+<i>46</i>&nbsp;    public String visitChooseWorkerPosition(ChooseWorkerPosition event) {
+<i>47</i>&nbsp;
+<b class="nc"><i>48</i>&nbsp;        s.setWorkerNum(event.getWorkerNum());</b>
+<b class="nc"><i>49</i>&nbsp;        return &quot;WORKERPOSITION&quot;;</b>
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    }
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    @Override
+<i>54</i>&nbsp;    public String visitDisconnection(Disconnection event) {
+<i>55</i>&nbsp;
+<b class="nc"><i>56</i>&nbsp;        return &quot;DISCONNECTION&quot;;</b>
+<i>57</i>&nbsp;    }
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    @Override
+<i>60</i>&nbsp;    public String visitEndEvent(EndEvent event) {
+<b class="nc"><i>61</i>&nbsp;        return &quot;END&quot;;</b>
+<i>62</i>&nbsp;    }
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;    @Override
+<i>65</i>&nbsp;    public String visitLose(Lose event) {
+<b class="nc"><i>66</i>&nbsp;        return &quot;LOSE&quot;;</b>
+<i>67</i>&nbsp;    }
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;    @Override
+<i>70</i>&nbsp;    public String visitMakeDecision(MakeDecision event) {
+<b class="nc"><i>71</i>&nbsp;        s.setDecision(event.getToDecide());</b>
+<b class="nc"><i>72</i>&nbsp;        return &quot;DECISION&quot;;</b>
+<i>73</i>&nbsp;    }
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;    @Override
+<i>76</i>&nbsp;    public String visitMapUpdate(MapUpdate event) {
+<b class="nc"><i>77</i>&nbsp;        s.setMap(event.getMap());</b>
+<b class="nc"><i>78</i>&nbsp;        s.setWorkers(event.getWorkers());</b>
+<b class="nc"><i>79</i>&nbsp;        return &quot;MAP&quot;;</b>
+<i>80</i>&nbsp;    }
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    @Override
+<i>83</i>&nbsp;    public String visitNickname(Nickname event) {
+<b class="nc"><i>84</i>&nbsp;        return &quot;NICKNAME&quot;;</b>
+<i>85</i>&nbsp;    }
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;    @Override
+<i>88</i>&nbsp;    public String visitNumberOfPlayer(NumberOfPlayer event) {
+<b class="nc"><i>89</i>&nbsp;        return &quot;NUMBEROFPLAYER&quot;;</b>
+<i>90</i>&nbsp;    }
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;    @Override
+<i>93</i>&nbsp;    public String visitWin(Win event) {
+<b class="nc"><i>94</i>&nbsp;        return &quot;WIN&quot;;</b>
+<i>95</i>&nbsp;    }
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    @Override
+<i>98</i>&nbsp;    public String visitOutOfRoom(OutOfRoom event) {
+<b class="nc"><i>99</i>&nbsp;        return &quot;ROOM&quot;;</b>
+<i>100</i>&nbsp;    }
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;    @Override
+<i>103</i>&nbsp;    public String visitUnsuccessfulOperation(UnsuccessfulOperation event) {
+<i>104</i>&nbsp;        //TODO alert the player that something went wrong on the server and his move wasn&#39;t be applied, and he must re do it
+<b class="nc"><i>105</i>&nbsp;        return &quot;UNSUCCESSFULOPERATION&quot;;</b>
+<i>106</i>&nbsp;    }
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;    @Override
+<i>109</i>&nbsp;    public String visitAck(Ack event) {
+<b class="nc"><i>110</i>&nbsp;        s.setOperationConfirmed(event.getOperationConfirmed());</b>
+<b class="nc"><i>111</i>&nbsp;        return &quot;ACK&quot;;</b>
+<i>112</i>&nbsp;    }
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;    @Override
+<i>115</i>&nbsp;    public String visitGameIsStarting(GameIsStarting event) {
+<b class="nc"><i>116</i>&nbsp;        s.setChosenGods(event.getChosenGods());</b>
+<b class="nc"><i>117</i>&nbsp;        s.setChosenColors(event.getColorMap());</b>
+<b class="nc"><i>118</i>&nbsp;        return &quot;GAME_IS_STARTING&quot;;</b>
+<i>119</i>&nbsp;    }
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;    @Override
+<i>122</i>&nbsp;    public String visitTurnIsEnd(TurnIsEnd event) {
+<b class="nc"><i>123</i>&nbsp;        return &quot;TURN_IS_END&quot;;</b>
+<i>124</i>&nbsp;    }
+<i>125</i>&nbsp;
+<i>126</i>&nbsp;    @Override
+<i>127</i>&nbsp;    public String visitChooseColor(ChooseColor event) {
+<b class="nc"><i>128</i>&nbsp;        s.setAvailableColors(event.getAvailableColor());</b>
+<b class="nc"><i>129</i>&nbsp;        return &quot;COLOR&quot;;</b>
+<i>130</i>&nbsp;    }
+<i>131</i>&nbsp;
+<i>132</i>&nbsp;}
+<i>133</i>&nbsp;
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-26 10:48</div>
+</div>
+</body>
+</html>

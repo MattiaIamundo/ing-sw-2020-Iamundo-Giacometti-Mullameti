@@ -1,0 +1,85 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GodController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.controller.gods</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GodController (it.polimi.ingsw.ps51.controller.gods)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">GodController</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.controller.gods;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.ps51.model.Coordinates;
+<i>4</i>&nbsp;import it.polimi.ingsw.ps51.model.Level;
+<i>5</i>&nbsp;import it.polimi.ingsw.ps51.model.Worker;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;public interface GodController {
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;    /**
+<i>10</i>&nbsp;     * This method is that one which must be called to start the turn, it retrieves the list of the workers that can be
+<i>11</i>&nbsp;     * moved and creates an event which is sent to the actual player who choose the worker to use,
+<i>12</i>&nbsp;     * if none of the workers of the actual player can be moved Game will be advised that the actual player
+<i>13</i>&nbsp;     * lost the match
+<i>14</i>&nbsp;     */
+<i>15</i>&nbsp;    void start();
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    /**
+<i>18</i>&nbsp;     * The method is called as a consequence of receiving a {@code WorkerChoice} event that specifies which of the player&#39;s
+<i>19</i>&nbsp;     * workers must be selected to perform the turn
+<i>20</i>&nbsp;     * @param worker the selected worker
+<i>21</i>&nbsp;     */
+<i>22</i>&nbsp;    void manageWorkerChoice(Worker worker);
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    /**
+<i>25</i>&nbsp;     * The method is called as a consequence of receiving a {@code MoveChoice} event that specifies where to move the
+<i>26</i>&nbsp;     * selected worker
+<i>27</i>&nbsp;     * @param moveTo the coordinates where the worker must be moved
+<i>28</i>&nbsp;     */
+<i>29</i>&nbsp;    void manageMoveChoice(Coordinates moveTo);
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    /**
+<i>32</i>&nbsp;     * The method is called as a consequence of receiving a {@code Build} event that specifies where and at which level
+<i>33</i>&nbsp;     * must be built a new tower&#39;s level.
+<i>34</i>&nbsp;     * @param buildOn the coordinates where the new level must be built
+<i>35</i>&nbsp;     * @param level the level that must be built
+<i>36</i>&nbsp;     */
+<i>37</i>&nbsp;    void manageBuildChoice(Coordinates buildOn, Level level);
+<i>38</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-26 10:48</div>
+</div>
+</body>
+</html>

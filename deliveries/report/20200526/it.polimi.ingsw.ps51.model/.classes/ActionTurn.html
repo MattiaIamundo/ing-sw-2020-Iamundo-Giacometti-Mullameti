@@ -1,0 +1,160 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ActionTurn</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ActionTurn (it.polimi.ingsw.ps51.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ActionTurn</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (14/ 14)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;/**
+<i>4</i>&nbsp; * @author Luca
+<i>5</i>&nbsp; * This class represents the single action of the game to be memorized in {@link MemoryTurn}
+<i>6</i>&nbsp; * which which is identified by:
+<i>7</i>&nbsp; * the nickname of the player who has done the action,
+<i>8</i>&nbsp; * the action {@link Action},
+<i>9</i>&nbsp; * and the number of the turn when he did this action
+<i>10</i>&nbsp; */
+<i>11</i>&nbsp;public class ActionTurn {
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;    private String nicknameOfPlayer;
+<i>14</i>&nbsp;    private Action action;
+<i>15</i>&nbsp;    private Integer numberOfTurn;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    /**
+<i>18</i>&nbsp;     * Constructor of the class
+<i>19</i>&nbsp;     * it sets:
+<i>20</i>&nbsp;     * the numberOfTurn to zero and
+<i>21</i>&nbsp;     * the action and the nickname to null
+<i>22</i>&nbsp;     */
+<b class="fc"><i>23</i>&nbsp;    public ActionTurn(){</b>
+<b class="fc"><i>24</i>&nbsp;        this.numberOfTurn = 0;</b>
+<b class="fc"><i>25</i>&nbsp;        this.action = null;</b>
+<b class="fc"><i>26</i>&nbsp;        this.nicknameOfPlayer = null;</b>
+<b class="fc"><i>27</i>&nbsp;    }</b>
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    /**
+<i>30</i>&nbsp;     * Setter of nicknameOfPlayer
+<i>31</i>&nbsp;     * @param nickname is the nickname of the player who has done this move
+<i>32</i>&nbsp;     */
+<i>33</i>&nbsp;    public void setNicknameOfPlayer(String nickname){
+<b class="fc"><i>34</i>&nbsp;        this.nicknameOfPlayer = nickname;</b>
+<b class="fc"><i>35</i>&nbsp;    }</b>
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    /**
+<i>38</i>&nbsp;     * Getter of nicknameOfPlayer
+<i>39</i>&nbsp;     * @return the nickname of the player who has done this move
+<i>40</i>&nbsp;     */
+<i>41</i>&nbsp;    public String getNickname(){
+<b class="fc"><i>42</i>&nbsp;        return this.nicknameOfPlayer;</b>
+<i>43</i>&nbsp;    }
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;    /**
+<i>46</i>&nbsp;     * Setter of action
+<i>47</i>&nbsp;     * @param action this is the action done by the player
+<i>48</i>&nbsp;     */
+<i>49</i>&nbsp;    public void setAction(Action action){
+<b class="fc"><i>50</i>&nbsp;        this.action = action;</b>
+<b class="fc"><i>51</i>&nbsp;    }</b>
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    /**
+<i>54</i>&nbsp;     * Getter of the action
+<i>55</i>&nbsp;     * @return the action done by the player
+<i>56</i>&nbsp;     */
+<i>57</i>&nbsp;    public Action getAction(){
+<b class="fc"><i>58</i>&nbsp;        return this.action;</b>
+<i>59</i>&nbsp;    }
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    /**
+<i>62</i>&nbsp;     * Setter of numberOfTurn
+<i>63</i>&nbsp;     * @param numberOfTurn it is an Integer which indicates the number of the turn
+<i>64</i>&nbsp;     */
+<i>65</i>&nbsp;    public void setNumberOfTurn(Integer numberOfTurn){
+<b class="fc"><i>66</i>&nbsp;        this.numberOfTurn = numberOfTurn;</b>
+<b class="fc"><i>67</i>&nbsp;    }</b>
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;    /**
+<i>70</i>&nbsp;     * Getter of numberOfTurn
+<i>71</i>&nbsp;     * @return an Integer which indicates the number of the turn
+<i>72</i>&nbsp;     */
+<i>73</i>&nbsp;    public Integer getNumberOfTurn(){
+<b class="fc"><i>74</i>&nbsp;        return this.numberOfTurn;</b>
+<i>75</i>&nbsp;    }
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-26 10:48</div>
+</div>
+</body>
+</html>

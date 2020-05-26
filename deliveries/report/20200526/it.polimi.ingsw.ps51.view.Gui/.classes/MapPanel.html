@@ -1,0 +1,451 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MapPanel</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.view.Gui</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MapPanel (it.polimi.ingsw.ps51.view.Gui)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MapPanel</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 22)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 197)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.view.Gui;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;
+<i>4</i>&nbsp;import javax.imageio.ImageIO;
+<i>5</i>&nbsp;import javax.swing.*;
+<i>6</i>&nbsp;import java.awt.*;
+<i>7</i>&nbsp;import java.awt.image.BufferedImage;
+<i>8</i>&nbsp;import java.io.IOException;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;public class MapPanel extends JPanel {
+<i>11</i>&nbsp;
+<b class="nc"><i>12</i>&nbsp;    GridBagConstraints gbc = new GridBagConstraints();</b>
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    BoardContainer boardContainer;
+<i>15</i>&nbsp;    Image background;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    private JLabel chat ;
+<i>18</i>&nbsp;    private JLabel decision;
+<i>19</i>&nbsp;    private JButton yes;
+<i>20</i>&nbsp;    private JButton no;
+<i>21</i>&nbsp;    Container decisionContainer;
+<i>22</i>&nbsp;    Container[] playerContainer;
+<i>23</i>&nbsp;    private JLabel[] godPic;
+<i>24</i>&nbsp;    private JLabel[] playerName;
+<i>25</i>&nbsp;    private Container workerContainer;
+<i>26</i>&nbsp;    private ImageIcon[] workerImages;
+<i>27</i>&nbsp;    private JLabel[] workers;
+<i>28</i>&nbsp;    private Container levelContainer;
+<i>29</i>&nbsp;    private JLabel[] levels;
+<i>30</i>&nbsp;    ImageIcon[] levelImages;
+<i>31</i>&nbsp;    JButton exit;
+<i>32</i>&nbsp;    UndoContainer undoContainer;
+<i>33</i>&nbsp;
+<b class="nc"><i>34</i>&nbsp;    public MapPanel(Image background) {</b>
+<i>35</i>&nbsp;
+<b class="nc"><i>36</i>&nbsp;        this.setLayout(null);</b>
+<b class="nc"><i>37</i>&nbsp;        this.background = background;</b>
+<i>38</i>&nbsp;
+<b class="nc"><i>39</i>&nbsp;        boardContainer = new BoardContainer();</b>
+<b class="nc"><i>40</i>&nbsp;        boardContainer.setLocation(395, 50);</b>
+<b class="nc"><i>41</i>&nbsp;        boardContainer.setSize(865 * 2 / 3, 880 * 2 / 3);</b>
+<b class="nc"><i>42</i>&nbsp;        this.add(boardContainer);</b>
+<b class="nc"><i>43</i>&nbsp;        undoContainer= new UndoContainer();</b>
+<b class="nc"><i>44</i>&nbsp;        undoContainer.setLocation(20,650);</b>
+<b class="nc"><i>45</i>&nbsp;        this.add(undoContainer);</b>
+<b class="nc"><i>46</i>&nbsp;        defineChatLabel();</b>
+<b class="nc"><i>47</i>&nbsp;        defineDecision();</b>
+<b class="nc"><i>48</i>&nbsp;        defineButton();</b>
+<b class="nc"><i>49</i>&nbsp;        definePlayerContainer();</b>
+<b class="nc"><i>50</i>&nbsp;        defineWorkerContainer();</b>
+<b class="nc"><i>51</i>&nbsp;        defineLevelImages();</b>
+<i>52</i>&nbsp;    }
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    @Override
+<i>55</i>&nbsp;    protected void paintComponent(Graphics g) {
+<b class="nc"><i>56</i>&nbsp;        super.paintComponent(g);</b>
+<i>57</i>&nbsp;
+<b class="nc"><i>58</i>&nbsp;        g.drawImage(background, 0, 0,this.getWidth(),this.getHeight(), this);</b>
+<i>59</i>&nbsp;    }
+<i>60</i>&nbsp;    private void defineChatLabel(){
+<b class="nc"><i>61</i>&nbsp;        chat = new JLabel();</b>
+<b class="nc"><i>62</i>&nbsp;        chat.setLocation(395,650);</b>
+<b class="nc"><i>63</i>&nbsp;        chat.setSize(865 * 2 / 3, 70);</b>
+<b class="nc"><i>64</i>&nbsp;        chat.setHorizontalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>65</i>&nbsp;        chat.setVerticalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>66</i>&nbsp;        chat.setForeground(new Color(0 ,0 ,153));</b>
+<b class="nc"><i>67</i>&nbsp;        chat.setFont(new Font (&quot;Times new Roman&quot; , Font.ITALIC , 18));</b>
+<b class="nc"><i>68</i>&nbsp;        chat.setBorder(BorderFactory.createMatteBorder(5,5,5,5, new Color(0 ,0 ,153)));</b>
+<b class="nc"><i>69</i>&nbsp;        this.add(chat);</b>
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;    }
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;    private void defineButton(){
+<i>74</i>&nbsp;
+<b class="nc"><i>75</i>&nbsp;        exit = new JButton();</b>
+<i>76</i>&nbsp;
+<b class="nc"><i>77</i>&nbsp;        exit.setVerticalTextPosition(SwingConstants.CENTER);</b>
+<b class="nc"><i>78</i>&nbsp;        exit.setHorizontalTextPosition(SwingConstants.CENTER);</b>
+<b class="nc"><i>79</i>&nbsp;        exit.setSize(1300 * 2 / 13, 700 / 9);</b>
+<b class="nc"><i>80</i>&nbsp;        exit.setFont(new Font(&quot;Times New Roman&quot;, Font.BOLD, 24));</b>
+<b class="nc"><i>81</i>&nbsp;        exit.setForeground(Color.WHITE);</b>
+<b class="nc"><i>82</i>&nbsp;        exit.setOpaque(false);</b>
+<b class="nc"><i>83</i>&nbsp;        exit.setContentAreaFilled(false);</b>
+<b class="nc"><i>84</i>&nbsp;        exit.setBorderPainted(false);</b>
+<b class="nc"><i>85</i>&nbsp;        exit.setBorder(null);</b>
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;        try {
+<b class="nc"><i>88</i>&nbsp;            BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream(&quot;/Buttons/btn_blue.png&quot;));</b>
+<b class="nc"><i>89</i>&nbsp;            ImageIcon exitImage = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(1300 * 2 / 13, 700 / 9, Image.SCALE_DEFAULT));</b>
+<b class="nc"><i>90</i>&nbsp;            exit.setIcon(exitImage);</b>
+<b class="nc"><i>91</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>92</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>93</i>&nbsp;        }</b>
+<b class="nc"><i>94</i>&nbsp;        exit.setText(&quot;EXIT&quot;);</b>
+<b class="nc"><i>95</i>&nbsp;        exit.setLocation(1100,650);</b>
+<b class="nc"><i>96</i>&nbsp;        this.add(exit);</b>
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;    }
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;    private void definePlayerContainer(){
+<i>101</i>&nbsp;
+<b class="nc"><i>102</i>&nbsp;        playerContainer = new Container[3];</b>
+<b class="nc"><i>103</i>&nbsp;        godPic = new JLabel[3];</b>
+<b class="nc"><i>104</i>&nbsp;        playerName = new JLabel[3];</b>
+<i>105</i>&nbsp;
+<b class="nc"><i>106</i>&nbsp;        for (int i=0 ; i&lt;3 ; i++){</b>
+<b class="nc"><i>107</i>&nbsp;            playerContainer[i] = new Container();</b>
+<b class="nc"><i>108</i>&nbsp;            playerContainer[i].setSize(200,300);</b>
+<b class="nc"><i>109</i>&nbsp;            playerContainer[i].setLayout(new GridBagLayout());</b>
+<b class="nc"><i>110</i>&nbsp;            playerName[i] = new JLabel();</b>
+<b class="nc"><i>111</i>&nbsp;            playerName[i].setSize(200,500);</b>
+<b class="nc"><i>112</i>&nbsp;            playerName[i].setHorizontalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>113</i>&nbsp;            playerName[i].setVerticalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>114</i>&nbsp;            playerName[i].setFont(new Font (&quot;Times new Roman&quot; , Font.BOLD , 36));</b>
+<i>115</i>&nbsp;            //playerName[i].setText(&quot;Meri&quot;);
+<b class="nc"><i>116</i>&nbsp;            godPic[i] = new JLabel();</b>
+<b class="nc"><i>117</i>&nbsp;            godPic[i].setHorizontalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>118</i>&nbsp;            godPic[i].setVerticalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>119</i>&nbsp;            godPic[i].setPreferredSize(new Dimension(1300*3/26,700*3/9));</b>
+<i>120</i>&nbsp;
+<b class="nc"><i>121</i>&nbsp;            gbc.anchor = 10;</b>
+<b class="nc"><i>122</i>&nbsp;            gbc.gridx = 0;</b>
+<b class="nc"><i>123</i>&nbsp;            gbc.gridy = 0;</b>
+<b class="nc"><i>124</i>&nbsp;            playerContainer[i].add(playerName[i] , gbc);</b>
+<b class="nc"><i>125</i>&nbsp;            gbc.gridy = 1;</b>
+<b class="nc"><i>126</i>&nbsp;            playerContainer[i].add(godPic[i] , gbc);</b>
+<i>127</i>&nbsp;
+<i>128</i>&nbsp;        }
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;
+<i>131</i>&nbsp;        /*ImageIcon godImage1 = new ImageIcon((new ImageIcon(&quot;src/main/resources/GodCards/apollo.png&quot;).getImage().getScaledInstance(1300*3/26,700*3/9,Image.SCALE_DEFAULT)));
+<i>132</i>&nbsp;        godPic[0].setIcon(godImage1);
+<i>133</i>&nbsp;        ImageIcon godImage2 = new ImageIcon((new ImageIcon(&quot;src/main/resources/GodCards/pan.png&quot;).getImage().getScaledInstance(1300*3/26,700*3/9,Image.SCALE_DEFAULT)));
+<i>134</i>&nbsp;        godPic[1].setIcon(godImage2);
+<i>135</i>&nbsp;        ImageIcon godImage3 = new ImageIcon((new ImageIcon(&quot;src/main/resources/GodCards/artemis.png&quot;).getImage().getScaledInstance(1300*3/26,700*3/9,Image.SCALE_DEFAULT)));
+<i>136</i>&nbsp;        godPic[2].setIcon(godImage3);*/
+<i>137</i>&nbsp;
+<b class="nc"><i>138</i>&nbsp;        playerContainer[0].setLocation(50,50);</b>
+<b class="nc"><i>139</i>&nbsp;        this.add(playerContainer[0]);</b>
+<b class="nc"><i>140</i>&nbsp;        playerContainer[1].setLocation(1100,50);</b>
+<b class="nc"><i>141</i>&nbsp;        this.add(playerContainer[1]);</b>
+<b class="nc"><i>142</i>&nbsp;        playerContainer[2].setLocation(1100,350);</b>
+<b class="nc"><i>143</i>&nbsp;        this.add(playerContainer[2]);</b>
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;    }
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;    private void defineWorkerContainer(){
+<i>148</i>&nbsp;
+<b class="nc"><i>149</i>&nbsp;        workerContainer = new Container();</b>
+<b class="nc"><i>150</i>&nbsp;        workerContainer.setLayout(new GridBagLayout());</b>
+<b class="nc"><i>151</i>&nbsp;        workerContainer.setSize(200,700*2/9);</b>
+<b class="nc"><i>152</i>&nbsp;        workerImages = new ImageIcon[2];</b>
+<i>153</i>&nbsp;
+<i>154</i>&nbsp;
+<b class="nc"><i>155</i>&nbsp;        workers = new JLabel[2];</b>
+<i>156</i>&nbsp;
+<b class="nc"><i>157</i>&nbsp;        for(int i=0 ; i&lt;2 ; i++) {</b>
+<i>158</i>&nbsp;
+<b class="nc"><i>159</i>&nbsp;            workers[i] = new JLabel();</b>
+<b class="nc"><i>160</i>&nbsp;            workers[i].setHorizontalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>161</i>&nbsp;            workers[i].setVerticalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>162</i>&nbsp;            workers[i].setPreferredSize(new Dimension(1300/13,700*2/9));</b>
+<b class="nc"><i>163</i>&nbsp;            gbc.gridx=i;</b>
+<b class="nc"><i>164</i>&nbsp;            gbc.gridy=0;</b>
+<b class="nc"><i>165</i>&nbsp;            workerContainer.add(workers[i],gbc);</b>
+<i>166</i>&nbsp;        }
+<i>167</i>&nbsp;
+<b class="nc"><i>168</i>&nbsp;        workerContainer.setLocation(50 , 400);</b>
+<b class="nc"><i>169</i>&nbsp;        this.add(workerContainer);</b>
+<i>170</i>&nbsp;
+<i>171</i>&nbsp;    }
+<i>172</i>&nbsp;
+<i>173</i>&nbsp;    private void defineLevelImages(){
+<i>174</i>&nbsp;
+<b class="nc"><i>175</i>&nbsp;        levelContainer = new Container();</b>
+<b class="nc"><i>176</i>&nbsp;        levelContainer.setLayout(new GridBagLayout());</b>
+<b class="nc"><i>177</i>&nbsp;        levelContainer.setSize(120,400);</b>
+<i>178</i>&nbsp;
+<b class="nc"><i>179</i>&nbsp;        levels = new JLabel[4];</b>
+<b class="nc"><i>180</i>&nbsp;        levelImages = new ImageIcon[4];</b>
+<i>181</i>&nbsp;
+<b class="nc"><i>182</i>&nbsp;        levels[0] = new JLabel(&quot;First&quot;);</b>
+<b class="nc"><i>183</i>&nbsp;        levels[1] = new JLabel(&quot;Second&quot;);</b>
+<b class="nc"><i>184</i>&nbsp;        levels[2] = new JLabel(&quot;Third&quot;);</b>
+<b class="nc"><i>185</i>&nbsp;        levels[3] = new JLabel(&quot;Dome&quot;);</b>
+<i>186</i>&nbsp;
+<i>187</i>&nbsp;
+<i>188</i>&nbsp;        try {
+<b class="nc"><i>189</i>&nbsp;            BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream(&quot;/Levels/first.png&quot;));</b>
+<b class="nc"><i>190</i>&nbsp;            levelImages[0] = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(1300 * 2 / 13, 700 / 9, Image.SCALE_DEFAULT));</b>
+<b class="nc"><i>191</i>&nbsp;            bufferedImage1 = ImageIO.read(getClass().getResourceAsStream(&quot;/Levels/second.png&quot;));</b>
+<b class="nc"><i>192</i>&nbsp;            levelImages[1] = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(200/2,170/2,Image.SCALE_DEFAULT)));</b>
+<b class="nc"><i>193</i>&nbsp;            bufferedImage1 = ImageIO.read(getClass().getResourceAsStream(&quot;/Levels/third.png&quot;));</b>
+<b class="nc"><i>194</i>&nbsp;            levelImages[2] = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(200/2,110/2,Image.SCALE_DEFAULT)));</b>
+<b class="nc"><i>195</i>&nbsp;            bufferedImage1 = ImageIO.read(getClass().getResourceAsStream(&quot;/Levels/dome.png&quot;));</b>
+<b class="nc"><i>196</i>&nbsp;            levelImages[3] = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(120/2,85/2,Image.SCALE_DEFAULT)));</b>
+<b class="nc"><i>197</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>198</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>199</i>&nbsp;        }</b>
+<i>200</i>&nbsp;
+<b class="nc"><i>201</i>&nbsp;        for(int i=0 ; i&lt;4 ; i++) {</b>
+<i>202</i>&nbsp;
+<i>203</i>&nbsp;
+<b class="nc"><i>204</i>&nbsp;            levels[i].setIcon(levelImages[i]);</b>
+<b class="nc"><i>205</i>&nbsp;            levels[i].setHorizontalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>206</i>&nbsp;            levels[i].setVerticalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>207</i>&nbsp;            levels[i].setHorizontalTextPosition(SwingConstants.CENTER);</b>
+<b class="nc"><i>208</i>&nbsp;            levels[i].setVerticalTextPosition(SwingConstants.BOTTOM);</b>
+<b class="nc"><i>209</i>&nbsp;            levels[i].setSize(levels[i].getIcon().getIconWidth(),levels[i].getIcon().getIconHeight());</b>
+<i>210</i>&nbsp;
+<i>211</i>&nbsp;        }
+<i>212</i>&nbsp;
+<b class="nc"><i>213</i>&nbsp;        levelContainer.setVisible(false);</b>
+<i>214</i>&nbsp;
+<b class="nc"><i>215</i>&nbsp;        gbc.insets = new Insets(5,0,5,0);</b>
+<i>216</i>&nbsp;
+<b class="nc"><i>217</i>&nbsp;        for(int i=0 ; i&lt;4 ; i++) {</b>
+<i>218</i>&nbsp;
+<b class="nc"><i>219</i>&nbsp;            gbc.gridx = 0;</b>
+<b class="nc"><i>220</i>&nbsp;            gbc.gridy = 4-i;</b>
+<b class="nc"><i>221</i>&nbsp;            levelContainer.add(levels[i] , gbc);</b>
+<i>222</i>&nbsp;        }
+<b class="nc"><i>223</i>&nbsp;        levelContainer.setLocation(260 , 200);</b>
+<b class="nc"><i>224</i>&nbsp;        this.add(levelContainer);</b>
+<i>225</i>&nbsp;
+<i>226</i>&nbsp;    }
+<i>227</i>&nbsp;
+<i>228</i>&nbsp;    private void defineDecision(){
+<b class="nc"><i>229</i>&nbsp;        decisionContainer = new Container();</b>
+<b class="nc"><i>230</i>&nbsp;        decisionContainer.setSize(865*2/3 , 30);</b>
+<b class="nc"><i>231</i>&nbsp;        decisionContainer.setLayout(new GridLayout(1,2));</b>
+<b class="nc"><i>232</i>&nbsp;        yes = new JButton(&quot;YES&quot;);</b>
+<b class="nc"><i>233</i>&nbsp;        yes.setSize(100,20);</b>
+<b class="nc"><i>234</i>&nbsp;        yes.setForeground(new Color(0,102, 0));</b>
+<b class="nc"><i>235</i>&nbsp;        yes.setFont(new Font (&quot;Times new Roman&quot; , Font.ITALIC , 18));</b>
+<b class="nc"><i>236</i>&nbsp;        yes.setOpaque(false);</b>
+<b class="nc"><i>237</i>&nbsp;        yes.setContentAreaFilled(false);</b>
+<b class="nc"><i>238</i>&nbsp;        yes.setBorder(BorderFactory.createMatteBorder(5,5,5,5, new Color(0,102, 0)));</b>
+<i>239</i>&nbsp;
+<b class="nc"><i>240</i>&nbsp;        no = new JButton(&quot;NO&quot;);</b>
+<b class="nc"><i>241</i>&nbsp;        no.setSize(100,20);</b>
+<b class="nc"><i>242</i>&nbsp;        no.setForeground(new Color(153,0,0));</b>
+<b class="nc"><i>243</i>&nbsp;        no.setFont(new Font (&quot;Times new Roman&quot; , Font.ITALIC , 18));</b>
+<b class="nc"><i>244</i>&nbsp;        no.setOpaque(false);</b>
+<b class="nc"><i>245</i>&nbsp;        no.setContentAreaFilled(false);</b>
+<b class="nc"><i>246</i>&nbsp;        no.setBorder(BorderFactory.createMatteBorder(5,5,5,5, new Color(153,0,0)));</b>
+<i>247</i>&nbsp;
+<b class="nc"><i>248</i>&nbsp;        decision = new JLabel();</b>
+<b class="nc"><i>249</i>&nbsp;        decision.setText(&quot;Enter Y for Yes or N for No !!&quot;);</b>
+<b class="nc"><i>250</i>&nbsp;        decision.setLayout(new BorderLayout());</b>
+<b class="nc"><i>251</i>&nbsp;        decision.setLocation(395,650);</b>
+<b class="nc"><i>252</i>&nbsp;        decision.setSize(865 * 2 / 3, 70);</b>
+<b class="nc"><i>253</i>&nbsp;        decision.setHorizontalAlignment(SwingConstants.CENTER);</b>
+<b class="nc"><i>254</i>&nbsp;        decision.setVerticalAlignment(SwingConstants.NORTH);</b>
+<b class="nc"><i>255</i>&nbsp;        decision.setForeground(Color.BLUE);</b>
+<b class="nc"><i>256</i>&nbsp;        decision.setFont(new Font (&quot;Times new Roman&quot; , Font.ITALIC , 18));</b>
+<b class="nc"><i>257</i>&nbsp;        decision.setBorder(BorderFactory.createMatteBorder(5,5,5,5, Color.BLUE));</b>
+<b class="nc"><i>258</i>&nbsp;        decisionContainer.add(yes);</b>
+<b class="nc"><i>259</i>&nbsp;        decisionContainer.add(no);</b>
+<b class="nc"><i>260</i>&nbsp;        decision.add(decisionContainer , BorderLayout.PAGE_END);</b>
+<b class="nc"><i>261</i>&nbsp;        decision.setVisible(false);</b>
+<b class="nc"><i>262</i>&nbsp;        this.add(decision);</b>
+<i>263</i>&nbsp;    }
+<i>264</i>&nbsp;
+<i>265</i>&nbsp;    public void setChat(String command){
+<b class="nc"><i>266</i>&nbsp;        chat.setText(command);</b>
+<i>267</i>&nbsp;    }
+<i>268</i>&nbsp;
+<i>269</i>&nbsp;    public void setWorkerBorder(int nr ){
+<b class="nc"><i>270</i>&nbsp;        workers[nr].setBorder(BorderFactory.createLineBorder(Color.RED , 2));</b>
+<i>271</i>&nbsp;    }
+<i>272</i>&nbsp;    public ImageIcon getWorkerImages(String color){
+<b class="nc"><i>273</i>&nbsp;        ImageIcon imageIcon = null;</b>
+<i>274</i>&nbsp;        try {
+<b class="nc"><i>275</i>&nbsp;            BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream(&quot;/Workers/&quot; + color.toLowerCase() + &quot;.png&quot;));</b>
+<b class="nc"><i>276</i>&nbsp;            imageIcon = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(1300 / 13, 700 * 2 / 9, Image.SCALE_DEFAULT)));</b>
+<b class="nc"><i>277</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>278</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>279</i>&nbsp;        }</b>
+<b class="nc"><i>280</i>&nbsp;        return imageIcon;</b>
+<i>281</i>&nbsp;    }
+<i>282</i>&nbsp;
+<i>283</i>&nbsp;    public Container getWorkerContainer() {
+<b class="nc"><i>284</i>&nbsp;        return workerContainer;</b>
+<i>285</i>&nbsp;    }
+<i>286</i>&nbsp;
+<i>287</i>&nbsp;    public Container getLevelContainer() {
+<b class="nc"><i>288</i>&nbsp;        return levelContainer;</b>
+<i>289</i>&nbsp;    }
+<i>290</i>&nbsp;
+<i>291</i>&nbsp;    public void setWorkerImages(String color ){
+<b class="nc"><i>292</i>&nbsp;        for(int i=0 ; i&lt;2 ;i++) {</b>
+<i>293</i>&nbsp;            try {
+<b class="nc"><i>294</i>&nbsp;                BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream(&quot;/Workers/&quot; + color.toLowerCase() + &quot;.png&quot;));</b>
+<b class="nc"><i>295</i>&nbsp;                workerImages[i] = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(1300 / 13, 700 * 2 / 9, Image.SCALE_DEFAULT)));</b>
+<b class="nc"><i>296</i>&nbsp;                workers[i].setIcon(workerImages[i]);</b>
+<b class="nc"><i>297</i>&nbsp;            } catch (IOException e) {</b>
+<b class="nc"><i>298</i>&nbsp;                e.printStackTrace();</b>
+<b class="nc"><i>299</i>&nbsp;            }</b>
+<i>300</i>&nbsp;        }
+<i>301</i>&nbsp;    }
+<i>302</i>&nbsp;
+<i>303</i>&nbsp;    public BoardContainer getBoardContainer() {
+<b class="nc"><i>304</i>&nbsp;        return boardContainer;</b>
+<i>305</i>&nbsp;    }
+<i>306</i>&nbsp;
+<i>307</i>&nbsp;    public void setGodPic(String god , int index) {
+<i>308</i>&nbsp;        try {
+<b class="nc"><i>309</i>&nbsp;            BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream(&quot;/GodCards/&quot;+god.toLowerCase()+&quot;.png&quot;));</b>
+<b class="nc"><i>310</i>&nbsp;            ImageIcon godImage = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(1300*3/30,700*3/10,Image.SCALE_DEFAULT)));</b>
+<b class="nc"><i>311</i>&nbsp;            godPic[index].setIcon(godImage);</b>
+<b class="nc"><i>312</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>313</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>314</i>&nbsp;        }</b>
+<b class="nc"><i>315</i>&nbsp;        godPic[index].setVisible(true);</b>
+<i>316</i>&nbsp;    }
+<i>317</i>&nbsp;    public void setPlayerName(String name , int index , String color){
+<b class="nc"><i>318</i>&nbsp;        playerName[index].setText(name.toUpperCase());</b>
+<b class="nc"><i>319</i>&nbsp;        switch (color){</b>
+<i>320</i>&nbsp;            case &quot;RED&quot; :
+<b class="nc"><i>321</i>&nbsp;                playerName[index].setForeground(Color.RED);</b>
+<b class="nc"><i>322</i>&nbsp;                break;</b>
+<i>323</i>&nbsp;            case &quot;BLUE&quot; :
+<b class="nc"><i>324</i>&nbsp;                playerName[index].setForeground(Color.BLUE);</b>
+<b class="nc"><i>325</i>&nbsp;                break;</b>
+<i>326</i>&nbsp;            case &quot;WHITE&quot; :
+<b class="nc"><i>327</i>&nbsp;                playerName[index].setForeground(Color.WHITE);</b>
+<i>328</i>&nbsp;                break;
+<i>329</i>&nbsp;        }
+<i>330</i>&nbsp;
+<i>331</i>&nbsp;    }
+<i>332</i>&nbsp;
+<i>333</i>&nbsp;
+<i>334</i>&nbsp;    public void setLevelImages(int nr ){
+<b class="nc"><i>335</i>&nbsp;        levels[nr].setBorder(BorderFactory.createLineBorder(Color.RED , 2));</b>
+<i>336</i>&nbsp;    }
+<i>337</i>&nbsp;
+<i>338</i>&nbsp;    public JLabel getLevel(int nr){
+<b class="nc"><i>339</i>&nbsp;        return levels[nr];</b>
+<i>340</i>&nbsp;}
+<i>341</i>&nbsp;
+<i>342</i>&nbsp;    public void makeDecision(String string){
+<b class="nc"><i>343</i>&nbsp;        chat.setVisible(false);</b>
+<b class="nc"><i>344</i>&nbsp;        decision.setVisible(true);</b>
+<b class="nc"><i>345</i>&nbsp;        decision.setText(string);</b>
+<i>346</i>&nbsp;    }
+<i>347</i>&nbsp;
+<i>348</i>&nbsp;    public JButton getYes() {
+<b class="nc"><i>349</i>&nbsp;        return yes;</b>
+<i>350</i>&nbsp;    }
+<i>351</i>&nbsp;
+<i>352</i>&nbsp;    public JButton getNo() {
+<b class="nc"><i>353</i>&nbsp;        return no;</b>
+<i>354</i>&nbsp;    }
+<i>355</i>&nbsp;
+<i>356</i>&nbsp; /*   public static void main(String[] args) throws IOException {
+<i>357</i>&nbsp;
+<i>358</i>&nbsp;        JFrame frame = new JFrame(&quot;Start&quot;);
+<i>359</i>&nbsp;        BufferedImage myImage = ImageIO.read(new File(&quot;src/main/resources/SantoriniBoard.png&quot;));
+<i>360</i>&nbsp;        frame.setContentPane(new MapPanel(myImage));
+<i>361</i>&nbsp;        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+<i>362</i>&nbsp;        frame.setUndecorated(true);
+<i>363</i>&nbsp;        frame.setVisible(true);
+<i>364</i>&nbsp;
+<i>365</i>&nbsp;    }
+<i>366</i>&nbsp;
+<i>367</i>&nbsp;  */
+<i>368</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-26 10:48</div>
+</div>
+</body>
+</html>

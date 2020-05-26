@@ -1,0 +1,370 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MainServer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.network.server</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MainServer (it.polimi.ingsw.ps51.network.server)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MainServer</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 82)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.network.server;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.ps51.controller.Game;
+<i>4</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_client.NumberOfPlayer;
+<i>5</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_client.OutOfRoom;
+<i>6</i>&nbsp;import it.polimi.ingsw.ps51.model.Player;
+<i>7</i>&nbsp;import it.polimi.ingsw.ps51.model.Playground;
+<i>8</i>&nbsp;import it.polimi.ingsw.ps51.network.client.ClientInterface;
+<i>9</i>&nbsp;import it.polimi.ingsw.ps51.network.server.socket.ServerSocket;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;import java.util.*;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;/**
+<i>14</i>&nbsp; * This class represents the central server which handles:
+<i>15</i>&nbsp; * the creation of the room,
+<i>16</i>&nbsp; * the setting of the controller game,
+<i>17</i>&nbsp; * the setting of the model,
+<i>18</i>&nbsp; * and it handles the {@link ClientInterface}
+<i>19</i>&nbsp; * In fact, here there are all the nicknames of all the players,
+<i>20</i>&nbsp; * the nickname which are searching for a room,
+<i>21</i>&nbsp; * and all the references between the nicknames and the connections used by the clients
+<i>22</i>&nbsp; * @author Luca Giacometti
+<i>23</i>&nbsp; */
+<i>24</i>&nbsp;public class MainServer implements Runnable{
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    private Integer numberOfPlayer;
+<i>27</i>&nbsp;    ServerSocket ss;
+<b class="nc"><i>28</i>&nbsp;    private final Object objectToSynchronized = new Object();</b>
+<i>29</i>&nbsp;    List&lt;String&gt; allNicknamesOfPlayers;
+<i>30</i>&nbsp;    List&lt;String&gt; actualNicknameInSearchOfRoom;
+<i>31</i>&nbsp;    Map&lt;String,ServerInterface&gt; mapOfNicknameAndServerInterface;
+<i>32</i>&nbsp;    List&lt;Room&gt; listOfRoom;
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    /**
+<i>35</i>&nbsp;     * Constructor
+<i>36</i>&nbsp;     */
+<b class="nc"><i>37</i>&nbsp;    public MainServer() {</b>
+<b class="nc"><i>38</i>&nbsp;        this.listOfRoom = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>39</i>&nbsp;        this.numberOfPlayer = 0;</b>
+<b class="nc"><i>40</i>&nbsp;        this.allNicknamesOfPlayers = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>41</i>&nbsp;        this.actualNicknameInSearchOfRoom = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>42</i>&nbsp;        this.mapOfNicknameAndServerInterface = new HashMap&lt;&gt;();</b>
+<i>43</i>&nbsp;    }
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;    /**
+<i>46</i>&nbsp;     * Getter of listOfRoom
+<i>47</i>&nbsp;     * @return the reference of listOfRoom
+<i>48</i>&nbsp;     */
+<i>49</i>&nbsp;    public synchronized List&lt;Room&gt; getListOfRoom() {
+<b class="nc"><i>50</i>&nbsp;        return this.listOfRoom;</b>
+<i>51</i>&nbsp;    }
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    /**
+<i>54</i>&nbsp;     * Getter of the object to be synchronized before every operation
+<i>55</i>&nbsp;     * by the other classes
+<i>56</i>&nbsp;     * @return the final object to be synchronized
+<i>57</i>&nbsp;     */
+<i>58</i>&nbsp;    public synchronized Object getObjectToSynchronized() {
+<b class="nc"><i>59</i>&nbsp;        return objectToSynchronized;</b>
+<i>60</i>&nbsp;    }
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    /**
+<i>63</i>&nbsp;     * Getter of the list of the nicknames which are waiting to start a game
+<i>64</i>&nbsp;     * @return the list of nicknames waiting the beginning of the game
+<i>65</i>&nbsp;     */
+<i>66</i>&nbsp;    public synchronized List&lt;String&gt; getActualNicknameInSearchOfRoom() {
+<b class="nc"><i>67</i>&nbsp;        return this.actualNicknameInSearchOfRoom;</b>
+<i>68</i>&nbsp;    }
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;    /**
+<i>71</i>&nbsp;     * Getter of number of player
+<i>72</i>&nbsp;     * @return the actual number of this game
+<i>73</i>&nbsp;     */
+<i>74</i>&nbsp;    public synchronized Integer getNumberOfPlayer() {
+<b class="nc"><i>75</i>&nbsp;        return numberOfPlayer;</b>
+<i>76</i>&nbsp;    }
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;    /**
+<i>79</i>&nbsp;     * Getter of the all nicknames of players
+<i>80</i>&nbsp;     * @return the list which contains all the nicknames of players which are playing a game
+<i>81</i>&nbsp;     */
+<i>82</i>&nbsp;    public synchronized List&lt;String&gt; getAllNicknamesOfPlayers() {
+<b class="nc"><i>83</i>&nbsp;        return allNicknamesOfPlayers;</b>
+<i>84</i>&nbsp;    }
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;    /**
+<i>87</i>&nbsp;     * Setter of number of player
+<i>88</i>&nbsp;     * @param number the number of the player for the game which is processing
+<i>89</i>&nbsp;     */
+<i>90</i>&nbsp;    public void setNumberOfPlayer(Integer number) {
+<b class="nc"><i>91</i>&nbsp;        this.numberOfPlayer = number;</b>
+<i>92</i>&nbsp;    }
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;    /**
+<i>95</i>&nbsp;     * This method obtains a synchronize access to the list of nicknames
+<i>96</i>&nbsp;     * which are waiting to start a game, and to the number of player
+<i>97</i>&nbsp;     * to be processed before to start the game.
+<i>98</i>&nbsp;     * If there are no players it sets the numberOfPlayer to 0.
+<i>99</i>&nbsp;     * If the number is different from 0, it checks if there are
+<i>100</i>&nbsp;     * enough players to start the game.
+<i>101</i>&nbsp;     * @return true if the number of nicknames are under the right number or
+<i>102</i>&nbsp;     *         the number is 0
+<i>103</i>&nbsp;     *         false if there are enough nicknames
+<i>104</i>&nbsp;     */
+<i>105</i>&nbsp;    public synchronized boolean computeTheSizeOfList() {
+<b class="nc"><i>106</i>&nbsp;        synchronized ( getObjectToSynchronized() ) {</b>
+<b class="nc"><i>107</i>&nbsp;            if ( actualNicknameInSearchOfRoom.size() == 0 &amp;&amp; numberOfPlayer != 0)</b>
+<b class="nc"><i>108</i>&nbsp;                numberOfPlayer = 0;</b>
+<b class="nc"><i>109</i>&nbsp;            if (this.numberOfPlayer == 0)</b>
+<b class="nc"><i>110</i>&nbsp;                return true;</b>
+<b class="nc"><i>111</i>&nbsp;            return getActualNicknameInSearchOfRoom().size() &lt; getNumberOfPlayer();</b>
+<b class="nc"><i>112</i>&nbsp;        }</b>
+<i>113</i>&nbsp;    }
+<i>114</i>&nbsp;
+<i>115</i>&nbsp;    /**
+<i>116</i>&nbsp;     * This method adds the nickname choose by a client into the lists of nicknames
+<i>117</i>&nbsp;     * and create the link between the nickname and his connection
+<i>118</i>&nbsp;     * @param s the nickname of the client
+<i>119</i>&nbsp;     * @param serverInterface the connection which the client is using
+<i>120</i>&nbsp;     */
+<i>121</i>&nbsp;    public void addNickname(String s, ServerInterface serverInterface) {
+<b class="nc"><i>122</i>&nbsp;        this.getActualNicknameInSearchOfRoom().add(s);</b>
+<b class="nc"><i>123</i>&nbsp;        this.getAllNicknamesOfPlayers().add(s);</b>
+<b class="nc"><i>124</i>&nbsp;        this.mapOfNicknameAndServerInterface.put(s,serverInterface);</b>
+<i>125</i>&nbsp;    }
+<i>126</i>&nbsp;
+<i>127</i>&nbsp;    /**
+<i>128</i>&nbsp;     * This method check if the nickname choose by the user is
+<i>129</i>&nbsp;     * already used or not inside the list of all nickname present
+<i>130</i>&nbsp;     * @param nickToCheck the nickname to be checked
+<i>131</i>&nbsp;     * @return true if the nickname is not already present
+<i>132</i>&nbsp;     *         false if it is already present
+<i>133</i>&nbsp;     */
+<i>134</i>&nbsp;    public synchronized boolean checkName(String nickToCheck) {
+<b class="nc"><i>135</i>&nbsp;        for (String s : getAllNicknamesOfPlayers()) {</b>
+<b class="nc"><i>136</i>&nbsp;            if (s.equals(nickToCheck)) {</b>
+<b class="nc"><i>137</i>&nbsp;                return false;</b>
+<i>138</i>&nbsp;            }
+<b class="nc"><i>139</i>&nbsp;        }</b>
+<b class="nc"><i>140</i>&nbsp;        return true;</b>
+<i>141</i>&nbsp;    }
+<i>142</i>&nbsp;
+<i>143</i>&nbsp;    /**
+<i>144</i>&nbsp;     * This method checks in the list of nickname which are in search of
+<i>145</i>&nbsp;     * a game if the nickname passed as parameter is the first one or not
+<i>146</i>&nbsp;     * @param nickname the nickname of the user
+<i>147</i>&nbsp;     * @return true if it is the first of the list
+<i>148</i>&nbsp;     *          false if it is not
+<i>149</i>&nbsp;     */
+<i>150</i>&nbsp;    public synchronized boolean iMFirst(String nickname) {
+<i>151</i>&nbsp;
+<b class="nc"><i>152</i>&nbsp;        if ( actualNicknameInSearchOfRoom.get(0) != null )</b>
+<b class="nc"><i>153</i>&nbsp;            return getActualNicknameInSearchOfRoom().get(0).equals(nickname);</b>
+<b class="nc"><i>154</i>&nbsp;        return true;</b>
+<i>155</i>&nbsp;    }
+<i>156</i>&nbsp;
+<i>157</i>&nbsp;    /**
+<i>158</i>&nbsp;     * Setter of ServerSocket
+<i>159</i>&nbsp;     * @param ss the ServerSocket
+<i>160</i>&nbsp;     */
+<i>161</i>&nbsp;    public void setSS(ServerSocket ss) {
+<b class="nc"><i>162</i>&nbsp;        this.ss = ss;</b>
+<i>163</i>&nbsp;    }
+<i>164</i>&nbsp;
+<i>165</i>&nbsp;    /**
+<i>166</i>&nbsp;     * This method removes the nickname from all the lists which contain it
+<i>167</i>&nbsp;     * @param nickname the nickname to remove from the server
+<i>168</i>&nbsp;     */
+<i>169</i>&nbsp;    public synchronized void removeNickname(String nickname) {
+<b class="nc"><i>170</i>&nbsp;        allNicknamesOfPlayers.remove(nickname);</b>
+<b class="nc"><i>171</i>&nbsp;        actualNicknameInSearchOfRoom.remove(nickname);</b>
+<b class="nc"><i>172</i>&nbsp;        ServerInterface si = mapOfNicknameAndServerInterface.get(nickname);</b>
+<b class="nc"><i>173</i>&nbsp;        si.closeConnection();</b>
+<b class="nc"><i>174</i>&nbsp;        mapOfNicknameAndServerInterface.remove(nickname, si);</b>
+<i>175</i>&nbsp;    }
+<i>176</i>&nbsp;
+<i>177</i>&nbsp;    /**
+<i>178</i>&nbsp;     * This method checks if the listOfRoom is empty or not
+<i>179</i>&nbsp;     * @return true if the list is not empty
+<i>180</i>&nbsp;     *         false otherwise
+<i>181</i>&nbsp;     */
+<i>182</i>&nbsp;    public boolean checkIfThereIsAlreadyARoom() {
+<b class="nc"><i>183</i>&nbsp;        return !getListOfRoom().isEmpty();</b>
+<i>184</i>&nbsp;    }
+<i>185</i>&nbsp;
+<i>186</i>&nbsp;    /**
+<i>187</i>&nbsp;     * If the client which is disconnected is the first one and there are others waiting
+<i>188</i>&nbsp;     * this method sets the number of player to 0 and asks to the next client the number of player
+<i>189</i>&nbsp;     * for this game
+<i>190</i>&nbsp;     * @param nickname the nickname of the client disconnected
+<i>191</i>&nbsp;     */
+<i>192</i>&nbsp;    public void reAskNumberIfIWasTheFirstOneAndOtherAreConnected(String nickname) {
+<b class="nc"><i>193</i>&nbsp;        if ( actualNicknameInSearchOfRoom.size() &gt; 1 &amp;&amp; actualNicknameInSearchOfRoom.get(0).equals(nickname)) {</b>
+<b class="nc"><i>194</i>&nbsp;            numberOfPlayer = 0;</b>
+<b class="nc"><i>195</i>&nbsp;            mapOfNicknameAndServerInterface.get(actualNicknameInSearchOfRoom.get(1)).sendEvent(new NumberOfPlayer());</b>
+<i>196</i>&nbsp;        }
+<i>197</i>&nbsp;    }
+<i>198</i>&nbsp;
+<i>199</i>&nbsp;    /**
+<i>200</i>&nbsp;     * Here foreach player which is over the numberOfPlayer, is removed from
+<i>201</i>&nbsp;     * every list which contains his nickname and to the client which his
+<i>202</i>&nbsp;     * nickname is referenced, is sent a {@link OutOfRoom} event and
+<i>203</i>&nbsp;     * his connection is closed
+<i>204</i>&nbsp;     */
+<i>205</i>&nbsp;    private void cleanFromOutOfRoomPlayers() {
+<i>206</i>&nbsp;
+<b class="nc"><i>207</i>&nbsp;        while (actualNicknameInSearchOfRoom.size() &gt; numberOfPlayer) {</b>
+<b class="nc"><i>208</i>&nbsp;            int num = actualNicknameInSearchOfRoom.size();</b>
+<b class="nc"><i>209</i>&nbsp;            String name = actualNicknameInSearchOfRoom.get(num-1);</b>
+<b class="nc"><i>210</i>&nbsp;            mapOfNicknameAndServerInterface.get(name).sendEvent(new OutOfRoom());</b>
+<b class="nc"><i>211</i>&nbsp;            mapOfNicknameAndServerInterface.get(name).closeConnection();</b>
+<b class="nc"><i>212</i>&nbsp;            mapOfNicknameAndServerInterface.remove(name);</b>
+<b class="nc"><i>213</i>&nbsp;            allNicknamesOfPlayers.remove(name);</b>
+<b class="nc"><i>214</i>&nbsp;            actualNicknameInSearchOfRoom.remove(name);</b>
+<b class="nc"><i>215</i>&nbsp;        }</b>
+<i>216</i>&nbsp;    }
+<i>217</i>&nbsp;
+<i>218</i>&nbsp;    /**
+<i>219</i>&nbsp;     * Here is create one game:
+<i>220</i>&nbsp;     * the players&#39;nicknames and the {@link ServerInterface} associated with him,
+<i>221</i>&nbsp;     * a new controller {@link Game} with a new whole model are copied in
+<i>222</i>&nbsp;     * a new instance of {@link Room} linked every observer needed and
+<i>223</i>&nbsp;     * the {@link Room} is launched as a thread
+<i>224</i>&nbsp;     */
+<i>225</i>&nbsp;    private void createGame() {
+<i>226</i>&nbsp;
+<b class="nc"><i>227</i>&nbsp;        List&lt;String&gt; list = new ArrayList&lt;&gt;(this.actualNicknameInSearchOfRoom);</b>
+<b class="nc"><i>228</i>&nbsp;        Map&lt;String,ServerInterface&gt; stringServerInterfaceMap = new HashMap&lt;&gt;();</b>
+<i>229</i>&nbsp;
+<b class="nc"><i>230</i>&nbsp;        for (String s : list) {</b>
+<b class="nc"><i>231</i>&nbsp;            stringServerInterfaceMap.put(s, this.mapOfNicknameAndServerInterface.get(s));</b>
+<b class="nc"><i>232</i>&nbsp;        }</b>
+<i>233</i>&nbsp;
+<b class="nc"><i>234</i>&nbsp;        Room newRoom = new Room(list, stringServerInterfaceMap);</b>
+<i>235</i>&nbsp;
+<b class="nc"><i>236</i>&nbsp;        List&lt;Player&gt; players = new ArrayList&lt;&gt;();</b>
+<i>237</i>&nbsp;
+<b class="nc"><i>238</i>&nbsp;        for (String s : list) {</b>
+<b class="nc"><i>239</i>&nbsp;            this.mapOfNicknameAndServerInterface.get(s).pairWithRoom(newRoom);</b>
+<b class="nc"><i>240</i>&nbsp;            players.add(new Player(s));</b>
+<b class="nc"><i>241</i>&nbsp;        }</b>
+<i>242</i>&nbsp;
+<b class="nc"><i>243</i>&nbsp;        Playground playground = new Playground(players);</b>
+<b class="nc"><i>244</i>&nbsp;        Game game = new Game(playground);</b>
+<i>245</i>&nbsp;
+<b class="nc"><i>246</i>&nbsp;        game.addObserver(newRoom);</b>
+<b class="nc"><i>247</i>&nbsp;        newRoom.setGame(game);</b>
+<i>248</i>&nbsp;
+<b class="nc"><i>249</i>&nbsp;        this.listOfRoom.add(newRoom);</b>
+<i>250</i>&nbsp;
+<b class="nc"><i>251</i>&nbsp;        Thread t = new Thread(newRoom);</b>
+<b class="nc"><i>252</i>&nbsp;        t.start();</b>
+<i>253</i>&nbsp;    }
+<i>254</i>&nbsp;
+<i>255</i>&nbsp;    /**
+<i>256</i>&nbsp;     * Here is launched the {@link ServerSocket} as thread.
+<i>257</i>&nbsp;     * When this thread is running, it waits the right number of players.
+<i>258</i>&nbsp;     * After it controls if there are out of room players and
+<i>259</i>&nbsp;     * when the number of players is right:
+<i>260</i>&nbsp;     * it stops the {@link ServerSocket}, sets a new Room,
+<i>261</i>&nbsp;     * clear the actual nickname in search of room list,
+<i>262</i>&nbsp;     * and terminates
+<i>263</i>&nbsp;     */
+<i>264</i>&nbsp;    @Override
+<i>265</i>&nbsp;    public void run() {
+<i>266</i>&nbsp;
+<b class="nc"><i>267</i>&nbsp;        Thread t1 = new Thread(ss);</b>
+<b class="nc"><i>268</i>&nbsp;        t1.start();</b>
+<i>269</i>&nbsp;
+<b class="nc"><i>270</i>&nbsp;        while (computeTheSizeOfList()) {</b>
+<i>271</i>&nbsp;            try {
+<b class="nc"><i>272</i>&nbsp;                Thread.sleep(400);</b>
+<b class="nc"><i>273</i>&nbsp;            } catch (InterruptedException e) {</b>
+<b class="nc"><i>274</i>&nbsp;                e.printStackTrace();</b>
+<b class="nc"><i>275</i>&nbsp;            }</b>
+<i>276</i>&nbsp;        }
+<b class="nc"><i>277</i>&nbsp;        ss.stopSS();</b>
+<i>278</i>&nbsp;
+<b class="nc"><i>279</i>&nbsp;        synchronized ( getObjectToSynchronized() ) {</b>
+<i>280</i>&nbsp;
+<b class="nc"><i>281</i>&nbsp;            cleanFromOutOfRoomPlayers();</b>
+<b class="nc"><i>282</i>&nbsp;            createGame();</b>
+<b class="nc"><i>283</i>&nbsp;            this.actualNicknameInSearchOfRoom.clear();</b>
+<b class="nc"><i>284</i>&nbsp;            this.numberOfPlayer = 0;</b>
+<b class="nc"><i>285</i>&nbsp;        }</b>
+<i>286</i>&nbsp;    }
+<i>287</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-26 10:48</div>
+</div>
+</body>
+</html>

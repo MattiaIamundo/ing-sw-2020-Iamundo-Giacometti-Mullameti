@@ -180,8 +180,6 @@ public class GameTest {
         stub.notify(new WorkerPosition(new Coordinates(0,0)));
         waitForEventBeApplied();
         assertEquals(new Coordinates(0,0), player3.getWorkers().get(1).getPosition().getCoordinates());
-
-        assertTrue(stub.buffer.get(14) instanceof GameIsStarting);
     }
 
     @Test
@@ -242,8 +240,6 @@ public class GameTest {
         stub.notify(new WorkerPosition(new Coordinates(0,0)));
         waitForEventBeApplied();
         assertEquals(new Coordinates(0,0), player3.getWorkers().get(1).getPosition().getCoordinates());
-
-        assertTrue(stub.buffer.get(10) instanceof GameIsStarting);
     }
 
     @Test
