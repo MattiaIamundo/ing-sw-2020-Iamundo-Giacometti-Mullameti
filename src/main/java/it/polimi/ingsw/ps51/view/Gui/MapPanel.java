@@ -365,4 +365,7 @@ public class MapPanel extends JPanel {
     }
 
   */
+ public UndoContainer getUndoContainer() {
+     return undoContainer;
+ }
 }

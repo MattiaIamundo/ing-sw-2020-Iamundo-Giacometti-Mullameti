@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.*;
 
 public class Gui {
 
@@ -32,12 +33,16 @@ public class Gui {
     private Supporter s;
     private BoardButton[][] boardButtons;
     private ImageIcon workerPic;
-    private ColorPanel colorPanel ;
+    private ColorPanel colorPanel;
     private BufferedImage myImage;
     private String player;
     private Coordinates chosenCoordinates;
     private Pair<Coordinates, List<Level>> chosenPair;
-
+    private Thread undoThread;
+    private boolean choice;
+    private Coordinates coordinates;
+    private Pair<Coordinates,Level> build;
+    private boolean clicked;
 
     public Gui(Supporter supporter) {
         s = supporter;
@@ -45,6 +50,7 @@ public class Gui {
 
         buttonNumber = 0;
         chosenGods = new ArrayList<>();
+        undoThread = null;
 
         try {
             myImage = ImageIO.read(new File("src/main/resources/SantoriniBoard.png"));
@@ -143,25 +149,25 @@ public class Gui {
         frame.setVisible(true);
     }
 
-    public void chooseColor(){
+    public void chooseColor() {
         frame.getContentPane().removeAll();
         frame.setSize(1400, 800);
 
 
         List<JButton> colorButton = new ArrayList<>();
 
-        for(WorkerColor workerColor : s.getAvailableColors()){
+        for (WorkerColor workerColor : s.getAvailableColors()) {
             colorButton.add(colorPanel.getSpecificButton(workerColor.ordinal()));
         }
 
-        for (int i=0 ; i<colorButton.size();i++) {
+        for (int i = 0; i < colorButton.size(); i++) {
             colorButton.get(i).addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     for (int i = 0; i < colorButton.size(); i++) {
                         if (e.getSource() == colorButton.get(i)) {
 
-                            colorButton.get(i).setBorder(BorderFactory.createLineBorder(Color.RED , 2));
+                            colorButton.get(i).setBorder(BorderFactory.createLineBorder(Color.RED, 2));
                             colorButton.get(i).setVisible(false);
                             EventForServer eventColor = new ColorChoice(s.getAvailableColors().get(i));
                             s.notify(eventColor);
@@ -231,11 +237,11 @@ public class Gui {
         }
 
         for (Gods god : s.getAvailableGods()) {
-           chosenButtons.add(chooseGodsPanel.getSpecificGod(god.ordinal()));
-           chooseGodsPanel.setGodBorder(god.ordinal());
+            chosenButtons.add(chooseGodsPanel.getSpecificGod(god.ordinal()));
+            chooseGodsPanel.setGodBorder(god.ordinal());
         }
 
-        for (int i=0 ; i<chosenButtons.size() ; i++) {
+        for (int i = 0; i < chosenButtons.size(); i++) {
             chosenButtons.get(i).addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -263,7 +269,7 @@ public class Gui {
 
     }
 
-    public void placeWorkers()  {
+    /*public void placeWorkers()  {
 
         mapPanel.setChat("Place your " + s.getWorkerNum() + "ª worker");
         mapPanel.setWorkerBorder(s.getWorkerNum() - 1);
@@ -297,7 +303,7 @@ public class Gui {
         //frame.setVisible(true);
 
 
-    }
+    }*/
     public void updateMap() throws OutOfMapException {
 
         frame.getContentPane().removeAll();
@@ -320,13 +326,13 @@ public class Gui {
         int maxCoordinate = map.getMaxCoordinate() + 1;
 
 
-        mapPanel.setPlayerName(player, 0 ,chosenColors.get(player).toString());
+        mapPanel.setPlayerName(player, 0, chosenColors.get(player).toString());
         int k = 1;
         for (Pair<String, Gods> pair : chosenGods) {
 
             if (!pair.getValue0().equals(player)) {
                 System.out.println(k);
-                mapPanel.setPlayerName(pair.getValue0(), k ,chosenColors.get(pair.getValue0()).toString());
+                mapPanel.setPlayerName(pair.getValue0(), k, chosenColors.get(pair.getValue0()).toString());
                 k = 2;
 
             }
@@ -334,12 +340,12 @@ public class Gui {
         }
 
 
-        k=1;
+        k = 1;
 
         for (Pair<String, Gods> god : chosenGods) {
             if (god.getValue0().equals(player))
                 mapPanel.setGodPic(god.getValue1().toString(), 0);
-            else{
+            else {
                 mapPanel.setGodPic(god.getValue1().toString(), k);
                 k = 2;
             }
@@ -377,7 +383,6 @@ public class Gui {
 
 
     }
-
 
 
     public void chooseWorker() {
@@ -450,9 +455,9 @@ public class Gui {
 //                            chosenWorker.setBorder(null);
                             availableMoveButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));
                             //availableMoveButtons.get(i).setWorker(chosenWorker.getWorker().);
-                            chosenCoordinates=s.getValidChoicesMoves().get(i);
-                            EventForServer eventMoveChoice = new MoveChoice(chosenCoordinates);
-                            s.notify(eventMoveChoice);
+                            chosenCoordinates = s.getValidChoicesMoves().get(i);
+                            mapPanel.getUndoContainer().setVisible(true);
+                            getChoice("MOVE");
                         }
                     }
                 }
@@ -508,8 +513,9 @@ public class Gui {
                                         for (int j = 0; j < availableLevels.size(); j++) {
                                             if (m.getSource() == availableLevels.get(j)) {
 
-                                                EventForServer  eventBuild = new Build(new Pair<>(chosenPair.getValue0(),Level.valueOf(availableLevels.get(j).getText().toUpperCase())));
-                                                s.notify(eventBuild);
+                                                build = new Pair<>(chosenPair.getValue0(), Level.valueOf(availableLevels.get(j).getText().toUpperCase()));
+                                                mapPanel.getUndoContainer().setVisible(true);
+                                                getChoice("BUILD");
 
                                             }
                                         }
@@ -528,7 +534,7 @@ public class Gui {
     }
 
 
-    public void makeDecision(){
+    public void makeDecision() {
         mapPanel.makeDecision(s.getDecision());
 
         JButton yes = mapPanel.getYes();
@@ -536,7 +542,7 @@ public class Gui {
         yes.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(e.getSource() == yes) {
+                if (e.getSource() == yes) {
                     EventForServer eventDecisionTaken = new DecisionTaken(true);
                     s.notify(eventDecisionTaken);
                 }
@@ -546,23 +552,26 @@ public class Gui {
         no.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(e.getSource() == no) {
+                if (e.getSource() == no) {
                     EventForServer eventDecisionTaken = new DecisionTaken(false);
                     s.notify(eventDecisionTaken);
                 }
             }
         });
     }
-    public void ack(){
-        mapPanel.setChat("Your "+s.getOperationConfirmed()+" event is received by server...");
+
+    public void ack() {
+        mapPanel.setChat("Your " + s.getOperationConfirmed() + " event is received by server...");
     }
-    public void unsuccessfulOperation(){
+
+    public void unsuccessfulOperation() {
         mapPanel.setChat("Sorry , something went wrong server side..."
-                +"Repeat your last action !");
+                + "Repeat your last action !");
     }
+
     public void winGame() throws IOException {
         frame.getContentPane().removeAll();
-        frame.setSize(625*3/2, 415*3/2);
+        frame.setSize(625 * 3 / 2, 415 * 3 / 2);
         Image winImage;
 
         winImage = ImageIO.read(new File("src/main/resources/winBackground.png"));
@@ -574,49 +583,171 @@ public class Gui {
         frame.setVisible(true);
     }
 
-    public void loseGame(){
+    public void loseGame() {
         frame.getContentPane().removeAll();
-        frame.setSize(625*3/2, 415*3/2);
+        frame.setSize(625 * 3 / 2, 415 * 3 / 2);
 
         LosePanel losePanel = new LosePanel();
 
         frame.getContentPane().add(losePanel);
         frame.setVisible(true);
     }
-    public void disconnectGame(){}
 
-    public void endGame(){}
+    public void disconnectGame() {
+    }
 
-    public void outOfRoom() {}
+    public void endGame() {
+    }
+
+    public void outOfRoom() {
+    }
 
 
     public void turnIsEnd() {
-        mapPanel.setChat( "Your turn has ended !");
+        mapPanel.setChat("Your turn has ended !");
     }
 
-    public void gameIsStarting(){
+    public void gameIsStarting() {
         //mapPanel.setChat( "The game is started!!");
     }
 
 
+    public void placeWorkers() {
 
 
 
+        mapPanel.setChat("Place your " + s.getWorkerNum() + "ª worker");
+        mapPanel.setWorkerBorder(s.getWorkerNum() - 1);
+        workerPic = mapPanel.getWorkerImages(s.getChosenColors().get(player).toString());
+        boardButtons = board.getBoardButtons();
+
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                boardButtons[i][j].addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        for (int i = 0; i < 5; i++) {
+                            for (int j = 0; j < 5; j++) {
+                                if (e.getSource() == boardButtons[i][j]) {
+                                    //boardButtons[i][j].setWorker(workerPic);
+                                    mapPanel.getUndoContainer().setVisible(true);
+                                    getChoice("PLACEWORKER");
+                                    coordinates = new Coordinates(i, j);
+
+
+                                }
+                            }
+                        }
+
+                    }
+                });
+            }
+        }
 
 
 
+        //frame.getContentPane().add(mapPanel);
+        //frame.setVisible(true);
 
 
+    }
 
 
+    private void getChoice(String methodName) {
+
+        ThreadFututre tf = new ThreadFututre();
+        Future<String> f = tf.getFutureString();
+        JButton yes = mapPanel.getUndoContainer().getYes();
+        JButton no = mapPanel.getUndoContainer().getNo();
+        mapPanel.getUndoContainer().getText().setText("getChoise");
+
+        undoThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
 
 
+                    try {
+                        if(f.get(10, TimeUnit.SECONDS).equals("YES")) {
+                            switch (methodName) {
+                                case "PLACEWORKER":
+                                    EventForServer eventWorkerPosition = new WorkerPosition(coordinates);
+                                    s.notify(eventWorkerPosition);
+                                    break;
+                                case "MOVE":
+                                    EventForServer eventMoveChoice = new MoveChoice(chosenCoordinates);
+                                    s.notify(eventMoveChoice);
+                                    break;
+                                case "BUILD":
+                                    EventForServer eventBuild = new Build(build);
+                                    s.notify(eventBuild);
+                                    break;
+                            }
+                        }
+
+                    } catch (TimeoutException e) {
+                        e.printStackTrace();
+                        switch (methodName) {
+                            case "PLACEWORKER":
+                                EventForServer eventWorkerPosition = new WorkerPosition(coordinates);
+                                s.notify(eventWorkerPosition);
+                                break;
+                            case "MOVE":
+                                EventForServer eventMoveChoice = new MoveChoice(chosenCoordinates);
+                                s.notify(eventMoveChoice);
+                                break;
+                            case "BUILD":
+                                EventForServer eventBuild = new Build(build);
+                                s.notify(eventBuild);
+                                break;
+                        }
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                tf.getEx().shutdown();
+            }
+        });
+
+        undoThread.start();
 
 
+        yes.addActionListener(e -> {
+
+            tf.setResult("YES");
+            tf.setBool(true);
+        });
 
 
+        no.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tf.setResult("NO");
+                tf.setBool(true);
+
+                    mapPanel.getUndoContainer().setVisible(false);
+                    switch (methodName){
+                        case "PLACEWORKER":
+                            placeWorkers();
+                            break;
+                        case "MOVE":
+                            askMove();
+                            break;
+                        case "BUILD":
+                            askBuild();
+                            break;
+                    }
+
+            }
+        });
 
 
+    }
 
+    public boolean isChoice() {
+        return choice;
+    }
 
+    public void setChoice(boolean choice) {
+        this.choice = choice;
+    }
 }
+

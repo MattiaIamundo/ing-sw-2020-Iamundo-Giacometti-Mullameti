@@ -40,7 +40,19 @@ public class UndoContainer extends Container {
 
         this.add(text);
     }
-    
+
+    public JLabel getText() {
+        return text;
+    }
+
+    public JButton getYes() {
+        return yes;
+    }
+
+    public JButton getNo() {
+        return no;
+    }
+
     private void defineButtons(JButton button){
         button.setSize(100,20);
         button.setForeground(new Color(0,102, 0));
