@@ -6,17 +6,16 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class LosePanel extends JPanel {
+public class EndGamePanel extends JPanel {
 
     private JLabel[] trumpets ;
     JLabel text;
 
-    public LosePanel(){
+    public EndGamePanel(){
 
         this.setLayout(new BorderLayout());
         defineTrumpets();
         text = new JLabel();
-        text.setText("You Lost !");
         text.setFont(new Font("Times new roman" , Font.BOLD , 48));
         text.setForeground(Color.BLACK);
         text.setHorizontalAlignment(0);
@@ -26,6 +25,10 @@ public class LosePanel extends JPanel {
         add(trumpets[1], BorderLayout.EAST);
 
 
+    }
+
+    public JLabel getText() {
+        return text;
     }
 
     private void defineTrumpets(){

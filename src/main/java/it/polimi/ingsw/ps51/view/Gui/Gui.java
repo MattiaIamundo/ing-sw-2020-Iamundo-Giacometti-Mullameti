@@ -39,10 +39,11 @@ public class Gui {
     private Coordinates chosenCoordinates;
     private Pair<Coordinates, List<Level>> chosenPair;
     private Thread undoThread;
-    private boolean choice;
+
     private Coordinates coordinates;
     private Pair<Coordinates,Level> build;
-    private boolean clicked;
+
+    private Worker chosenWorker;
 
     public Gui(Supporter supporter) {
         s = supporter;
@@ -58,7 +59,7 @@ public class Gui {
 
         }
 
-        colorPanel = new ColorPanel(myImage);
+
 
     }
 
@@ -153,11 +154,12 @@ public class Gui {
         frame.getContentPane().removeAll();
         frame.setSize(1400, 800);
 
-
+        colorPanel = new ColorPanel(myImage);
         List<JButton> colorButton = new ArrayList<>();
 
         for (WorkerColor workerColor : s.getAvailableColors()) {
             colorButton.add(colorPanel.getSpecificButton(workerColor.ordinal()));
+            colorPanel.getSpecificButton(workerColor.ordinal()).setVisible(true);
         }
 
         for (int i = 0; i < colorButton.size(); i++) {
@@ -167,8 +169,8 @@ public class Gui {
                     for (int i = 0; i < colorButton.size(); i++) {
                         if (e.getSource() == colorButton.get(i)) {
 
-                            colorButton.get(i).setBorder(BorderFactory.createLineBorder(Color.RED, 2));
-                            colorButton.get(i).setVisible(false);
+                            //colorButton.get(i).setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+                            colorButton.get(i).setEnabled(false);
                             EventForServer eventColor = new ColorChoice(s.getAvailableColors().get(i));
                             s.notify(eventColor);
                         }
@@ -202,7 +204,7 @@ public class Gui {
                         if (e.getSource() == godButtons[i]) {
                             godButtons[i].setBorder(BorderFactory.createLineBorder(new Color(102, 0, 153)));
                             chosenGods.add(Gods.getGodFromString(godButtons[i].getText()));
-                            godButtons[i].setVisible(false);
+                            godButtons[i].setEnabled(false);
                             if (chosenGods.size() == s.getGodsNum()) {
                                 SwingUtilities.invokeLater(new Runnable() {
                                     public void run() {
@@ -269,7 +271,9 @@ public class Gui {
 
     }
 
-    /*public void placeWorkers()  {
+    public void placeWorkers() {
+
+
 
         mapPanel.setChat("Place your " + s.getWorkerNum() + "ª worker");
         mapPanel.setWorkerBorder(s.getWorkerNum() - 1);
@@ -278,16 +282,17 @@ public class Gui {
 
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                boardButtons[i][j].addActionListener(new ActionListener() {
+                boardButtons[j][i].addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         for (int i = 0; i < 5; i++) {
                             for (int j = 0; j < 5; j++) {
-                                if (e.getSource() == boardButtons[i][j]) {
-                                    boardButtons[i][j].setWorker(workerPic);
+                                if (e.getSource() == boardButtons[j][i]) {
+                                    //boardButtons[i][j].setWorker(workerPic);
+                                    mapPanel.getUndoContainer().setVisible(true);
+                                    getChoice("PLACEWORKER");
+                                    coordinates = new Coordinates(i, j);
 
-                                    EventForServer eventWorkerPosition = new WorkerPosition(new Coordinates(i, j));
-                                    s.notify(eventWorkerPosition);
 
                                 }
                             }
@@ -299,11 +304,12 @@ public class Gui {
         }
 
 
+
         //frame.getContentPane().add(mapPanel);
         //frame.setVisible(true);
 
 
-    }*/
+    }
     public void updateMap() throws OutOfMapException {
 
         frame.getContentPane().removeAll();
@@ -358,16 +364,16 @@ public class Gui {
             for (int j = 0; j < maxCoordinate; j++) {
 
                 if (map.getSquare(j, i).getLevel().ordinal() > 0)
-                    boardButtons[j][i].setLevel(map.getSquare(j, i).getLevel().ordinal() - 1);
+                    boardButtons[i][j].setLevel(map.getSquare(j,i).getLevel().ordinal() - 1);
 
 
-                if (map.getSquare(j, i).isPresentWorker()) {
-
+                if (map.getSquare(j,i).isPresentWorker()) {
+                    System.out.println("x " + map.getSquare(i,j).getCoordinates().getX() +" y "+ map.getSquare(i,j).getCoordinates().getY() + "i"+ i + "j"+j);
                     for (Worker worker : workerList) {
                         if (worker.getPosition().getCoordinates().getX() == j && worker.getPosition().getCoordinates().getY() == i) {
                             for (Pair<String, Gods> pair : chosenGods)
                                 if (worker.getNamePlayer().equals(pair.getValue0())) {
-                                    boardButtons[j][i].setWorker(mapPanel.getWorkerImages(s.getChosenColors().get(pair.getValue0()).toString()));
+                                    boardButtons[i][j].setWorker(mapPanel.getWorkerImages(s.getChosenColors().get(pair.getValue0()).toString()));
                                 }
                         }
 
@@ -410,8 +416,11 @@ public class Gui {
                         if (e.getSource() == workerButtons.get(i)) {
                             workerButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));
                             //chosenWorker = boardButtons[workerButtons.get(i).getX()][workerButtons.get(i).getY()];
-                            EventForServer eventWorkerChoice = new WorkerChoice(s.getValidChoicesWorkers().get(i));
-                            s.notify(eventWorkerChoice);
+
+                            mapPanel.getUndoContainer().setVisible(true);
+                            getChoice("CHOOSEWORKER");
+                            chosenWorker=s.getValidChoicesWorkers().get(i);
+
                         }
                     }
                 }
@@ -471,7 +480,7 @@ public class Gui {
     public void askBuild() {
 
         mapPanel.setChat("BUILD");
-        mapPanel.getLevelContainer().setVisible(true);
+
 
         List<BoardButton> availableBuildButtons = new ArrayList<>();
         List<JLabel> availableLevels = new ArrayList<>();
@@ -587,19 +596,40 @@ public class Gui {
         frame.getContentPane().removeAll();
         frame.setSize(625 * 3 / 2, 415 * 3 / 2);
 
-        LosePanel losePanel = new LosePanel();
-
+        EndGamePanel losePanel = new EndGamePanel();
+        losePanel.getText().setText("YOU LOST !!!");
         frame.getContentPane().add(losePanel);
         frame.setVisible(true);
     }
 
     public void disconnectGame() {
+        frame.getContentPane().removeAll();
+        frame.setSize(625 * 3 / 2, 415 * 3 / 2);
+
+        EndGamePanel disconnectGame = new EndGamePanel();
+        disconnectGame.getText().setText("Game Disconnected !!!");
+        frame.getContentPane().add(disconnectGame);
+        frame.setVisible(true);
     }
 
     public void endGame() {
+        frame.getContentPane().removeAll();
+        frame.setSize(625 * 3 / 2, 415 * 3 / 2);
+
+        EndGamePanel endGamePanel = new EndGamePanel();
+        endGamePanel.getText().setText("Game Ended");
+        frame.getContentPane().add(endGamePanel);
+        frame.setVisible(true);
     }
 
     public void outOfRoom() {
+        frame.getContentPane().removeAll();
+        frame.setSize(625 * 3 / 2, 415 * 3 / 2);
+
+        EndGamePanel outOfRoom = new EndGamePanel();
+        outOfRoom.getText().setText("Out of Room");
+        frame.getContentPane().add(outOfRoom);
+        frame.setVisible(true);
     }
 
 
@@ -612,46 +642,6 @@ public class Gui {
     }
 
 
-    public void placeWorkers() {
-
-
-
-        mapPanel.setChat("Place your " + s.getWorkerNum() + "ª worker");
-        mapPanel.setWorkerBorder(s.getWorkerNum() - 1);
-        workerPic = mapPanel.getWorkerImages(s.getChosenColors().get(player).toString());
-        boardButtons = board.getBoardButtons();
-
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                boardButtons[i][j].addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        for (int i = 0; i < 5; i++) {
-                            for (int j = 0; j < 5; j++) {
-                                if (e.getSource() == boardButtons[i][j]) {
-                                    //boardButtons[i][j].setWorker(workerPic);
-                                    mapPanel.getUndoContainer().setVisible(true);
-                                    getChoice("PLACEWORKER");
-                                    coordinates = new Coordinates(i, j);
-
-
-                                }
-                            }
-                        }
-
-                    }
-                });
-            }
-        }
-
-
-
-        //frame.getContentPane().add(mapPanel);
-        //frame.setVisible(true);
-
-
-    }
-
 
     private void getChoice(String methodName) {
 
@@ -659,7 +649,7 @@ public class Gui {
         Future<String> f = tf.getFutureString();
         JButton yes = mapPanel.getUndoContainer().getYes();
         JButton no = mapPanel.getUndoContainer().getNo();
-        mapPanel.getUndoContainer().getText().setText("getChoise");
+        mapPanel.getUndoContainer().getText().setText("Do you confirm your choice ?");
 
         undoThread = new Thread(new Runnable() {
             @Override
@@ -672,6 +662,10 @@ public class Gui {
                                 case "PLACEWORKER":
                                     EventForServer eventWorkerPosition = new WorkerPosition(coordinates);
                                     s.notify(eventWorkerPosition);
+                                    break;
+                                case "CHOOSEWORKER":
+                                    EventForServer eventWorkerChoice = new WorkerChoice(chosenWorker);
+                                    s.notify(eventWorkerChoice);
                                     break;
                                 case "MOVE":
                                     EventForServer eventMoveChoice = new MoveChoice(chosenCoordinates);
@@ -690,6 +684,10 @@ public class Gui {
                             case "PLACEWORKER":
                                 EventForServer eventWorkerPosition = new WorkerPosition(coordinates);
                                 s.notify(eventWorkerPosition);
+                                break;
+                            case "CHOOSEWORKER":
+                                EventForServer eventWorkerChoice = new WorkerChoice(chosenWorker);
+                                s.notify(eventWorkerChoice);
                                 break;
                             case "MOVE":
                                 EventForServer eventMoveChoice = new MoveChoice(chosenCoordinates);
@@ -728,6 +726,9 @@ public class Gui {
                         case "PLACEWORKER":
                             placeWorkers();
                             break;
+                        case "CHOOSEWORKER":
+                            chooseWorker();
+                            break;
                         case "MOVE":
                             askMove();
                             break;
@@ -742,12 +743,6 @@ public class Gui {
 
     }
 
-    public boolean isChoice() {
-        return choice;
-    }
 
-    public void setChoice(boolean choice) {
-        this.choice = choice;
-    }
 }
 

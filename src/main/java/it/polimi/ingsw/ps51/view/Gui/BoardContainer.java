@@ -20,7 +20,7 @@ public class BoardContainer extends Container {
             for(int j=0 ; j<5 ; j++){
                 boardButtons[i][j] = new BoardButton();
                 boardButtons[i][j].setSize(865*2/15,830*2/15);
-                boardButtons[i][j].setText("[" + (i+1)+","+(j+1) + "]");
+                boardButtons[i][j].setText("[" + (j+1)+","+(i+1) + "]");
                 boardButtons[i][j].setHorizontalAlignment(SwingConstants.RIGHT);
                 boardButtons[i][j].setVerticalAlignment(SwingConstants.NORTH);
                 boardButtons[i][j].setFont(new Font("Times New Roman", Font.BOLD, 24));
@@ -40,7 +40,7 @@ public class BoardContainer extends Container {
     public BoardButton[][] getBoardButtons() {
         return boardButtons;
     }
-    public BoardButton getSpecificButtons(int i, int j){return boardButtons[i][j];}
+    public BoardButton getSpecificButtons(int j, int i){return boardButtons[i][j];}
 
     public void setBoardButtons(BoardButton[][] boardButtons) {
         this.boardButtons = boardButtons;

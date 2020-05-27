@@ -5,6 +5,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 public class MapPanel extends JPanel {
@@ -41,7 +42,8 @@ public class MapPanel extends JPanel {
         boardContainer.setSize(865 * 2 / 3, 880 * 2 / 3);
         this.add(boardContainer);
         undoContainer= new UndoContainer();
-        undoContainer.setLocation(20,650);
+        undoContainer.setLocation(20,600);
+        undoContainer.setVisible(false);
         this.add(undoContainer);
         defineChatLabel();
         defineDecision();
@@ -187,7 +189,7 @@ public class MapPanel extends JPanel {
 
         try {
             BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/first.png"));
-            levelImages[0] = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(1300 * 2 / 13, 700 / 9, Image.SCALE_DEFAULT));
+            levelImages[0] = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(235/2, 215/2, Image.SCALE_DEFAULT));
             bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/second.png"));
             levelImages[1] = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(200/2,170/2,Image.SCALE_DEFAULT)));
             bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/third.png"));
@@ -210,7 +212,7 @@ public class MapPanel extends JPanel {
 
         }
 
-        levelContainer.setVisible(false);
+
 
         gbc.insets = new Insets(5,0,5,0);
 
@@ -353,7 +355,7 @@ public class MapPanel extends JPanel {
         return no;
     }
 
- /*   public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException {
 
         JFrame frame = new JFrame("Start");
         BufferedImage myImage = ImageIO.read(new File("src/main/resources/SantoriniBoard.png"));
@@ -364,7 +366,6 @@ public class MapPanel extends JPanel {
 
     }
 
-  */
  public UndoContainer getUndoContainer() {
      return undoContainer;
  }

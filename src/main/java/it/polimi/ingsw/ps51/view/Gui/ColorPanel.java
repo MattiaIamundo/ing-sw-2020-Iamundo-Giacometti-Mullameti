@@ -70,7 +70,7 @@ public class ColorPanel extends JPanel {
             colors[i].setOpaque(false);
             colors[i].setContentAreaFilled(false);
             colors[i].setBorder(null);
-
+            colors[i].setVisible(false);
             colorContainer.add(colors[i]);
         }
 
