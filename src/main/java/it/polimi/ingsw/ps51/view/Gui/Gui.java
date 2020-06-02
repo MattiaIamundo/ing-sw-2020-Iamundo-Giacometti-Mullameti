@@ -32,14 +32,12 @@ public class Gui {
     private Gods chosenGod;
     private Supporter s;
     private BoardButton[][] boardButtons;
-    private ImageIcon workerPic;
-    private ColorPanel colorPanel;
     private BufferedImage myImage;
     private String player;
     private Coordinates chosenCoordinates;
     private Pair<Coordinates, List<Level>> chosenPair;
     private Thread undoThread;
-
+    private WorkerColor chosenColor;
     private Coordinates coordinates;
     private Pair<Coordinates,Level> build;
 
@@ -54,12 +52,10 @@ public class Gui {
         undoThread = null;
 
         try {
-            myImage = ImageIO.read(new File("src/main/resources/SantoriniBoard.png"));
+            myImage = ImageIO.read(getClass().getResourceAsStream("/santoriniBoard.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
 
     }
 
@@ -92,27 +88,29 @@ public class Gui {
         if (!first) {
             logInPanel.setNicknameErr("Please insert a valid Nickname !");
         }
-        submitButton.addActionListener(e -> {
-            if (logInPanel.getNickname().equals(""))
-                logInPanel.setNicknameError(true);
-            else {
-                logInPanel.setNicknameError(false);
-                first = false;
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (logInPanel.getNickname().equals("") || logInPanel.getNickname().contains(" "))
+                    logInPanel.setNicknameError(true);
+                else {
+                    logInPanel.setNicknameError(false);
+                    first = false;
+                    Thread nick = new Thread(() -> {
                         player = logInPanel.getNickname();
                         EventForFirstPhase eventNickname = new Nickname(logInPanel.getNickname());
                         s.notify(eventNickname);
-                    }
-                });
+                    });
+                    nick.start();
+                }
             }
         });
 
         frame.getContentPane().add(logInPanel);
         frame.setVisible(true);
 
-    }
 
+    }
 
     public void numberOfPlayers() {
         frame.getContentPane().removeAll();
@@ -120,7 +118,6 @@ public class Gui {
 
         NrOfPlayersPanel nrOfPlayersPanel = new NrOfPlayersPanel();
         JButton[] nrButton = nrOfPlayersPanel.getNrButton();
-        BorderLayout borderLayout = new BorderLayout();
 
         for (JButton button : nrButton) {
             button.addActionListener(e -> {
@@ -131,12 +128,11 @@ public class Gui {
 
                     }
                 }
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        EventForFirstPhase eventNumberOfPlayers = new NumberOfPlayers(buttonNumber);
-                        s.notify(eventNumberOfPlayers);
-                    }
+                Thread number = new Thread ( () -> {
+                    EventForFirstPhase eventNumberOfPlayers = new NumberOfPlayers(buttonNumber);
+                    s.notify(eventNumberOfPlayers);
                 });
+                number.start();
 
             });
         }
@@ -148,7 +144,7 @@ public class Gui {
         frame.getContentPane().removeAll();
         frame.setSize(1400, 800);
 
-        colorPanel = new ColorPanel(myImage);
+        ColorPanel colorPanel = new ColorPanel(myImage);
         List<JButton> colorButton = new ArrayList<>();
 
         for (WorkerColor workerColor : s.getAvailableColors()) {
@@ -163,15 +159,17 @@ public class Gui {
                     for (int i = 0; i < colorButton.size(); i++) {
                         if (e.getSource() == colorButton.get(i)) {
 
-                            //colorButton.get(i).setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+                            chosenColor=s.getAvailableColors().get(i);
                             colorButton.get(i).setEnabled(false);
-                            EventForServer eventColor = new ColorChoice(s.getAvailableColors().get(i));
-                            s.notify(eventColor);
+
+                            Thread color = new Thread ( () -> {
+                                EventForServer eventColor = new ColorChoice(chosenColor);
+                                s.notify(eventColor);
+                            });
+                            color.start();
                         }
 
-
                     }
-
 
                 }
             });
@@ -196,16 +194,17 @@ public class Gui {
                 public void actionPerformed(ActionEvent e) {
                     for (int i = 0; i < 14; i++) {
                         if (e.getSource() == godButtons[i]) {
+
                             godButtons[i].setBorder(BorderFactory.createLineBorder(new Color(102, 0, 153)));
                             chosenGods.add(Gods.getGodFromString(godButtons[i].getText()));
                             godButtons[i].setEnabled(false);
+
                             if (chosenGods.size() == s.getGodsNum()) {
-                                SwingUtilities.invokeLater(new Runnable() {
-                                    public void run() {
-                                        EventForServer eventGodsDeck = new GodsDeck(chosenGods);
-                                        s.notify(eventGodsDeck);
-                                    }
+                                Thread god = new Thread(() -> {
+                                    EventForServer eventGodsDeck = new GodsDeck(chosenGods);
+                                    s.notify(eventGodsDeck);
                                 });
+                                god.start();
                             }
                         }
                     }
@@ -236,11 +235,6 @@ public class Gui {
             }
         }
 
-        /*for (Gods god : s.getAvailableGods()) {
-            chosenButtons.add(chooseGodsPanel.getSpecificGod(god.ordinal()));
-            chooseGodsPanel.setGodUnavailable(god.ordinal());
-        }*/
-
         for (int i = 0; i < chosenButtons.size(); i++) {
             chosenButtons.get(i).addActionListener(e -> {
                 for (JButton chosenButton : chosenButtons) {
@@ -248,31 +242,28 @@ public class Gui {
                         chosenButton.setEnabled(false);
                         chosenGod = Gods.getGodFromString(chosenButton.getText());
 
+                        Thread godChoice = new Thread( () -> {
+                            EventForServer eventGodChoice = new GodChoice(chosenGod);
+                            s.notify(eventGodChoice);
+                        });
+                        godChoice.start();
+
                     }
 
                 }
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        EventForServer eventGodChoice = new GodChoice(chosenGod);
-                        s.notify(eventGodChoice);
-                    }
-                });
 
             });
         }
         frame.getContentPane().add(chooseGodsPanel);
         frame.setVisible(true);
 
-
     }
 
     public void placeWorkers() {
 
 
-
         mapPanel.setChat("Place your " + s.getWorkerNum() + "ª worker");
         mapPanel.setWorkerBorder(s.getWorkerNum() - 1);
-        workerPic = mapPanel.getWorkerImages(s.getChosenColors().get(player).toString());
         boardButtons = board.getBoardButtons();
 
         for (int i = 0; i < 5; i++) {
@@ -287,7 +278,11 @@ public class Gui {
                                     mapPanel.getUndoContainer().setVisible(true);
                                     getChoice("PLACEWORKER");
                                     coordinates = new Coordinates(i, j);
-
+                                    Thread workerPos = new Thread( () -> {
+                                        EventForServer eventWorkerPosition = new WorkerPosition(coordinates);
+                                        s.notify(eventWorkerPosition);
+                                    });
+                                    workerPos.start();
 
                                 }
                             }
@@ -298,13 +293,8 @@ public class Gui {
             }
         }
 
-
-
-        //frame.getContentPane().add(mapPanel);
-        //frame.setVisible(true);
-
-
     }
+
     public void updateMap() throws OutOfMapException {
 
         frame.getContentPane().removeAll();
@@ -385,7 +375,6 @@ public class Gui {
 
     }
 
-
     public void chooseWorker() {
 
         //frame.getContentPane().removeAll();
@@ -430,11 +419,6 @@ public class Gui {
 
     public void askMove() {
 
-        //frame.getContentPane().removeAll();
-        //frame.setSize(1400, 800);
-
-        //mapPanel = new MapPanel(myImage);
-        //board = mapPanel.getBoardContainer();
         mapPanel.setChat("Move");
 
         List<BoardButton> availableMoveButtons = new ArrayList<>();
@@ -454,12 +438,8 @@ public class Gui {
                     for (int i = 0; i < availableMoveButtons.size(); i++) {
 
                         if (e.getSource() == availableMoveButtons.get(i)) {
-                            // for(int j=0 ; j<availableMoveButtons.size() ;j++)
-                            //   availableMoveButtons.get(i).setBorder(null);
 
-//                            chosenWorker.setBorder(null);
                             availableMoveButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));
-                            //availableMoveButtons.get(i).setWorker(chosenWorker.getWorker().);
                             chosenCoordinates = s.getValidChoicesMoves().get(i);
                             mapPanel.getUndoContainer().setVisible(true);
                             getChoice("MOVE");
@@ -469,8 +449,6 @@ public class Gui {
             });
         }
 
-        //frame.getContentPane().add(mapPanel);
-        //frame.setVisible(true);
     }
 
     public void askBuild() {
@@ -543,15 +521,21 @@ public class Gui {
         JButton no = mapPanel.getNo();
         yes.addActionListener(e -> {
             if (e.getSource() == yes) {
-                EventForServer eventDecisionTaken = new DecisionTaken(true);
-                s.notify(eventDecisionTaken);
+                Thread decisionYes = new Thread( () -> {
+                    EventForServer eventDecisionTaken = new DecisionTaken(true);
+                    s.notify(eventDecisionTaken);
+                });
+                decisionYes.start();
             }
         });
 
         no.addActionListener(e -> {
             if (e.getSource() == no) {
-                EventForServer eventDecisionTaken = new DecisionTaken(false);
-                s.notify(eventDecisionTaken);
+                Thread decisionNo = new Thread ( () -> {
+                    EventForServer eventDecisionTaken = new DecisionTaken(false);
+                    s.notify(eventDecisionTaken);
+                });
+                decisionNo.start();
             }
         });
     }
@@ -561,8 +545,7 @@ public class Gui {
     }
 
     public void unsuccessfulOperation() {
-        mapPanel.setChat("Sorry , something went wrong server side..."
-                + "Repeat your last action !");
+        mapPanel.setChat("Sorry , something went wrong server side..." + "\n" + "Repeat your last action !");
     }
 
     public void winGame() throws IOException {
