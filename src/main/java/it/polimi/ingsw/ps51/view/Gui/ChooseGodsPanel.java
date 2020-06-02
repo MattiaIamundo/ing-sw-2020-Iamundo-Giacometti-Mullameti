@@ -80,11 +80,13 @@ public class ChooseGodsPanel extends JPanel {
         return godButtons[nr];
     }
 
-    public void setGodBorder(int nr ){
+  /*  public void setGodBorder(int nr ){
         godButtons[nr].setBorderPainted(true);
         godButtons[nr].setBorder(BorderFactory.createLineBorder(Color.RED , 2));
-    }
-
+    }*/
+      public void setGodUnavailable(int nr ){
+        godButtons[nr].setEnabled(false);
+      }
 
     public JLabel getChooseGods() {
         return chooseGods;

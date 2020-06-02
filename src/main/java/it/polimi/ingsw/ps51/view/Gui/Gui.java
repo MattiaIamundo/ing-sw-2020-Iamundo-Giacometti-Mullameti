@@ -56,7 +56,7 @@ public class Gui {
         try {
             myImage = ImageIO.read(new File("src/main/resources/SantoriniBoard.png"));
         } catch (IOException e) {
-
+            e.printStackTrace();
         }
 
 
@@ -88,26 +88,23 @@ public class Gui {
 
         LogInPanel logInPanel = new LogInPanel();
         JButton submitButton = logInPanel.getSubmitButton();
-        BorderLayout borderLayout = new BorderLayout();
+
         if (!first) {
             logInPanel.setNicknameErr("Please insert a valid Nickname !");
         }
-        submitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (logInPanel.getNickname().equals(""))
-                    logInPanel.setNicknameError(true);
-                else {
-                    logInPanel.setNicknameError(false);
-                    first = false;
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            player = logInPanel.getNickname();
-                            EventForFirstPhase eventNickname = new Nickname(logInPanel.getNickname());
-                            s.notify(eventNickname);
-                        }
-                    });
-                }
+        submitButton.addActionListener(e -> {
+            if (logInPanel.getNickname().equals(""))
+                logInPanel.setNicknameError(true);
+            else {
+                logInPanel.setNicknameError(false);
+                first = false;
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        player = logInPanel.getNickname();
+                        EventForFirstPhase eventNickname = new Nickname(logInPanel.getNickname());
+                        s.notify(eventNickname);
+                    }
+                });
             }
         });
 
@@ -126,24 +123,21 @@ public class Gui {
         BorderLayout borderLayout = new BorderLayout();
 
         for (JButton button : nrButton) {
-            button.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    for (int i = 0; i < 2; i++) {
-                        if (e.getSource() == nrButton[i]) {
+            button.addActionListener(e -> {
+                for (int i = 0; i < 2; i++) {
+                    if (e.getSource() == nrButton[i]) {
 
-                            buttonNumber = i + 2;
+                        buttonNumber = i + 2;
 
-                        }
                     }
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            EventForFirstPhase eventNumberOfPlayers = new NumberOfPlayers(buttonNumber);
-                            s.notify(eventNumberOfPlayers);
-                        }
-                    });
-
                 }
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        EventForFirstPhase eventNumberOfPlayers = new NumberOfPlayers(buttonNumber);
+                        s.notify(eventNumberOfPlayers);
+                    }
+                });
+
             });
         }
         frame.getContentPane().add(nrOfPlayersPanel);
@@ -234,35 +228,36 @@ public class Gui {
 
         chosenGods = s.getAvailableGods();
 
-        for (JButton button : chooseGodsPanel.getGodButtons()) {
-            button.setVisible(true);
+        for(Gods god : Gods.values()){
+            if (s.getAvailableGods().contains(god)) {
+                chosenButtons.add(chooseGodsPanel.getSpecificGod(god.ordinal()));
+            }else {
+                chooseGodsPanel.setGodUnavailable(god.ordinal());
+            }
         }
 
-        for (Gods god : s.getAvailableGods()) {
+        /*for (Gods god : s.getAvailableGods()) {
             chosenButtons.add(chooseGodsPanel.getSpecificGod(god.ordinal()));
-            chooseGodsPanel.setGodBorder(god.ordinal());
-        }
+            chooseGodsPanel.setGodUnavailable(god.ordinal());
+        }*/
 
         for (int i = 0; i < chosenButtons.size(); i++) {
-            chosenButtons.get(i).addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    for (int i = 0; i < chosenButtons.size(); i++) {
-                        if (e.getSource() == chosenButtons.get(i)) {
-
-                            chosenGod = Gods.getGodFromString(chosenButtons.get(i).getText());
-
-                        }
+            chosenButtons.get(i).addActionListener(e -> {
+                for (JButton chosenButton : chosenButtons) {
+                    if (e.getSource() == chosenButton) {
+                        chosenButton.setEnabled(false);
+                        chosenGod = Gods.getGodFromString(chosenButton.getText());
 
                     }
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            EventForServer eventGodChoice = new GodChoice(chosenGod);
-                            s.notify(eventGodChoice);
-                        }
-                    });
 
                 }
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        EventForServer eventGodChoice = new GodChoice(chosenGod);
+                        s.notify(eventGodChoice);
+                    }
+                });
+
             });
         }
         frame.getContentPane().add(chooseGodsPanel);
@@ -407,6 +402,7 @@ public class Gui {
         }
 
         for (int i = 0; i < 2; i++) {
+            workerButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.BLUE,2));
             workerButtons.get(i).addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -519,10 +515,10 @@ public class Gui {
                                 availableLevels.get(j).addMouseListener(new MouseAdapter() {
                                     @Override
                                     public void mouseClicked(MouseEvent m) {
-                                        for (int j = 0; j < availableLevels.size(); j++) {
-                                            if (m.getSource() == availableLevels.get(j)) {
+                                        for (JLabel availableLevel : availableLevels) {
+                                            if (m.getSource() == availableLevel) {
 
-                                                build = new Pair<>(chosenPair.getValue0(), Level.valueOf(availableLevels.get(j).getText().toUpperCase()));
+                                                build = new Pair<>(chosenPair.getValue0(), Level.valueOf(availableLevel.getText().toUpperCase()));
                                                 mapPanel.getUndoContainer().setVisible(true);
                                                 getChoice("BUILD");
 
@@ -536,10 +532,7 @@ public class Gui {
                 }
             });
 
-
         }
-
-
     }
 
 
@@ -548,23 +541,17 @@ public class Gui {
 
         JButton yes = mapPanel.getYes();
         JButton no = mapPanel.getNo();
-        yes.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == yes) {
-                    EventForServer eventDecisionTaken = new DecisionTaken(true);
-                    s.notify(eventDecisionTaken);
-                }
+        yes.addActionListener(e -> {
+            if (e.getSource() == yes) {
+                EventForServer eventDecisionTaken = new DecisionTaken(true);
+                s.notify(eventDecisionTaken);
             }
         });
 
-        no.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == no) {
-                    EventForServer eventDecisionTaken = new DecisionTaken(false);
-                    s.notify(eventDecisionTaken);
-                }
+        no.addActionListener(e -> {
+            if (e.getSource() == no) {
+                EventForServer eventDecisionTaken = new DecisionTaken(false);
+                s.notify(eventDecisionTaken);
             }
         });
     }
@@ -651,35 +638,11 @@ public class Gui {
         JButton no = mapPanel.getUndoContainer().getNo();
         mapPanel.getUndoContainer().getText().setText("Do you confirm your choice ?");
 
-        undoThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
+        undoThread = new Thread(() -> {
 
 
-                    try {
-                        if(f.get(10, TimeUnit.SECONDS).equals("YES")) {
-                            switch (methodName) {
-                                case "PLACEWORKER":
-                                    EventForServer eventWorkerPosition = new WorkerPosition(coordinates);
-                                    s.notify(eventWorkerPosition);
-                                    break;
-                                case "CHOOSEWORKER":
-                                    EventForServer eventWorkerChoice = new WorkerChoice(chosenWorker);
-                                    s.notify(eventWorkerChoice);
-                                    break;
-                                case "MOVE":
-                                    EventForServer eventMoveChoice = new MoveChoice(chosenCoordinates);
-                                    s.notify(eventMoveChoice);
-                                    break;
-                                case "BUILD":
-                                    EventForServer eventBuild = new Build(build);
-                                    s.notify(eventBuild);
-                                    break;
-                            }
-                        }
-
-                    } catch (TimeoutException e) {
-                        e.printStackTrace();
+                try {
+                    if(f.get(10, TimeUnit.SECONDS).equals("YES")) {
                         switch (methodName) {
                             case "PLACEWORKER":
                                 EventForServer eventWorkerPosition = new WorkerPosition(coordinates);
@@ -698,11 +661,32 @@ public class Gui {
                                 s.notify(eventBuild);
                                 break;
                         }
-                    } catch (InterruptedException | ExecutionException e) {
-                        e.printStackTrace();
                     }
-                tf.getEx().shutdown();
-            }
+
+                } catch (TimeoutException e) {
+                    e.printStackTrace();
+                    switch (methodName) {
+                        case "PLACEWORKER":
+                            EventForServer eventWorkerPosition = new WorkerPosition(coordinates);
+                            s.notify(eventWorkerPosition);
+                            break;
+                        case "CHOOSEWORKER":
+                            EventForServer eventWorkerChoice = new WorkerChoice(chosenWorker);
+                            s.notify(eventWorkerChoice);
+                            break;
+                        case "MOVE":
+                            EventForServer eventMoveChoice = new MoveChoice(chosenCoordinates);
+                            s.notify(eventMoveChoice);
+                            break;
+                        case "BUILD":
+                            EventForServer eventBuild = new Build(build);
+                            s.notify(eventBuild);
+                            break;
+                    }
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            tf.getEx().shutdown();
         });
 
         undoThread.start();
@@ -715,29 +699,26 @@ public class Gui {
         });
 
 
-        no.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tf.setResult("NO");
-                tf.setBool(true);
+        no.addActionListener(e -> {
+            tf.setResult("NO");
+            tf.setBool(true);
 
-                    mapPanel.getUndoContainer().setVisible(false);
-                    switch (methodName){
-                        case "PLACEWORKER":
-                            placeWorkers();
-                            break;
-                        case "CHOOSEWORKER":
-                            chooseWorker();
-                            break;
-                        case "MOVE":
-                            askMove();
-                            break;
-                        case "BUILD":
-                            askBuild();
-                            break;
-                    }
+                mapPanel.getUndoContainer().setVisible(false);
+                switch (methodName){
+                    case "PLACEWORKER":
+                        placeWorkers();
+                        break;
+                    case "CHOOSEWORKER":
+                        chooseWorker();
+                        break;
+                    case "MOVE":
+                        askMove();
+                        break;
+                    case "BUILD":
+                        askBuild();
+                        break;
+                }
 
-            }
         });
 
 

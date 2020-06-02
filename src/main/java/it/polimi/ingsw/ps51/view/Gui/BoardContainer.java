@@ -28,7 +28,7 @@ public class BoardContainer extends Container {
                 //button[i][j].setOpaque(false);
                 boardButtons[i][j].setContentAreaFilled(false);
                 //button[i][j].setBorderPainted(false);
-                boardButtons[i][j].setBorder(BorderFactory.createLineBorder(Color.BLUE,2));
+                boardButtons[i][j].setBorder(BorderFactory.createLineBorder(Color.lightGray,1));
 
                 this.add(boardButtons[i][j]);
             }
@@ -42,9 +42,6 @@ public class BoardContainer extends Container {
     }
     public BoardButton getSpecificButtons(int j, int i){return boardButtons[i][j];}
 
-    public void setBoardButtons(BoardButton[][] boardButtons) {
-        this.boardButtons = boardButtons;
-    }
 
     /*public static void main(String[] args) throws IOException {
         JFrame frame = new JFrame("Start");
