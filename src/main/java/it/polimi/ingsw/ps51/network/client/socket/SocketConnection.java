@@ -58,7 +58,7 @@ public class SocketConnection implements ClientInterface {
             this.connection.setSoTimeout(0);
             return event;
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("The object input stream is closed by server...");
         }
         return new Disconnection();
     }

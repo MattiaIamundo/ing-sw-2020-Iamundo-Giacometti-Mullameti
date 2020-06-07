@@ -60,8 +60,8 @@ public class Room extends Observable<EventForServer> implements Runnable, RoomOb
     public void update(EventForClient message) {
 
         if (message.getReceiver().equals("ALL") || message.getReceiver().equals("END")) {
+            logger.info("[ROOM]: I'm sending a " + message.toString() + " event to ALL");
             for (String s: this.nicknames) {
-                logger.info("[ROOM]: I'm sending an event to ALL the players!");
                 mapOfNicknameAndServerInterface.get(s).sendEvent(message);
             }
 
