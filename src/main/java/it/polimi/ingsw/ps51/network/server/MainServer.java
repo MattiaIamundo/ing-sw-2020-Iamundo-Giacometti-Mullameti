@@ -9,6 +9,7 @@ import it.polimi.ingsw.ps51.network.client.ClientInterface;
 import it.polimi.ingsw.ps51.network.server.socket.ServerSocket;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * This class represents the central server which handles:
@@ -30,6 +31,7 @@ public class MainServer implements Runnable{
     List<String> actualNicknameInSearchOfRoom;
     Map<String,ServerInterface> mapOfNicknameAndServerInterface;
     List<Room> listOfRoom;
+    Logger logger = Logger.getLogger(this.getClass().getName());
 
     /**
      * Constructor
@@ -263,10 +265,12 @@ public class MainServer implements Runnable{
      */
     @Override
     public void run() {
+        logger.info("[MAIN SERVER]: I'm on!");
 
         Thread t1 = new Thread(ss);
         t1.start();
 
+        logger.info("[MAIN SERVER]: I'm waiting for the players...");
         while (computeTheSizeOfList()) {
             try {
                 Thread.sleep(400);
@@ -274,14 +278,16 @@ public class MainServer implements Runnable{
                 e.printStackTrace();
             }
         }
+        logger.info("[MAIN SERVER]: I'm trying to shut down the server socket...");
         ss.stopSS();
 
         synchronized ( getObjectToSynchronized() ) {
-
+            logger.info("[MAIN SERVER]: I'm creating the game room!");
             cleanFromOutOfRoomPlayers();
             createGame();
             this.actualNicknameInSearchOfRoom.clear();
             this.numberOfPlayer = 0;
         }
+        logger.info("[MAIN SERVER]: I'm shutting down...");
     }
 }

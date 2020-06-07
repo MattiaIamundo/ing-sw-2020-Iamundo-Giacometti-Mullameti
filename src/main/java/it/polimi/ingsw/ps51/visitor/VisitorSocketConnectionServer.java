@@ -9,9 +9,12 @@ import it.polimi.ingsw.ps51.events.events_for_server.Pong;
 import it.polimi.ingsw.ps51.network.server.MainServer;
 import it.polimi.ingsw.ps51.network.server.socket.SocketConnection;
 
+import java.util.logging.Logger;
+
 public class VisitorSocketConnectionServer implements VisitorFirstPhase{
 
     SocketConnection socketConnection;
+    Logger logger = Logger.getLogger(this.getClass().getName());
 
     /**
      * Constructor
@@ -31,8 +34,10 @@ public class VisitorSocketConnectionServer implements VisitorFirstPhase{
      */
     @Override
     public void visitNickname(Nickname nickname) {
+        logger.info("[VISITOR SOCKETCONNECTION]: I'm processing the NICKNAME event!");
         if (socketConnection.checkIfIsAlreadyPresentARoom()) {
             //the game is already started so the player cannot be admitted in the room
+            logger.info("[VISITOR SOCKETCONNECTION]: A game is already started!");
             socketConnection.setOk(true);
             socketConnection.setFinish(true);
             socketConnection.sendEvent(new OutOfRoom());
@@ -43,13 +48,18 @@ public class VisitorSocketConnectionServer implements VisitorFirstPhase{
                 socketConnection.setNickname(nickname.getNickname());
                 boolean first = socketConnection.first();
 
-                if (first)
+                if (first) {
+                    logger.info("[VISITOR SOCKETCONNECTION of " + nickname.getNickname() + "]: I'm sending the NUMBER OF PLAYER event!");
                     socketConnection.sendEvent(new NumberOfPlayer());
+                }
                 else
                     socketConnection.setOk(true);
             }
-            else
+            else {
+                logger.info("[VISITOR SOCKETCONNECTION]: There is already the nickname: " + nickname.getNickname() + "!");
+                logger.info("[VISITOR SOCKETCONNECTION]: I'm sending again the NICKNAME event!");
                 socketConnection.sendEvent(new it.polimi.ingsw.ps51.events.events_for_client.Nickname());
+            }
         }
     }
 
@@ -59,6 +69,7 @@ public class VisitorSocketConnectionServer implements VisitorFirstPhase{
      */
     @Override
     public void visitNumberOfPlayer(NumberOfPlayers numberOfPlayers) {
+        logger.info("[VISITOR SOCKETCONNECTION of " + socketConnection.getNickname() + "]: I'm processing the NUMBEROFPLAYERS event!");
         socketConnection.setOnServerNumberOfPlayer(numberOfPlayers.getPlayerNumber());
     }
 

@@ -3,6 +3,7 @@ package it.polimi.ingsw.ps51.network.server.socket;
 import it.polimi.ingsw.ps51.network.server.MainServer;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 /**
  * This class represents the Server which creates the {@link SocketConnection}
@@ -12,6 +13,7 @@ public class ServerSocket implements Runnable{
 
     MainServer mainServer;
     java.net.ServerSocket ss;
+    Logger logger = Logger.getLogger(this.getClass().getName());
 
     /**
      * Constructor
@@ -30,7 +32,7 @@ public class ServerSocket implements Runnable{
         try {
             this.ss.close();
         } catch (IOException e) {
-            System.out.println("The ServerSocket is already closed...");
+            logger.info("[SERVERSOCKET]: I'm already closed...");
         }
     }
 
@@ -42,15 +44,16 @@ public class ServerSocket implements Runnable{
      */
     @Override
     public void run() {
-
+            logger.info("[SERVERSOCKET]: I'm on!");
             try {
                 while (this.mainServer.computeTheSizeOfList()) {
                     SocketConnection si = new SocketConnection(ss.accept(), this.mainServer);
+                    logger.info("[SERVERSOCKET]: I'm processing a new player...");
                     Thread t = new Thread(si);
                     t.start();
                 }
             } catch (IOException e) {
-                System.out.println("The server socket is down...");
+                logger.info("[SERVERSOCKET]: I'm shutting down...");
         }
     }
 }

@@ -8,6 +8,7 @@ import it.polimi.ingsw.ps51.utility.Observable;
 import it.polimi.ingsw.ps51.utility.RoomObserver;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * This class represents the container which has:
@@ -22,6 +23,7 @@ public class Room extends Observable<EventForServer> implements Runnable, RoomOb
     private Game game;
     List<String> nicknames;
     Map<String,ServerInterface> mapOfNicknameAndServerInterface;
+    Logger logger = Logger.getLogger(this.getClass().getName());
 
     /**
      * Constructor
@@ -59,15 +61,19 @@ public class Room extends Observable<EventForServer> implements Runnable, RoomOb
 
         if (message.getReceiver().equals("ALL") || message.getReceiver().equals("END")) {
             for (String s: this.nicknames) {
+                logger.info("[ROOM]: I'm sending an event to ALL the players!");
                 mapOfNicknameAndServerInterface.get(s).sendEvent(message);
             }
 
             if (message.getReceiver().equals("END")) {
+                logger.info("[ROOM]: I've received an END EVENT, so I'll terminate myself...");
                 this.isFinish = true;
             }
         }
-        else
+        else {
+            logger.info("[ROOM]: I'm sending a " + message.toString() + " event to {" + message.getReceiver() + "}");
             mapOfNicknameAndServerInterface.get(message.getReceiver()).sendEvent(message);
+        }
 
     }
 
@@ -78,20 +84,21 @@ public class Room extends Observable<EventForServer> implements Runnable, RoomOb
      */
     @Override
     public void run() {
+        logger.info("[ROOM]: I'm on and i'm starting the game!");
         game.startGame();
 
         while (!isFinish) {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
-                System.out.println("The thread Room is interrupted but is continuing to run");
+                logger.info("[ROOM]: I'm interrupted but i'll continue to run");
             }
         }
 
         for( String s : this.nicknames) {
             this.mapOfNicknameAndServerInterface.get(s).closeConnection();
         }
-        System.out.println("The game room is shutting down...");
+        logger.info("[ROOM]: I'm shutting down...");
     }
 
     /**
@@ -102,6 +109,8 @@ public class Room extends Observable<EventForServer> implements Runnable, RoomOb
      */
     @Override
     public void update(Disconnection disconnection) {
+        logger.info("[ROOM]: A disconnection is received!");
+        logger.info("[ROOM]: I'll disconnect every player!");
         for(String s : this.nicknames) {
             if (!s.equals(disconnection.getPlayerDisconnected()))
                 mapOfNicknameAndServerInterface.get(s).sendEvent(new it.polimi.ingsw.ps51.events.events_for_client.Disconnection());

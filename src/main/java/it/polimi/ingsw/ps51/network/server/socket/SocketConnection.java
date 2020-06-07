@@ -238,11 +238,12 @@ public class SocketConnection implements Runnable, ServerInterface {
      */
     @Override
     public void run() {
-
+        logger.info("[SOCKETCONNECTION]: A socket connection is established!");
         try {
             connection.setSoTimeout(timeOut);
             startPingThread();
             sendEvent(new it.polimi.ingsw.ps51.events.events_for_client.Nickname());
+            logger.info("[SOCKETCONNECTION]: Send the NICKNAME event");
             while (!ok) {
                 EventForFirstPhase event = (EventForFirstPhase) this.ois.readObject();
                 event.acceptVisitor(this.visitor);
@@ -252,6 +253,7 @@ public class SocketConnection implements Runnable, ServerInterface {
 
             synchronized (this.mainServer.getObjectToSynchronized()) {
                 if (this.nickname != null) {
+                    logger.info("[SOCKETCONNECTION of " + this.nickname + "]: A disconnection is received...");
                     this.mainServer.reAskNumberIfIWasTheFirstOneAndOtherAreConnected(this.nickname);
                     this.mainServer.removeNickname(this.nickname);
                 }
@@ -268,10 +270,13 @@ public class SocketConnection implements Runnable, ServerInterface {
         } catch (IOException | ClassNotFoundException e) {
 
             if (gameRoom != null) {
+                logger.info("[SOCKETCONNECTION of " + this.nickname + "]: A disconnection is received...");
+                logger.info("[SOCKETCONNECTION of " + this.nickname + "]: I'm going to communicate it to the ROOM!");
                 this.gameRoom.update(new it.polimi.ingsw.ps51.events.events_for_server.Disconnection(this.nickname));
             }
             else {
                 synchronized (this.mainServer.getObjectToSynchronized()) {
+                    logger.info("[SOCKETCONNECTION of " + this.nickname + "]: A disconnection is received...");
                     this.mainServer.reAskNumberIfIWasTheFirstOneAndOtherAreConnected(this.nickname);
                     this.mainServer.removeNickname(this.nickname);
                 }

@@ -553,8 +553,7 @@ public class Gui {
         frame.setSize(625 * 3 / 2, 415 * 3 / 2);
         Image winImage;
 
-        winImage = ImageIO.read(new File("src/main/resources/winBackground.png"));
-
+        winImage = ImageIO.read(getClass().getResourceAsStream("winBackground.jpg"));
 
         WinPanel winPanel = new WinPanel(winImage);
 
@@ -625,7 +624,7 @@ public class Gui {
 
 
                 try {
-                    if(f.get(10, TimeUnit.SECONDS).equals("YES")) {
+                    if(f.get(5, TimeUnit.SECONDS).equals("YES")) {
                         switch (methodName) {
                             case "PLACEWORKER":
                                 EventForServer eventWorkerPosition = new WorkerPosition(coordinates);
