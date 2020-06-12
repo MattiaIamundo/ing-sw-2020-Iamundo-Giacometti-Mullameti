@@ -58,28 +58,4 @@ public class InterruptibleInputStream extends InputStream {
         return i;
     }
 
-    @Override
-    public int available() throws IOException {
-        return in.available();
-    }
-
-    @Override
-    public void close() throws IOException {
-        in.close();
-    }
-
-    @Override
-    public synchronized void mark(int readlimit) {
-        in.mark(readlimit);
-    }
-
-    @Override
-    public synchronized void reset() throws IOException {
-        in.reset();
-    }
-
-    @Override
-    public boolean markSupported() {
-        return in.markSupported();
-    }
 }
