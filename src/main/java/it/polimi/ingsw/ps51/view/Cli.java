@@ -504,8 +504,8 @@ public class Cli extends Supporter {
         while (true) {
 
             FutureTask<String> userChoice = new FutureTask<>(() -> {
-                BufferedReader in = new BufferedReader(new InputStreamReader(new InterruptibleInputStream(System.in)));
-                return in.readLine();
+                Scanner in = new Scanner(new BufferedReader(new InputStreamReader(new InterruptibleInputStream(System.in))));
+                return in.next();
             });
             Thread thread = new Thread(userChoice, "ReaderForUserChoice");
             thread.start();
