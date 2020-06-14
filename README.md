@@ -33,12 +33,12 @@ default port **20000**.
 In order to start a new client, first check a server is already running, then you have to
 start the client application, namely <code>client.jar</code> collocated in: <code>deliveries/final/jar/</code>.
 
-###Linux/Mac systems:
+### Linux/Mac systems:
 to start a new client, from a terminal, simply digit:
     
     java -jar client.jar [option][value]
 
-###Windows systems:
+### Windows systems:
 If you desire to use the CLI interface it's recommended to install **Windows Terminal** from 
 the Microsoft store, otherwise you can incur into some visual defects such as missed colors
 visualization, unprintable characters.  
@@ -48,7 +48,7 @@ To start the client open a new command prompt from Windows terminal, if installe
 
 Instead ,if you desire to use the GUI, you can follow the same instruction for Linux/Mac.
 
-###Client Options:
+### Client Options:
 When launching a client there is some option that can be specified, 
 the available options are:  
 -   <code>-ip</code>: to specify the server ip, the default value is the Localhost
