@@ -12,6 +12,7 @@ import it.polimi.ingsw.ps51.utility.InterruptibleInputStream;
 import it.polimi.ingsw.ps51.utility.MessageHandler;
 import org.javatuples.Pair;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class Cli extends Supporter {
     boolean isFinish;
     MessageHandler mh;
     Printer printer;
-    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader((System.in)));
     Scanner reader = new Scanner(bufferedReader);
 
 
@@ -504,8 +505,8 @@ public class Cli extends Supporter {
         while (true) {
 
             FutureTask<String> userChoice = new FutureTask<>(() -> {
-                Scanner in = new Scanner(new BufferedReader(new InputStreamReader(new InterruptibleInputStream(System.in))));
-                return in.next();
+                BufferedReader in = new BufferedReader(new InputStreamReader(new InterruptibleInputStream(System.in)));
+                return in.readLine();
             });
             Thread thread = new Thread(userChoice, "ReaderForUserChoice");
             thread.start();
