@@ -42,19 +42,8 @@ public class MessageHandler {
      */
     public Future<String> handleTheFuture() {
         return ex.submit( () -> {
-
-            while (true) {
-                try {
-                    Thread.sleep(300);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                if (!supporter.getEvents().isEmpty()) {
-                    event = supporter.getEvents().take();
-                    return this.event.acceptVisitor(visitorClient);
-                }
-            }
+            event = supporter.getEvents().take();
+            return this.event.acceptVisitor(visitorClient);
         });
     }
 }

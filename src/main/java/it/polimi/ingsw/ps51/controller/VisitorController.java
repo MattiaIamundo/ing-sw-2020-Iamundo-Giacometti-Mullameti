@@ -42,6 +42,11 @@ public class VisitorController implements VisitorServer {
     }
 
     @Override
+    public void visitFirstPlayerChoice(FirstPlayerChoice event) {
+        game.phaseFour(event.getFirstPlayer());
+    }
+
+    @Override
     public void visitGodChoice(GodChoice event) {
         game.assignController(event.getGod());
     }

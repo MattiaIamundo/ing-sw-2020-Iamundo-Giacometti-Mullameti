@@ -29,6 +29,7 @@ abstract public class Supporter extends Observable<EventForServer> implements Ru
     private String ack;
     private List<Pair<String, Gods>> chosenGods;
     private List<WorkerColor> availableColors;
+    private List<String> players;
     private java.util.Map<String, WorkerColor> chosenColors;
 
     public Supporter() {
@@ -102,6 +103,14 @@ abstract public class Supporter extends Observable<EventForServer> implements Ru
     }
     public void setAvailableColors(List<WorkerColor> availableColors) {
         this.availableColors = availableColors;
+    }
+
+    public List<String> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<String> players) {
+        this.players = players;
     }
 
     public java.util.Map<String, WorkerColor> getChosenColors() {

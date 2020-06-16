@@ -80,6 +80,11 @@ public class Cli extends Supporter {
                             EventForServer eventGodChoice = new GodChoice(god);
                             notify(eventGodChoice);
                             break;
+                        case "FIRSTPLAYER":
+                            String firstPlayer = chooseFirstPlayer();
+                            EventForServer playerChoice = new FirstPlayerChoice(firstPlayer);
+                            notify(playerChoice);
+                            break;
                         case "WORKERPOSITION" :
                             EventForServer eventWorkerPosition;
                             do {
@@ -301,6 +306,25 @@ public class Cli extends Supporter {
         }
 
         return chosenGod;
+    }
+
+    public String chooseFirstPlayer(){
+        String firstPlayer = null;
+        ok = false;
+
+        printer.println(printer.colorToAnsi(Color.BLUE)+"You have to choose who is the first to play:");
+        printer.println(printer.colorToAnsi(Color.BLUE) + getPlayers());
+
+        while (!ok){
+            firstPlayer = reader.nextLine().toLowerCase();
+            if (getPlayers().contains(firstPlayer)){
+                ok = true;
+            }else {
+                printer.println(printer.colorToAnsi(Color.RED) + "'" + firstPlayer +
+                        "' isn't a valid player's username, please select a name from the given list" + printer.colorToAnsi(Color.BLUE));
+            }
+        }
+        return firstPlayer;
     }
 
     public void updateMap() throws OutOfMapException {

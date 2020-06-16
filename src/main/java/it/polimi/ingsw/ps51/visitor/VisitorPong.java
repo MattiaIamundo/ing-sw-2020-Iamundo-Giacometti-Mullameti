@@ -33,6 +33,12 @@ public class VisitorPong implements VisitorForPong {
     }
 
     @Override
+    public void visitFirstPlayerChoice(FirstPlayerChoice event) {
+        logger.info("[VISITOR PONG of " + socketConnection.getNickname() + "]: a FIRST PLAYER CHOICE event is received!");
+        socketConnection.getGameRoom().notify(event);
+    }
+
+    @Override
     public void visitGodChoice(GodChoice event) {
         logger.info("[VISITOR PONG of " + socketConnection.getNickname() + "]: a GOD CHOICE event is received!");
         socketConnection.getGameRoom().notify(event);

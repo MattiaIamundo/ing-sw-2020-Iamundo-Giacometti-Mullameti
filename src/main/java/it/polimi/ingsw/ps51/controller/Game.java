@@ -34,6 +34,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
     private Map<Player, WorkerColor> colorMap;
     private final int WORKER_NUMBER;
     protected ThirdPhase thirdPhase;
+    private final Player challenger;
     private final static Logger logger = Logger.getLogger(Game.class.getName());
 
     /**
@@ -46,6 +47,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
         colorMap = new HashMap<>();
         visitor = new VisitorController(this);
         WORKER_NUMBER = 2;
+        challenger = gameRoom.getPlayers().get(new Random().nextInt(gameRoom.getPlayers().size()));
     }
 
     /**
@@ -54,7 +56,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
      * number of players in the match
      */
     public void startGame() {
-        actualPlayer = gameRoom.getPlayers().get(new Random().nextInt(gameRoom.getPlayers().size()));
+        actualPlayer = challenger;
         gameRoom.setActualPlayer(actualPlayer);
         notify(new ChooseGodsDeck(actualPlayer.getNickname(), gameRoom.getPlayers().size()));
     }
@@ -102,17 +104,11 @@ public class Game extends Observable<EventForClient> implements GameObserver {
         colorMap.put(actualPlayer, color);
         actualPlayer = gameRoom.getNextPlayer();
         if (colorMap.containsKey(actualPlayer)){
-            List<Pair<String, Gods>> chosenGods = new ArrayList<>();
+            List<String> players = new ArrayList<>();
             for (Player player : gameRoom.getPlayers()){
-                chosenGods.add(new Pair<>(player.getNickname(), Gods.getGodFromCard(player.getGod())));
+                players.add(player.getNickname());
             }
-            Map<String, WorkerColor> colorMap1 = new HashMap<>();
-            for (Map.Entry<Player, WorkerColor> pair : colorMap.entrySet()){
-                colorMap1.put(pair.getKey().getNickname(), pair.getValue());
-            }
-            Game.this.notify(new GameIsStarting(chosenGods, colorMap1));
-            thirdPhase = new ThirdPhase();
-            thirdPhase.start();
+            Game.this.notify(new ChooseFirstPlayer(challenger.getNickname(), players));
         }else {
             List<WorkerColor> availableColors = WorkerColor.toList();
             for (Map.Entry<Player, WorkerColor> pair : colorMap.entrySet()){
@@ -203,6 +199,24 @@ public class Game extends Observable<EventForClient> implements GameObserver {
                 notifyAll();
             }
         }
+    }
+
+    public void phaseFour(String firstPlayer){
+        Player first = gameRoom.getPlayer(firstPlayer);
+        actualPlayer = first;
+        gameRoom.setActualPlayer(first);
+
+        List<Pair<String, Gods>> chosenGods = new ArrayList<>();
+        for (Player player : gameRoom.getPlayers()){
+            chosenGods.add(new Pair<>(player.getNickname(), Gods.getGodFromCard(player.getGod())));
+        }
+        Map<String, WorkerColor> colorMap1 = new HashMap<>();
+        for (Map.Entry<Player, WorkerColor> pair : colorMap.entrySet()){
+            colorMap1.put(pair.getKey().getNickname(), pair.getValue());
+        }
+        Game.this.notify(new GameIsStarting(chosenGods, colorMap1));
+        thirdPhase = new ThirdPhase();
+        thirdPhase.start();
     }
 
 

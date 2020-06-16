@@ -9,6 +9,8 @@ public interface VisitorServer {
 
     void visitDecisionTaken(DecisionTaken event);
 
+    void visitFirstPlayerChoice(FirstPlayerChoice event);
+
     void visitGodChoice(GodChoice event);
 
     void visitGodsDeck(GodsDeck event);

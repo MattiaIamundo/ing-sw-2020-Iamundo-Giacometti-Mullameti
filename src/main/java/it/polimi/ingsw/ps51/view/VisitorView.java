@@ -129,5 +129,11 @@ public class VisitorView implements VisitorClient {
         return "COLOR";
     }
 
+    @Override
+    public String visitChooseFirstPlayer(ChooseFirstPlayer event) {
+        s.setPlayers(event.getPlayers());
+        return "FIRSTPLAYER";
+    }
+
 }
 

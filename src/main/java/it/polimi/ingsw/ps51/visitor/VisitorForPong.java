@@ -21,6 +21,12 @@ public interface VisitorForPong {
     void visitDecisionTaken(DecisionTaken event);
 
     /**
+     * To pass to the room the {@link FirstPlayerChoice} event
+     * @param event the FirstPlayer event received from the client
+     */
+    void visitFirstPlayerChoice(FirstPlayerChoice event);
+
+    /**
      * To pass to the room the {@link GodChoice} event
      * @param event the god choice event received from the client
      */

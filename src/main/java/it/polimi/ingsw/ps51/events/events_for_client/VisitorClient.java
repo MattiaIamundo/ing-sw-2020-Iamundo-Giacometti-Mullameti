@@ -41,4 +41,6 @@ public interface VisitorClient {
     String visitTurnIsEnd(TurnIsEnd event);
 
     String visitChooseColor(ChooseColor event);
+
+    String visitChooseFirstPlayer(ChooseFirstPlayer event);
 }

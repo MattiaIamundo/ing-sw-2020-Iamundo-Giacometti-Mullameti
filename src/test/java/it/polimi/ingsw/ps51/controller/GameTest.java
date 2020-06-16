@@ -123,15 +123,21 @@ public class GameTest {
         stub.clearBuffer();
         stub.notify(new ColorChoice(WorkerColor.WHITE));
         waitForEventBeApplied();
-        assertEquals(3, stub.buffer.size());
-        assertTrue(stub.buffer.get(0) instanceof GameIsStarting);
-        assertTrue(stub.buffer.get(1) instanceof MapUpdate);
-        assertTrue(stub.buffer.get(2) instanceof ChooseWorkerPosition);
+        assertTrue(stub.event instanceof ChooseFirstPlayer);
+    }
+
+    @Test
+    public void phaseFourTest(){
+        colorAssignmentTest();
+
+        stub.notify(new FirstPlayerChoice("Player1"));
+        waitForEventBeApplied();
+        assertTrue(stub.event instanceof ChooseWorkerPosition);
     }
 
     @Test
     public void phaseThree(){
-        colorAssignmentTest();
+        phaseFourTest();
         assertTrue(stub.event instanceof ChooseWorkerPosition);
         assertEquals(1, ((ChooseWorkerPosition) stub.event).getWorkerNum());
         assertEquals(player1.getNickname(), ((ChooseWorkerPosition) stub.event).getReceiver());
@@ -184,7 +190,7 @@ public class GameTest {
 
     @Test
     public void phaseThree_OutOfMapCoordinates_RequestToRedoTheAction(){
-        colorAssignmentTest();
+        phaseFourTest();
 
         assertTrue(stub.event instanceof ChooseWorkerPosition);
         assertEquals(1, ((ChooseWorkerPosition) stub.event).getWorkerNum());

@@ -35,6 +35,15 @@ public class Playground extends Observable<EventForClient> implements SquareObse
         return new ArrayList<>(players);
     }
 
+    public Player getPlayer(String player){
+        for(Player player1 : players){
+            if (player1.getNickname().equals(player)){
+                return player1;
+            }
+        }
+        return null;
+    }
+
     public Map getBoardMap(){
         return boardMap;
     }
