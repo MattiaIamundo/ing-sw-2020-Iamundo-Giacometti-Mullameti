@@ -25,11 +25,11 @@ public class Printer {
 
     public void welcome(){
 
-       println(colorToAnsi(Color.BLUE)+" ────      /\\     |\\    | ───── ─────  ──────   ──────   |  |\\    |  |");
-       println(colorToAnsi(Color.BLUE)+"|         /  \\    | \\   |      |      |      | |      |  |  | \\   |  |");
-       println(colorToAnsi(Color.BLUE)+" ────    /────\\   |  \\  |      |      |      |  ─────    |  |  \\  |  |");
-       println(colorToAnsi(Color.BLUE)+"     |  /      \\  |   \\ |      |      |      | |     \\   |  |   \\ |  |");
-       println(colorToAnsi(Color.BLUE)+" ────  /        \\ |    \\|      |       ──────  |      \\  |  |    \\|  |");
+       println(colorToAnsi(Color.CYAN)+" ────      /\\     |\\    | ───── ─────  ──────   ──────   |  |\\    |  |");
+       println(colorToAnsi(Color.CYAN)+"|         /  \\    | \\   |      |      |      | |      |  |  | \\   |  |");
+       println(colorToAnsi(Color.CYAN)+" ────    /────\\   |  \\  |      |      |      |  ─────    |  |  \\  |  |");
+       println(colorToAnsi(Color.CYAN)+"     |  /      \\  |   \\ |      |      |      | |     \\   |  |   \\ |  |");
+       println(colorToAnsi(Color.CYAN)+" ────  /        \\ |    \\|      |       ──────  |      \\  |  |    \\|  |");
     }
 
 
@@ -93,7 +93,7 @@ public class Printer {
                         ITEM_PER_LINE = gods.size() - x;
                     }
                     for (int t = 0; t < ITEM_PER_LINE; t++){
-                        print(colorToAnsi(Color.BLUE) + "┌─────────────────────────────────────────────┐   ");
+                        print(colorToAnsi(Color.CYAN) + "┌─────────────────────────────────────────────┐   " + colorToAnsi(Color.WHITE));
                     }
                     print("\n ");
                     for (int t = 0; t < ITEM_PER_LINE; t++){
@@ -102,7 +102,7 @@ public class Printer {
                     }
                     print("\n");
                     for (int t = 0; t < ITEM_PER_LINE; t++){
-                        print(colorToAnsi(Color.BLUE) + "├─────────────────────────────────────────────┤   ");
+                        print(colorToAnsi(Color.CYAN) + "├─────────────────────────────────────────────┤   " + colorToAnsi(Color.WHITE));
                     }
                     print("\n ");
                     for (int t = 0; t < ITEM_PER_LINE; t++){
@@ -118,7 +118,7 @@ public class Printer {
                     }
                     print("\n");
                     for (int t = 0; t < ITEM_PER_LINE; t++){
-                        print(colorToAnsi(Color.BLUE) + "└─────────────────────────────────────────────┘   ");
+                        print(colorToAnsi(Color.CYAN) + "└─────────────────────────────────────────────┘   " + colorToAnsi(Color.WHITE));
                     }
                     println("");
                 }
@@ -143,16 +143,16 @@ public class Printer {
             while ((line = bufferedReader.readLine()) != null) {
                 for(String string : stringGod){
                     if(string.equals(line)){
-                        println(colorToAnsi(Color.BLUE) + "┌─────────────────────────────────────────────┐   ");
+                        println(colorToAnsi(Color.CYAN) + "┌─────────────────────────────────────────────┐   ");
                         print(" ");
                         println(colorToAnsi(Color.WHITE)+line.toUpperCase());
-                        println(colorToAnsi(Color.BLUE) + "├─────────────────────────────────────────────┤   ");
+                        println(colorToAnsi(Color.CYAN) + "├─────────────────────────────────────────────┤   ");
                         for(int i=0 ; i<5 ;i++ ){
                             print(" ");
                             println(colorToAnsi(Color.WHITE)+bufferedReader.readLine());
 
                         }
-                        println(colorToAnsi(Color.BLUE) + "└─────────────────────────────────────────────┘   ");
+                        println(colorToAnsi(Color.CYAN) + "└─────────────────────────────────────────────┘   ");
 
                     }
                 }
@@ -342,6 +342,8 @@ public class Printer {
                 return "\u001B[0;37m";
             case CYAN:
                 return "\u001b[0;36m";
+            case BRIGHT_GREEN:
+                return "\u001B[0;92m";
             default:
                 return "\u001B[0;37m";
         }

@@ -213,8 +213,8 @@ public class Cli extends Supporter {
 
         int numberOfPlayers = 0;
         ok = false;
-        printer.println(printer.colorToAnsi(Color.BLUE) + "Choose the number of players !");
-        printer.println(printer.colorToAnsi(Color.BLUE) + "2 players or 3 players ? ");
+        printer.println(printer.colorToAnsi(Color.CYAN) + "Choose the number of players !");
+        printer.println(printer.colorToAnsi(Color.CYAN) + "2 players or 3 players ? ");
 
         while(!ok){
             reader.reset();
@@ -245,11 +245,11 @@ public class Cli extends Supporter {
         List<Gods> chosenGods = new ArrayList<>();
         String chosenGod;
         printer.printDeck();
-        printer.println(printer.colorToAnsi(Color.BLUE) + "You must choose only " + getGodsNum() + " Gods !!");
+        printer.println(printer.colorToAnsi(Color.CYAN) + "You must choose only " + getGodsNum() + " Gods !!");
 
         for (int i = 0; i < getGodsNum(); i++) {
             ok = false;
-            printer.println(printer.colorToAnsi(Color.BLUE) + "Enter the name of the " + (i + 1) + "º God?");
+            printer.println(printer.colorToAnsi(Color.CYAN) + "Enter the name of the " + (i + 1) + "º God?");
             while (!ok) {
                 try {
                     chosenGod = reader.nextLine();
@@ -281,8 +281,8 @@ public class Cli extends Supporter {
         ok=false;
         printer.printGods(getAvailableGods());
 
-        printer.println(printer.colorToAnsi(Color.BLUE) + "You must choose only 1 God !!");
-        printer.println(printer.colorToAnsi(Color.BLUE) + "Type the name RIGHT !!");
+        printer.println(printer.colorToAnsi(Color.CYAN) + "You must choose only 1 God !!");
+        printer.println(printer.colorToAnsi(Color.CYAN) + "Type the name RIGHT !!");
         while(!ok){
 
             try{
@@ -312,8 +312,8 @@ public class Cli extends Supporter {
         String firstPlayer = null;
         ok = false;
 
-        printer.println(printer.colorToAnsi(Color.BLUE)+"You have to choose who is the first to play:");
-        printer.println(printer.colorToAnsi(Color.BLUE) + getPlayers());
+        printer.println(printer.colorToAnsi(Color.CYAN)+"You have to choose who is the first to play:");
+        printer.println(printer.colorToAnsi(Color.CYAN) + getPlayers());
 
         while (!ok){
             firstPlayer = reader.nextLine().toLowerCase();
@@ -321,7 +321,7 @@ public class Cli extends Supporter {
                 ok = true;
             }else {
                 printer.println(printer.colorToAnsi(Color.RED) + "'" + firstPlayer +
-                        "' isn't a valid player's username, please select a name from the given list" + printer.colorToAnsi(Color.BLUE));
+                        "' isn't a valid player's username, please select a name from the given list" + printer.colorToAnsi(Color.CYAN));
             }
         }
         return firstPlayer;
@@ -338,8 +338,8 @@ public class Cli extends Supporter {
         int y;
 
 
-        printer.println(printer.colorToAnsi(Color.BLUE) + "Where do you want to place your " + getWorkerNum() + "º worker ?");
-        printer.println(printer.colorToAnsi(Color.BLUE) + "Enter VALID coordinates !! ");
+        printer.println(printer.colorToAnsi(Color.CYAN) + "Where do you want to place your " + getWorkerNum() + "º worker ?");
+        printer.println(printer.colorToAnsi(Color.CYAN) + "Enter VALID coordinates !! ");
 
         x = coordinateCheck("X");
 
@@ -356,9 +356,9 @@ public class Cli extends Supporter {
         Worker worker;
         ok =  false;
         int count = 1;
-        printer.println(printer.colorToAnsi(Color.BLUE) + "Which worker do you want to use ?");
+        printer.println(printer.colorToAnsi(Color.CYAN) + "Which worker do you want to use ?");
         for(Worker workers : getValidChoicesWorkers()) {
-            printer.println(printer.colorToAnsi(Color.BLUE) + count +".The Worker in position [" + (workers.getPosition().getCoordinates().getX() + 1) + "]" +
+            printer.println(printer.colorToAnsi(Color.CYAN) + count +".The Worker in position [" + (workers.getPosition().getCoordinates().getX() + 1) + "]" +
                     "[" + (workers.getPosition().getCoordinates().getY() + 1) + "]");
             count = count + 1;
         }
@@ -367,8 +367,8 @@ public class Cli extends Supporter {
                 choice = reader.nextInt();
                 ok = true;
                 if(choice!=1 && choice!=2){
-                    printer.println(printer.colorToAnsi(Color.BLUE) + "Enter a VALID number !");
-                    printer.println(printer.colorToAnsi(Color.BLUE) + "Enter 1 or 2 !!");
+                    printer.println(printer.colorToAnsi(Color.CYAN) + "Enter a VALID number !");
+                    printer.println(printer.colorToAnsi(Color.CYAN) + "Enter 1 or 2 !!");
                     ok = false;
                 }
             }catch(InputMismatchException e) {
@@ -389,10 +389,10 @@ public class Cli extends Supporter {
         Coordinates coordinates;
         boolean notAvailable = false;
         ok = false;
-        printer.println(printer.colorToAnsi(Color.BLUE) + "Where do you want your worker to move ?");
-        printer.println(printer.colorToAnsi(Color.BLUE) + "These are the available coordinates :");
+        printer.println(printer.colorToAnsi(Color.CYAN) + "Where do you want your worker to move ?");
+        printer.println(printer.colorToAnsi(Color.CYAN) + "These are the available coordinates :");
         for(Coordinates coord : getValidChoicesMoves()){
-            printer.print(printer.colorToAnsi(Color.BLUE) + " [" + (coord.getX()+1) + " , " + (coord.getY()+1) +"]");
+            printer.print(printer.colorToAnsi(Color.CYAN) + " [" + (coord.getX()+1) + " , " + (coord.getY()+1) +"]");
         }
         printer.println("");
         while (!notAvailable) {
@@ -412,7 +412,7 @@ public class Cli extends Supporter {
 
             if(!notAvailable){
                 printer.println(printer.colorToAnsi(Color.RED) + "This coordinates are not available");
-                printer.println(printer.colorToAnsi(Color.BLUE) + "Enter valid Coordinates");
+                printer.println(printer.colorToAnsi(Color.CYAN) + "Enter valid Coordinates");
             }
         }
         coordinates = new Coordinates(x-1,y-1);
@@ -431,11 +431,11 @@ public class Cli extends Supporter {
         Pair<Coordinates, Level> buildOn;
 
 
-        printer.println(printer.colorToAnsi(Color.BLUE) + "Where do you want your worker to build ?");
-        printer.println(printer.colorToAnsi(Color.BLUE) + "These are the available coordinates :");
+        printer.println(printer.colorToAnsi(Color.CYAN) + "Where do you want your worker to build ?");
+        printer.println(printer.colorToAnsi(Color.CYAN) + "These are the available coordinates :");
         for(Pair<Coordinates, List<Level>> validBuilds : getValidChoicesBuild()){
             for(Level l : validBuilds.getValue1())
-                printer.print(printer.colorToAnsi(Color.BLUE) + " [" + (validBuilds.getValue0().getX() + 1) + " , " + (validBuilds.getValue0().getY() + 1) + " , " + l +"]");
+                printer.print(printer.colorToAnsi(Color.CYAN) + " [" + (validBuilds.getValue0().getX() + 1) + " , " + (validBuilds.getValue0().getY() + 1) + " , " + l +"]");
         }
         printer.println("");
         while (!notAvailable) {
@@ -449,12 +449,12 @@ public class Cli extends Supporter {
                 if (valid.getValue0().getX() == (x - 1) && valid.getValue0().getY() == (y - 1)) {
                     validCoordinates = true;
                     while (!ok) {
-                        printer.println(printer.colorToAnsi(Color.BLUE) + "What level do you want to build ?");
+                        printer.println(printer.colorToAnsi(Color.CYAN) + "What level do you want to build ?");
 
                         for (Pair<Coordinates, List<Level>> validBuilds : getValidChoicesBuild())
                             if (validBuilds.getValue0().getX() == x - 1 && validBuilds.getValue0().getY() == y - 1)
                                 for (Level validLevel : validBuilds.getValue1())
-                                    printer.println(printer.colorToAnsi(Color.BLUE) + validLevel.toString());
+                                    printer.println(printer.colorToAnsi(Color.CYAN) + validLevel.toString());
 
 
                         try {
@@ -525,7 +525,7 @@ public class Cli extends Supporter {
     }
 
     public boolean undo(){
-        printer.println(printer.colorToAnsi(Color.CYAN)+"Do you confirm your choice, press Y for yes, or N to abort and redo your last action");
+        printer.println(printer.colorToAnsi(Color.BRIGHT_GREEN)+"Do you confirm your choice, press Y for yes, or N to abort and redo your last action" + printer.colorToAnsi(Color.CYAN));
         while (true) {
 
             FutureTask<String> userChoice = new FutureTask<>(() -> {
@@ -537,13 +537,13 @@ public class Cli extends Supporter {
             try {
                 switch (userChoice.get(5, TimeUnit.SECONDS).toLowerCase()){
                     case "y":
-                        printer.println(printer.colorToAnsi(Color.GREEN)+"Decided to accept");
+                        printer.println(printer.colorToAnsi(Color.GREEN)+"Decided to accept" + printer.colorToAnsi(Color.CYAN));
                         return true;
                     case "n":
-                        printer.println(printer.colorToAnsi(Color.RED)+"Decided to redo");
+                        printer.println(printer.colorToAnsi(Color.RED)+"Decided to redo" + printer.colorToAnsi(Color.CYAN));
                         return false;
                     default:
-                        printer.println(printer.colorToAnsi(Color.RED)+"Invalid input, please redo your selection");
+                        printer.println(printer.colorToAnsi(Color.RED)+"Invalid input, please redo your selection" + printer.colorToAnsi(Color.CYAN));
                 }
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
@@ -570,8 +570,8 @@ public class Cli extends Supporter {
         printer.println(printer.colorToAnsi(Color.RED) + "Sorry , you lost ...");
     }
     public void disconnectGame(){
-        printer.println(printer.colorToAnsi(Color.BLUE) + "The server is shutting down for some reasons or");
-        printer.println(printer.colorToAnsi(Color.BLUE) + "A player disconnected himself so everyone is disconnected...");
+        printer.println(printer.colorToAnsi(Color.CYAN) + "The server is shutting down for some reasons or");
+        printer.println(printer.colorToAnsi(Color.CYAN) + "A player disconnected himself so everyone is disconnected...");
     }
 
     public void endGame(){
@@ -586,14 +586,14 @@ public class Cli extends Supporter {
         ok = false;
         int coordinate = 0;
         while (!ok) {
-            printer.print(printer.colorToAnsi(Color.BLUE) + "Enter the "+ car +" coordinate : ");
+            printer.print(printer.colorToAnsi(Color.CYAN) + "Enter the "+ car +" coordinate : ");
             try {
                 coordinate = reader.nextInt();
                 ok = true;
 
                 if( coordinate<1 || coordinate>getMap().getMaxCoordinate()+1){
-                    printer.println(printer.colorToAnsi(Color.BLUE) + "This Coordinate is  NOT VALID !!");
-                    printer.println(printer.colorToAnsi(Color.BLUE) + "Enter a VALID coordinate !! ");
+                    printer.println(printer.colorToAnsi(Color.CYAN) + "This Coordinate is  NOT VALID !!");
+                    printer.println(printer.colorToAnsi(Color.CYAN) + "Enter a VALID coordinate !! ");
                     ok = false;
                 }
 
