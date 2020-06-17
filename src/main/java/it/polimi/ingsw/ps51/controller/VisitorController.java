@@ -28,7 +28,7 @@ public class VisitorController implements VisitorServer {
 
     @Override
     public void visitWorkerPosition(WorkerPosition event) {
-        game.thirdPhase.setPosition(event.getCoordinates());
+        game.phaseFour.setPosition(event.getCoordinates());
     }
 
     @Override
@@ -43,7 +43,7 @@ public class VisitorController implements VisitorServer {
 
     @Override
     public void visitFirstPlayerChoice(FirstPlayerChoice event) {
-        game.phaseFour(event.getFirstPlayer());
+        game.phaseThree(event.getFirstPlayer());
     }
 
     @Override

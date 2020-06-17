@@ -3,7 +3,6 @@ package it.polimi.ingsw.ps51.controller;
 import it.polimi.ingsw.ps51.events.ControllerToGame;
 import it.polimi.ingsw.ps51.events.events_for_client.*;
 import it.polimi.ingsw.ps51.events.events_for_server.*;
-import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
 import it.polimi.ingsw.ps51.model.*;
 import it.polimi.ingsw.ps51.model.gods.*;
 import it.polimi.ingsw.ps51.utility.GodControllerObservable;
@@ -85,7 +84,7 @@ public class GameTest {
     }
 
     @Test
-    public void phaseTwo(){
+    public void phaseTwoTest(){
         stub.notify(new GodsDeck(Arrays.asList(Gods.APOLLO, Gods.ARTEMIS, Gods.MINOTAUR)));
 
         assertTrue(stub.event instanceof ChooseGod);
@@ -107,12 +106,21 @@ public class GameTest {
         stub.notify(new GodChoice(Gods.ARTEMIS));
         assertNotNull(player3.getGod());
         assertTrue(player3.getGod() instanceof Artemis);
+        assertTrue(stub.event instanceof ChooseFirstPlayer);
+    }
+
+    @Test
+    public void phaseThreeTest(){
+        phaseTwoTest();
+
+        stub.notify(new FirstPlayerChoice("Player1"));
+        waitForEventBeApplied();
         assertTrue(stub.event instanceof ChooseColor);
     }
 
     @Test
     public void colorAssignmentTest(){
-        phaseTwo();
+        phaseThreeTest();
 
         stub.notify(new ColorChoice(WorkerColor.BLUE));
         assertTrue(stub.event instanceof ChooseColor);
@@ -123,21 +131,12 @@ public class GameTest {
         stub.clearBuffer();
         stub.notify(new ColorChoice(WorkerColor.WHITE));
         waitForEventBeApplied();
-        assertTrue(stub.event instanceof ChooseFirstPlayer);
+        assertTrue(stub.event instanceof ChooseWorkerPosition);
     }
 
     @Test
     public void phaseFourTest(){
         colorAssignmentTest();
-
-        stub.notify(new FirstPlayerChoice("Player1"));
-        waitForEventBeApplied();
-        assertTrue(stub.event instanceof ChooseWorkerPosition);
-    }
-
-    @Test
-    public void phaseThree(){
-        phaseFourTest();
         assertTrue(stub.event instanceof ChooseWorkerPosition);
         assertEquals(1, ((ChooseWorkerPosition) stub.event).getWorkerNum());
         assertEquals(player1.getNickname(), ((ChooseWorkerPosition) stub.event).getReceiver());
@@ -190,7 +189,7 @@ public class GameTest {
 
     @Test
     public void phaseThree_OutOfMapCoordinates_RequestToRedoTheAction(){
-        phaseFourTest();
+        colorAssignmentTest();
 
         assertTrue(stub.event instanceof ChooseWorkerPosition);
         assertEquals(1, ((ChooseWorkerPosition) stub.event).getWorkerNum());
@@ -250,7 +249,7 @@ public class GameTest {
 
     @Test
     public void updateTest_LoserEvent3Player_PlayerRemovedGameContinues(){
-        phaseThree();
+        phaseFourTest();
         stub.clearBuffer();
         controller.notifyToGame(ControllerToGame.LOSER);
 
@@ -264,7 +263,7 @@ public class GameTest {
 
     @Test
     public void updateTest_LoserEvent2Player_GameEnds(){
-        phaseThree();
+        phaseFourTest();
         playground.removePlayer(player2);
         stub.clearBuffer();
         controller.notifyToGame(ControllerToGame.LOSER);
@@ -279,7 +278,7 @@ public class GameTest {
 
     @Test
     public void updateTest_EndTurnEvent_GoToNextTurn(){
-        phaseThree();
+        phaseFourTest();
         stub.clearBuffer();
         controller.notifyToGame(ControllerToGame.END_TURN);
 
@@ -292,7 +291,7 @@ public class GameTest {
 
     @Test
     public void updateTest_WinnerEvent_GameEnd(){
-        phaseThree();
+        phaseFourTest();
         stub.clearBuffer();
         controller.notifyToGame(ControllerToGame.WINNER);
 

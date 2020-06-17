@@ -33,7 +33,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
     private Map<Player, GodController> godControllersMap;
     private Map<Player, WorkerColor> colorMap;
     private final int WORKER_NUMBER;
-    protected ThirdPhase thirdPhase;
+    protected PhaseFour phaseFour;
     private final Player challenger;
     private final static Logger logger = Logger.getLogger(Game.class.getName());
 
@@ -64,7 +64,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
     /**
      * This method continues the setup of the match, it's the phase two, where, after receiving the list of gods from
      * the challenger, is asked to each player to choose a god from the previously mentioned list. The first player that
-     * is asked to choose is the successive of the challenger and so on until all the chose a god
+     * is asked to choose is the successive of the challenger and so on until all the players chose a god
      * @param godsList the list of gods chosen by the challenger
      */
     public void startGamePhaseTwo(List<Gods> godsList){
@@ -96,19 +96,36 @@ public class Game extends Observable<EventForClient> implements GameObserver {
             godsDeck.remove(god);
             notify(new ChooseGod(actualPlayer.getNickname(), godsDeck));
         }else {
-            notify(new ChooseColor(actualPlayer.getNickname(), WorkerColor.toList()));
+            List<String> players = new ArrayList<>();
+            for (Player player : gameRoom.getPlayers()){
+                players.add(player.getNickname());
+            }
+            notify(new ChooseFirstPlayer(challenger.getNickname(), players));
         }
+    }
+
+    public void phaseThree(String firstPlayer){
+        Player first = gameRoom.getPlayer(firstPlayer);
+        actualPlayer = first;
+        gameRoom.setActualPlayer(first);
+        notify(new ChooseColor(actualPlayer.getNickname(), WorkerColor.toList()));
     }
 
     public void colorAssignment(WorkerColor color){
         colorMap.put(actualPlayer, color);
         actualPlayer = gameRoom.getNextPlayer();
         if (colorMap.containsKey(actualPlayer)){
-            List<String> players = new ArrayList<>();
+            List<Pair<String, Gods>> chosenGods = new ArrayList<>();
             for (Player player : gameRoom.getPlayers()){
-                players.add(player.getNickname());
+                chosenGods.add(new Pair<>(player.getNickname(), Gods.getGodFromCard(player.getGod())));
             }
-            Game.this.notify(new ChooseFirstPlayer(challenger.getNickname(), players));
+            Map<String, WorkerColor> colorMap1 = new HashMap<>();
+            for (Map.Entry<Player, WorkerColor> pair : colorMap.entrySet()){
+                colorMap1.put(pair.getKey().getNickname(), pair.getValue());
+            }
+            Game.this.notify(new GameIsStarting(chosenGods, colorMap1));
+            phaseFour = new PhaseFour();
+            phaseFour.start();
         }else {
             List<WorkerColor> availableColors = WorkerColor.toList();
             for (Map.Entry<Player, WorkerColor> pair : colorMap.entrySet()){
@@ -122,7 +139,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
      * This thread is needed to manage the third phase of the setup, that one where the players must choose where
      * to collocates their workers
      */
-    protected class ThirdPhase extends Thread{
+    protected class PhaseFour extends Thread{
 
         private Coordinates position = null;
 
@@ -199,24 +216,6 @@ public class Game extends Observable<EventForClient> implements GameObserver {
                 notifyAll();
             }
         }
-    }
-
-    public void phaseFour(String firstPlayer){
-        Player first = gameRoom.getPlayer(firstPlayer);
-        actualPlayer = first;
-        gameRoom.setActualPlayer(first);
-
-        List<Pair<String, Gods>> chosenGods = new ArrayList<>();
-        for (Player player : gameRoom.getPlayers()){
-            chosenGods.add(new Pair<>(player.getNickname(), Gods.getGodFromCard(player.getGod())));
-        }
-        Map<String, WorkerColor> colorMap1 = new HashMap<>();
-        for (Map.Entry<Player, WorkerColor> pair : colorMap.entrySet()){
-            colorMap1.put(pair.getKey().getNickname(), pair.getValue());
-        }
-        Game.this.notify(new GameIsStarting(chosenGods, colorMap1));
-        thirdPhase = new ThirdPhase();
-        thirdPhase.start();
     }
 
 

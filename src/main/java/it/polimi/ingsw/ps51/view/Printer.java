@@ -329,9 +329,9 @@ public class Printer {
     public String colorToAnsi(Color color){
         switch (color){
             case BLUE:
-                return "\u001B[0;34m";
+                return "\u001B[0;94m";
             case RED:
-                return "\u001B[0;31m";
+                return "\u001B[0;91m";
             case YELLOW:
                 return "\u001B[0;33m";
             case GREEN:
@@ -344,6 +344,8 @@ public class Printer {
                 return "\u001b[0;36m";
             case BRIGHT_GREEN:
                 return "\u001B[0;92m";
+            case BRIGHT_YELLOW:
+                return "\u001B[0;93m";
             default:
                 return "\u001B[0;37m";
         }
