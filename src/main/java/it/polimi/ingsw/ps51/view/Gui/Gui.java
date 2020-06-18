@@ -14,11 +14,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.*;
+
 
 public class Gui {
 
@@ -40,7 +41,7 @@ public class Gui {
     private WorkerColor chosenColor;
     private Coordinates coordinates;
     private Pair<Coordinates,Level> build;
-
+    private String firstPlayer;
     private Worker chosenWorker;
 
     public Gui(Supporter supporter) {
@@ -195,7 +196,10 @@ public class Gui {
 
 
         for (JButton button : godButtons) {
+            if (button.getActionListeners().length>0) {
 
+                System.out.println("entra");
+            }
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -244,15 +248,21 @@ public class Gui {
         }
 
         for (int i = 0; i < chosenButtons.size(); i++) {
+
+            if (chosenButtons.get(i).getActionListeners().length>0) {
+                chosenButtons.get(i).removeActionListener(chosenButtons.get(i).getAction());
+                System.out.println("entra");
+            }
+
             chosenButtons.get(i).addActionListener(e -> {
                 for (JButton chosenButton : chosenButtons) {
                     if (e.getSource() == chosenButton) {
-                        for(JButton button : chosenButtons){
+                        for (JButton button : chosenButtons) {
                             button.setEnabled(false);
                         }
                         chosenGod = Gods.getGodFromString(chosenButton.getText());
 
-                        Thread godChoice = new Thread( () -> {
+                        Thread godChoice = new Thread(() -> {
                             EventForServer eventGodChoice = new GodChoice(chosenGod);
                             s.notify(eventGodChoice);
                         });
@@ -264,10 +274,49 @@ public class Gui {
                 }
 
             });
+
         }
         frame.getContentPane().add(chooseGodsPanel);
         frame.setVisible(true);
 
+    }
+
+    public void chooseFirstPlayer(){
+
+        frame.getContentPane().removeAll();
+        //frame.setSize(1400, 800);
+
+        FirstPlayerPanel firstPlayerPanel = new FirstPlayerPanel(myImage);
+        JButton[] playerButton = firstPlayerPanel.getPlayers();
+
+        for (int i=0 ; i<s.getPlayers().size();i++) {
+            playerButton[i].setText(s.getPlayers().get(i));
+            playerButton[i].setVisible(true);
+        }
+
+        for (int i = 0; i < s.getPlayers().size(); i++) {
+            playerButton[i].addActionListener(e -> {
+                for (int i1 = 0; i1 < s.getPlayers().size(); i1++) {
+                    if (e.getSource() == playerButton[i1]) {
+                        for(JButton button : playerButton){
+                            button.setEnabled(false);
+                        }
+                        firstPlayer=s.getPlayers().get(i1);
+
+
+                        Thread firstPlayerthread = new Thread ( () -> {
+                            EventForServer playerChoice = new FirstPlayerChoice(firstPlayer);
+                            s.notify(playerChoice);
+                        });
+                        firstPlayerthread.start();
+                    }
+
+                }
+
+            });
+        }
+        frame.getContentPane().add(firstPlayerPanel);
+        frame.setVisible(true);
     }
 
     public void placeWorkers() {

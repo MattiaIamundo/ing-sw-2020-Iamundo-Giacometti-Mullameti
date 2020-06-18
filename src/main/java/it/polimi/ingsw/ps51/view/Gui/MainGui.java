@@ -1,6 +1,8 @@
 package it.polimi.ingsw.ps51.view.Gui;
 
 import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
+import it.polimi.ingsw.ps51.events.events_for_server.EventForServer;
+import it.polimi.ingsw.ps51.events.events_for_server.FirstPlayerChoice;
 import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
 import it.polimi.ingsw.ps51.utility.MessageHandler;
 import it.polimi.ingsw.ps51.view.Supporter;
@@ -61,6 +63,10 @@ public class MainGui extends Supporter {
                             break;
                         case "GOD" :
                             SwingUtilities.invokeLater(() -> gui.chooseGodsPlayers());
+                            break;
+                        case "FIRSTPLAYER":
+                            SwingUtilities.invokeLater(() -> gui.chooseFirstPlayer());
+
                             break;
                         case "COLOR":
                             SwingUtilities.invokeLater(() -> gui.chooseColor());
