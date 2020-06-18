@@ -72,15 +72,16 @@ public class Gui {
             }
         });
         frame.pack();
-        frame.setResizable(false);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
+        frame.setResizable(false);
 
     }
 
     public void logIn() {
 
         frame.getContentPane().removeAll();
-        frame.setSize(650, 650);
+        //frame.setSize(650, 650);
 
         LogInPanel logInPanel = new LogInPanel();
         JButton submitButton = logInPanel.getSubmitButton();
@@ -91,9 +92,11 @@ public class Gui {
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (logInPanel.getNickname().equals("") || logInPanel.getNickname().contains(" "))
+                submitButton.setEnabled(false);
+                if (logInPanel.getNickname().equals("") || logInPanel.getNickname().contains(" ")) {
+                    submitButton.setEnabled(true);
                     logInPanel.setNicknameError(true);
-                else {
+                }else {
                     logInPanel.setNicknameError(false);
                     first = false;
                     Thread nick = new Thread(() -> {
@@ -114,7 +117,7 @@ public class Gui {
 
     public void numberOfPlayers() {
         frame.getContentPane().removeAll();
-        frame.setSize(635, 635);
+        //frame.setSize(635, 635);
 
         NrOfPlayersPanel nrOfPlayersPanel = new NrOfPlayersPanel();
         JButton[] nrButton = nrOfPlayersPanel.getNrButton();
@@ -123,7 +126,8 @@ public class Gui {
             button.addActionListener(e -> {
                 for (int i = 0; i < 2; i++) {
                     if (e.getSource() == nrButton[i]) {
-
+                        for(JButton jButton: nrButton)
+                            jButton.setEnabled(false);
                         buttonNumber = i + 2;
 
                     }
@@ -142,7 +146,7 @@ public class Gui {
 
     public void chooseColor() {
         frame.getContentPane().removeAll();
-        frame.setSize(1400, 800);
+        //frame.setSize(1400, 800);
 
         ColorPanel colorPanel = new ColorPanel(myImage);
         List<JButton> colorButton = new ArrayList<>();
@@ -158,9 +162,11 @@ public class Gui {
                 public void actionPerformed(ActionEvent e) {
                     for (int i = 0; i < colorButton.size(); i++) {
                         if (e.getSource() == colorButton.get(i)) {
-
+                            for(JButton button : colorButton){
+                                button.setEnabled(false);
+                            }
                             chosenColor=s.getAvailableColors().get(i);
-                            colorButton.get(i).setEnabled(false);
+
 
                             Thread color = new Thread ( () -> {
                                 EventForServer eventColor = new ColorChoice(chosenColor);
@@ -180,7 +186,7 @@ public class Gui {
 
     public void chooseGodsDeck() {
         frame.getContentPane().removeAll();
-        frame.setSize(1300, 700);
+        //frame.setSize(1300, 700);
 
         chooseGodsPanel = new ChooseGodsPanel();
         JLabel label = chooseGodsPanel.getChooseGods();
@@ -189,6 +195,7 @@ public class Gui {
 
 
         for (JButton button : godButtons) {
+
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -212,6 +219,7 @@ public class Gui {
                 }
             });
         }
+
         frame.getContentPane().add(chooseGodsPanel);
         frame.setVisible(true);
 
@@ -219,7 +227,7 @@ public class Gui {
 
     public void chooseGodsPlayers() {
         frame.getContentPane().removeAll();
-        frame.setSize(1300, 700);
+        //frame.setSize(1300, 700);
         chooseGodsPanel = new ChooseGodsPanel();
         JLabel label = chooseGodsPanel.getChooseGods();
         label.setText("Choose a God");
@@ -239,7 +247,9 @@ public class Gui {
             chosenButtons.get(i).addActionListener(e -> {
                 for (JButton chosenButton : chosenButtons) {
                     if (e.getSource() == chosenButton) {
-                        chosenButton.setEnabled(false);
+                        for(JButton button : chosenButtons){
+                            button.setEnabled(false);
+                        }
                         chosenGod = Gods.getGodFromString(chosenButton.getText());
 
                         Thread godChoice = new Thread( () -> {
@@ -249,6 +259,7 @@ public class Gui {
                         godChoice.start();
 
                     }
+
 
                 }
 
@@ -274,7 +285,12 @@ public class Gui {
                         for (int i = 0; i < 5; i++) {
                             for (int j = 0; j < 5; j++) {
                                 if (e.getSource() == boardButtons[j][i]) {
-                                    //boardButtons[i][j].setWorker(workerPic);
+
+                                    for(int col=0 ;col<5 ; col++)
+                                        for(int row=0 ; row<5 ; row++)
+                                            if(!boardButtons[row][col].equals(boardButtons[j][i]))
+                                                boardButtons[row][col].setVisible(false);
+
                                     mapPanel.getUndoContainer().setVisible(true);
                                     getChoice("PLACEWORKER");
                                     coordinates = new Coordinates(i, j);
@@ -298,7 +314,7 @@ public class Gui {
     public void updateMap() throws OutOfMapException {
 
         frame.getContentPane().removeAll();
-        frame.setSize(1400, 800);
+        //frame.setSize(1400, 800);
 
 
         mapPanel = new MapPanel(myImage);
@@ -401,7 +417,11 @@ public class Gui {
                         if (e.getSource() == workerButtons.get(i)) {
                             workerButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));
                             //chosenWorker = boardButtons[workerButtons.get(i).getX()][workerButtons.get(i).getY()];
-
+                           /* for(int col=0 ;col<5 ; col++)
+                                for(int row=0 ; row<5 ; row++)
+                                    if(!boardButtons[row][col].equals(boardButtons[s.getValidChoicesWorkers().get(i).getPosition().getCoordinates().getX()][s.getValidChoicesWorkers().get(i).getPosition().getCoordinates().getY()]))
+                                        boardButtons[row][col].setVisible(false);
+*/
                             mapPanel.getUndoContainer().setVisible(true);
                             getChoice("CHOOSEWORKER");
                             chosenWorker=s.getValidChoicesWorkers().get(i);
@@ -431,22 +451,29 @@ public class Gui {
         for (int i = 0; i < availableMoveButtons.size(); i++) {
             availableMoveButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.YELLOW, 2));
 
-            availableMoveButtons.get(i).addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
+                availableMoveButtons.get(i).addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
 
-                    for (int i = 0; i < availableMoveButtons.size(); i++) {
+                        for (int i = 0; i < availableMoveButtons.size(); i++) {
 
-                        if (e.getSource() == availableMoveButtons.get(i)) {
+                            if (e.getSource() == availableMoveButtons.get(i)) {
 
-                            availableMoveButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));
-                            chosenCoordinates = s.getValidChoicesMoves().get(i);
-                            mapPanel.getUndoContainer().setVisible(true);
-                            getChoice("MOVE");
+                                availableMoveButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));
+
+                                for (BoardButton button : availableMoveButtons)
+                                    if (!button.equals(availableMoveButtons.get(i)))
+                                        button.setVisible(false);
+
+                                chosenCoordinates = s.getValidChoicesMoves().get(i);
+                                mapPanel.getUndoContainer().setVisible(true);
+                                getChoice("MOVE");
+                            }
                         }
                     }
-                }
-            });
+
+                });
+
         }
 
     }
@@ -614,98 +641,85 @@ public class Gui {
 
     private void getChoice(String methodName) {
 
-        ThreadFututre tf = new ThreadFututre();
-        Future<String> f = tf.getFutureString();
         JButton yes = mapPanel.getUndoContainer().getYes();
         JButton no = mapPanel.getUndoContainer().getNo();
         mapPanel.getUndoContainer().getText().setText("Do you confirm your choice ?");
 
+        Timer yesTimer = new Timer(5000, null);
+
+        ActionListener yesActionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                yesTimer.stop();
+                yes.removeActionListener(this);
+                no.removeActionListener(no.getActionListeners()[0]);
+                //here we have to handle the yes case...
+
+                SwingUtilities.invokeLater( () -> mapPanel.getUndoContainer().setVisible(false) );
+
+                switch (methodName) {
+                    case "PLACEWORKER":
+                        EventForServer eventWorkerPosition = new WorkerPosition(coordinates);
+                        s.notify(eventWorkerPosition);
+                        break;
+                    case "CHOOSEWORKER":
+                        EventForServer eventWorkerChoice = new WorkerChoice(chosenWorker);
+                        s.notify(eventWorkerChoice);
+                        break;
+                    case "MOVE":
+                        EventForServer eventMoveChoice = new MoveChoice(chosenCoordinates);
+                        s.notify(eventMoveChoice);
+                        break;
+                    case "BUILD":
+                        EventForServer eventBuild = new Build(build);
+                        s.notify(eventBuild);
+                        break;
+                }
+            }
+        };
+
+        ActionListener noActionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                yesTimer.stop();
+                yes.removeActionListener(yes.getActionListeners()[0]);
+                no.removeActionListener(this);
+                //here we have to handle the no case...
+
+                SwingUtilities.invokeLater( () -> mapPanel.getUndoContainer().setVisible(false) );
+
+                switch (methodName){
+                    case "PLACEWORKER":
+                        SwingUtilities.invokeLater( () -> { placeWorkers(); } );
+                        break;
+                    case "CHOOSEWORKER":
+                        SwingUtilities.invokeLater( () -> { chooseWorker(); } );
+                        break;
+                    case "MOVE":
+                        SwingUtilities.invokeLater( () -> { askMove(); } );
+                        break;
+                    case "BUILD":
+                        SwingUtilities.invokeLater( () -> { askBuild(); } );
+                        break;
+                }
+            }
+        };
+
         undoThread = new Thread(() -> {
 
+            yes.addActionListener(yesActionListener);
 
-                try {
-                    if(f.get(5, TimeUnit.SECONDS).equals("YES")) {
-                        switch (methodName) {
-                            case "PLACEWORKER":
-                                EventForServer eventWorkerPosition = new WorkerPosition(coordinates);
-                                s.notify(eventWorkerPosition);
-                                break;
-                            case "CHOOSEWORKER":
-                                EventForServer eventWorkerChoice = new WorkerChoice(chosenWorker);
-                                s.notify(eventWorkerChoice);
-                                break;
-                            case "MOVE":
-                                EventForServer eventMoveChoice = new MoveChoice(chosenCoordinates);
-                                s.notify(eventMoveChoice);
-                                break;
-                            case "BUILD":
-                                EventForServer eventBuild = new Build(build);
-                                s.notify(eventBuild);
-                                break;
-                        }
-                    }
+            yesTimer.addActionListener(yesActionListener);
+            yesTimer.setRepeats(false);
+            yesTimer.start();
 
-                } catch (TimeoutException e) {
-                    e.printStackTrace();
-                    switch (methodName) {
-                        case "PLACEWORKER":
-                            EventForServer eventWorkerPosition = new WorkerPosition(coordinates);
-                            s.notify(eventWorkerPosition);
-                            break;
-                        case "CHOOSEWORKER":
-                            EventForServer eventWorkerChoice = new WorkerChoice(chosenWorker);
-                            s.notify(eventWorkerChoice);
-                            break;
-                        case "MOVE":
-                            EventForServer eventMoveChoice = new MoveChoice(chosenCoordinates);
-                            s.notify(eventMoveChoice);
-                            break;
-                        case "BUILD":
-                            EventForServer eventBuild = new Build(build);
-                            s.notify(eventBuild);
-                            break;
-                    }
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
-            tf.getEx().shutdown();
+            no.addActionListener(noActionListener);
+
         });
 
         undoThread.start();
 
-
-        yes.addActionListener(e -> {
-
-            tf.setResult("YES");
-            tf.setBool(true);
-        });
-
-
-        no.addActionListener(e -> {
-            tf.setResult("NO");
-            tf.setBool(true);
-
-                mapPanel.getUndoContainer().setVisible(false);
-                switch (methodName){
-                    case "PLACEWORKER":
-                        placeWorkers();
-                        break;
-                    case "CHOOSEWORKER":
-                        chooseWorker();
-                        break;
-                    case "MOVE":
-                        askMove();
-                        break;
-                    case "BUILD":
-                        askBuild();
-                        break;
-                }
-
-        });
-
-
     }
-
 
 }
 

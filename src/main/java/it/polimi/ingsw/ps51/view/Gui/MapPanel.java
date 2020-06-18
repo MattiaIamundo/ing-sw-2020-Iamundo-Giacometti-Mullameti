@@ -38,7 +38,7 @@ public class MapPanel extends JPanel {
         this.background = background;
 
         boardContainer = new BoardContainer();
-        boardContainer.setLocation(395, 50);
+        boardContainer.setLocation(400, 45);
         boardContainer.setSize(865 * 2 / 3, 880 * 2 / 3);
         this.add(boardContainer);
         undoContainer= new UndoContainer();
@@ -355,7 +355,7 @@ public class MapPanel extends JPanel {
         return no;
     }
 
-    public static void main(String[] args) throws IOException {
+  /*  public static void main(String[] args) throws IOException {
 
         JFrame frame = new JFrame("Start");
         BufferedImage myImage = ImageIO.read(new File("src/main/resources/SantoriniBoard.png"));
@@ -364,7 +364,7 @@ public class MapPanel extends JPanel {
         frame.setUndecorated(true);
         frame.setVisible(true);
 
-    }
+    }*/
 
  public UndoContainer getUndoContainer() {
      return undoContainer;
