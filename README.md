@@ -1,5 +1,5 @@
 #   Santorini
-![](/resources/Santorini.jpg)
+![](/src/main/resources/Santorini.jpg)
 ## Game overview:
 Santorini is strategic game where 2 or 3 players try build some towers over a 5x5 board 
 with the objective to reach the tower's third level before everyone else, this with the help
