@@ -104,6 +104,11 @@ public class Game extends Observable<EventForClient> implements GameObserver {
         }
     }
 
+    /**
+     * Third phase of the game setting needed before the match can start. In this phase will be set who is the player
+     * that start the match
+     * @param firstPlayer the nickname of the first player to game
+     */
     public void phaseThree(String firstPlayer){
         Player first = gameRoom.getPlayer(firstPlayer);
         actualPlayer = first;
@@ -111,6 +116,10 @@ public class Game extends Observable<EventForClient> implements GameObserver {
         notify(new ChooseColor(actualPlayer.getNickname(), WorkerColor.toList()));
     }
 
+    /**
+     * This method manage the choice of the player about the color of their workers
+     * @param color the color chosen by the player
+     */
     public void colorAssignment(WorkerColor color){
         colorMap.put(actualPlayer, color);
         actualPlayer = gameRoom.getNextPlayer();
@@ -136,7 +145,7 @@ public class Game extends Observable<EventForClient> implements GameObserver {
     }
 
     /**
-     * This thread is needed to manage the third phase of the setup, that one where the players must choose where
+     * This thread is needed to manage the fourth phase of the setup, that one where the players must choose where
      * to collocates their workers
      */
     protected class PhaseFour extends Thread{

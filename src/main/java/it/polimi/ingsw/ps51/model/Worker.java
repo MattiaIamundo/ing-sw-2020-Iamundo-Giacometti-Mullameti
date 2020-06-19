@@ -52,13 +52,6 @@ public class Worker implements Serializable, WorkerObserver, Cloneable {
     }
 
     /**
-     * @return the color associated to the worker that the UI must show
-     */
-    public WorkerColor getColor() {
-        return color;
-    }
-
-    /**
      * set the color, chosen by the player, associated to the player's workers in order to make
      * them distinguishable from the opponent's workers
      * @param color the color chosen by the player
@@ -66,6 +59,14 @@ public class Worker implements Serializable, WorkerObserver, Cloneable {
     public void setColor(WorkerColor color) {
         this.color = color;
     }
+
+    /**
+     * @return the color associated to the worker that the UI must show
+     */
+    public WorkerColor getColor() {
+        return color;
+    }
+
 
     /**
      * This method sets the position of the worker
@@ -103,20 +104,36 @@ public class Worker implements Serializable, WorkerObserver, Cloneable {
         this.inWinningCondition =condition;
     }
 
+    /**
+     * This method return the list of the gods, with effect on the opponent's turn, whose effect are currently active
+     * @return the list of the active gods with effect on the opponent's turn
+     */
     public List<Gods> getActiveGods() {
         return activeGods;
     }
 
-
+    /**
+     * This update the list of the active gods with effect on the opponent's turn
+     * @param message the god, with effect on opponent's turn, whom power is been activated
+     */
     @Override
     public void updateGods(Gods message) {
         activeGods.add(message);
     }
 
+    /**
+     * This remove from the active gods list a god whose effect is no more active
+     * @param card the {@code Card} associated to the God that must be removed from the active gods list
+     */
     public void removeGod(Card card){
         activeGods.remove(Gods.getGodFromCard(card));
     }
 
+    /**
+     * This method update the current position of the worker
+     * @param message is pair of {@code Square} where the former is the current position and the latter represent the newer
+     *                worker's position
+     */
     @Override
     public void updatePosition(Pair<Square, Square> message) {
         if (position.equals(message.getValue0())){

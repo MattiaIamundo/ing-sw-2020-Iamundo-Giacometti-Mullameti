@@ -35,6 +35,11 @@ public class Playground extends Observable<EventForClient> implements SquareObse
         return new ArrayList<>(players);
     }
 
+    /**
+     * Retrieve a player from his nickname
+     * @param player the nickname of the searched player
+     * @return the player whose nickname was given
+     */
     public Player getPlayer(String player){
         for(Player player1 : players){
             if (player1.getNickname().equals(player)){
@@ -71,6 +76,11 @@ public class Playground extends Observable<EventForClient> implements SquareObse
         this.actualPlayer = actualPlayer;
     }
 
+    /**
+     * Retrieve who is the player that must be play his turn after the actual player, the list of players is cycled and
+     * at its end restart from the first element
+     * @return the next player
+     */
     public Player getNextPlayer(){
         int index = players.indexOf(actualPlayer);
         index++;
@@ -86,6 +96,11 @@ public class Playground extends Observable<EventForClient> implements SquareObse
         return actualPlayer;
     }
 
+    /**
+     * Remove a player from the playground, this could happen in a 3-player game, where a player lose but the other two
+     * continue to play the game
+     * @param player the player that lost the match
+     */
     public synchronized void removePlayer(Player player){
         for (Worker worker : player.getWorkers()){
             worker.getPosition().setPresentWorker(false);
@@ -102,6 +117,10 @@ public class Playground extends Observable<EventForClient> implements SquareObse
         players.remove(player);
     }
 
+    /**
+     * The method is called by a square that noticed a change in it's status and consequently send a {@link MapUpdate}
+     * message to all the players to inform them about a change in the map's configuration
+     */
     @Override
     public void mapUpdated() {
         List<Worker> workers = new ArrayList<>();

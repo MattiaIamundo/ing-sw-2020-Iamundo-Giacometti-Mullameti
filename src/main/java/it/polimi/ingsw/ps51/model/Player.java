@@ -60,6 +60,10 @@ public class Player {
         this.workers.addAll(workers);
     }
 
+    /**
+     * Add a worker to the player's worker list
+     * @param worker the worker that must added to the player's workers list
+     */
     public void addWorker(Worker worker){
         workers.add(worker);
     }

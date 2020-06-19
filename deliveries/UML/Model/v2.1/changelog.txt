@@ -1,0 +1,22 @@
+-[Map] changed attribute name from 'map' to 'effectiveMap'
+-[Map] added method 'getSquare(coordinates: Coordinates)'
+-[Map] added method 'getMaxCoordinate()'
+-[Map] added method 'isThisPerimeterSquare(coordinates: Coordinates)'
+-[Playground] changed constructor signature, erased parameter 'boradMap: Map'
+-[Playground] added method 'getPlayer(player: String)'
+-[Square] erased atribute 'presentWorker' of type Worker
+-[Square] added attribute 'isPresentWorker' of type boolean
+-[Sqaure] fixed constructor definition, was missing parameter 'coordinates: Coordinates'
+-[Worker] added attribute 'color' of type WorkerColor
+-[Worker] added method getColor()
+-[Worker] added method setColor(color: WorkerColor)
+-[OpponentTurnGodsManager] added method 'isValidWin(worker: Worker, map: Map)'
+-[OpponentAthena] added method 'isValidWin(worker: Worker, map: Map)'
+
+-created class 'WorkerColor'
+-created class 'OpponentHera'
+-created class 'Hera'
+-created class 'Hestia'
+-created class 'Poseidon'
+-created class 'Triton'
+-created class 'Zeus'

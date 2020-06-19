@@ -1,0 +1,10 @@
+-[Game] renamed attribute from 'thirdPhase' to 'phaseFour'
+-[Game] fixed visibility of 'phaseFour' from private to protected
+-[Game] added attribute 'challenger' of type Player
+-[PrometheusController] fixed 'preBuild()' visibility from public to protcted
+-[PrometheusController] fixed 'removeMoveUp()' visibility from public to private
+
+-renamed class 'ThirdPhase' to 'PhaseFour'
+-added class 'HestiaController'
+-added class 'PoseidonController'
+-added class 'TritonController'

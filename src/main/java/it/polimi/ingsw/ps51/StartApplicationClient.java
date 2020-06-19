@@ -32,13 +32,23 @@ public class StartApplicationClient {
             for (Pair<String, String> pair : inputArgument){
                 switch (pair.getValue0()){
                     case "-ip":
+                        String[] ip = pair.getValue1().split(".");
+                        for (int i = 0; i < 4; i++){
+                            if (Integer.parseInt(ip[i]) < 0 || Integer.parseInt(ip[i]) > 255){
+                                break;
+                            }
+                        }
                         url = pair.getValue1();
                         break;
                     case "-p":
-                        port = Integer.parseInt(pair.getValue1());
+                        Integer portNum = Integer.parseInt(pair.getValue1());
+                        if (portNum >= 0 && portNum <= 65535){
+                            port = portNum;
+                        }
                         break;
                     case "-i":
-                        typeOfSupporter = Integer.parseInt(pair.getValue1());
+                        Integer userInterface = Integer.parseInt(pair.getValue1());
+
                         break;
                     default:
                         System.out.println("\u001B[0;31m"+pair.getValue1()+" isn't a valid command\u001B[0;37m");
