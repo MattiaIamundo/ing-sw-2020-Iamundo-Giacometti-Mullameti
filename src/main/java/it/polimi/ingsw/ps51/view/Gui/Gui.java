@@ -40,7 +40,7 @@ public class Gui {
     private Thread undoThread;
     private WorkerColor chosenColor;
     private Coordinates coordinates;
-    private Pair<Coordinates,Level> build;
+    private Pair<Coordinates, Level> build;
     private String firstPlayer;
     private Worker chosenWorker;
 
@@ -97,7 +97,7 @@ public class Gui {
                 if (logInPanel.getNickname().equals("") || logInPanel.getNickname().contains(" ")) {
                     submitButton.setEnabled(true);
                     logInPanel.setNicknameError(true);
-                }else {
+                } else {
                     logInPanel.setNicknameError(false);
                     first = false;
                     Thread nick = new Thread(() -> {
@@ -127,13 +127,13 @@ public class Gui {
             button.addActionListener(e -> {
                 for (int i = 0; i < 2; i++) {
                     if (e.getSource() == nrButton[i]) {
-                        for(JButton jButton: nrButton)
+                        for (JButton jButton : nrButton)
                             jButton.setEnabled(false);
                         buttonNumber = i + 2;
 
                     }
                 }
-                Thread number = new Thread ( () -> {
+                Thread number = new Thread(() -> {
                     EventForFirstPhase eventNumberOfPlayers = new NumberOfPlayers(buttonNumber);
                     s.notify(eventNumberOfPlayers);
                 });
@@ -163,13 +163,13 @@ public class Gui {
                 public void actionPerformed(ActionEvent e) {
                     for (int i = 0; i < colorButton.size(); i++) {
                         if (e.getSource() == colorButton.get(i)) {
-                            for(JButton button : colorButton){
+                            for (JButton button : colorButton) {
                                 button.setEnabled(false);
                             }
-                            chosenColor=s.getAvailableColors().get(i);
+                            chosenColor = s.getAvailableColors().get(i);
 
 
-                            Thread color = new Thread ( () -> {
+                            Thread color = new Thread(() -> {
                                 EventForServer eventColor = new ColorChoice(chosenColor);
                                 s.notify(eventColor);
                             });
@@ -196,33 +196,33 @@ public class Gui {
 
 
         for (JButton button : godButtons) {
-            if (button.getActionListeners().length>0) {
+            if (button.getActionListeners().length > 0) {
                 button.removeActionListener(button.getActionListeners()[0]);
-            }else {
-                button.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        for (int i = 0; i < 14; i++) {
-                            if (e.getSource() == godButtons[i]) {
+            }
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    for (int i = 0; i < 14; i++) {
+                        if (e.getSource() == godButtons[i]) {
 
-                                godButtons[i].setBorder(BorderFactory.createLineBorder(new Color(102, 0, 153)));
-                                chosenGods.add(Gods.getGodFromString(godButtons[i].getText()));
-                                godButtons[i].setEnabled(false);
+                            godButtons[i].setBorder(BorderFactory.createLineBorder(new Color(102, 0, 153)));
+                            chosenGods.add(Gods.getGodFromString(godButtons[i].getText()));
+                            godButtons[i].setEnabled(false);
 
-                                if (chosenGods.size() == s.getGodsNum()) {
-                                    Thread god = new Thread(() -> {
-                                        EventForServer eventGodsDeck = new GodsDeck(chosenGods);
-                                        s.notify(eventGodsDeck);
-                                    });
-                                    god.start();
-                                }
+                            if (chosenGods.size() == s.getGodsNum()) {
+                                Thread god = new Thread(() -> {
+                                    EventForServer eventGodsDeck = new GodsDeck(chosenGods);
+                                    s.notify(eventGodsDeck);
+                                });
+                                god.start();
                             }
                         }
-
                     }
-                });
-            }
+
+                }
+            });
         }
+
 
         frame.getContentPane().add(chooseGodsPanel);
         frame.setVisible(true);
@@ -239,10 +239,10 @@ public class Gui {
 
         chosenGods = s.getAvailableGods();
 
-        for(Gods god : Gods.values()){
+        for (Gods god : Gods.values()) {
             if (s.getAvailableGods().contains(god)) {
                 chosenButtons.add(chooseGodsPanel.getSpecificGod(god.ordinal()));
-            }else {
+            } else {
                 chooseGodsPanel.setGodUnavailable(god.ordinal());
             }
         }
@@ -254,29 +254,28 @@ public class Gui {
 
                 chosenButtons.get(i).removeActionListener(chosenButtons.get(i).getActionListeners()[0]);
 
-            }else {
+            }
 
-                chosenButtons.get(i).addActionListener(e -> {
-                    for (JButton chosenButton : chosenButtons) {
-                        if (e.getSource() == chosenButton) {
-                            for (JButton button : chosenButtons) {
-                                button.setEnabled(false);
-                            }
-                            chosenGod = Gods.getGodFromString(chosenButton.getText());
-
-                            Thread godChoice = new Thread(() -> {
-                                EventForServer eventGodChoice = new GodChoice(chosenGod);
-                                s.notify(eventGodChoice);
-                            });
-                            godChoice.start();
-
+            chosenButtons.get(i).addActionListener(e -> {
+                for (JButton chosenButton : chosenButtons) {
+                    if (e.getSource() == chosenButton) {
+                        for (JButton button : chosenButtons) {
+                            button.setEnabled(false);
                         }
+                        chosenGod = Gods.getGodFromString(chosenButton.getText());
 
+                        Thread godChoice = new Thread(() -> {
+                            EventForServer eventGodChoice = new GodChoice(chosenGod);
+                            s.notify(eventGodChoice);
+                        });
+                        godChoice.start();
 
                     }
 
-                });
-            }
+
+                }
+
+            });
 
         }
         frame.getContentPane().add(chooseGodsPanel);
@@ -284,7 +283,7 @@ public class Gui {
 
     }
 
-    public void chooseFirstPlayer(){
+    public void chooseFirstPlayer() {
 
         frame.getContentPane().removeAll();
         //frame.setSize(1400, 800);
@@ -292,7 +291,7 @@ public class Gui {
         FirstPlayerPanel firstPlayerPanel = new FirstPlayerPanel(myImage);
         JButton[] playerButton = firstPlayerPanel.getPlayers();
 
-        for (int i=0 ; i<s.getPlayers().size();i++) {
+        for (int i = 0; i < s.getPlayers().size(); i++) {
             playerButton[i].setText(s.getPlayers().get(i));
             playerButton[i].setVisible(true);
         }
@@ -301,13 +300,13 @@ public class Gui {
             playerButton[i].addActionListener(e -> {
                 for (int i1 = 0; i1 < s.getPlayers().size(); i1++) {
                     if (e.getSource() == playerButton[i1]) {
-                        for(JButton button : playerButton){
+                        for (JButton button : playerButton) {
                             button.setEnabled(false);
                         }
-                        firstPlayer=s.getPlayers().get(i1);
+                        firstPlayer = s.getPlayers().get(i1);
 
 
-                        Thread firstPlayerthread = new Thread ( () -> {
+                        Thread firstPlayerthread = new Thread(() -> {
                             EventForServer playerChoice = new FirstPlayerChoice(firstPlayer);
                             s.notify(playerChoice);
                         });
@@ -329,8 +328,8 @@ public class Gui {
         mapPanel.setWorkerBorder(s.getWorkerNum() - 1);
         boardButtons = board.getBoardButtons();
 
-        for(int i=0 ; i<5 ; i++){
-            for(int j=0 ; j<5 ; j++){
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
                 boardButtons[j][i].setVisible(true);
             }
         }
@@ -339,39 +338,39 @@ public class Gui {
                 if (boardButtons[j][i].getActionListeners().length > 0) {
                     boardButtons[j][i].removeActionListener(boardButtons[j][i].getActionListeners()[0]);
 
-                } else {
-                    boardButtons[j][i].addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            for (int i = 0; i < 5; i++) {
-                                for (int j = 0; j < 5; j++) {
-                                    if (e.getSource() == boardButtons[j][i]) {
+                }
+                boardButtons[j][i].addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        for (int i = 0; i < 5; i++) {
+                            for (int j = 0; j < 5; j++) {
+                                if (e.getSource() == boardButtons[j][i]) {
 
-                                        for (int col = 0; col < 5; col++)
-                                            for (int row = 0; row < 5; row++)
-                                                if (!boardButtons[row][col].equals(boardButtons[j][i]))
-                                                    boardButtons[row][col].setVisible(false);
+                                    for (int col = 0; col < 5; col++)
+                                        for (int row = 0; row < 5; row++)
+                                            if (!boardButtons[row][col].equals(boardButtons[j][i]))
+                                                boardButtons[row][col].setVisible(false);
 
-                                        mapPanel.getUndoContainer().setVisible(true);
-                                        getChoice("PLACEWORKER");
-                                        coordinates = new Coordinates(i, j);
+                                    mapPanel.getUndoContainer().setVisible(true);
+                                    getChoice("PLACEWORKER");
+                                    coordinates = new Coordinates(i, j);
                                        /* Thread workerPos = new Thread(() -> {
                                             EventForServer eventWorkerPosition = new WorkerPosition(coordinates);
                                             s.notify(eventWorkerPosition);
                                         });
                                         workerPos.start();*/
 
-                                    }
                                 }
                             }
-
                         }
-                    });
-                }
+
+                    }
+                });
             }
         }
-
     }
+
+
 
     public void updateMap() throws OutOfMapException {
 
@@ -427,11 +426,11 @@ public class Gui {
             for (int j = 0; j < maxCoordinate; j++) {
 
                 if (map.getSquare(j, i).getLevel().ordinal() > 0)
-                    boardButtons[i][j].setLevel(map.getSquare(j,i).getLevel().ordinal() - 1);
+                    boardButtons[i][j].setLevel(map.getSquare(j, i).getLevel().ordinal() - 1);
 
 
-                if (map.getSquare(j,i).isPresentWorker()) {
-                     for (Worker worker : workerList) {
+                if (map.getSquare(j, i).isPresentWorker()) {
+                    for (Worker worker : workerList) {
                         if (worker.getPosition().getCoordinates().getX() == j && worker.getPosition().getCoordinates().getY() == i) {
                             for (Pair<String, Gods> pair : chosenGods)
                                 if (worker.getNamePlayer().equals(pair.getValue0())) {
@@ -463,8 +462,8 @@ public class Gui {
         mapPanel.getWorkerContainer().setVisible(false);
         List<BoardButton> workerButtons = new ArrayList<>();
         boardButtons = board.getBoardButtons();
-        for(int i=0 ; i<5 ; i++){
-            for(int j=0 ; j<5 ; j++){
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
                 boardButtons[j][i].setVisible(true);
             }
         }
@@ -473,40 +472,41 @@ public class Gui {
         }
 
         for (int i = 0; i < 2; i++) {
-            workerButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.BLUE,2));
+            workerButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
 
-            if(workerButtons.get(i).getActionListeners().length>0){
+            if (workerButtons.get(i).getActionListeners().length > 0) {
                 workerButtons.get(i).removeActionListener(workerButtons.get(i).getActionListeners()[0]);
-            }else {
-                workerButtons.get(i).addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
+            }
+            workerButtons.get(i).addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
 
-                        for (int i = 0; i < 2; i++) {
+                    for (int i = 0; i < 2; i++) {
 
-                            if (e.getSource() == workerButtons.get(i)) {
-                                workerButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));
-                                //chosenWorker = boardButtons[workerButtons.get(i).getX()][workerButtons.get(i).getY()];
+                        if (e.getSource() == workerButtons.get(i)) {
+                            workerButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));
+                            //chosenWorker = boardButtons[workerButtons.get(i).getX()][workerButtons.get(i).getY()];
                            /* for(int col=0 ;col<5 ; col++)
                                 for(int row=0 ; row<5 ; row++)
                                     if(!boardButtons[row][col].equals(boardButtons[s.getValidChoicesWorkers().get(i).getPosition().getCoordinates().getX()][s.getValidChoicesWorkers().get(i).getPosition().getCoordinates().getY()]))
                                         boardButtons[row][col].setVisible(false);
 */
-                                mapPanel.getUndoContainer().setVisible(true);
-                                getChoice("CHOOSEWORKER");
-                                chosenWorker = s.getValidChoicesWorkers().get(i);
+                            mapPanel.getUndoContainer().setVisible(true);
+                            getChoice("CHOOSEWORKER");
+                            chosenWorker = s.getValidChoicesWorkers().get(i);
 
-                            }
                         }
                     }
-                });
-            }
+                }
+            });
         }
-
-        //frame.getContentPane().add(mapPanel);
-        //frame.setVisible(true);
-
     }
+
+    //frame.getContentPane().add(mapPanel);
+    //frame.setVisible(true);
+
+
+
 
     public void askMove() {
 
@@ -514,8 +514,8 @@ public class Gui {
 
         List<BoardButton> availableMoveButtons = new ArrayList<>();
         boardButtons = board.getBoardButtons();
-        for(int i=0 ; i<5 ; i++){
-            for(int j=0 ; j<5 ; j++){
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
                 boardButtons[j][i].setVisible(true);
             }
         }
@@ -526,36 +526,36 @@ public class Gui {
         for (int i = 0; i < availableMoveButtons.size(); i++) {
             availableMoveButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.YELLOW, 2));
             System.out.println(availableMoveButtons.get(i).getActionListeners().length);
-            if(availableMoveButtons.get(i).getActionListeners().length>0){
+            if (availableMoveButtons.get(i).getActionListeners().length > 0) {
                 availableMoveButtons.get(i).removeActionListener(availableMoveButtons.get(i).getActionListeners()[0]);
-            }else {
-                availableMoveButtons.get(i).addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
+            }
+            availableMoveButtons.get(i).addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
 
-                        for (int i = 0; i < availableMoveButtons.size(); i++) {
+                    for (int i = 0; i < availableMoveButtons.size(); i++) {
 
-                            if (e.getSource() == availableMoveButtons.get(i)) {
+                        if (e.getSource() == availableMoveButtons.get(i)) {
 
-                                availableMoveButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));
+                            availableMoveButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));
 
-                                for (BoardButton button : availableMoveButtons)
-                                    if (!button.equals(availableMoveButtons.get(i)))
-                                        button.setVisible(false);
+                            for (BoardButton button : availableMoveButtons)
+                                if (!button.equals(availableMoveButtons.get(i)))
+                                    button.setVisible(false);
 
-                                chosenCoordinates = s.getValidChoicesMoves().get(i);
-                                mapPanel.getUndoContainer().setVisible(true);
-                                getChoice("MOVE");
-                            }
+                            chosenCoordinates = s.getValidChoicesMoves().get(i);
+                            mapPanel.getUndoContainer().setVisible(true);
+                            getChoice("MOVE");
                         }
                     }
+                }
 
-                });
-            }
-
+            });
         }
 
     }
+
+
 
     public void askBuild() {
 
@@ -565,8 +565,8 @@ public class Gui {
         List<BoardButton> availableBuildButtons = new ArrayList<>();
         List<JLabel> availableLevels = new ArrayList<>();
         boardButtons = board.getBoardButtons();
-        for(int i=0 ; i<5 ; i++){
-            for(int j=0 ; j<5 ; j++){
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
                 boardButtons[j][i].setVisible(true);
             }
         }
@@ -577,52 +577,53 @@ public class Gui {
 
         for (int i = 0; i < availableBuildButtons.size(); i++) {
             availableBuildButtons.get(i).setBorder(BorderFactory.createLineBorder(new Color(255, 153, 0), 2));
-            if(availableBuildButtons.get(i).getActionListeners().length>0){
+            if (availableBuildButtons.get(i).getActionListeners().length > 0) {
                 availableBuildButtons.get(i).removeActionListener(availableBuildButtons.get(i).getActionListeners()[0]);
-            }else {
-                availableBuildButtons.get(i).addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
+            }
+            availableBuildButtons.get(i).addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
 
-                        for (int i = 0; i < availableBuildButtons.size(); i++) {
+                    for (int i = 0; i < availableBuildButtons.size(); i++) {
 
-                            if (e.getSource() == availableBuildButtons.get(i)) {
+                        if (e.getSource() == availableBuildButtons.get(i)) {
 
-                                availableBuildButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));
-                                chosenPair = s.getValidChoicesBuild().get(i);
+                            availableBuildButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));
+                            chosenPair = s.getValidChoicesBuild().get(i);
 
-                                for (Pair<Coordinates, List<Level>> validBuilds : s.getValidChoicesBuild()) {
 
-                                    if (validBuilds.getValue0().equals(chosenPair.getValue0())) {
+                            for (Pair<Coordinates, List<Level>> validBuilds : s.getValidChoicesBuild()) {
 
-                                        for (Level validLevel : validBuilds.getValue1()) {
-                                            mapPanel.setLevelImages(validLevel.ordinal() - 1);
-                                            availableLevels.add(mapPanel.getLevel(validLevel.ordinal() - 1));
-                                        }
+                                if (validBuilds.getValue0().equals(chosenPair.getValue0())) {
+
+                                    for (Level validLevel : validBuilds.getValue1()) {
+                                        mapPanel.setLevelImages(validLevel.ordinal() - 1);
+                                        availableLevels.add(mapPanel.getLevel(validLevel.ordinal() - 1));
                                     }
                                 }
+                            }
 
-                                for (int j = 0; j < availableLevels.size(); j++) {
-                                    availableLevels.get(j).addMouseListener(new MouseAdapter() {
-                                        @Override
-                                        public void mouseClicked(MouseEvent m) {
-                                            for (JLabel availableLevel : availableLevels) {
-                                                if (m.getSource() == availableLevel) {
+                            for (int j = 0; j < availableLevels.size(); j++) {
+                                availableLevels.get(j).addMouseListener(new MouseAdapter() {
+                                    @Override
+                                    public void mouseClicked(MouseEvent m) {
+                                        for (JLabel availableLevel : availableLevels) {
+                                            if (m.getSource() == availableLevel) {
 
-                                                    build = new Pair<>(chosenPair.getValue0(), Level.valueOf(availableLevel.getText().toUpperCase()));
-                                                    mapPanel.getUndoContainer().setVisible(true);
-                                                    getChoice("BUILD");
+                                                build = new Pair<>(chosenPair.getValue0(), Level.valueOf(availableLevel.getText().toUpperCase()));
+                                                mapPanel.getUndoContainer().setVisible(true);
+                                                getChoice("BUILD");
 
-                                                }
                                             }
                                         }
-                                    });
-                                }
+                                    }
+                                });
                             }
                         }
                     }
-                });
-            }
+                }
+            });
+
         }
     }
 
@@ -632,32 +633,32 @@ public class Gui {
 
         JButton yes = mapPanel.getYes();
         JButton no = mapPanel.getNo();
-        if(yes.getActionListeners().length>1){
+        if (yes.getActionListeners().length > 1) {
             yes.removeActionListener(yes.getActionListeners()[0]);
-        }else {
-            yes.addActionListener(e -> {
-                if (e.getSource() == yes) {
-                    Thread decisionYes = new Thread(() -> {
-                        EventForServer eventDecisionTaken = new DecisionTaken(true);
-                        s.notify(eventDecisionTaken);
-                    });
-                    decisionYes.start();
-                }
-            });
         }
-        if(no.getActionListeners().length>1){
+        yes.addActionListener(e -> {
+            if (e.getSource() == yes) {
+                Thread decisionYes = new Thread(() -> {
+                    EventForServer eventDecisionTaken = new DecisionTaken(true);
+                    s.notify(eventDecisionTaken);
+                });
+                decisionYes.start();
+            }
+        });
+
+        if (no.getActionListeners().length > 1) {
             no.removeActionListener(no.getActionListeners()[0]);
-        }else {
-            no.addActionListener(e -> {
-                if (e.getSource() == no) {
-                    Thread decisionNo = new Thread(() -> {
-                        EventForServer eventDecisionTaken = new DecisionTaken(false);
-                        s.notify(eventDecisionTaken);
-                    });
-                    decisionNo.start();
-                }
-            });
         }
+        no.addActionListener(e -> {
+            if (e.getSource() == no) {
+                Thread decisionNo = new Thread(() -> {
+                    EventForServer eventDecisionTaken = new DecisionTaken(false);
+                    s.notify(eventDecisionTaken);
+                });
+                decisionNo.start();
+            }
+        });
+
     }
 
     public void ack() {
