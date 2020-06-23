@@ -197,7 +197,7 @@ public class Gui {
 
         for (JButton button : godButtons) {
             if (button.getActionListeners().length>0) {
-                button.removeActionListener(button.getActionListeners()[1]);
+                button.removeActionListener(button.getActionListeners()[0]);
             }else {
                 button.addActionListener(new ActionListener() {
                     @Override
@@ -249,8 +249,10 @@ public class Gui {
 
         for (int i = 0; i < chosenButtons.size(); i++) {
 
+
             if (chosenButtons.get(i).getActionListeners().length > 0) {
-                chosenButtons.get(i).removeActionListener(chosenButtons.get(i).getActionListeners()[1]);
+
+                chosenButtons.get(i).removeActionListener(chosenButtons.get(i).getActionListeners()[0]);
 
             }else {
 
@@ -327,10 +329,15 @@ public class Gui {
         mapPanel.setWorkerBorder(s.getWorkerNum() - 1);
         boardButtons = board.getBoardButtons();
 
+        for(int i=0 ; i<5 ; i++){
+            for(int j=0 ; j<5 ; j++){
+                boardButtons[j][i].setVisible(true);
+            }
+        }
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 if (boardButtons[j][i].getActionListeners().length > 0) {
-                    boardButtons[j][i].removeActionListener(boardButtons[j][i].getActionListeners()[1]);
+                    boardButtons[j][i].removeActionListener(boardButtons[j][i].getActionListeners()[0]);
 
                 } else {
                     boardButtons[j][i].addActionListener(new ActionListener() {
@@ -455,15 +462,21 @@ public class Gui {
         mapPanel.setChat("Choose Worker");
         mapPanel.getWorkerContainer().setVisible(false);
         List<BoardButton> workerButtons = new ArrayList<>();
-
+        boardButtons = board.getBoardButtons();
+        for(int i=0 ; i<5 ; i++){
+            for(int j=0 ; j<5 ; j++){
+                boardButtons[j][i].setVisible(true);
+            }
+        }
         for (Worker worker : s.getValidChoicesWorkers()) {
             workerButtons.add(board.getSpecificButtons(worker.getPosition().getCoordinates().getX(), worker.getPosition().getCoordinates().getY()));
         }
 
         for (int i = 0; i < 2; i++) {
             workerButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.BLUE,2));
+
             if(workerButtons.get(i).getActionListeners().length>0){
-                workerButtons.get(i).removeActionListener(workerButtons.get(i).getActionListeners()[1]);
+                workerButtons.get(i).removeActionListener(workerButtons.get(i).getActionListeners()[0]);
             }else {
                 workerButtons.get(i).addActionListener(new ActionListener() {
                     @Override
@@ -500,17 +513,21 @@ public class Gui {
         mapPanel.setChat("Move");
 
         List<BoardButton> availableMoveButtons = new ArrayList<>();
-
-
+        boardButtons = board.getBoardButtons();
+        for(int i=0 ; i<5 ; i++){
+            for(int j=0 ; j<5 ; j++){
+                boardButtons[j][i].setVisible(true);
+            }
+        }
         for (Coordinates coordinates : s.getValidChoicesMoves()) {
             availableMoveButtons.add(board.getSpecificButtons(coordinates.getX(), coordinates.getY()));
         }
 
         for (int i = 0; i < availableMoveButtons.size(); i++) {
             availableMoveButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.YELLOW, 2));
-
+            System.out.println(availableMoveButtons.get(i).getActionListeners().length);
             if(availableMoveButtons.get(i).getActionListeners().length>0){
-                availableMoveButtons.get(i).removeActionListener(availableMoveButtons.get(i).getActionListeners()[1]);
+                availableMoveButtons.get(i).removeActionListener(availableMoveButtons.get(i).getActionListeners()[0]);
             }else {
                 availableMoveButtons.get(i).addActionListener(new ActionListener() {
                     @Override
@@ -547,7 +564,12 @@ public class Gui {
 
         List<BoardButton> availableBuildButtons = new ArrayList<>();
         List<JLabel> availableLevels = new ArrayList<>();
-
+        boardButtons = board.getBoardButtons();
+        for(int i=0 ; i<5 ; i++){
+            for(int j=0 ; j<5 ; j++){
+                boardButtons[j][i].setVisible(true);
+            }
+        }
 
         for (Pair<Coordinates, List<Level>> validBuilds : s.getValidChoicesBuild()) {
             availableBuildButtons.add(board.getSpecificButtons(validBuilds.getValue0().getX(), validBuilds.getValue0().getY()));
@@ -556,7 +578,7 @@ public class Gui {
         for (int i = 0; i < availableBuildButtons.size(); i++) {
             availableBuildButtons.get(i).setBorder(BorderFactory.createLineBorder(new Color(255, 153, 0), 2));
             if(availableBuildButtons.get(i).getActionListeners().length>0){
-                availableBuildButtons.get(i).removeActionListener(availableBuildButtons.get(i).getActionListeners()[1]);
+                availableBuildButtons.get(i).removeActionListener(availableBuildButtons.get(i).getActionListeners()[0]);
             }else {
                 availableBuildButtons.get(i).addActionListener(new ActionListener() {
                     @Override
@@ -611,7 +633,7 @@ public class Gui {
         JButton yes = mapPanel.getYes();
         JButton no = mapPanel.getNo();
         if(yes.getActionListeners().length>1){
-            yes.removeActionListener(yes.getActionListeners()[1]);
+            yes.removeActionListener(yes.getActionListeners()[0]);
         }else {
             yes.addActionListener(e -> {
                 if (e.getSource() == yes) {
@@ -624,7 +646,7 @@ public class Gui {
             });
         }
         if(no.getActionListeners().length>1){
-            no.removeActionListener(no.getActionListeners()[1]);
+            no.removeActionListener(no.getActionListeners()[0]);
         }else {
             no.addActionListener(e -> {
                 if (e.getSource() == no) {
