@@ -28,34 +28,25 @@ public class InputReader {
     }
 
     public String read() throws InterruptedException {
-        String out;
-        do {
-            sniff();
-            out = Objects.requireNonNull(queue.take()).split(" ")[0];
-        } while (out.equals(""));
-        return out;
+        sniff();
+        return Objects.requireNonNull(queue.take()).split(" ")[0];
     }
 
     public String read(long timer, TimeUnit timeUnit) throws InterruptedException {
         String out;
-        do {
-            sniff();
-            out = queue.poll(5, TimeUnit.SECONDS);
-            if (out == null){
-                return null;
-            }else {
-                out = out.split(" ")[0];
-            }
-        } while (out.equals(""));
+        sniff();
+        out = queue.poll(timer, timeUnit);
+        if (out == null){
+            return null;
+        }else {
+            out = out.split(" ")[0];
+        }
         return out;
     }
 
-    public Integer readInt() throws InterruptedException {
-        String num;
-        do {
-            sniff();
-            num = read().split(" ")[0];
-        } while (num.equals(""));
+    public Integer readInt() throws InterruptedException, NumberFormatException {
+        sniff();
+        String num = read().split(" ")[0];
         return Integer.parseInt(num);
     }
 }
