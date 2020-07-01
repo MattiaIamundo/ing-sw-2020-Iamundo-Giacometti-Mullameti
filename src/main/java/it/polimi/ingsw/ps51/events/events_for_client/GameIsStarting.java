@@ -8,6 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The event signal to all the client that the setup phases of the game is ended and now the match will start,
+ * the event also carry all the information needed to the clients to decorate the game board, for instance the
+ * list of the gods chosen by each player and their color
+ */
 public class GameIsStarting implements EventForClient{
 
     private final List<Pair<String, Gods>> chosenGods;

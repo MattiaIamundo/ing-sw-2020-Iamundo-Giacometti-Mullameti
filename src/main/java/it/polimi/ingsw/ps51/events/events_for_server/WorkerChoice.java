@@ -7,14 +7,14 @@ import it.polimi.ingsw.ps51.visitor.VisitorForPong;
  * Event that carries the selected worker that will be moved and used to build a new level of a tower
  */
 public class WorkerChoice implements EventForServer{
-    private Worker chosedWorker;
+    private final Worker chosenWorker;
 
-    public WorkerChoice(Worker chosedWorker) {
-        this.chosedWorker = chosedWorker;
+    public WorkerChoice(Worker chosenWorker) {
+        this.chosenWorker = chosenWorker;
     }
 
-    public Worker getChosedWorker() {
-        return chosedWorker;
+    public Worker getChosenWorker() {
+        return chosenWorker;
     }
 
     @Override

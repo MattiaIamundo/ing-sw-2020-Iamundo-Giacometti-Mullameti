@@ -1,0 +1,13 @@
+[chooseBuild] fixed returned type of "getVAlidChoices" from 'Tuple' to 'Pair'
+[ChooseGod] added missing parameter in the constructor 'availableGods: List<Gods>'
+[ChooseGodsDeck] added missing parameter in the constructor 'godsNum: int'
+[ChooseWorkerPosition] fixed attribute visibility from 'public' to 'private'
+[GameIsStarting] added attribute 'colorMap: Map<String, WorkerColor>'
+[GameIsStarting] added function 'getColorMap(): Map<String, WorkerColor>'
+[Build] fixed type in attribute and functions from 'Tuple' to 'Pair'
+[Disconnection] added function 'getPlayerDisconnected'
+[WorkerChoice] fixed typo 'chosed' to 'chosen'
+
+added ChooseFirstPlayer
+added FirstPlayerChoice
+added ControllerToGame

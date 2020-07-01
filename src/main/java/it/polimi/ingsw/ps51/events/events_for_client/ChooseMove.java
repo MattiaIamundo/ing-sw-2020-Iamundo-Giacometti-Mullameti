@@ -1,7 +1,5 @@
 package it.polimi.ingsw.ps51.events.events_for_client;
 
-import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
-import it.polimi.ingsw.ps51.events.events_for_client.SpecificUserEvent;
 import it.polimi.ingsw.ps51.model.Coordinates;
 
 import java.util.List;

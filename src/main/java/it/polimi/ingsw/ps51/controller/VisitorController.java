@@ -23,7 +23,7 @@ public class VisitorController implements VisitorServer {
 
     @Override
     public void visitWorkerChoice(WorkerChoice event) {
-        game.getActualController().manageWorkerChoice(event.getChosedWorker());
+        game.getActualController().manageWorkerChoice(event.getChosenWorker());
     }
 
     @Override

@@ -5,9 +5,6 @@ package it.polimi.ingsw.ps51.events.events_for_client;
  */
 public class NumberOfPlayer implements EventForClient{
 
-    public NumberOfPlayer() {
-
-    }
 
     @Override
     public String acceptVisitor(VisitorClient visitor) {
