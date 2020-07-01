@@ -43,6 +43,11 @@ public class Gui {
     private Pair<Coordinates, Level> build;
     private String firstPlayer;
     private Worker chosenWorker;
+    private WinPanel winPanel;
+    private LosePanel losePanel;
+    int width;
+    int height;
+    GraphicsDevice gd;
 
     public Gui(Supporter supporter) {
         s = supporter;
@@ -51,7 +56,9 @@ public class Gui {
         buttonNumber = 0;
         chosenGods = new ArrayList<>();
         undoThread = null;
-
+        gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        width = gd.getDisplayMode().getWidth();
+        height = gd.getDisplayMode().getHeight();
         try {
             myImage = ImageIO.read(getClass().getResourceAsStream("/santoriniBoard.png"));
         } catch (IOException e) {
@@ -72,8 +79,8 @@ public class Gui {
                     frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
             }
         });
-        frame.pack();
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //frame.pack();
+        frame.setSize(95*width/100,90*height/100);
         frame.setVisible(true);
         frame.setResizable(false);
 
@@ -210,6 +217,9 @@ public class Gui {
                             godButtons[i].setEnabled(false);
 
                             if (chosenGods.size() == s.getGodsNum()) {
+                                for(JButton god : godButtons){
+                                    god.setEnabled(false);
+                                }
                                 Thread god = new Thread(() -> {
                                     EventForServer eventGodsDeck = new GodsDeck(chosenGods);
                                     s.notify(eventGodsDeck);
@@ -676,7 +686,7 @@ public class Gui {
 
         winImage = ImageIO.read(getClass().getResourceAsStream("winBackground.jpg"));
 
-        WinPanel winPanel = new WinPanel(winImage);
+        winPanel = new WinPanel(winImage);
 
         frame.getContentPane().add(winPanel);
         frame.setVisible(true);
@@ -686,40 +696,35 @@ public class Gui {
         frame.getContentPane().removeAll();
         frame.setSize(625 * 3 / 2, 415 * 3 / 2);
 
-        EndGamePanel losePanel = new EndGamePanel();
+        LosePanel losePanel = new LosePanel();
         losePanel.getText().setText("YOU LOST !!!");
         frame.getContentPane().add(losePanel);
         frame.setVisible(true);
     }
 
     public void disconnectGame() {
-        frame.getContentPane().removeAll();
+        /*frame.getContentPane().removeAll();
         frame.setSize(625 * 3 / 2, 415 * 3 / 2);
 
         EndGamePanel disconnectGame = new EndGamePanel();
         disconnectGame.getText().setText("Game Disconnected !!!");
         frame.getContentPane().add(disconnectGame);
-        frame.setVisible(true);
+        frame.setVisible(true);*/
     }
 
     public void endGame() {
-        frame.getContentPane().removeAll();
-        frame.setSize(625 * 3 / 2, 415 * 3 / 2);
-
-        EndGamePanel endGamePanel = new EndGamePanel();
-        endGamePanel.getText().setText("Game Ended");
-        frame.getContentPane().add(endGamePanel);
-        frame.setVisible(true);
+       winPanel.getGameEnded().setVisible(true);
+       losePanel.getGameEnded().setVisible(true);
     }
 
     public void outOfRoom() {
         frame.getContentPane().removeAll();
         frame.setSize(625 * 3 / 2, 415 * 3 / 2);
 
-        EndGamePanel outOfRoom = new EndGamePanel();
+        /*EndGamePanel outOfRoom = new EndGamePanel();
         outOfRoom.getText().setText("Out of Room");
         frame.getContentPane().add(outOfRoom);
-        frame.setVisible(true);
+        frame.setVisible(true);*/
     }
 
 

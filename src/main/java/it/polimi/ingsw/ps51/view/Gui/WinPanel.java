@@ -4,6 +4,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 public class WinPanel extends JPanel {
@@ -11,6 +12,7 @@ public class WinPanel extends JPanel {
     Image background;
     private JLabel[] trumpets ;
     JLabel text;
+    JLabel gameEnded;
 
     public WinPanel(Image background){
         this.background = background;
@@ -25,7 +27,14 @@ public class WinPanel extends JPanel {
         add(text, BorderLayout.CENTER);
         add(trumpets[0], BorderLayout.WEST);
         add(trumpets[1], BorderLayout.EAST);
-
+        gameEnded = new JLabel();
+        gameEnded.setText("Game Ended");
+        gameEnded.setFont(new Font("Times new roman" , Font.BOLD , 48));
+        gameEnded.setForeground(Color.RED);
+        gameEnded.setVisible(false);
+        gameEnded.setHorizontalAlignment(0);
+        gameEnded.setVerticalAlignment(0);
+        add(gameEnded, BorderLayout.SOUTH);
 
     }
 
@@ -62,8 +71,8 @@ public class WinPanel extends JPanel {
         }
 
     }
-
-   /* public static void main(String[] args) throws IOException {
+    public JLabel getGameEnded(){return gameEnded;}
+ /* public static void main(String[] args) throws IOException {
 
         JFrame frame = new JFrame("Start");
         BufferedImage myImage = ImageIO.read(new File("src/main/resources/winBackground.jpg"));

@@ -31,19 +31,24 @@ public class MapPanel extends JPanel {
     ImageIcon[] levelImages;
     JButton exit;
     UndoContainer undoContainer;
-
+    int width;
+    int height;
+    GraphicsDevice gd;
     public MapPanel(Image background) {
 
         this.setLayout(null);
         this.background = background;
-
+        gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        width = gd.getDisplayMode().getWidth();
+        height = gd.getDisplayMode().getHeight();
+        //System.out.println(width+"  "+height);
         boardContainer = new BoardContainer();
-        boardContainer.setLocation(400, 45);
-        boardContainer.setSize(865 * 2 / 3, 880 * 2 / 3);
+        boardContainer.setLocation(267*width/1000, 5*height/96);
+        boardContainer.setSize(550, 500);
         this.add(boardContainer);
         undoContainer= new UndoContainer();
-        undoContainer.setLocation(20,600);
-        undoContainer.setVisible(false);
+        undoContainer.setLocation(3*width/200,39*height/50);
+        undoContainer.setVisible(true);
         this.add(undoContainer);
         defineChatLabel();
         defineDecision();
@@ -51,6 +56,7 @@ public class MapPanel extends JPanel {
         definePlayerContainer();
         defineWorkerContainer();
         defineLevelImages();
+
     }
 
     @Override
@@ -61,7 +67,7 @@ public class MapPanel extends JPanel {
     }
     private void defineChatLabel(){
         chat = new JLabel();
-        chat.setLocation(395,650);
+        chat.setLocation(29*width/100,17*height/20);
         chat.setSize(865 * 2 / 3, 70);
         chat.setHorizontalAlignment(SwingConstants.CENTER);
         chat.setVerticalAlignment(SwingConstants.CENTER);
@@ -251,7 +257,7 @@ public class MapPanel extends JPanel {
         decision.setText("Enter Y for Yes or N for No !!");
         decision.setLayout(new BorderLayout());
         decision.setLocation(395,650);
-        decision.setSize(865 * 2 / 3, 70);
+        decision.setSize(500, 70);
         decision.setHorizontalAlignment(SwingConstants.CENTER);
         decision.setVerticalAlignment(SwingConstants.NORTH);
         decision.setForeground(Color.BLUE);
@@ -260,7 +266,7 @@ public class MapPanel extends JPanel {
         decisionContainer.add(yes);
         decisionContainer.add(no);
         decision.add(decisionContainer , BorderLayout.PAGE_END);
-        decision.setVisible(false);
+        decision.setVisible(true);
         this.add(decision);
     }
 
@@ -342,7 +348,7 @@ public class MapPanel extends JPanel {
 }
 
     public void makeDecision(String string){
-        chat.setVisible(false);
+        chat.setVisible(true);
         decision.setVisible(true);
         decision.setText(string);
     }
@@ -355,16 +361,19 @@ public class MapPanel extends JPanel {
         return no;
     }
 
-  /*  public static void main(String[] args) throws IOException {
+   public static void main(String[] args) throws IOException {
 
         JFrame frame = new JFrame("Start");
         BufferedImage myImage = ImageIO.read(new File("src/main/resources/SantoriniBoard.png"));
         frame.setContentPane(new MapPanel(myImage));
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setUndecorated(true);
+        frame.pack();
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        int width = gd.getDisplayMode().getWidth();
+        int height = gd.getDisplayMode().getHeight();
+        frame.setSize(95*width/100,90*height/100);
         frame.setVisible(true);
 
-    }*/
+    }
 
  public UndoContainer getUndoContainer() {
      return undoContainer;

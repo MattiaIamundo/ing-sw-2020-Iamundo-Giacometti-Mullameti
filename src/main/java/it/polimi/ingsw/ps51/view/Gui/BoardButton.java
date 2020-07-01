@@ -15,10 +15,10 @@ public class BoardButton extends JButton {
     private JLabel worker;
 
     public BoardButton(){
-        this.setPreferredSize(new Dimension(865*2/15,830*2/15));
+        this.setPreferredSize(new Dimension(110,100));
         buttonContainer = new Container();
         buttonContainer.setLayout(new GridBagLayout());
-        buttonContainer.setPreferredSize(new Dimension(865*2/15,830*2/15));
+        buttonContainer.setPreferredSize(new Dimension(110,100));
         defineLevels();
         this.add(buttonContainer);
     }

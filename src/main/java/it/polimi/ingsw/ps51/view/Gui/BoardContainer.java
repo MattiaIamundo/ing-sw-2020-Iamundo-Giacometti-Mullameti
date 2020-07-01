@@ -11,7 +11,7 @@ public class BoardContainer extends Container {
 
 
     public BoardContainer(){
-        this.setPreferredSize(new Dimension(865*2/3,830*2/3));
+        this.setPreferredSize(new Dimension(550,500));
         this.setLayout(new GridLayout(5,5));
 
         boardButtons = new BoardButton[5][5];
@@ -19,7 +19,7 @@ public class BoardContainer extends Container {
         for(int i=0 ; i<5 ; i++){
             for(int j=0 ; j<5 ; j++){
                 boardButtons[i][j] = new BoardButton();
-                boardButtons[i][j].setSize(865*2/15,830*2/15);
+                boardButtons[i][j].setSize(110,100);
                 boardButtons[i][j].setText("[" + (j+1)+","+(i+1) + "]");
                 boardButtons[i][j].setHorizontalAlignment(SwingConstants.RIGHT);
                 boardButtons[i][j].setVerticalAlignment(SwingConstants.NORTH);

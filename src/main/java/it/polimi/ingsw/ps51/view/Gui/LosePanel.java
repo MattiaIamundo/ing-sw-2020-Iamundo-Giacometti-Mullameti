@@ -6,12 +6,13 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class EndGamePanel extends JPanel {
+public class LosePanel extends JPanel {
 
     private JLabel[] trumpets ;
     JLabel text;
+    JLabel gameEnded;
 
-    public EndGamePanel(){
+    public LosePanel(){
 
         this.setLayout(new BorderLayout());
         defineTrumpets();
@@ -21,16 +22,22 @@ public class EndGamePanel extends JPanel {
         text.setHorizontalAlignment(0);
         text.setVerticalAlignment(0);
         add(text, BorderLayout.CENTER);
+        gameEnded = new JLabel("Game Ended");
+        gameEnded.setFont(new Font("Times new roman" , Font.BOLD , 48));
+        gameEnded.setForeground(Color.BLACK);
+        gameEnded.setHorizontalAlignment(0);
+        gameEnded.setVerticalAlignment(0);
+        gameEnded.setVisible(false);
+        add(gameEnded, BorderLayout.SOUTH);
         add(trumpets[0], BorderLayout.WEST);
         add(trumpets[1], BorderLayout.EAST);
-
 
     }
 
     public JLabel getText() {
         return text;
     }
-
+    public JLabel getGameEnded(){return gameEnded;}
     private void defineTrumpets(){
 
         trumpets = new JLabel[2];
@@ -57,8 +64,8 @@ public class EndGamePanel extends JPanel {
 
 
     }
-/*
-    public static void main(String[] args) {
+
+    /*public static void main(String[] args) {
 
         JFrame frame = new JFrame("Start");
 
@@ -67,7 +74,7 @@ public class EndGamePanel extends JPanel {
         frame.setResizable(true);
         frame.setVisible(true);
 
-    }
+    }*/
 
- */
+
 }

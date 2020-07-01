@@ -57,6 +57,7 @@ public class WelcomePanel extends JPanel {
         add(buttonContainer , BorderLayout.CENTER);
     }
 
+
   /*  public static void main(String[] args) {
         JFrame frame = new JFrame("Start");
         WelcomePanel welcomePanel = new WelcomePanel();
