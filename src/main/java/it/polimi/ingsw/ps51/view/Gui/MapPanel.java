@@ -67,8 +67,8 @@ public class MapPanel extends JPanel {
     }
     private void defineChatLabel(){
         chat = new JLabel();
-        chat.setLocation(29*width/100,17*height/20);
-        chat.setSize(865 * 2 / 3, 70);
+        chat.setLocation(27*width/100,15*height/20);
+        chat.setSize(4*width/10, 9*height/100);
         chat.setHorizontalAlignment(SwingConstants.CENTER);
         chat.setVerticalAlignment(SwingConstants.CENTER);
         chat.setForeground(new Color(0 ,0 ,153));
@@ -370,6 +370,7 @@ public class MapPanel extends JPanel {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         int width = gd.getDisplayMode().getWidth();
         int height = gd.getDisplayMode().getHeight();
+        frame.setResizable(false);
         frame.setSize(95*width/100,90*height/100);
         frame.setVisible(true);
 

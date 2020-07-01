@@ -60,7 +60,7 @@ public class Gui {
         width = gd.getDisplayMode().getWidth();
         height = gd.getDisplayMode().getHeight();
         try {
-            myImage = ImageIO.read(getClass().getResourceAsStream("/santoriniBoard.png"));
+            myImage = ImageIO.read(getClass().getResourceAsStream("/SantoriniBoard.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -80,7 +80,7 @@ public class Gui {
             }
         });
         //frame.pack();
-        frame.setSize(95*width/100,90*height/100);
+        frame.setSize(1300,700);
         frame.setVisible(true);
         frame.setResizable(false);
 
@@ -600,7 +600,9 @@ public class Gui {
 
                             availableBuildButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));
                             chosenPair = s.getValidChoicesBuild().get(i);
-
+                            for(JButton button : availableBuildButtons){
+                                button.setVisible(false);
+                            }
 
                             for (Pair<Coordinates, List<Level>> validBuilds : s.getValidChoicesBuild()) {
 
