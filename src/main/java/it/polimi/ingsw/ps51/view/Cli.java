@@ -8,6 +8,7 @@ import it.polimi.ingsw.ps51.model.Level;
 import it.polimi.ingsw.ps51.model.Worker;
 import it.polimi.ingsw.ps51.model.WorkerColor;
 import it.polimi.ingsw.ps51.model.gods.Gods;
+import it.polimi.ingsw.ps51.utility.InputReader;
 import it.polimi.ingsw.ps51.utility.InterruptibleInputStream;
 import it.polimi.ingsw.ps51.utility.MessageHandler;
 import org.javatuples.Pair;
@@ -15,10 +16,7 @@ import org.javatuples.Pair;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.*;
 
 public class Cli extends Supporter {
@@ -27,8 +25,7 @@ public class Cli extends Supporter {
     boolean isFinish;
     MessageHandler mh;
     Printer printer;
-    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader((System.in)));
-    Scanner reader = new Scanner(bufferedReader);
+    InputReader reader;
 
 
     public Cli() {
@@ -37,6 +34,7 @@ public class Cli extends Supporter {
         isFinish = false;
         mh = new MessageHandler(this);
         printer = new Printer();
+        reader = new InputReader();
     }
 
     @Override
@@ -171,45 +169,43 @@ public class Cli extends Supporter {
                 }
             }
         }
-        this.mh.getEx().shutdown();
+        mh.getEx().shutdownNow();
+        reader.close();
+        System.exit(0);
     }
 
     private void turnIsEnd() {
-        printer.println(printer.colorToAnsi(Color.PURPLE) + "Your turn has ended !");
+        printer.println(printer.colorToAnsi(Color.PURPLE) + "Your turn has ended !" + printer.colorToAnsi(Color.CYAN));
     }
 
     private void gameIsStarting(){
-        printer.println(printer.colorToAnsi(Color.GREEN) + "The game is started!!");
+        printer.println(printer.colorToAnsi(Color.GREEN) + "The game is started!!" + printer.colorToAnsi(Color.CYAN));
     }
 
     public void launch(){
         printer.welcome();
     }
 
-    public String logIn(){
+    public String logIn() throws InterruptedException {
 
         String nickname = "";
         ok = false;
 
         while(!ok){
-            printer.println(printer.colorToAnsi(Color.GREEN)+"Insert your Nickname:");
-            ok = true;
-            nickname = reader.nextLine();
+            printer.println(printer.colorToAnsi(Color.GREEN) + "Insert your Nickname:" + printer.colorToAnsi(Color.CYAN));
+            nickname = reader.read();
 
-            if ( nickname.contains(" ") ) {
-                printer.println(printer.colorToAnsi(Color.RED)+"Write something without space...");
-                ok = false;
-            }
             if ( nickname.equals("")) {
-                printer.println(printer.colorToAnsi(Color.RED)+"Write something...");
-                ok = false;
+                printer.println(printer.colorToAnsi(Color.RED)+"Write something..." + printer.colorToAnsi(Color.CYAN));
+            }else {
+                ok = true;
             }
         }
 
         return nickname;
     }
 
-    public int numberOfPlayers(){
+    public int numberOfPlayers() throws InterruptedException {
 
         int numberOfPlayers = 0;
         ok = false;
@@ -217,30 +213,25 @@ public class Cli extends Supporter {
         printer.println(printer.colorToAnsi(Color.CYAN) + "2 players or 3 players ? ");
 
         while(!ok){
-            reader.reset();
             try{
-                numberOfPlayers=reader.nextInt();
-                ok = true;
+                numberOfPlayers = reader.readInt();
 
                 if(numberOfPlayers!=2 && numberOfPlayers!=3){
                     printer.println(printer.colorToAnsi(Color.RED) + "You can only have 2 or 3 players!!");
-                    printer.println(printer.colorToAnsi(Color.RED) + "Enter 2 or 3 !!");
-                    ok = false;
+                    printer.println("Enter 2 or 3 !!" + printer.colorToAnsi(Color.CYAN));
+                }else {
+                    ok = true;
                 }
 
-            }catch(InputMismatchException e){
+            }catch(NumberFormatException e){
                 printer.println(printer.colorToAnsi(Color.RED) + "What you entered is NOT OK !!");
-                printer.println(printer.colorToAnsi(Color.RED) + "Enter a number!!");
-                reader.nextLine();
-
+                printer.println("Enter a number!!" + printer.colorToAnsi(Color.CYAN));
             }
         }
-        reader.nextLine();
-
         return numberOfPlayers;
     }
 
-    public List<Gods> chooseGodsDeck() {
+    public List<Gods> chooseGodsDeck() throws InterruptedException {
 
         List<Gods> chosenGods = new ArrayList<>();
         String chosenGod;
@@ -249,24 +240,21 @@ public class Cli extends Supporter {
 
         for (int i = 0; i < getGodsNum(); i++) {
             ok = false;
-            printer.println(printer.colorToAnsi(Color.CYAN) + "Enter the name of the " + (i + 1) + "º God?");
             while (!ok) {
+                printer.println(printer.colorToAnsi(Color.CYAN) + "Enter the name of the " + (i + 1) + "º God?");
                 try {
-                    chosenGod = reader.nextLine();
-                    chosenGod=chosenGod.toUpperCase();
-                    ok = true;
+                    chosenGod = reader.read().toUpperCase();
                     if((chosenGods.isEmpty()) || (!(chosenGods.contains(Gods.valueOf(chosenGod))))){
                         chosenGods.add(Gods.valueOf(chosenGod));
+                        ok = true;
                     }else{
                         printer.println(printer.colorToAnsi(Color.RED) + "You already chose that one !!");
-                        printer.println(printer.colorToAnsi(Color.RED) + "Choose another!!");
-                        ok = false;
+                        printer.println("Choose another!!" + printer.colorToAnsi(Color.CYAN));
                     }
 
                 } catch (IllegalArgumentException e) {
                     printer.println(printer.colorToAnsi(Color.RED) + "This name is NOT ACCEPTABLE !!");
-                    printer.println(printer.colorToAnsi(Color.RED) + "Enter a VALID name of a  God !!");
-                    ok = false;
+                    printer.println("Enter a VALID name of a  God !!" + printer.colorToAnsi(Color.CYAN));
                 }
             }
         }
@@ -274,7 +262,7 @@ public class Cli extends Supporter {
         return chosenGods;
     }
 
-    public Gods chooseGodsPlayers(){
+    public Gods chooseGodsPlayers() throws InterruptedException {
 
         Gods chosenGod = null;
         String chosen;
@@ -283,32 +271,28 @@ public class Cli extends Supporter {
 
         printer.println(printer.colorToAnsi(Color.CYAN) + "You must choose only 1 God !!");
         printer.println(printer.colorToAnsi(Color.CYAN) + "Type the name RIGHT !!");
-        while(!ok){
 
+        while(!ok){
             try{
-                ok = true;
-                chosen = reader.nextLine();
-                chosen = chosen.toUpperCase();
-                if(getAvailableGods().contains(Gods.valueOf(chosen)))
+                chosen = reader.read().toUpperCase();
+                if(getAvailableGods().contains(Gods.valueOf(chosen))) {
                     chosenGod = Gods.valueOf(chosen);
-                else {
+                    ok = true;
+                }else {
                     printer.println(printer.colorToAnsi(Color.RED) + "The God you choose is NOT AVAILABLE !!");
-                    printer.println(printer.colorToAnsi(Color.RED) + "Choose one of the given Gods!!");
-                    ok = false;
+                    printer.println("Choose one of the given Gods!!" + printer.colorToAnsi(Color.CYAN));
                 }
 
             }catch (IllegalArgumentException e){
-
                 printer.println(printer.colorToAnsi(Color.RED) + "This name is NOT ACCEPTABLE !!");
-                printer.println(printer.colorToAnsi(Color.RED) + "Enter a VALID name of a  God !!");
-                ok = false;
+                printer.println("Enter a VALID name of a  God !!" + printer.colorToAnsi(Color.CYAN));
             }
         }
 
         return chosenGod;
     }
 
-    public String chooseFirstPlayer(){
+    public String chooseFirstPlayer() throws InterruptedException {
         String firstPlayer = null;
         ok = false;
 
@@ -316,7 +300,7 @@ public class Cli extends Supporter {
         printer.println(printer.colorToAnsi(Color.CYAN) + getPlayers());
 
         while (!ok){
-            firstPlayer = reader.nextLine().toLowerCase();
+            firstPlayer = reader.read();
             if (getPlayers().contains(firstPlayer)){
                 ok = true;
             }else {
@@ -331,18 +315,16 @@ public class Cli extends Supporter {
         printer.board(getMap() , getWorkers() ,getChosenGods(), getChosenColors());
     }
 
-    public Coordinates placeWorkers(){
+    public Coordinates placeWorkers() throws InterruptedException {
 
         Coordinates coordinates;
         int x;
         int y;
 
-
         printer.println(printer.colorToAnsi(Color.CYAN) + "Where do you want to place your " + getWorkerNum() + "º worker ?");
         printer.println(printer.colorToAnsi(Color.CYAN) + "Enter VALID coordinates !! ");
 
         x = coordinateCheck("X");
-
 
         y = coordinateCheck("Y");
 
@@ -351,7 +333,7 @@ public class Cli extends Supporter {
     }
 
 
-    public Worker chooseWorker(){
+    public Worker chooseWorker() throws InterruptedException {
         int choice = 0;
         Worker worker;
         ok =  false;
@@ -364,30 +346,28 @@ public class Cli extends Supporter {
         }
         while(!ok){
             try{
-                choice = reader.nextInt();
-                ok = true;
+                choice = reader.readInt();
                 if(choice!=1 && choice!=2){
-                    printer.println(printer.colorToAnsi(Color.CYAN) + "Enter a VALID number !");
-                    printer.println(printer.colorToAnsi(Color.CYAN) + "Enter 1 or 2 !!");
-                    ok = false;
+                    printer.println(printer.colorToAnsi(Color.RED) + "Enter a VALID number !");
+                    printer.println("Enter 1 or 2 !!" + printer.colorToAnsi(Color.CYAN));
+                }else {
+                    ok = true;
                 }
-            }catch(InputMismatchException e) {
+            }catch(NumberFormatException e) {
                 printer.println(printer.colorToAnsi(Color.RED) + "What you entered is NOT OK !!");
-                printer.println(printer.colorToAnsi(Color.RED) + "Enter a number!!");
-                reader.nextLine();
+                printer.println("Enter a number!!" + printer.colorToAnsi(Color.CYAN));
             }
         }
-        reader.nextLine();
         worker = getValidChoicesWorkers().get(choice-1);
         return worker;
     }
 
-    public Coordinates askMove() {
+    public Coordinates askMove() throws InterruptedException {
 
         int x = 0;
         int y = 0;
         Coordinates coordinates;
-        boolean notAvailable = false;
+        boolean notAvailable = true;
         ok = false;
         printer.println(printer.colorToAnsi(Color.CYAN) + "Where do you want your worker to move ?");
         printer.println(printer.colorToAnsi(Color.CYAN) + "These are the available coordinates :");
@@ -395,22 +375,21 @@ public class Cli extends Supporter {
             printer.print(printer.colorToAnsi(Color.CYAN) + " [" + (coord.getX()+1) + " , " + (coord.getY()+1) +"]");
         }
         printer.println("");
-        while (!notAvailable) {
+        while (notAvailable) {
 
             x = coordinateCheck("X");
-
 
             y = coordinateCheck("Y");
 
             for(Coordinates coord : getValidChoicesMoves()){
                 if(coord.getX()==(x-1) && coord.getY()==(y-1)){
-                    notAvailable = true;
+                    notAvailable = false;
                     break;
                 }
 
             }
 
-            if(!notAvailable){
+            if(notAvailable){
                 printer.println(printer.colorToAnsi(Color.RED) + "This coordinates are not available");
                 printer.println(printer.colorToAnsi(Color.CYAN) + "Enter valid Coordinates");
             }
@@ -419,7 +398,7 @@ public class Cli extends Supporter {
         return coordinates;
     }
 
-      public Pair<Coordinates, Level> askBuild(){
+      public Pair<Coordinates, Level> askBuild() throws InterruptedException {
 
         int x;
         int y;
@@ -458,20 +437,19 @@ public class Cli extends Supporter {
 
 
                         try {
-                            z = reader.nextLine();
+                            z = reader.read().toUpperCase();
                             while (z.equals("")) {
-                                System.out.println("Don't press enter without write something!");
-                                z = reader.nextLine();
+                                printer.println(printer.colorToAnsi(Color.RED) + "Don't press enter without write " +
+                                        "something!" + printer.colorToAnsi(Color.CYAN));
+                                z = reader.read().toUpperCase();
                             }
-                            z = z.toUpperCase();
                             ok = true;
                             Level.valueOf(z);
 
                         } catch (IllegalArgumentException e) {
 
                             printer.println(printer.colorToAnsi(Color.RED) + "This level is NOT ACCEPTABLE !!");
-                            printer.println(printer.colorToAnsi(Color.RED) + "Enter a VALID level !!");
-                            ok = false;
+                            printer.println("Enter a VALID level !!" + printer.colorToAnsi(Color.CYAN));
                         }
                     }
                     for (Pair<Coordinates, List<Level>> validBuilds : getValidChoicesBuild()) {
@@ -490,7 +468,7 @@ public class Cli extends Supporter {
                     }
                     if (!notAvailable) {
                         printer.println(printer.colorToAnsi(Color.RED) + "This level is NOT AVAILABLE !!");
-                        printer.println(printer.colorToAnsi(Color.RED) + "Enter other coordinates !!");
+                        printer.println("Enter other coordinates !!" + printer.colorToAnsi(Color.CYAN));
                         notAvailable = false;
                     }
                     break;
@@ -499,68 +477,65 @@ public class Cli extends Supporter {
             }
 
             if(!validCoordinates)
-                printer.println(printer.colorToAnsi(Color.RED) + "This Coordinates are NOT AVAILABLE !!");
+                printer.println(printer.colorToAnsi(Color.RED) + "This Coordinates are NOT AVAILABLE !!" + printer.colorToAnsi(Color.CYAN));
         }
         buildOn = new Pair<>(coordinates,level);
         return buildOn;
     }
 
-    public boolean makeDecision(){
+    public boolean makeDecision() throws InterruptedException {
 
         String answer="";
         ok = false;
-        printer.println(printer.colorToAnsi(Color.GREEN)+getDecision());
+        printer.println(printer.colorToAnsi(Color.GREEN) + getDecision());
 
         while(!ok){
-            printer.println(printer.colorToAnsi(Color.GREEN)+"Enter Y for Yes or N for No !!");
-            answer = reader.nextLine();
-            answer = answer.toUpperCase();
-            ok = true;
+            printer.println(printer.colorToAnsi(Color.GREEN) + "Enter Y for Yes or N for No !!");
+            answer = reader.read().toUpperCase();
             if(!(answer.equals("Y")||answer.equals("N"))){
-                printer.println(printer.colorToAnsi(Color.GREEN)+"This is NOT VALID !!");
-                ok = false;
+                printer.println(printer.colorToAnsi(Color.RED) + "This is NOT VALID !!");
+            }else {
+                ok = true;
             }
         }
         return answer.equals("Y");
     }
 
     public boolean undo(){
-        printer.println(printer.colorToAnsi(Color.BRIGHT_GREEN)+"Do you confirm your choice, press Y for yes, or N to abort and redo your last action" + printer.colorToAnsi(Color.CYAN));
+        printer.println(printer.colorToAnsi(Color.BRIGHT_GREEN)+"Do you confirm your choice, press Y for yes, " +
+                "or N to abort and redo your last action" + printer.colorToAnsi(Color.CYAN));
+        String userChoice;
         while (true) {
-
-            FutureTask<String> userChoice = new FutureTask<>(() -> {
-                BufferedReader in = new BufferedReader(new InputStreamReader(new InterruptibleInputStream(System.in)));
-                return in.readLine();
-            });
-            Thread thread = new Thread(userChoice, "ReaderForUserChoice");
-            thread.start();
             try {
-                switch (userChoice.get(5, TimeUnit.SECONDS).toLowerCase()){
-                    case "y":
-                        printer.println(printer.colorToAnsi(Color.GREEN)+"Decided to accept" + printer.colorToAnsi(Color.CYAN));
-                        return true;
-                    case "n":
-                        printer.println(printer.colorToAnsi(Color.RED)+"Decided to redo" + printer.colorToAnsi(Color.CYAN));
-                        return false;
-                    default:
-                        printer.println(printer.colorToAnsi(Color.RED)+"Invalid input, please redo your selection" + printer.colorToAnsi(Color.CYAN));
+                userChoice = reader.read(5, TimeUnit.SECONDS);
+                if (userChoice == null){
+                    printer.println(printer.colorToAnsi(Color.RED) + "Time out, action automatically accepted" + printer.colorToAnsi(Color.CYAN));
+                    return true;
+                }else {
+                    switch (userChoice.toLowerCase()) {
+                        case "y":
+                            printer.println(printer.colorToAnsi(Color.GREEN) + "Decided to accept" + printer.colorToAnsi(Color.CYAN));
+                            return true;
+                        case "n":
+                            printer.println(printer.colorToAnsi(Color.RED) + "Decided to redo" + printer.colorToAnsi(Color.CYAN));
+                            return false;
+                        default:
+                            printer.println(printer.colorToAnsi(Color.RED) + "Invalid input, please redo your selection" + printer.colorToAnsi(Color.CYAN));
+                    }
                 }
-            } catch (InterruptedException | ExecutionException e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
-            } catch (TimeoutException e){
-                printer.println(printer.colorToAnsi(Color.RED)+"Time out, action automatically accepted");
-                thread.interrupt();
-                return true;
             }
         }
     }
 
     public void ack(){
-        printer.println(printer.colorToAnsi(Color.PURPLE)+"Your "+getOperationConfirmed()+" event is received by server...");
+        printer.println(printer.colorToAnsi(Color.PURPLE) + "Your "+getOperationConfirmed()+" event is received by server..."
+                + printer.colorToAnsi(Color.CYAN));
     }
     public void unsuccessfulOperation(){
         printer.println(printer.colorToAnsi(Color.RED) + "Sorry , something went wrong server side...");
-        printer.println(printer.colorToAnsi(Color.GREEN) + "Repeat your last action !");
+        printer.println(printer.colorToAnsi(Color.GREEN) + "Repeat your last action !" + printer.colorToAnsi(Color.CYAN));
     }
     public void winGame(){
         printer.println(printer.colorToAnsi(Color.GREEN) + "Congratulations , YOU WON !!");
@@ -571,44 +546,42 @@ public class Cli extends Supporter {
     }
     public void disconnectGame(){
         printer.println(printer.colorToAnsi(Color.CYAN) + "The server is shutting down for some reasons or");
-        printer.println(printer.colorToAnsi(Color.CYAN) + "A player disconnected himself so everyone is disconnected...");
+        printer.println("A player disconnected himself so everyone is disconnected..." + printer.colorToAnsi(Color.WHITE));
     }
 
     public void endGame(){
-        printer.println(printer.colorToAnsi(Color.RED) + "End Game");
+        printer.println(printer.colorToAnsi(Color.RED) + "End Game" + printer.colorToAnsi(Color.WHITE));
     }
 
     public void outOfRoom() {
-        printer.println(printer.colorToAnsi(Color.RED) + "The game is already started, try again later...");
+        printer.println(printer.colorToAnsi(Color.RED) + "The game is already started, try again later..." + printer.colorToAnsi(Color.WHITE));
     }
 
-    private int  coordinateCheck(String car){
+    private int  coordinateCheck(String car) throws InterruptedException {
         ok = false;
         int coordinate = 0;
         while (!ok) {
             printer.print(printer.colorToAnsi(Color.CYAN) + "Enter the "+ car +" coordinate : ");
             try {
-                coordinate = reader.nextInt();
-                ok = true;
+                coordinate = reader.readInt();
 
                 if( coordinate<1 || coordinate>getMap().getMaxCoordinate()+1){
-                    printer.println(printer.colorToAnsi(Color.CYAN) + "This Coordinate is  NOT VALID !!");
-                    printer.println(printer.colorToAnsi(Color.CYAN) + "Enter a VALID coordinate !! ");
-                    ok = false;
+                    printer.println(printer.colorToAnsi(Color.RED) + "This Coordinate is  NOT VALID !!");
+                    printer.println("Enter a VALID coordinate !! " + printer.colorToAnsi(Color.CYAN));
+                }else {
+                    ok = true;
                 }
 
-                reader.nextLine();
-            } catch (InputMismatchException e) {
+            } catch (NumberFormatException e) {
                 printer.println(printer.colorToAnsi(Color.RED) + "What you entered is NOT OK !!");
-                printer.println(printer.colorToAnsi(Color.RED) + "Enter a number!!");
-                reader.nextLine();
+                printer.println("Enter a number!!" + printer.colorToAnsi(Color.CYAN));
             }
         }
         return coordinate;
     }
 
-    public WorkerColor chooseColor() {
-        boolean ok = false;
+    public WorkerColor chooseColor() throws InterruptedException {
+        ok = false;
         String choice;
         WorkerColor userChoice = getAvailableColors().get(0);
 
@@ -619,14 +592,14 @@ public class Cli extends Supporter {
                 printer.println(printer.colorToAnsi( Color.valueOf(c.toString().toUpperCase()) ) + c.toString().toUpperCase());
             }
 
-            printer.println(printer.colorToAnsi(Color.GREEN) + "Write the color you want:");
-            choice = reader.nextLine();
-            choice = choice.toUpperCase();
+            printer.println(printer.colorToAnsi(Color.GREEN) + "Write the color you want:" + printer.colorToAnsi(Color.CYAN));
+            choice = reader.read();
 
             for (WorkerColor c: getAvailableColors()) {
-                if (choice.equals(c.toString().toUpperCase())) {
+                if (choice.equalsIgnoreCase(c.toString())) {
                     userChoice = c;
                     ok = true;
+                    break;
                 }
             }
 
@@ -637,9 +610,8 @@ public class Cli extends Supporter {
                 } catch (IllegalArgumentException e) {
                     printer.println(printer.colorToAnsi(Color.RED) + "What your typed is not a color!");
                 }
-                printer.println(printer.colorToAnsi(Color.RED) + "Write a color now please!!");
+                printer.println("Write a color now please!!" + printer.colorToAnsi(Color.CYAN));
             }
-
         }
 
         return userChoice;
