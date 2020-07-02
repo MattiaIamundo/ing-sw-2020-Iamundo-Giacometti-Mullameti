@@ -439,6 +439,8 @@ public class MapPanel extends JPanel {
 
     public void makeDecision(String string){
         chat.setVisible(false);
+        yes.setEnabled(true);
+        no.setEnabled(true);
         decision.setVisible(true);
         textDecisio.setText(string);
     }

@@ -123,7 +123,7 @@ public class MainGui extends Supporter {
                             SwingUtilities.invokeLater(() -> gui.outOfRoom());
                             isFinish = true;
                             break;
-                        case "DISCONNECT":
+                        case "DISCONNECTION":
                             SwingUtilities.invokeLater(() -> gui.disconnectGame());
                             isFinish = true;
                             break;

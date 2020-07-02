@@ -479,7 +479,7 @@ public class Gui {
             workerButtons.add(board.getSpecificButtons(worker.getPosition().getCoordinates().getX(), worker.getPosition().getCoordinates().getY()));
         }
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < s.getValidChoicesWorkers().size(); i++) {
             workerButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
 
             if (workerButtons.get(i).getActionListeners().length > 0) {
@@ -489,7 +489,7 @@ public class Gui {
                 @Override
                 public void actionPerformed(ActionEvent e) {
 
-                    for (int i = 0; i < 2; i++) {
+                    for (int i = 0; i < s.getValidChoicesWorkers().size(); i++) {
 
                         if (e.getSource() == workerButtons.get(i)) {
                             workerButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));
@@ -660,6 +660,8 @@ public class Gui {
         }
         yes.addActionListener(e -> {
             if (e.getSource() == yes) {
+                yes.setEnabled(false);
+                no.setEnabled(false);
                 Thread decisionYes = new Thread(() -> {
                     EventForServer eventDecisionTaken = new DecisionTaken(true);
                     s.notify(eventDecisionTaken);
@@ -673,6 +675,8 @@ public class Gui {
         }
         no.addActionListener(e -> {
             if (e.getSource() == no) {
+                yes.setEnabled(false);
+                no.setEnabled(false);
                 Thread decisionNo = new Thread(() -> {
                     EventForServer eventDecisionTaken = new DecisionTaken(false);
                     s.notify(eventDecisionTaken);
@@ -696,7 +700,7 @@ public class Gui {
         frame.setSize(625 * 3 / 2, 415 * 3 / 2);
         Image winImage;
 
-        winImage = ImageIO.read(getClass().getResourceAsStream("winBackground.jpg"));
+        winImage = ImageIO.read(getClass().getResourceAsStream("/winBackground.jpg"));
 
         winPanel = new WinPanel(winImage);
 
@@ -715,13 +719,12 @@ public class Gui {
     }
 
     public void disconnectGame() {
-        /*frame.getContentPane().removeAll();
+        frame.getContentPane().removeAll();
         frame.setSize(625 * 3 / 2, 415 * 3 / 2);
-
-        EndGamePanel disconnectGame = new EndGamePanel();
+        LosePanel disconnectGame = new LosePanel();
         disconnectGame.getText().setText("Game Disconnected !!!");
         frame.getContentPane().add(disconnectGame);
-        frame.setVisible(true);*/
+        frame.setVisible(true);
     }
 
     public void endGame() {
@@ -732,11 +735,11 @@ public class Gui {
     public void outOfRoom() {
         frame.getContentPane().removeAll();
         frame.setSize(625 * 3 / 2, 415 * 3 / 2);
-
-        /*EndGamePanel outOfRoom = new EndGamePanel();
+        System.out.println("Out if room");
+        LosePanel outOfRoom = new LosePanel();
         outOfRoom.getText().setText("Out of Room");
         frame.getContentPane().add(outOfRoom);
-        frame.setVisible(true);*/
+        frame.setVisible(true);
     }
 
 
