@@ -56,11 +56,9 @@ public class Gui {
         buttonNumber = 0;
         chosenGods = new ArrayList<>();
         undoThread = null;
-        gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        width = gd.getDisplayMode().getWidth();
-        height = gd.getDisplayMode().getHeight();
+
         try {
-            myImage = ImageIO.read(getClass().getResourceAsStream("/SantoriniBoard.png"));
+            myImage = ImageIO.read(getClass().getResourceAsStream("/newBackground.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -80,7 +78,8 @@ public class Gui {
             }
         });
         //frame.pack();
-        frame.setSize(1300,700);
+        frame.setSize(1400,700);
+
         frame.setVisible(true);
         frame.setResizable(false);
 
@@ -469,7 +468,7 @@ public class Gui {
         //mapPanel = new MapPanel(myImage);
         //board = mapPanel.getBoardContainer();
         mapPanel.setChat("Choose Worker");
-        mapPanel.getWorkerContainer().setVisible(false);
+        mapPanel.getWorkerContainer().setVisible(true);
         List<BoardButton> workerButtons = new ArrayList<>();
         boardButtons = board.getBoardButtons();
         for (int i = 0; i < 5; i++) {

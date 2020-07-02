@@ -29,33 +29,47 @@ public class MapPanel extends JPanel {
     private Container levelContainer;
     private JLabel[] levels;
     ImageIcon[] levelImages;
-    JButton exit;
     UndoContainer undoContainer;
-    int width;
-    int height;
-    GraphicsDevice gd;
+    private Label undo;
+    private Container westContainer;
+    private Container pContainer;
+    private Container levelWorkerContainer;
+    private Container container;
     public MapPanel(Image background) {
 
-        this.setLayout(null);
-        this.background = background;
-        gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        width = gd.getDisplayMode().getWidth();
-        height = gd.getDisplayMode().getHeight();
-        //System.out.println(width+"  "+height);
+        this.background=background;
+        this.setLayout(new GridLayout(1,2));
+        westContainer=new Container();
+        westContainer.setPreferredSize(new Dimension(500,700));
+        westContainer.setLayout(new GridBagLayout());
+        container=new Container();
+        container.setPreferredSize(new Dimension(700,700));
+        container.setLayout(new GridBagLayout());
+
         boardContainer = new BoardContainer();
-        boardContainer.setLocation(267*width/1000, 5*height/96);
-        boardContainer.setSize(550, 500);
+        boardContainer.setSize(700, 700);
         this.add(boardContainer);
-        undoContainer= new UndoContainer();
-        undoContainer.setLocation(3*width/200,39*height/50);
-        undoContainer.setVisible(true);
-        this.add(undoContainer);
-        defineChatLabel();
-        defineDecision();
-        defineButton();
         definePlayerContainer();
-        defineWorkerContainer();
+        undoContainer= new UndoContainer();
+        undoContainer.setPreferredSize(new Dimension(400,100));
+        undoContainer.setVisible(true);
+        gbc.gridx=1;
+        gbc.gridy=1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.fill = GridBagConstraints.VERTICAL;
+        gbc.insets=new Insets(50,0,50,0);
+        westContainer.add(undoContainer,gbc);
         defineLevelImages();
+
+
+        defineChatLabel();
+        gbc.gridx=1;
+        gbc.gridy=0;
+        gbc.anchor = GridBagConstraints.FIRST_LINE_END;
+        gbc.insets = new Insets(0,20,0,0);
+        container.add(westContainer , gbc);
+        this.add(container);
+        defineDecision();
 
     }
 
@@ -65,121 +79,14 @@ public class MapPanel extends JPanel {
 
         g.drawImage(background, 0, 0,this.getWidth(),this.getHeight(), this);
     }
-    private void defineChatLabel(){
-        chat = new JLabel();
-        chat.setLocation(27*width/100,15*height/20);
-        chat.setSize(4*width/10, 9*height/100);
-        chat.setHorizontalAlignment(SwingConstants.CENTER);
-        chat.setVerticalAlignment(SwingConstants.CENTER);
-        chat.setForeground(new Color(0 ,0 ,153));
-        chat.setFont(new Font ("Times new Roman" , Font.ITALIC , 18));
-        chat.setBorder(BorderFactory.createMatteBorder(5,5,5,5, new Color(0 ,0 ,153)));
-        this.add(chat);
-
-    }
-
-    private void defineButton(){
-
-        exit = new JButton();
-
-        exit.setVerticalTextPosition(SwingConstants.CENTER);
-        exit.setHorizontalTextPosition(SwingConstants.CENTER);
-        exit.setSize(1300 * 2 / 13, 700 / 9);
-        exit.setFont(new Font("Times New Roman", Font.BOLD, 24));
-        exit.setForeground(Color.WHITE);
-        exit.setOpaque(false);
-        exit.setContentAreaFilled(false);
-        exit.setBorderPainted(false);
-        exit.setBorder(null);
-
-        try {
-            BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Buttons/btn_blue.png"));
-            ImageIcon exitImage = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(1300 * 2 / 13, 700 / 9, Image.SCALE_DEFAULT));
-            exit.setIcon(exitImage);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        exit.setText("EXIT");
-        exit.setLocation(1100,650);
-        this.add(exit);
-
-    }
-
-    private void definePlayerContainer(){
-
-        playerContainer = new Container[3];
-        godPic = new JLabel[3];
-        playerName = new JLabel[3];
-
-        for (int i=0 ; i<3 ; i++){
-            playerContainer[i] = new Container();
-            playerContainer[i].setSize(200,300);
-            playerContainer[i].setLayout(new GridBagLayout());
-            playerName[i] = new JLabel();
-            playerName[i].setSize(200,500);
-            playerName[i].setHorizontalAlignment(SwingConstants.CENTER);
-            playerName[i].setVerticalAlignment(SwingConstants.CENTER);
-            playerName[i].setFont(new Font ("Times new Roman" , Font.BOLD , 36));
-            //playerName[i].setText("Meri");
-            godPic[i] = new JLabel();
-            godPic[i].setHorizontalAlignment(SwingConstants.CENTER);
-            godPic[i].setVerticalAlignment(SwingConstants.CENTER);
-            godPic[i].setPreferredSize(new Dimension(1300*3/26,700*3/9));
-
-            gbc.anchor = 10;
-            gbc.gridx = 0;
-            gbc.gridy = 0;
-            playerContainer[i].add(playerName[i] , gbc);
-            gbc.gridy = 1;
-            playerContainer[i].add(godPic[i] , gbc);
-
-        }
 
 
-        /*ImageIcon godImage1 = new ImageIcon((new ImageIcon("src/main/resources/GodCards/apollo.png").getImage().getScaledInstance(1300*3/26,700*3/9,Image.SCALE_DEFAULT)));
-        godPic[0].setIcon(godImage1);
-        ImageIcon godImage2 = new ImageIcon((new ImageIcon("src/main/resources/GodCards/pan.png").getImage().getScaledInstance(1300*3/26,700*3/9,Image.SCALE_DEFAULT)));
-        godPic[1].setIcon(godImage2);
-        ImageIcon godImage3 = new ImageIcon((new ImageIcon("src/main/resources/GodCards/artemis.png").getImage().getScaledInstance(1300*3/26,700*3/9,Image.SCALE_DEFAULT)));
-        godPic[2].setIcon(godImage3);*/
-
-        playerContainer[0].setLocation(50,50);
-        this.add(playerContainer[0]);
-        playerContainer[1].setLocation(1100,50);
-        this.add(playerContainer[1]);
-        playerContainer[2].setLocation(1100,350);
-        this.add(playerContainer[2]);
-
-    }
-
-    private void defineWorkerContainer(){
-
-        workerContainer = new Container();
-        workerContainer.setLayout(new GridBagLayout());
-        workerContainer.setSize(200,700*2/9);
-        workerImages = new ImageIcon[2];
-
-
-        workers = new JLabel[2];
-
-        for(int i=0 ; i<2 ; i++) {
-
-            workers[i] = new JLabel();
-            workers[i].setHorizontalAlignment(SwingConstants.CENTER);
-            workers[i].setVerticalAlignment(SwingConstants.CENTER);
-            workers[i].setPreferredSize(new Dimension(1300/13,700*2/9));
-            gbc.gridx=i;
-            gbc.gridy=0;
-            workerContainer.add(workers[i],gbc);
-        }
-
-        workerContainer.setLocation(50 , 400);
-        this.add(workerContainer);
-
-    }
 
     private void defineLevelImages(){
 
+        levelWorkerContainer = new Container();
+        levelWorkerContainer.setLayout(new GridBagLayout());
+        levelWorkerContainer.setSize(200,700);
         levelContainer = new Container();
         levelContainer.setLayout(new GridBagLayout());
         levelContainer.setSize(120,400);
@@ -195,13 +102,13 @@ public class MapPanel extends JPanel {
 
         try {
             BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/first.png"));
-            levelImages[0] = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(235/2, 215/2, Image.SCALE_DEFAULT));
+            levelImages[0] = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(235/3, 215/3, Image.SCALE_DEFAULT));
             bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/second.png"));
-            levelImages[1] = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(200/2,170/2,Image.SCALE_DEFAULT)));
+            levelImages[1] = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(200/3,170/3,Image.SCALE_DEFAULT)));
             bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/third.png"));
-            levelImages[2] = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(200/2,110/2,Image.SCALE_DEFAULT)));
+            levelImages[2] = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(200/3,110/3,Image.SCALE_DEFAULT)));
             bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/dome.png"));
-            levelImages[3] = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(120/2,85/2,Image.SCALE_DEFAULT)));
+            levelImages[3] = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(120/3,85/3,Image.SCALE_DEFAULT)));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -228,12 +135,112 @@ public class MapPanel extends JPanel {
             gbc.gridy = 4-i;
             levelContainer.add(levels[i] , gbc);
         }
-        levelContainer.setLocation(260 , 200);
-        this.add(levelContainer);
+
+        workerContainer = new Container();
+        workerContainer.setLayout(new GridBagLayout());
+        workerContainer.setSize(200,700*2/9);
+        workerImages = new ImageIcon[2];
+
+
+        workers = new JLabel[2];
+
+        for(int i=0 ; i<2 ; i++) {
+
+            workers[i] = new JLabel();
+            workers[i].setHorizontalAlignment(SwingConstants.CENTER);
+            workers[i].setVerticalAlignment(SwingConstants.CENTER);
+            workers[i].setPreferredSize(new Dimension(70,125));
+            gbc.gridx=0;
+            gbc.gridy=i;
+            workerContainer.add(workers[i],gbc);
+        }
+
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        levelWorkerContainer.add(workerContainer,gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        levelWorkerContainer.add(levelContainer,gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+        container.add(levelWorkerContainer,gbc);
 
     }
+    private void definePlayerContainer(){
+        pContainer = new Container();
+        pContainer.setLayout(new GridLayout(1,3,10,10));
+        pContainer.setPreferredSize(new Dimension(400,220));
+        playerContainer = new Container[3];
+        godPic = new JLabel[3];
+        playerName = new JLabel[3];
 
-    private void defineDecision(){
+        for (int i=0 ; i<3 ; i++){
+            playerContainer[i] = new Container();
+            playerContainer[i].setSize(200,300);
+            playerContainer[i].setLayout(new GridBagLayout());
+            playerName[i] = new JLabel();
+            playerName[i].setSize(200,500);
+            playerName[i].setHorizontalAlignment(SwingConstants.CENTER);
+            playerName[i].setVerticalAlignment(SwingConstants.CENTER);
+            playerName[i].setFont(new Font ("Times new Roman" , Font.BOLD , 24));
+            //playerName[i].setText("Meri");
+            godPic[i] = new JLabel();
+            godPic[i].setHorizontalAlignment(SwingConstants.CENTER);
+            godPic[i].setVerticalAlignment(SwingConstants.CENTER);
+            godPic[i].setPreferredSize(new Dimension(115,210));
+
+            gbc.anchor = 10;
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            playerContainer[i].add(playerName[i] , gbc);
+            gbc.gridy = 1;
+            playerContainer[i].add(godPic[i] , gbc);
+
+        }
+
+
+        /*ImageIcon godImage1 = new ImageIcon((new ImageIcon("src/main/resources/GodCards/apollo.png").getImage().getScaledInstance(115,200,Image.SCALE_DEFAULT)));
+        godPic[0].setIcon(godImage1);
+        ImageIcon godImage2 = new ImageIcon((new ImageIcon("src/main/resources/GodCards/pan.png").getImage().getScaledInstance(115,200,Image.SCALE_DEFAULT)));
+        godPic[1].setIcon(godImage2);
+        ImageIcon godImage3 = new ImageIcon((new ImageIcon("src/main/resources/GodCards/artemis.png").getImage().getScaledInstance(115,200,Image.SCALE_DEFAULT)));
+        godPic[2].setIcon(godImage3);*/
+
+
+        pContainer.add(playerContainer[0]);
+
+        pContainer.add(playerContainer[1]);
+
+        pContainer.add(playerContainer[2]);
+        gbc.gridx=1;
+        gbc.gridy=0;
+        westContainer.add(pContainer,gbc);
+    }
+
+
+    private void defineChatLabel(){
+        chat = new JLabel("welcome");
+
+        chat.setSize(400,100);
+        try {
+            BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/bluechat.png"));
+            ImageIcon chatImage = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(400, 100, Image.SCALE_DEFAULT));
+
+            chat.setIcon(chatImage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        chat.setHorizontalAlignment(SwingConstants.CENTER);
+        chat.setVerticalAlignment(SwingConstants.CENTER);
+        chat.setHorizontalTextPosition(SwingConstants.CENTER);
+        chat.setVerticalTextPosition(SwingConstants.CENTER);
+        chat.setForeground(Color.WHITE);
+        chat.setFont(new Font ("Times new Roman" , Font.ITALIC , 18));
+        chat.setBorder(BorderFactory.createMatteBorder(5,5,5,5, Color.WHITE));
+
         decisionContainer = new Container();
         decisionContainer.setSize(865*2/3 , 30);
         decisionContainer.setLayout(new GridLayout(1,2));
@@ -256,18 +263,24 @@ public class MapPanel extends JPanel {
         decision = new JLabel();
         decision.setText("Enter Y for Yes or N for No !!");
         decision.setLayout(new BorderLayout());
-        decision.setLocation(395,650);
-        decision.setSize(500, 70);
+        decision.setSize(400, 100);
         decision.setHorizontalAlignment(SwingConstants.CENTER);
         decision.setVerticalAlignment(SwingConstants.NORTH);
         decision.setForeground(Color.BLUE);
         decision.setFont(new Font ("Times new Roman" , Font.ITALIC , 18));
-        decision.setBorder(BorderFactory.createMatteBorder(5,5,5,5, Color.BLUE));
+        decision.setBorder(BorderFactory.createMatteBorder(0,0,0,0, Color.BLUE));
         decisionContainer.add(yes);
         decisionContainer.add(no);
         decision.add(decisionContainer , BorderLayout.PAGE_END);
-        decision.setVisible(true);
-        this.add(decision);
+        decision.setVisible(false);
+        chat.add(decision);
+        gbc.gridx=1;
+        gbc.gridy=2;
+        westContainer.add(chat,gbc);
+    }
+
+    private void defineDecision(){
+
     }
 
     public void setChat(String command){
@@ -281,7 +294,7 @@ public class MapPanel extends JPanel {
         ImageIcon imageIcon = null;
         try {
             BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Workers/" + color.toLowerCase() + ".png"));
-            imageIcon = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(1300 / 13, 700 * 2 / 9, Image.SCALE_DEFAULT)));
+            imageIcon = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(70, 125, Image.SCALE_DEFAULT)));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -300,7 +313,7 @@ public class MapPanel extends JPanel {
         for(int i=0 ; i<2 ;i++) {
             try {
                 BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Workers/" + color.toLowerCase() + ".png"));
-                workerImages[i] = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(1300 / 13, 700 * 2 / 9, Image.SCALE_DEFAULT)));
+                workerImages[i] = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(70, 125, Image.SCALE_DEFAULT)));
                 workers[i].setIcon(workerImages[i]);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -315,7 +328,7 @@ public class MapPanel extends JPanel {
     public void setGodPic(String god , int index) {
         try {
             BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/GodCards/"+god.toLowerCase()+".png"));
-            ImageIcon godImage = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(1300*3/30,700*3/10,Image.SCALE_DEFAULT)));
+            ImageIcon godImage = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(115,210,Image.SCALE_DEFAULT)));
             godPic[index].setIcon(godImage);
         } catch (IOException e) {
             e.printStackTrace();
@@ -345,7 +358,7 @@ public class MapPanel extends JPanel {
 
     public JLabel getLevel(int nr){
         return levels[nr];
-}
+    }
 
     public void makeDecision(String string){
         chat.setVisible(true);
@@ -361,22 +374,18 @@ public class MapPanel extends JPanel {
         return no;
     }
 
-   public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException {
 
         JFrame frame = new JFrame("Start");
-        BufferedImage myImage = ImageIO.read(new File("src/main/resources/SantoriniBoard.png"));
+        BufferedImage myImage = ImageIO.read(new File("src/main/resources/newBackground.png"));
         frame.setContentPane(new MapPanel(myImage));
         frame.pack();
-        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        int width = gd.getDisplayMode().getWidth();
-        int height = gd.getDisplayMode().getHeight();
-        frame.setResizable(false);
-        frame.setSize(95*width/100,90*height/100);
+        frame.setSize(1400,700);
         frame.setVisible(true);
 
     }
 
- public UndoContainer getUndoContainer() {
-     return undoContainer;
- }
+    public UndoContainer getUndoContainer() {
+        return undoContainer;
+    }
 }

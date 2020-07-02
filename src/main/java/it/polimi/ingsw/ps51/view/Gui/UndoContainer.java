@@ -12,12 +12,13 @@ public class UndoContainer extends Container {
 
     public UndoContainer(){
 
-        this.setSize(300 , 100);
+        this.setSize(400 , 150);
         this.setLayout(new BorderLayout());
         buttonContainer = new Container();
-        buttonContainer.setSize(865*2/3,30);
+        buttonContainer.setSize(400,50);
         buttonContainer.setLayout(new GridLayout(1,2));
         yes = new JButton("YES");
+        yes.setBackground(Color.red);
         yes.setBorder(BorderFactory.createMatteBorder(5,5,5,5, new Color(0,102, 0)));
         defineButtons(yes);
         no = new JButton("NO");
@@ -27,13 +28,12 @@ public class UndoContainer extends Container {
         text = new JLabel();
         text.setText("Do you confirm your choice ?");
         text.setLayout(new BorderLayout());
-        text.setLocation(395,650);
-        text.setSize(865 * 2 / 3, 70);
+        text.setSize(400, 100);
         text.setHorizontalAlignment(SwingConstants.CENTER);
         text.setVerticalAlignment(SwingConstants.NORTH);
-        text.setForeground(Color.BLUE);
+        text.setForeground(Color.WHITE);
         text.setFont(new Font ("Times new Roman" , Font.ITALIC , 18));
-        text.setBorder(BorderFactory.createMatteBorder(5,5,5,5, Color.BLUE));
+        text.setBorder(BorderFactory.createMatteBorder(5,5,5,5, Color.GRAY));
         buttonContainer.add(yes);
         buttonContainer.add(no);
         this.add(buttonContainer , BorderLayout.PAGE_END);
