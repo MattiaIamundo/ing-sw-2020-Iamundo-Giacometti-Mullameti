@@ -10,10 +10,7 @@ import org.fusesource.jansi.AnsiConsole;
 import org.javatuples.Pair;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Printer {
@@ -127,6 +124,11 @@ public class Printer {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Here, the available gods for the game are printed using the Gods file in the resources
+     * @param gods list of god to print
+     */
     public void printGods(List<Gods>gods){
 
         List<String> stringGod = new ArrayList<>();
@@ -164,6 +166,16 @@ public class Printer {
 
     }
 
+    /**
+     * Here the printer has to print the map with all the updates.
+     * The map to be printed is set with every element and then is printed.
+     * After it, the method printLegends is called.
+     * @param map           the map of the game
+     * @param workerList    the list of the workers in the game
+     * @param chosenGods    the god chosen by the players
+     * @param playerColor   the color chosen by the players
+     * @throws OutOfMapException if there are coordinates out of bounds of the map
+     */
     public  void board(Map map , List<Worker> workerList , List<Pair<String, Gods>> chosenGods, java.util.Map<String, WorkerColor> playerColor) throws OutOfMapException {
 
         ArrayList<String> players = new ArrayList<>();
@@ -271,6 +283,12 @@ public class Printer {
         printLegend(chosenGods, playerColor);
 
     }
+
+    /**
+     * Here, the legend is printed
+     * @param chosenGod     the god chosen by the players
+     * @param playerColor   the color chosen by the players
+     */
     public void printLegend(List<Pair<String, Gods>> chosenGod, java.util.Map<String, WorkerColor> playerColor) {
 
         if (chosenGod.isEmpty()) {
@@ -313,7 +331,7 @@ public class Printer {
         public static void space1(String string){
 
             int length = string.length();
-            String spaces;
+            //String spaces;
 
             for(int i=0 ;i<30-length;i++){
                 System.out.print(" ");
@@ -353,7 +371,7 @@ public class Printer {
     public void space(String string){
 
         int length = string.length();
-        String spaces = new String();
+        //String spaces = new String();
 
         for(int i=0 ;i<50-length;i++){
             print(" ");

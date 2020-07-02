@@ -9,13 +9,9 @@ import it.polimi.ingsw.ps51.model.Worker;
 import it.polimi.ingsw.ps51.model.WorkerColor;
 import it.polimi.ingsw.ps51.model.gods.Gods;
 import it.polimi.ingsw.ps51.utility.InputReader;
-import it.polimi.ingsw.ps51.utility.InterruptibleInputStream;
 import it.polimi.ingsw.ps51.utility.MessageHandler;
 import org.javatuples.Pair;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -42,6 +38,13 @@ public class Cli extends Supporter {
         getEvents().add(message);
     }
 
+    /**
+     * This is the main methods of the CLI.
+     * Here, the choice of which method is to call is handled by the usage of future string type and some cycles.
+     * When an event is received by the network, it is put in the array blocking queue and it is captured by the
+     * object MessageHandler.
+     * Then the stringFuture is updated and the correct method is called.
+     */
     @Override
     public void run() {
         launch();
@@ -186,6 +189,11 @@ public class Cli extends Supporter {
         printer.welcome();
     }
 
+    /**
+     * Here, the chose name phase is handled
+     * @return the nickname chosen by the client
+     * @throws InterruptedException if the reader is interrupted
+     */
     public String logIn() throws InterruptedException {
 
         String nickname = "";
@@ -197,7 +205,11 @@ public class Cli extends Supporter {
 
             if ( nickname.equals("")) {
                 printer.println(printer.colorToAnsi(Color.RED)+"Write something..." + printer.colorToAnsi(Color.CYAN));
-            }else {
+            }
+            if (nickname.contains(" ")) {
+                printer.println(printer.colorToAnsi(Color.RED)+"Write a nickname without space..." + printer.colorToAnsi(Color.CYAN));
+            }
+            else {
                 ok = true;
             }
         }
@@ -205,6 +217,11 @@ public class Cli extends Supporter {
         return nickname;
     }
 
+    /**
+     * Here, the selection of the number of player to play the game is handled
+     * @return the number of player chosen by the client
+     * @throws InterruptedException if the reader is interrupted
+     */
     public int numberOfPlayers() throws InterruptedException {
 
         int numberOfPlayers = 0;
@@ -231,6 +248,12 @@ public class Cli extends Supporter {
         return numberOfPlayers;
     }
 
+    /**
+     * Here, the entire list of gods is printed. Then, the client has to choose 2 or 3 gods.
+     * It depend by the Gods Number attribute set when the event was arrived.
+     * @return a list of God which the client has chosen for the game
+     * @throws InterruptedException if the reader is interrupted
+     */
     public List<Gods> chooseGodsDeck() throws InterruptedException {
 
         List<Gods> chosenGods = new ArrayList<>();
@@ -262,6 +285,11 @@ public class Cli extends Supporter {
         return chosenGods;
     }
 
+    /**
+     * Here, the client has to chose the god which he wants to play the game
+     * @return the god chosen
+     * @throws InterruptedException if the reader is interrupted
+     */
     public Gods chooseGodsPlayers() throws InterruptedException {
 
         Gods chosenGod = null;
@@ -292,6 +320,11 @@ public class Cli extends Supporter {
         return chosenGod;
     }
 
+    /**
+     * Here, the client has to write who will be the first player for this game
+     * @return the player chosen to be the first player
+     * @throws InterruptedException if the reader is interrupted
+     */
     public String chooseFirstPlayer() throws InterruptedException {
         String firstPlayer = null;
         ok = false;
@@ -311,10 +344,19 @@ public class Cli extends Supporter {
         return firstPlayer;
     }
 
+    /**
+     * The printer is called to print the updated map
+     * @throws OutOfMapException if there is a coordinates which is out of the boundaries of the map
+     */
     public void updateMap() throws OutOfMapException {
         printer.board(getMap() , getWorkers() ,getChosenGods(), getChosenColors());
     }
 
+    /**
+     * Here, the client chooses the place for his worker
+     * @return the coordinates where put his worker
+     * @throws InterruptedException  if the reader is interrupted
+     */
     public Coordinates placeWorkers() throws InterruptedException {
 
         Coordinates coordinates;
@@ -332,7 +374,11 @@ public class Cli extends Supporter {
         return coordinates;
     }
 
-
+    /**
+     * Here, the client has to select one of his workers to start his turn
+     * @return the worker chosen
+     * @throws InterruptedException  if the reader is interrupted
+     */
     public Worker chooseWorker() throws InterruptedException {
         int choice = 0;
         Worker worker;
@@ -362,6 +408,11 @@ public class Cli extends Supporter {
         return worker;
     }
 
+    /**
+     * The client has to write the coordinates where he wants to move his worker selected in the previously phase
+     * @return the coordinates where to move the selected worker
+     * @throws InterruptedException  if the reader is interrupted
+     */
     public Coordinates askMove() throws InterruptedException {
 
         int x = 0;
@@ -398,6 +449,11 @@ public class Cli extends Supporter {
         return coordinates;
     }
 
+    /**
+     * The client chooses the coordinates and an available level to build
+     * @return the pair with coordinates on which build and the level to be built
+     * @throws InterruptedException if the reader is interrupted
+     */
       public Pair<Coordinates, Level> askBuild() throws InterruptedException {
 
         int x;
@@ -483,6 +539,12 @@ public class Cli extends Supporter {
         return buildOn;
     }
 
+    /**
+     * Here, the client has to write yes or not to confirmed or not his decision.
+     * @return  true if the decision is confirmed
+     *          false if not
+     * @throws InterruptedException if the reader is interrupted
+     */
     public boolean makeDecision() throws InterruptedException {
 
         String answer="";
@@ -501,6 +563,11 @@ public class Cli extends Supporter {
         return answer.equals("Y");
     }
 
+    /**
+     * Using a reader and an interruptible input stream, the client has to confirm or not his selection
+     * @return  true if the move has confirmed
+     *          false if the client wants to modify his selection
+     */
     public boolean undo(){
         printer.println(printer.colorToAnsi(Color.BRIGHT_GREEN)+"Do you confirm your choice, press Y for yes, " +
                 "or N to abort and redo your last action" + printer.colorToAnsi(Color.CYAN));
@@ -557,6 +624,13 @@ public class Cli extends Supporter {
         printer.println(printer.colorToAnsi(Color.RED) + "The game is already started, try again later..." + printer.colorToAnsi(Color.WHITE));
     }
 
+    /**
+     * This method is used to control the user input, to verify if it is an integer
+     * and it is not out of bounds of the map
+     * @param car X or Y to be chosen
+     * @return an int which represents the coordinate selected by the client
+     * @throws InterruptedException if the reader is interrupted
+     */
     private int  coordinateCheck(String car) throws InterruptedException {
         ok = false;
         int coordinate = 0;
@@ -580,6 +654,11 @@ public class Cli extends Supporter {
         return coordinate;
     }
 
+    /**
+     * Here, the client has to indicate which color, in the available colors, he prefers to play the game
+     * @return the color selected by client
+     * @throws InterruptedException if the reader is interrupted
+     */
     public WorkerColor chooseColor() throws InterruptedException {
         ok = false;
         String choice;
