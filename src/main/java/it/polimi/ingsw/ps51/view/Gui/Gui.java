@@ -17,8 +17,6 @@ import java.awt.image.BufferedImage;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 
 public class Gui {
@@ -29,14 +27,14 @@ public class Gui {
     private ChooseGodsPanel chooseGodsPanel;
     private MapPanel mapPanel;
     private int buttonNumber;
-    private List<Gods> chosenGods;
+    private java.util.List<Gods> chosenGods;
     private Gods chosenGod;
     private Supporter s;
     private BoardButton[][] boardButtons;
     private BufferedImage myImage;
     private String player;
     private Coordinates chosenCoordinates;
-    private Pair<Coordinates, List<Level>> chosenPair;
+    private Pair<Coordinates, java.util.List<Level>> chosenPair;
     private Thread undoThread;
     private WorkerColor chosenColor;
     private Coordinates coordinates;
@@ -156,7 +154,7 @@ public class Gui {
         //frame.setSize(1400, 800);
 
         ColorPanel colorPanel = new ColorPanel(myImage);
-        List<JButton> colorButton = new ArrayList<>();
+        java.util.List<JButton> colorButton = new ArrayList<>();
 
         for (WorkerColor workerColor : s.getAvailableColors()) {
             colorButton.add(colorPanel.getSpecificButton(workerColor.ordinal()));
@@ -244,7 +242,7 @@ public class Gui {
         chooseGodsPanel = new ChooseGodsPanel();
         JLabel label = chooseGodsPanel.getChooseGods();
         label.setText("Choose a God");
-        List<JButton> chosenButtons = new ArrayList<>();
+        java.util.List<JButton> chosenButtons = new ArrayList<>();
 
         chosenGods = s.getAvailableGods();
 
@@ -360,7 +358,8 @@ public class Gui {
                                             if (!boardButtons[row][col].equals(boardButtons[j][i]))
                                                 boardButtons[row][col].setVisible(false);
 
-                                    mapPanel.getUndoContainer().setVisible(true);
+                                    mapPanel.getYesUndo().setEnabled(true);
+                                    mapPanel.getNoUndo().setEnabled(true);
                                     getChoice("PLACEWORKER");
                                     coordinates = new Coordinates(i, j);
                                        /* Thread workerPos = new Thread(() -> {
@@ -394,11 +393,11 @@ public class Gui {
         boardButtons = board.getBoardButtons();
 
         Map map = s.getMap();
-        List<Worker> workerList = s.getWorkers();
+        java.util.List<Worker> workerList = s.getWorkers();
 
 
         java.util.Map<String, WorkerColor> chosenColors = s.getChosenColors();
-        List<Pair<String, Gods>> chosenGods = s.getChosenGods();
+        java.util.List<Pair<String, Gods>> chosenGods = s.getChosenGods();
 
         int maxCoordinate = map.getMaxCoordinate() + 1;
 
@@ -469,7 +468,7 @@ public class Gui {
         //board = mapPanel.getBoardContainer();
         mapPanel.setChat("Choose Worker");
         mapPanel.getWorkerContainer().setVisible(true);
-        List<BoardButton> workerButtons = new ArrayList<>();
+        java.util.List<BoardButton> workerButtons = new ArrayList<>();
         boardButtons = board.getBoardButtons();
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -500,7 +499,8 @@ public class Gui {
                                     if(!boardButtons[row][col].equals(boardButtons[s.getValidChoicesWorkers().get(i).getPosition().getCoordinates().getX()][s.getValidChoicesWorkers().get(i).getPosition().getCoordinates().getY()]))
                                         boardButtons[row][col].setVisible(false);
 */
-                            mapPanel.getUndoContainer().setVisible(true);
+                            mapPanel.getYesUndo().setEnabled(true);
+                            mapPanel.getNoUndo().setEnabled(true);
                             getChoice("CHOOSEWORKER");
                             chosenWorker = s.getValidChoicesWorkers().get(i);
 
@@ -521,7 +521,7 @@ public class Gui {
 
         mapPanel.setChat("Move");
 
-        List<BoardButton> availableMoveButtons = new ArrayList<>();
+        java.util.List<BoardButton> availableMoveButtons = new ArrayList<>();
         boardButtons = board.getBoardButtons();
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -534,7 +534,7 @@ public class Gui {
 
         for (int i = 0; i < availableMoveButtons.size(); i++) {
             availableMoveButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.YELLOW, 2));
-            System.out.println(availableMoveButtons.get(i).getActionListeners().length);
+
             if (availableMoveButtons.get(i).getActionListeners().length > 0) {
                 availableMoveButtons.get(i).removeActionListener(availableMoveButtons.get(i).getActionListeners()[0]);
             }
@@ -558,8 +558,9 @@ public class Gui {
                                 }
                             }
 
+                            mapPanel.getYesUndo().setEnabled(true);
+                            mapPanel.getNoUndo().setEnabled(true);
                             chosenCoordinates = s.getValidChoicesMoves().get(i);
-                            mapPanel.getUndoContainer().setVisible(true);
                             getChoice("MOVE");
                         }
                     }
@@ -577,8 +578,8 @@ public class Gui {
         mapPanel.setChat("BUILD");
 
 
-        List<BoardButton> availableBuildButtons = new ArrayList<>();
-        List<JLabel> availableLevels = new ArrayList<>();
+        java.util.List<BoardButton> availableBuildButtons = new ArrayList<>();
+        java.util.List<JLabel> availableLevels = new ArrayList<>();
         boardButtons = board.getBoardButtons();
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -586,7 +587,7 @@ public class Gui {
             }
         }
 
-        for (Pair<Coordinates, List<Level>> validBuilds : s.getValidChoicesBuild()) {
+        for (Pair<Coordinates, java.util.List<Level>> validBuilds : s.getValidChoicesBuild()) {
             availableBuildButtons.add(board.getSpecificButtons(validBuilds.getValue0().getX(), validBuilds.getValue0().getY()));
         }
 
@@ -612,7 +613,7 @@ public class Gui {
                                 }
                             }
 
-                            for (Pair<Coordinates, List<Level>> validBuilds : s.getValidChoicesBuild()) {
+                            for (Pair<Coordinates, java.util.List<Level>> validBuilds : s.getValidChoicesBuild()) {
 
                                 if (validBuilds.getValue0().equals(chosenPair.getValue0())) {
 
@@ -631,7 +632,8 @@ public class Gui {
                                             if (m.getSource() == availableLevel) {
 
                                                 build = new Pair<>(chosenPair.getValue0(), Level.valueOf(availableLevel.getText().toUpperCase()));
-                                                mapPanel.getUndoContainer().setVisible(true);
+                                                mapPanel.getYesUndo().setEnabled(true);
+                                                mapPanel.getNoUndo().setEnabled(true);
                                                 getChoice("BUILD");
 
                                             }
@@ -653,7 +655,7 @@ public class Gui {
 
         JButton yes = mapPanel.getYes();
         JButton no = mapPanel.getNo();
-        if (yes.getActionListeners().length > 1) {
+        if (yes.getActionListeners().length > 0) {
             yes.removeActionListener(yes.getActionListeners()[0]);
         }
         yes.addActionListener(e -> {
@@ -666,7 +668,7 @@ public class Gui {
             }
         });
 
-        if (no.getActionListeners().length > 1) {
+        if (no.getActionListeners().length > 0) {
             no.removeActionListener(no.getActionListeners()[0]);
         }
         no.addActionListener(e -> {
@@ -723,8 +725,8 @@ public class Gui {
     }
 
     public void endGame() {
-       winPanel.getGameEnded().setVisible(true);
-       losePanel.getGameEnded().setVisible(true);
+        winPanel.getGameEnded().setVisible(true);
+        losePanel.getGameEnded().setVisible(true);
     }
 
     public void outOfRoom() {
@@ -750,9 +752,9 @@ public class Gui {
 
     private void getChoice(String methodName) {
 
-        JButton yes = mapPanel.getUndoContainer().getYes();
-        JButton no = mapPanel.getUndoContainer().getNo();
-        mapPanel.getUndoContainer().getText().setText("Do you confirm your choice ?");
+        JButton yes = mapPanel.getYesUndo();
+        JButton no = mapPanel.getNoUndo();
+
 
         Timer yesTimer = new Timer(5000, null);
 
@@ -764,7 +766,8 @@ public class Gui {
                 no.removeActionListener(no.getActionListeners()[0]);
                 //here we have to handle the yes case...
 
-                SwingUtilities.invokeLater( () -> mapPanel.getUndoContainer().setVisible(false) );
+                mapPanel.getYesUndo().setEnabled(false);
+                mapPanel.getNoUndo().setEnabled(false);
 
                 switch (methodName) {
                     case "PLACEWORKER":
@@ -795,7 +798,8 @@ public class Gui {
                 no.removeActionListener(this);
                 //here we have to handle the no case...
 
-                SwingUtilities.invokeLater( () -> mapPanel.getUndoContainer().setVisible(false) );
+                mapPanel.getYesUndo().setEnabled(false);
+                mapPanel.getNoUndo().setEnabled(false);
 
                 switch (methodName){
                     case "PLACEWORKER":
@@ -832,4 +836,3 @@ public class Gui {
 
 
 }
-

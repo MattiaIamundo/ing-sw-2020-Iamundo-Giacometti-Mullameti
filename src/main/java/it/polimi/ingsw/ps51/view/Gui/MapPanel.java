@@ -1,12 +1,24 @@
 package it.polimi.ingsw.ps51.view.Gui;
 
 
+import it.polimi.ingsw.ps51.events.events_for_server.*;
+import it.polimi.ingsw.ps51.events.events_for_server.Build;
+import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
+import it.polimi.ingsw.ps51.model.*;
+import it.polimi.ingsw.ps51.model.gods.Gods;
+import it.polimi.ingsw.ps51.view.Supporter;
+import org.javatuples.Pair;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MapPanel extends JPanel {
 
@@ -29,8 +41,11 @@ public class MapPanel extends JPanel {
     private Container levelContainer;
     private JLabel[] levels;
     ImageIcon[] levelImages;
-    UndoContainer undoContainer;
-    private Label undo;
+    private JTextPane textDecisio;
+    private JTextPane textChat;
+    private JButton yesUndo;
+    private JButton noUndo;
+    private Container undoContainer;
     private Container westContainer;
     private Container pContainer;
     private Container levelWorkerContainer;
@@ -50,9 +65,25 @@ public class MapPanel extends JPanel {
         boardContainer.setSize(700, 700);
         this.add(boardContainer);
         definePlayerContainer();
-        undoContainer= new UndoContainer();
-        undoContainer.setPreferredSize(new Dimension(400,100));
+        undoContainer = new Container();
+        undoContainer.setLayout(new GridBagLayout());
+
         undoContainer.setVisible(true);
+
+        yesUndo = new JButton();
+        noUndo = new JButton();
+        defineButtons();
+        yesUndo.setVisible(true);
+        yesUndo.setEnabled(false);
+        gbc.gridy=1;
+        gbc.gridx=0;
+        undoContainer.add(yesUndo , gbc);
+        noUndo.setVisible(true);
+        noUndo.setEnabled(false);
+        gbc.gridy=1;
+        gbc.gridx=1;
+        gbc.insets = new Insets(0,30,0,30);
+        undoContainer.add(noUndo , gbc);
         gbc.gridx=1;
         gbc.gridy=1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -62,14 +93,14 @@ public class MapPanel extends JPanel {
         defineLevelImages();
 
 
-        defineChatLabel();
+        defineChatDecisionLabel();
         gbc.gridx=1;
         gbc.gridy=0;
         gbc.anchor = GridBagConstraints.FIRST_LINE_END;
         gbc.insets = new Insets(0,20,0,0);
         container.add(westContainer , gbc);
         this.add(container);
-        defineDecision();
+
 
     }
 
@@ -172,7 +203,7 @@ public class MapPanel extends JPanel {
     private void definePlayerContainer(){
         pContainer = new Container();
         pContainer.setLayout(new GridLayout(1,3,10,10));
-        pContainer.setPreferredSize(new Dimension(400,220));
+        pContainer.setPreferredSize(new Dimension(400,250));
         playerContainer = new Container[3];
         godPic = new JLabel[3];
         playerName = new JLabel[3];
@@ -190,7 +221,7 @@ public class MapPanel extends JPanel {
             godPic[i] = new JLabel();
             godPic[i].setHorizontalAlignment(SwingConstants.CENTER);
             godPic[i].setVerticalAlignment(SwingConstants.CENTER);
-            godPic[i].setPreferredSize(new Dimension(115,210));
+            godPic[i].setPreferredSize(new Dimension(115,220));
 
             gbc.anchor = 10;
             gbc.gridx = 0;
@@ -221,26 +252,76 @@ public class MapPanel extends JPanel {
     }
 
 
-    private void defineChatLabel(){
-        chat = new JLabel("welcome");
+    private void defineButtons(){
+        yesUndo = new JButton("OK");
+        try {
+            BufferedImage green = ImageIO.read(getClass().getResourceAsStream("/Buttons/btn_green.png"));
+            ImageIcon greenButton = new ImageIcon(new ImageIcon(green).getImage().getScaledInstance(150,70,Image.SCALE_DEFAULT));
+            yesUndo.setIcon(greenButton);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        yesUndo.setSize(150,70);
+        yesUndo.setHorizontalTextPosition(JButton.CENTER);
+        yesUndo.setVerticalTextPosition(JButton.CENTER);
+        yesUndo.setFont(new Font("Times New Roman", Font.BOLD, 24));
+        yesUndo.setForeground(Color.WHITE);
+        yesUndo.setOpaque(false);
+        yesUndo.setContentAreaFilled(false);
+        yesUndo.setBorderPainted(false);
+        yesUndo.setBorder(null);
+        noUndo = new JButton("UNDO");
+        try {
+            BufferedImage red = ImageIO.read(getClass().getResourceAsStream("/Buttons/btn_coral.png"));
+            ImageIcon redButton = new ImageIcon(new ImageIcon(red).getImage().getScaledInstance(150,70,Image.SCALE_DEFAULT));
+            noUndo.setIcon(redButton);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        noUndo.setSize(150,70);
+        noUndo.setHorizontalTextPosition(JButton.CENTER);
+        noUndo.setVerticalTextPosition(JButton.CENTER);
+        noUndo.setFont(new Font("Times New Roman", Font.BOLD, 24));
+        noUndo.setForeground(Color.WHITE);
+        noUndo.setOpaque(false);
+        noUndo.setContentAreaFilled(false);
+        noUndo.setBorderPainted(false);
+        noUndo.setBorder(null);
+    }
+    private void defineTextPane(JTextPane textPane){
+        SimpleAttributeSet attributes = new SimpleAttributeSet();
+        StyleConstants.setAlignment(attributes, StyleConstants.ALIGN_CENTER);
+        StyleConstants.setFontSize(attributes,18);
+        StyleConstants.setForeground(attributes,Color.WHITE);
+        textPane.setParagraphAttributes(attributes, true);
+        textPane.setEditable(false);
+        textPane.setOpaque(false);
 
+
+    }
+    private void defineChatDecisionLabel(){
+        chat = new JLabel();
+        decision = new JLabel();
         chat.setSize(400,100);
         try {
             BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/bluechat.png"));
             ImageIcon chatImage = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(400, 100, Image.SCALE_DEFAULT));
 
             chat.setIcon(chatImage);
+            decision.setIcon(chatImage);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        textChat = new JTextPane();
+        defineTextPane(textChat);
+
         chat.setHorizontalAlignment(SwingConstants.CENTER);
         chat.setVerticalAlignment(SwingConstants.CENTER);
         chat.setHorizontalTextPosition(SwingConstants.CENTER);
         chat.setVerticalTextPosition(SwingConstants.CENTER);
-        chat.setForeground(Color.WHITE);
-        chat.setFont(new Font ("Times new Roman" , Font.ITALIC , 18));
         chat.setBorder(BorderFactory.createMatteBorder(5,5,5,5, Color.WHITE));
-
+        chat.setLayout(new BorderLayout());
+        chat.add(textChat , BorderLayout.CENTER);
         decisionContainer = new Container();
         decisionContainer.setSize(865*2/3 , 30);
         decisionContainer.setLayout(new GridLayout(1,2));
@@ -259,32 +340,28 @@ public class MapPanel extends JPanel {
         no.setOpaque(false);
         no.setContentAreaFilled(false);
         no.setBorder(BorderFactory.createMatteBorder(5,5,5,5, new Color(153,0,0)));
-
-        decision = new JLabel();
-        decision.setText("Enter Y for Yes or N for No !!");
+        textDecisio = new JTextPane();
+        defineTextPane(textDecisio);
         decision.setLayout(new BorderLayout());
         decision.setSize(400, 100);
         decision.setHorizontalAlignment(SwingConstants.CENTER);
         decision.setVerticalAlignment(SwingConstants.NORTH);
-        decision.setForeground(Color.BLUE);
-        decision.setFont(new Font ("Times new Roman" , Font.ITALIC , 18));
-        decision.setBorder(BorderFactory.createMatteBorder(0,0,0,0, Color.BLUE));
+        decision.setBorder(BorderFactory.createMatteBorder(5,5,5,5, Color.WHITE));
         decisionContainer.add(yes);
         decisionContainer.add(no);
+        decision.add(textDecisio,BorderLayout.PAGE_START);
         decision.add(decisionContainer , BorderLayout.PAGE_END);
         decision.setVisible(false);
-        chat.add(decision);
+
         gbc.gridx=1;
         gbc.gridy=2;
         westContainer.add(chat,gbc);
+        westContainer.add(decision,gbc);
     }
 
-    private void defineDecision(){
-
-    }
 
     public void setChat(String command){
-        chat.setText(command);
+        textChat.setText(command);
     }
 
     public void setWorkerBorder(int nr ){
@@ -328,7 +405,7 @@ public class MapPanel extends JPanel {
     public void setGodPic(String god , int index) {
         try {
             BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/GodCards/"+god.toLowerCase()+".png"));
-            ImageIcon godImage = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(115,210,Image.SCALE_DEFAULT)));
+            ImageIcon godImage = new ImageIcon((new ImageIcon(bufferedImage1).getImage().getScaledInstance(115,220,Image.SCALE_DEFAULT)));
             godPic[index].setIcon(godImage);
         } catch (IOException e) {
             e.printStackTrace();
@@ -361,9 +438,9 @@ public class MapPanel extends JPanel {
     }
 
     public void makeDecision(String string){
-        chat.setVisible(true);
+        chat.setVisible(false);
         decision.setVisible(true);
-        decision.setText(string);
+        textDecisio.setText(string);
     }
 
     public JButton getYes() {
@@ -374,7 +451,7 @@ public class MapPanel extends JPanel {
         return no;
     }
 
-    public static void main(String[] args) throws IOException {
+    /*public static void main(String[] args) throws IOException {
 
         JFrame frame = new JFrame("Start");
         BufferedImage myImage = ImageIO.read(new File("src/main/resources/newBackground.png"));
@@ -383,9 +460,18 @@ public class MapPanel extends JPanel {
         frame.setSize(1400,700);
         frame.setVisible(true);
 
+    }*/
+
+    /*public JLabel getUndoContainer() {
+        System.out.println("get");
+        return this.undo;
+    }*/
+    public JButton getYesUndo() {
+        return yesUndo;
     }
 
-    public UndoContainer getUndoContainer() {
-        return undoContainer;
+    public JButton getNoUndo() {
+        return noUndo;
     }
+
 }
