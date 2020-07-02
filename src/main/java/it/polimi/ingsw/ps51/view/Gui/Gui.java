@@ -549,9 +549,15 @@ public class Gui {
 
                             availableMoveButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));
 
-                            for (BoardButton button : availableMoveButtons)
+                            /*for (BoardButton button : availableMoveButtons)
                                 if (!button.equals(availableMoveButtons.get(i)))
-                                    button.setVisible(false);
+                                    button.setVisible(false);*/
+                            for (int k = 0; k < 5; k++) {
+                                for (int l = 0; l < 5; l++) {
+                                    if (!boardButtons[l][k].equals(availableMoveButtons.get(i)))
+                                        boardButtons[l][k].setVisible(false);
+                                }
+                            }
 
                             chosenCoordinates = s.getValidChoicesMoves().get(i);
                             mapPanel.getUndoContainer().setVisible(true);
@@ -600,8 +606,11 @@ public class Gui {
 
                             availableBuildButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));
                             chosenPair = s.getValidChoicesBuild().get(i);
-                            for(JButton button : availableBuildButtons){
-                                button.setVisible(false);
+                            for (int k = 0; k < 5; k++) {
+                                for (int l = 0; l < 5; l++) {
+                                    if (!boardButtons[l][k].equals(availableBuildButtons.get(i)))
+                                        boardButtons[l][k].setVisible(false);
+                                }
                             }
 
                             for (Pair<Coordinates, List<Level>> validBuilds : s.getValidChoicesBuild()) {
