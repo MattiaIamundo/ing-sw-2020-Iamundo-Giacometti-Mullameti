@@ -99,6 +99,7 @@ public class Room extends Observable<EventForServer> implements Runnable, RoomOb
             this.mapOfNicknameAndServerInterface.get(s).closeConnection();
         }
         logger.info("[ROOM]: I'm shutting down...");
+        System.exit(0);
     }
 
     /**
