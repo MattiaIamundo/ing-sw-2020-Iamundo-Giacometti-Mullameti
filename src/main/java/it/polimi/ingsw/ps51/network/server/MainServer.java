@@ -172,7 +172,11 @@ public class MainServer implements Runnable{
         allNicknamesOfPlayers.remove(nickname);
         actualNicknameInSearchOfRoom.remove(nickname);
         ServerInterface si = mapOfNicknameAndServerInterface.get(nickname);
-        si.closeConnection();
+        try {
+            si.closeConnection();
+        } catch (NullPointerException e) {
+            logger.info("connection already turn down");
+        }
         mapOfNicknameAndServerInterface.remove(nickname, si);
     }
 
