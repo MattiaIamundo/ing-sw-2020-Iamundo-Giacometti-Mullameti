@@ -152,7 +152,7 @@ public class MapPanel extends JPanel {
             levels[i].setContentAreaFilled(false);
             //levels[i].setBorderPainted(false);
             levels[i].setBorder(BorderFactory.createLineBorder(Color.red , 0));
-
+            levels[i].setEnabled(false);
         }
 
         gbc.insets = new Insets(5,0,5,0);
