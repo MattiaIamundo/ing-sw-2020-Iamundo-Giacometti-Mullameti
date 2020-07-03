@@ -518,10 +518,10 @@ public class Gui {
                                 }
                             }
                             for(JButton button : workerButtons){
-                                if (!button.equals(workerButtons.get(i))){
-                                    button.setBorder(BorderFactory.createLineBorder(Color.BLUE , 0));
-                                    button.setEnabled(false);
-                                }
+
+                                button.setBorder(BorderFactory.createLineBorder(Color.BLUE , 0));
+                                button.setEnabled(false);
+
                             }
                             mapPanel.getYesUndo().setEnabled(true);
                             mapPanel.getNoUndo().setEnabled(true);
