@@ -205,11 +205,9 @@ public class Cli extends Supporter {
 
             if ( nickname.equals("")) {
                 printer.println(printer.colorToAnsi(Color.RED)+"Write something..." + printer.colorToAnsi(Color.CYAN));
-            }
-            if (nickname.contains(" ")) {
+            }else if (nickname.contains(" ")) {
                 printer.println(printer.colorToAnsi(Color.RED)+"Write a nickname without space..." + printer.colorToAnsi(Color.CYAN));
-            }
-            else {
+            }else {
                 ok = true;
             }
         }
