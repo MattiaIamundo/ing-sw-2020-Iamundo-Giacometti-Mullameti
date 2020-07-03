@@ -723,8 +723,8 @@ public class Gui {
      */
     public void winGame() throws IOException {
         frame.getContentPane().removeAll();
-        frame.setSize(625 * 3 / 2, 415 * 3 / 2);
-        Image winImage;
+        frame.setSize(1400,700);
+        BufferedImage winImage;
 
         winImage = ImageIO.read(getClass().getResourceAsStream("/winBackground.jpg"));
 
@@ -738,7 +738,7 @@ public class Gui {
      */
     public void loseGame() {
         frame.getContentPane().removeAll();
-        frame.setSize(625 * 3 / 2, 415 * 3 / 2);
+        frame.setSize(1400, 700);
 
         LosePanel losePanel = new LosePanel();
         losePanel.getText().setText("YOU LOST !!!");
@@ -750,7 +750,7 @@ public class Gui {
      */
     public void disconnectGame() {
         frame.getContentPane().removeAll();
-        frame.setSize(625 * 3 / 2, 415 * 3 / 2);
+        frame.setSize(1400, 700);
         LosePanel disconnectGame = new LosePanel();
         disconnectGame.getText().setText("Game Disconnected !!!");
         frame.getContentPane().add(disconnectGame);
@@ -760,16 +760,25 @@ public class Gui {
      * This method lets the player that the game has ended.
      */
     public void endGame() {
-        winPanel.getGameEnded().setVisible(true);
-        losePanel.getGameEnded().setVisible(true);
+        if (winPanel != null)
+            winPanel.getGameEnded().setVisible(true);
+        if (losePanel != null)
+            losePanel.getGameEnded().setVisible(true);
+        if (losePanel == null && winPanel == null) {
+            frame.getContentPane().removeAll();
+            frame.setSize(1400, 700);
+            LosePanel endGame = new LosePanel();
+            endGame.getText().setText("You Lose !!! End Game");
+            frame.getContentPane().add(endGame);
+            frame.setVisible(true);
+        }
     }
     /**
      * This method lets the player know that he is out of the room.
      */
     public void outOfRoom() {
         frame.getContentPane().removeAll();
-        frame.setSize(625 * 3 / 2, 415 * 3 / 2);
-        System.out.println("Out if room");
+        frame.setSize(1400, 700);
         LosePanel outOfRoom = new LosePanel();
         outOfRoom.getText().setText("Out of Room");
         frame.getContentPane().add(outOfRoom);
