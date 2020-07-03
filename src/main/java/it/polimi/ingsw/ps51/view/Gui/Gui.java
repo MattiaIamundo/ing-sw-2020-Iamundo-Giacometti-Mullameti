@@ -572,6 +572,8 @@ public class Gui {
                                 for (int l = 0; l < 5; l++) {
                                     if (!boardButtons[l][k].equals(availableMoveButtons.get(i)))
                                         boardButtons[l][k].setVisible(false);
+                                    else
+                                        boardButtons[l][k].setEnabled(false);
                                 }
                             }
 
@@ -627,6 +629,8 @@ public class Gui {
                                 for (int l = 0; l < 5; l++) {
                                     if (!boardButtons[l][k].equals(availableBuildButtons.get(i)))
                                         boardButtons[l][k].setVisible(false);
+                                    else
+                                        boardButtons[l][k].setEnabled(false);
                                 }
                             }
 
