@@ -4,9 +4,11 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-
+/**
+ * @author Merita Mullameti
+ * This class is a JPanel that goes to the main frame when the game ends and we have a winner.
+ */
 public class WinPanel extends JPanel {
 
     Image background;
@@ -72,14 +74,5 @@ public class WinPanel extends JPanel {
 
     }
     public JLabel getGameEnded(){return gameEnded;}
- /* public static void main(String[] args) throws IOException {
 
-        JFrame frame = new JFrame("Start");
-        BufferedImage myImage = ImageIO.read(new File("src/main/resources/winBackground.jpg"));
-        frame.setContentPane(new WinPanel(myImage));
-        frame.setSize(625*3/2, 415*3/2);
-        frame.setResizable(true);
-        frame.setVisible(true);
-
-    }*/
 }

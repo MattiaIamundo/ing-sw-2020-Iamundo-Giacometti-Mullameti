@@ -8,6 +8,11 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+/**
+ * @author Merita Mullameti
+ * This class is a JPanel that goes to the main frame when
+ * we need the player to choose the color that will rappresent him through the game.
+ */
 public class ColorPanel extends JPanel {
 
     GridBagConstraints gbc = new GridBagConstraints();

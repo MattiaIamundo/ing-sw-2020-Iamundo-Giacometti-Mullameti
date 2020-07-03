@@ -1,16 +1,16 @@
 package it.polimi.ingsw.ps51.view.Gui;
 
-import com.google.common.escape.ArrayBasedEscaperMap;
-import it.polimi.ingsw.ps51.model.WorkerColor;
-import it.polimi.ingsw.ps51.model.gods.Gods;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+
+/**
+ * @author Merita Mullameti
+ * This class is a JPanel for the first player to choose the player that will start the game.
+ */
 
 public class FirstPlayerPanel extends JPanel {
 
@@ -89,16 +89,4 @@ public class FirstPlayerPanel extends JPanel {
         return players;
     }
 
-
-    public static void main(String[] args) throws IOException {
-
-        JFrame frame = new JFrame("Start");
-        BufferedImage myImage = ImageIO.read(new File("src/main/resources/SantoriniBoard.png"));
-        frame.setContentPane(new ColorPanel(myImage));
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setUndecorated(true);
-        frame.setVisible(true);
-
-    }
-   
 }

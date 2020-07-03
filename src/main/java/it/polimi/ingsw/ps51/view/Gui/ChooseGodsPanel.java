@@ -7,7 +7,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
+/**
+ * @author Merita Mullameti
+ * This class is a JPanel for the player to choose a number of gods based on the number of players
+ * and after for each player to choose only one god.
+ */
 
 public class ChooseGodsPanel extends JPanel {
 

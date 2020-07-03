@@ -6,10 +6,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
+/**
+ * @author Merita Mullameti
+ * This class is a JPanel for the player to log in by choosing a nickname.
+ */
 
 public class LogInPanel extends JPanel {
-
 
     JLabel nicknameError;
     JButton submitButton;
@@ -17,7 +19,6 @@ public class LogInPanel extends JPanel {
     JLabel welcome;
     JLabel enterNickname;
     JTextField nickname;
-
 
     public LogInPanel() {
 
@@ -103,16 +104,6 @@ public class LogInPanel extends JPanel {
     public void setNicknameError(Boolean err) {
         nicknameError.setVisible(err);
     }
-
-   /* public static void main(String[] args) {
-        JFrame frame = new JFrame("Start");
-        LogInPanel logInPanel = new LogInPanel();
-        frame.add(logInPanel);
-        frame.setSize(635, 635);
-        frame.setResizable(false);
-        frame.setVisible(true);
-
-    }*/
 
 
 }

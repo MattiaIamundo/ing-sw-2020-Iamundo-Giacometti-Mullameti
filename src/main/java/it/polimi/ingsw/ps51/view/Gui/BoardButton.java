@@ -6,8 +6,11 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+/**
+ * @author Merita Mullameti
+ * This class is a Button in which are collected all the elements that need to be in the buttons of the board.
+ */
 public class BoardButton extends JButton {
-
 
     GridBagConstraints gbc  = new GridBagConstraints();
     private Container buttonContainer;
@@ -74,7 +77,6 @@ public class BoardButton extends JButton {
 
     public void setWorker(ImageIcon icon) {
         worker.setIcon(new ImageIcon(icon.getImage().getScaledInstance(865*3/60,830*3/30,Image.SCALE_DEFAULT)));
-
     }
 
     public JLabel[] getLevel() {
@@ -85,20 +87,5 @@ public class BoardButton extends JButton {
         return worker;
     }
 
-    public Container getButtonContainer() {
-        return buttonContainer;
-    }
 
-    public void setButtonContainer(Container buttonContainer) {
-        this.buttonContainer = buttonContainer;
-    }
-
-    /* public static void main(String[] args) throws IOException {
-        JFrame frame = new JFrame("Start");
-        frame.setContentPane(new ButtonContainer());
-        frame.setSize(865*2/15,830*2/15);
-        frame.setResizable(false);
-        frame.setVisible(true);
-
-    }*/
 }

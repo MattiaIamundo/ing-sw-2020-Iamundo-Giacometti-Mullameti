@@ -5,7 +5,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
+/**
+ * @author Merita Mullameti
+ * This class is a JPanel to appear in the main frame when the game ends and the player looses,
+ * in case of out of room and in case of disconnection.
+ */
 public class LosePanel extends JPanel {
 
     private JLabel[] trumpets ;
@@ -65,16 +69,6 @@ public class LosePanel extends JPanel {
 
     }
 
-    /*public static void main(String[] args) {
-
-        JFrame frame = new JFrame("Start");
-
-        frame.setContentPane(new LosePanel());
-        frame.setSize(625*3/2, 415*3/2);
-        frame.setResizable(true);
-        frame.setVisible(true);
-
-    }*/
 
 
 }

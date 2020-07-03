@@ -1,24 +1,17 @@
 package it.polimi.ingsw.ps51.view.Gui;
 
 
-import it.polimi.ingsw.ps51.events.events_for_server.*;
-import it.polimi.ingsw.ps51.events.events_for_server.Build;
-import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
-import it.polimi.ingsw.ps51.model.*;
-import it.polimi.ingsw.ps51.model.gods.Gods;
-import it.polimi.ingsw.ps51.view.Supporter;
-import org.javatuples.Pair;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+/**
+ * @author Merita Mullameti
+ * This class is a JPanel that describes the frame the game takes place.
+ */
 
 public class MapPanel extends JPanel {
 
@@ -111,6 +104,9 @@ public class MapPanel extends JPanel {
         g.drawImage(background, 0, 0,this.getWidth(),this.getHeight(), this);
     }
 
+    /**
+     * This method defines the details of the container and the level pictures.
+     */
 
 
     private void defineLevelImages(){
@@ -129,7 +125,6 @@ public class MapPanel extends JPanel {
         levels[1] = new JLabel("Second");
         levels[2] = new JLabel("Third");
         levels[3] = new JLabel("Dome");
-
 
         try {
             BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/first.png"));
@@ -155,8 +150,6 @@ public class MapPanel extends JPanel {
             levels[i].setSize(levels[i].getIcon().getIconWidth(),levels[i].getIcon().getIconHeight());
 
         }
-
-
 
         gbc.insets = new Insets(5,0,5,0);
 
@@ -186,7 +179,6 @@ public class MapPanel extends JPanel {
             workerContainer.add(workers[i],gbc);
         }
 
-
         gbc.gridx = 0;
         gbc.gridy = 0;
         levelWorkerContainer.add(workerContainer,gbc);
@@ -198,9 +190,14 @@ public class MapPanel extends JPanel {
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.FIRST_LINE_START;
         container.add(levelWorkerContainer,gbc);
-
     }
+
+    /**
+     * This method defines the details of the container, the player's names and the god pictures.
+     */
+
     private void definePlayerContainer(){
+
         pContainer = new Container();
         pContainer.setLayout(new GridLayout(1,3,10,10));
         pContainer.setPreferredSize(new Dimension(400,250));
@@ -232,27 +229,20 @@ public class MapPanel extends JPanel {
 
         }
 
-
-        /*ImageIcon godImage1 = new ImageIcon((new ImageIcon("src/main/resources/GodCards/apollo.png").getImage().getScaledInstance(115,200,Image.SCALE_DEFAULT)));
-        godPic[0].setIcon(godImage1);
-        ImageIcon godImage2 = new ImageIcon((new ImageIcon("src/main/resources/GodCards/pan.png").getImage().getScaledInstance(115,200,Image.SCALE_DEFAULT)));
-        godPic[1].setIcon(godImage2);
-        ImageIcon godImage3 = new ImageIcon((new ImageIcon("src/main/resources/GodCards/artemis.png").getImage().getScaledInstance(115,200,Image.SCALE_DEFAULT)));
-        godPic[2].setIcon(godImage3);*/
-
-
         pContainer.add(playerContainer[0]);
-
         pContainer.add(playerContainer[1]);
-
         pContainer.add(playerContainer[2]);
         gbc.gridx=1;
         gbc.gridy=0;
         westContainer.add(pContainer,gbc);
     }
 
+    /**
+     * This method defines the details of the "OK" and "UNDO" buttons.
+     */
 
     private void defineButtons(){
+
         yesUndo = new JButton("OK");
         try {
             BufferedImage green = ImageIO.read(getClass().getResourceAsStream("/Buttons/btn_green.png"));
@@ -288,6 +278,11 @@ public class MapPanel extends JPanel {
         noUndo.setBorderPainted(false);
         noUndo.setBorder(null);
     }
+
+    /**
+     * This method defines the details of the text used in the chat and decision label.
+     */
+
     private void defineTextPane(JTextPane textPane){
         SimpleAttributeSet attributes = new SimpleAttributeSet();
         StyleConstants.setAlignment(attributes, StyleConstants.ALIGN_CENTER);
@@ -296,9 +291,12 @@ public class MapPanel extends JPanel {
         textPane.setParagraphAttributes(attributes, true);
         textPane.setEditable(false);
         textPane.setOpaque(false);
-
-
     }
+
+    /**
+     * This method defines the details of the chat label e decision label.
+     */
+
     private void defineChatDecisionLabel(){
         chat = new JLabel();
         decision = new JLabel();
@@ -343,7 +341,7 @@ public class MapPanel extends JPanel {
         textDecisio = new JTextPane();
         defineTextPane(textDecisio);
         decision.setLayout(new BorderLayout());
-        decision.setSize(400, 100);
+        decision.setSize(400, 150);
         decision.setHorizontalAlignment(SwingConstants.CENTER);
         decision.setVerticalAlignment(SwingConstants.NORTH);
         decision.setBorder(BorderFactory.createMatteBorder(5,5,5,5, Color.WHITE));
@@ -359,7 +357,6 @@ public class MapPanel extends JPanel {
         westContainer.add(decision,gbc);
     }
 
-
     public void setChat(String command){
         textChat.setText(command);
     }
@@ -367,6 +364,7 @@ public class MapPanel extends JPanel {
     public void setWorkerBorder(int nr ){
         workers[nr].setBorder(BorderFactory.createLineBorder(Color.RED , 2));
     }
+
     public ImageIcon getWorkerImages(String color){
         ImageIcon imageIcon = null;
         try {
@@ -380,10 +378,6 @@ public class MapPanel extends JPanel {
 
     public Container getWorkerContainer() {
         return workerContainer;
-    }
-
-    public Container getLevelContainer() {
-        return levelContainer;
     }
 
     public void setWorkerImages(String color ){
@@ -412,6 +406,7 @@ public class MapPanel extends JPanel {
         }
         godPic[index].setVisible(true);
     }
+
     public void setPlayerName(String name , int index , String color){
         playerName[index].setText(name.toUpperCase());
         switch (color){
@@ -425,9 +420,7 @@ public class MapPanel extends JPanel {
                 playerName[index].setForeground(Color.WHITE);
                 break;
         }
-
     }
-
 
     public void setLevelImages(int nr ){
         levels[nr].setBorder(BorderFactory.createLineBorder(Color.RED , 2));
@@ -453,21 +446,6 @@ public class MapPanel extends JPanel {
         return no;
     }
 
-    /*public static void main(String[] args) throws IOException {
-
-        JFrame frame = new JFrame("Start");
-        BufferedImage myImage = ImageIO.read(new File("src/main/resources/newBackground.png"));
-        frame.setContentPane(new MapPanel(myImage));
-        frame.pack();
-        frame.setSize(1400,700);
-        frame.setVisible(true);
-
-    }*/
-
-    /*public JLabel getUndoContainer() {
-        System.out.println("get");
-        return this.undo;
-    }*/
     public JButton getYesUndo() {
         return yesUndo;
     }

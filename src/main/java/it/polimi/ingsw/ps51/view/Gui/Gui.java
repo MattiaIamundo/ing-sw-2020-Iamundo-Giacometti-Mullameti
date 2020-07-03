@@ -18,6 +18,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * This class is dedicated to the managing of the frames and the other components during the game.
+ */
 
 public class Gui {
 
@@ -43,9 +46,7 @@ public class Gui {
     private Worker chosenWorker;
     private WinPanel winPanel;
     private LosePanel losePanel;
-    int width;
-    int height;
-    GraphicsDevice gd;
+
 
     public Gui(Supporter supporter) {
         s = supporter;
@@ -63,7 +64,9 @@ public class Gui {
 
     }
 
-
+    /**
+     * This method launches the frame.
+     */
     public void launch() {
         frame.addWindowListener(new WindowAdapter() {
             @Override
@@ -80,8 +83,12 @@ public class Gui {
 
         frame.setVisible(true);
         frame.setResizable(false);
-
     }
+
+    /**
+     * This method launches the first panel.
+     * The player enters a nickname. If the nickname is already chosen from another player then he must choose another one.
+     */
 
     public void logIn() {
 
@@ -119,10 +126,11 @@ public class Gui {
 
 
     }
-
+    /**
+     * This method launches the number of players panel. The first player chooses the number of players on the game.
+     */
     public void numberOfPlayers() {
         frame.getContentPane().removeAll();
-        //frame.setSize(635, 635);
 
         NrOfPlayersPanel nrOfPlayersPanel = new NrOfPlayersPanel();
         JButton[] nrButton = nrOfPlayersPanel.getNrButton();
@@ -148,10 +156,12 @@ public class Gui {
         frame.getContentPane().add(nrOfPlayersPanel);
         frame.setVisible(true);
     }
-
+    /**
+     * This method launches the color panel. Each player chooses the color that will represent them through the game.
+     */
     public void chooseColor() {
         frame.getContentPane().removeAll();
-        //frame.setSize(1400, 800);
+
 
         ColorPanel colorPanel = new ColorPanel(myImage);
         java.util.List<JButton> colorButton = new ArrayList<>();
@@ -188,16 +198,17 @@ public class Gui {
         frame.getContentPane().add(colorPanel);
         frame.setVisible(true);
     }
-
+    /**
+     * This method launches the choose gods panel. One of the players chooses 2 or 3 gods based on the number of players.
+     */
     public void chooseGodsDeck() {
         frame.getContentPane().removeAll();
-        //frame.setSize(1300, 700);
+
 
         chooseGodsPanel = new ChooseGodsPanel();
         JLabel label = chooseGodsPanel.getChooseGods();
         label.setText("Choose " + s.getGodsNum() + " Gods");
         JButton[] godButtons = chooseGodsPanel.getGodButtons();
-
 
         for (JButton button : godButtons) {
             if (button.getActionListeners().length > 0) {
@@ -235,10 +246,13 @@ public class Gui {
         frame.setVisible(true);
 
     }
-
+    /**
+     * This method launches the gods player panel. Each player must choose only one god.
+     */
     public void chooseGodsPlayers() {
+
         frame.getContentPane().removeAll();
-        //frame.setSize(1300, 700);
+
         chooseGodsPanel = new ChooseGodsPanel();
         JLabel label = chooseGodsPanel.getChooseGods();
         label.setText("Choose a God");
@@ -289,7 +303,9 @@ public class Gui {
         frame.setVisible(true);
 
     }
-
+    /**
+     * This method launches the first player panel. The first player chooses the player that will start the game
+     */
     public void chooseFirstPlayer() {
 
         frame.getContentPane().removeAll();
@@ -327,9 +343,10 @@ public class Gui {
         frame.getContentPane().add(firstPlayerPanel);
         frame.setVisible(true);
     }
-
+    /**
+     * This method launches the map panel. The players place their workers in the map.
+     */
     public void placeWorkers() {
-
 
         mapPanel.setChat("Place your " + s.getWorkerNum() + "ª worker");
         mapPanel.setWorkerBorder(s.getWorkerNum() - 1);
@@ -378,13 +395,14 @@ public class Gui {
         }
     }
 
+    /**
+     *This method is important for the update of the map.
+     */
 
 
     public void updateMap() throws OutOfMapException {
 
         frame.getContentPane().removeAll();
-        //frame.setSize(1400, 800);
-
 
         mapPanel = new MapPanel(myImage);
         board = mapPanel.getBoardContainer();
@@ -414,7 +432,6 @@ public class Gui {
             }
 
         }
-
 
         k = 1;
 
@@ -456,16 +473,12 @@ public class Gui {
         frame.getContentPane().add(mapPanel);
         frame.setVisible(true);
 
-
     }
-
+    /**
+     * This method is dedicated to choosing the worker the player will play this round of the game with.
+     */
     public void chooseWorker() {
 
-        //frame.getContentPane().removeAll();
-        //frame.setSize(1400, 800);
-
-        //mapPanel = new MapPanel(myImage);
-        //board = mapPanel.getBoardContainer();
         mapPanel.setChat("Choose Worker");
         mapPanel.getWorkerContainer().setVisible(true);
         java.util.List<BoardButton> workerButtons = new ArrayList<>();
@@ -493,12 +506,6 @@ public class Gui {
 
                         if (e.getSource() == workerButtons.get(i)) {
                             workerButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));
-                            //chosenWorker = boardButtons[workerButtons.get(i).getX()][workerButtons.get(i).getY()];
-                           /* for(int col=0 ;col<5 ; col++)
-                                for(int row=0 ; row<5 ; row++)
-                                    if(!boardButtons[row][col].equals(boardButtons[s.getValidChoicesWorkers().get(i).getPosition().getCoordinates().getX()][s.getValidChoicesWorkers().get(i).getPosition().getCoordinates().getY()]))
-                                        boardButtons[row][col].setVisible(false);
-*/
                             mapPanel.getYesUndo().setEnabled(true);
                             mapPanel.getNoUndo().setEnabled(true);
                             getChoice("CHOOSEWORKER");
@@ -510,13 +517,9 @@ public class Gui {
             });
         }
     }
-
-    //frame.getContentPane().add(mapPanel);
-    //frame.setVisible(true);
-
-
-
-
+    /**
+     * This method is dedicated to choosing where to move the chosen worker.
+     */
     public void askMove() {
 
         mapPanel.setChat("Move");
@@ -548,9 +551,6 @@ public class Gui {
 
                             availableMoveButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));
 
-                            /*for (BoardButton button : availableMoveButtons)
-                                if (!button.equals(availableMoveButtons.get(i)))
-                                    button.setVisible(false);*/
                             for (int k = 0; k < 5; k++) {
                                 for (int l = 0; l < 5; l++) {
                                     if (!boardButtons[l][k].equals(availableMoveButtons.get(i)))
@@ -570,9 +570,9 @@ public class Gui {
         }
 
     }
-
-
-
+    /**
+     * This method is dedicated to choosing where to build and the level the player wants to build.
+     */
     public void askBuild() {
 
         mapPanel.setChat("BUILD");
@@ -625,6 +625,9 @@ public class Gui {
                             }
 
                             for (int j = 0; j < availableLevels.size(); j++) {
+                                if (availableLevels.get(i).getMouseListeners().length>0) {
+                                    availableLevels.get(i).removeMouseListener(availableLevels.get(i).getMouseListeners()[0]);
+                                }
                                 availableLevels.get(j).addMouseListener(new MouseAdapter() {
                                     @Override
                                     public void mouseClicked(MouseEvent m) {
@@ -648,11 +651,12 @@ public class Gui {
 
         }
     }
-
-
+    /**
+     * This method is dedicated to making a decision in case there is special effect the players god card offers.
+     */
     public void makeDecision() {
-        mapPanel.makeDecision(s.getDecision());
 
+        mapPanel.makeDecision(s.getDecision());
         JButton yes = mapPanel.getYes();
         JButton no = mapPanel.getNo();
         if (yes.getActionListeners().length > 0) {
@@ -687,14 +691,21 @@ public class Gui {
 
     }
 
+    /**
+     * This method communicates to the players that their actions have been received by server.
+     */
     public void ack() {
         mapPanel.setChat("Your " + s.getOperationConfirmed() + " event is received by server...");
     }
-
+    /**
+     * This method communicates to the players that something has gone wrong.
+     */
     public void unsuccessfulOperation() {
         mapPanel.setChat("Sorry , something went wrong server side..." + "\n" + "Repeat your last action !");
     }
-
+    /**
+     * This method launches the win panel for the player who won at the end of the game.
+     */
     public void winGame() throws IOException {
         frame.getContentPane().removeAll();
         frame.setSize(625 * 3 / 2, 415 * 3 / 2);
@@ -707,7 +718,9 @@ public class Gui {
         frame.getContentPane().add(winPanel);
         frame.setVisible(true);
     }
-
+    /**
+     * This method launches the lose panel for the player who lost at the end of the game.
+     */
     public void loseGame() {
         frame.getContentPane().removeAll();
         frame.setSize(625 * 3 / 2, 415 * 3 / 2);
@@ -717,7 +730,9 @@ public class Gui {
         frame.getContentPane().add(losePanel);
         frame.setVisible(true);
     }
-
+    /**
+     * This method lets the player know that there has been a disconnection.
+     */
     public void disconnectGame() {
         frame.getContentPane().removeAll();
         frame.setSize(625 * 3 / 2, 415 * 3 / 2);
@@ -726,12 +741,16 @@ public class Gui {
         frame.getContentPane().add(disconnectGame);
         frame.setVisible(true);
     }
-
+    /**
+     * This method lets the player that the game has ended.
+     */
     public void endGame() {
         winPanel.getGameEnded().setVisible(true);
         losePanel.getGameEnded().setVisible(true);
     }
-
+    /**
+     * This method lets the player know that he is out of the room.
+     */
     public void outOfRoom() {
         frame.getContentPane().removeAll();
         frame.setSize(625 * 3 / 2, 415 * 3 / 2);
@@ -741,18 +760,22 @@ public class Gui {
         frame.getContentPane().add(outOfRoom);
         frame.setVisible(true);
     }
-
-
+    /**
+     * This method lets the player know that his turn has ended.
+     */
     public void turnIsEnd() {
         mapPanel.setChat("Your turn has ended !");
     }
-
+    /**
+     * This method lets the player know that the game is starting.
+     */
     public void gameIsStarting() {
         //mapPanel.setChat( "The game is started!!");
     }
-
-
-
+    /**
+     * This method manages the choice of the player to undo his last action.
+     * @param methodName to understand which action the player wants to undo.
+     */
     private void getChoice(String methodName) {
 
         JButton yes = mapPanel.getYesUndo();

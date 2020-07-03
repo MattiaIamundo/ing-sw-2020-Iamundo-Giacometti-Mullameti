@@ -14,7 +14,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
+/**
+ * This class allows the communication with the players in a graphic interface
+ */
 public class MainGui extends Supporter {
 
     Gui gui;
@@ -36,7 +38,10 @@ public class MainGui extends Supporter {
     public void update(EventForClient message) {
         getEvents().add(message);
     }
-
+    /**
+     * This is the main methods of the GUI.
+     * We choose what method is to be called based on the messages we get from the client.
+     */
     @Override
     public void run() {
 

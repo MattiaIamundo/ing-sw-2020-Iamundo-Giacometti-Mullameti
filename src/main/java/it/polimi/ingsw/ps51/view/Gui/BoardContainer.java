@@ -2,13 +2,13 @@ package it.polimi.ingsw.ps51.view.Gui;
 
 import javax.swing.*;
 import java.awt.*;
-
+/**
+ * @author Merita Mullameti
+ * This class is a Container that containes all the buttons of the board in a 5x5 matrix.
+ */
 public class BoardContainer extends Container {
 
-
     private BoardButton [][] boardButtons;
-
-
 
     public BoardContainer(){
         this.setPreferredSize(new Dimension(550,500));
@@ -41,15 +41,5 @@ public class BoardContainer extends Container {
         return boardButtons;
     }
     public BoardButton getSpecificButtons(int j, int i){return boardButtons[i][j];}
-
-
-    /*public static void main(String[] args) throws IOException {
-        JFrame frame = new JFrame("Start");
-        frame.setContentPane(new BoardContainer());
-        frame.setSize(865*2/3,880*2/3);
-        frame.setResizable(false);
-        frame.setVisible(true);
-
-    }*/
 
 }

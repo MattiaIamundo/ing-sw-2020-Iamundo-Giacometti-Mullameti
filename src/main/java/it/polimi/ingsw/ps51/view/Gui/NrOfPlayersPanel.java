@@ -6,6 +6,11 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+/**
+ * @author Merita Mullameti
+ * This class is a JPanel for the first player to choose how many players he wants to play with.
+ */
+
 public class NrOfPlayersPanel extends JPanel {
 
     JButton[] nrButton;
@@ -70,16 +75,6 @@ public class NrOfPlayersPanel extends JPanel {
     public JButton[] getNrButton() {
         return nrButton;
     }
-
-   /* public static void main(String[] args) {
-        JFrame frame = new JFrame("Start");
-        NrOfPlayersPanel nrOfPlayersPanel = new NrOfPlayersPanel();
-        frame.add(nrOfPlayersPanel);
-        frame.setSize(635, 635);
-        frame.setResizable(false);
-        frame.setVisible(true);
-
-    }*/
 
 
 }
