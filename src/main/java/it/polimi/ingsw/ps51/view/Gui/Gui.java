@@ -491,6 +491,11 @@ public class Gui {
         for (Worker worker : s.getValidChoicesWorkers()) {
             workerButtons.add(board.getSpecificButtons(worker.getPosition().getCoordinates().getX(), worker.getPosition().getCoordinates().getY()));
         }
+        for(JButton button : workerButtons){
+                button.setBorder(BorderFactory.createLineBorder(Color.BLUE , 0));
+                button.setEnabled(true);
+
+        }
 
         for (int i = 0; i < s.getValidChoicesWorkers().size(); i++) {
             workerButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
@@ -510,6 +515,12 @@ public class Gui {
                                 for (int l = 0; l < 5; l++) {
                                     if (!boardButtons[l][k].equals(workerButtons.get(i)))
                                         boardButtons[l][k].setVisible(false);
+                                }
+                            }
+                            for(JButton button : workerButtons){
+                                if (!button.equals(workerButtons.get(i))){
+                                    button.setBorder(BorderFactory.createLineBorder(Color.BLUE , 0));
+                                    button.setEnabled(false);
                                 }
                             }
                             mapPanel.getYesUndo().setEnabled(true);
