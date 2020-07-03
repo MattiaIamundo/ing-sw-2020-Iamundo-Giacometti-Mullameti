@@ -506,6 +506,12 @@ public class Gui {
 
                         if (e.getSource() == workerButtons.get(i)) {
                             workerButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));
+                            for (int k = 0; k < 5; k++) {
+                                for (int l = 0; l < 5; l++) {
+                                    if (!boardButtons[l][k].equals(workerButtons.get(i)))
+                                        boardButtons[l][k].setVisible(false);
+                                }
+                            }
                             mapPanel.getYesUndo().setEnabled(true);
                             mapPanel.getNoUndo().setEnabled(true);
                             getChoice("CHOOSEWORKER");

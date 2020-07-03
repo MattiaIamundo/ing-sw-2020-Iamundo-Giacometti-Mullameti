@@ -562,7 +562,7 @@ public class Cli extends Supporter {
     }
 
     /**
-     * Using a reader and an interruptible input stream, the client has to confirm or not his selection
+     * The client has to confirm or not his selection within 5 seconds
      * @return  true if the move has confirmed
      *          false if the client wants to modify his selection
      */
