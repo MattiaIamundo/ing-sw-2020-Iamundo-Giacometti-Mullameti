@@ -546,7 +546,6 @@ public class Gui {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 boardButtons[j][i].setVisible(true);
-                boardButtons[j][i].setEnabled(true);
             }
         }
         for (Coordinates coordinates : s.getValidChoicesMoves()) {
@@ -555,7 +554,7 @@ public class Gui {
 
         for (int i = 0; i < availableMoveButtons.size(); i++) {
             availableMoveButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.YELLOW, 2));
-
+            availableMoveButtons.get(i).setEnabled(true);
             if (availableMoveButtons.get(i).getActionListeners().length > 0) {
                 availableMoveButtons.get(i).removeActionListener(availableMoveButtons.get(i).getActionListeners()[0]);
             }
@@ -604,7 +603,6 @@ public class Gui {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 boardButtons[j][i].setVisible(true);
-                boardButtons[j][i].setEnabled(true);
             }
         }
 
@@ -613,6 +611,7 @@ public class Gui {
         }
 
         for (int i = 0; i < availableBuildButtons.size(); i++) {
+            availableBuildButtons.get(i).setEnabled(true);
             availableBuildButtons.get(i).setBorder(BorderFactory.createLineBorder(new Color(255, 153, 0), 2));
             if (availableBuildButtons.get(i).getActionListeners().length > 0) {
                 availableBuildButtons.get(i).removeActionListener(availableBuildButtons.get(i).getActionListeners()[0]);
