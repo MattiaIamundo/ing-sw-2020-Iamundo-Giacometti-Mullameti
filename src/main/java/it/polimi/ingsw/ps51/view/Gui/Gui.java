@@ -579,7 +579,7 @@ public class Gui {
 
 
         java.util.List<BoardButton> availableBuildButtons = new ArrayList<>();
-        java.util.List<JLabel> availableLevels = new ArrayList<>();
+        java.util.List<JButton> availableLevels = new ArrayList<>();
         boardButtons = board.getBoardButtons();
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -625,14 +625,15 @@ public class Gui {
                             }
 
                             for (int j = 0; j < availableLevels.size(); j++) {
-                                if (availableLevels.get(i).getMouseListeners().length>0) {
-                                    availableLevels.get(i).removeMouseListener(availableLevels.get(i).getMouseListeners()[0]);
+                                //System.out.println(availableLevels.get(i).getMouseListeners());
+                                if (availableLevels.get(j).getActionListeners().length>0) {
+                                    availableLevels.get(j).removeActionListener(availableLevels.get(j).getActionListeners()[0]);
                                 }
-                                availableLevels.get(j).addMouseListener(new MouseAdapter() {
+                                availableLevels.get(j).addActionListener(new ActionListener() {
                                     @Override
-                                    public void mouseClicked(MouseEvent m) {
-                                        for (JLabel availableLevel : availableLevels) {
-                                            if (m.getSource() == availableLevel) {
+                                    public void actionPerformed(ActionEvent e) {
+                                        for (JButton availableLevel : availableLevels) {
+                                            if (e.getSource() == availableLevel) {
 
                                                 build = new Pair<>(chosenPair.getValue0(), Level.valueOf(availableLevel.getText().toUpperCase()));
                                                 mapPanel.getYesUndo().setEnabled(true);

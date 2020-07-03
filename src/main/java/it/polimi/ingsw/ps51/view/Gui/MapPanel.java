@@ -7,6 +7,7 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 /**
  * @author Merita Mullameti
@@ -32,7 +33,7 @@ public class MapPanel extends JPanel {
     private ImageIcon[] workerImages;
     private JLabel[] workers;
     private Container levelContainer;
-    private JLabel[] levels;
+    private JButton[] levels;
     ImageIcon[] levelImages;
     private JTextPane textDecisio;
     private JTextPane textChat;
@@ -118,13 +119,13 @@ public class MapPanel extends JPanel {
         levelContainer.setLayout(new GridBagLayout());
         levelContainer.setSize(120,400);
 
-        levels = new JLabel[4];
+        levels = new JButton[4];
         levelImages = new ImageIcon[4];
 
-        levels[0] = new JLabel("First");
-        levels[1] = new JLabel("Second");
-        levels[2] = new JLabel("Third");
-        levels[3] = new JLabel("Dome");
+        levels[0] = new JButton("First");
+        levels[1] = new JButton("Second");
+        levels[2] = new JButton("Third");
+        levels[3] = new JButton("Dome");
 
         try {
             BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/Levels/first.png"));
@@ -141,13 +142,16 @@ public class MapPanel extends JPanel {
 
         for(int i=0 ; i<4 ; i++) {
 
-
             levels[i].setIcon(levelImages[i]);
             levels[i].setHorizontalAlignment(SwingConstants.CENTER);
             levels[i].setVerticalAlignment(SwingConstants.CENTER);
             levels[i].setHorizontalTextPosition(SwingConstants.CENTER);
             levels[i].setVerticalTextPosition(SwingConstants.BOTTOM);
             levels[i].setSize(levels[i].getIcon().getIconWidth(),levels[i].getIcon().getIconHeight());
+            levels[i].setOpaque(false);
+            levels[i].setContentAreaFilled(false);
+            //levels[i].setBorderPainted(false);
+            levels[i].setBorder(BorderFactory.createLineBorder(Color.red , 0));
 
         }
 
@@ -213,7 +217,7 @@ public class MapPanel extends JPanel {
             playerName[i].setSize(200,500);
             playerName[i].setHorizontalAlignment(SwingConstants.CENTER);
             playerName[i].setVerticalAlignment(SwingConstants.CENTER);
-            playerName[i].setFont(new Font ("Times new Roman" , Font.BOLD , 24));
+            playerName[i].setFont(new Font ("Times new Roman" , Font.BOLD , 18));
             //playerName[i].setText("Meri");
             godPic[i] = new JLabel();
             godPic[i].setHorizontalAlignment(SwingConstants.CENTER);
@@ -303,7 +307,7 @@ public class MapPanel extends JPanel {
         chat.setSize(400,100);
         try {
             BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream("/bluechat.png"));
-            ImageIcon chatImage = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(400, 100, Image.SCALE_DEFAULT));
+            ImageIcon chatImage = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(400, 120, Image.SCALE_DEFAULT));
 
             chat.setIcon(chatImage);
             decision.setIcon(chatImage);
@@ -341,7 +345,7 @@ public class MapPanel extends JPanel {
         textDecisio = new JTextPane();
         defineTextPane(textDecisio);
         decision.setLayout(new BorderLayout());
-        decision.setSize(400, 150);
+        decision.setSize(400, 120);
         decision.setHorizontalAlignment(SwingConstants.CENTER);
         decision.setVerticalAlignment(SwingConstants.NORTH);
         decision.setBorder(BorderFactory.createMatteBorder(5,5,5,5, Color.WHITE));
@@ -423,10 +427,11 @@ public class MapPanel extends JPanel {
     }
 
     public void setLevelImages(int nr ){
+
         levels[nr].setBorder(BorderFactory.createLineBorder(Color.RED , 2));
     }
 
-    public JLabel getLevel(int nr){
+    public JButton getLevel(int nr){
         return levels[nr];
     }
 

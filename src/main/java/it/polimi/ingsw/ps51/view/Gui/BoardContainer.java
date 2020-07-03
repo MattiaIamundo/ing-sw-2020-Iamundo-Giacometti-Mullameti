@@ -28,7 +28,7 @@ public class BoardContainer extends Container {
                 //button[i][j].setOpaque(false);
                 boardButtons[i][j].setContentAreaFilled(false);
                 //button[i][j].setBorderPainted(false);
-                boardButtons[i][j].setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY,2));
+                boardButtons[i][j].setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY,0));
 
                 this.add(boardButtons[i][j]);
             }
