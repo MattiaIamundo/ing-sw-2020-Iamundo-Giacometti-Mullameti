@@ -29,7 +29,7 @@ public class InputReader {
 
     public String read() throws InterruptedException {
         sniff();
-        return Objects.requireNonNull(queue.take()).split(" ")[0];
+        return Objects.requireNonNull(queue.take()).trim().split(" ")[0];
     }
 
     public String read(long timer, TimeUnit timeUnit) throws InterruptedException {
@@ -39,14 +39,12 @@ public class InputReader {
         if (out == null){
             return null;
         }else {
-            out = out.split(" ")[0];
+            out = out.trim().split(" ")[0];
         }
         return out;
     }
 
     public Integer readInt() throws InterruptedException, NumberFormatException {
-        sniff();
-        String num = read().split(" ")[0];
-        return Integer.parseInt(num);
+        return Integer.parseInt(read());
     }
 }
