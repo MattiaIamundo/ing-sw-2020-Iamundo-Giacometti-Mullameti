@@ -50,7 +50,7 @@
     0%
   </span>
   <span class="absValue">
-    (0/ 273)
+    (0/ 279)
   </span>
 </td>
 </tr>
@@ -183,7 +183,7 @@
     0%
   </span>
   <span class="absValue">
-    (0/ 12)
+    (0/ 16)
   </span>
 </td>
   </tr>
@@ -202,7 +202,7 @@
     0%
   </span>
   <span class="absValue">
-    (0/ 12)
+    (0/ 13)
   </span>
 </td>
   </tr>
@@ -221,7 +221,7 @@
     0%
   </span>
   <span class="absValue">
-    (0/ 20)
+    (0/ 25)
   </span>
 </td>
   </tr>
@@ -240,7 +240,7 @@
     0%
   </span>
   <span class="absValue">
-    (0/ 8)
+    (0/ 12)
   </span>
 </td>
   </tr>
@@ -278,7 +278,7 @@
     0%
   </span>
   <span class="absValue">
-    (0/ 411)
+    (0/ 431)
   </span>
 </td>
 </tr>
@@ -781,399 +781,423 @@
 <b class="nc"><i>491</i>&nbsp;        for (Worker worker : s.getValidChoicesWorkers()) {</b>
 <b class="nc"><i>492</i>&nbsp;            workerButtons.add(board.getSpecificButtons(worker.getPosition().getCoordinates().getX(), worker.getPosition().getCoordinates().getY()));</b>
 <b class="nc"><i>493</i>&nbsp;        }</b>
-<i>494</i>&nbsp;
-<b class="nc"><i>495</i>&nbsp;        for (int i = 0; i &lt; s.getValidChoicesWorkers().size(); i++) {</b>
-<b class="nc"><i>496</i>&nbsp;            workerButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));</b>
+<b class="nc"><i>494</i>&nbsp;        for(JButton button : workerButtons){</b>
+<b class="nc"><i>495</i>&nbsp;                button.setBorder(BorderFactory.createLineBorder(Color.BLUE , 0));</b>
+<b class="nc"><i>496</i>&nbsp;                button.setEnabled(true);</b>
 <i>497</i>&nbsp;
-<b class="nc"><i>498</i>&nbsp;            if (workerButtons.get(i).getActionListeners().length &gt; 0) {</b>
-<b class="nc"><i>499</i>&nbsp;                workerButtons.get(i).removeActionListener(workerButtons.get(i).getActionListeners()[0]);</b>
-<i>500</i>&nbsp;            }
-<b class="nc"><i>501</i>&nbsp;            workerButtons.get(i).addActionListener(new ActionListener() {</b>
-<i>502</i>&nbsp;                @Override
-<i>503</i>&nbsp;                public void actionPerformed(ActionEvent e) {
-<i>504</i>&nbsp;
-<b class="nc"><i>505</i>&nbsp;                    for (int i = 0; i &lt; s.getValidChoicesWorkers().size(); i++) {</b>
-<i>506</i>&nbsp;
-<b class="nc"><i>507</i>&nbsp;                        if (e.getSource() == workerButtons.get(i)) {</b>
-<b class="nc"><i>508</i>&nbsp;                            workerButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));</b>
-<b class="nc"><i>509</i>&nbsp;                            for (int k = 0; k &lt; 5; k++) {</b>
-<b class="nc"><i>510</i>&nbsp;                                for (int l = 0; l &lt; 5; l++) {</b>
-<b class="nc"><i>511</i>&nbsp;                                    if (!boardButtons[l][k].equals(workerButtons.get(i)))</b>
-<b class="nc"><i>512</i>&nbsp;                                        boardButtons[l][k].setVisible(false);</b>
-<i>513</i>&nbsp;                                }
-<i>514</i>&nbsp;                            }
-<b class="nc"><i>515</i>&nbsp;                            mapPanel.getYesUndo().setEnabled(true);</b>
-<b class="nc"><i>516</i>&nbsp;                            mapPanel.getNoUndo().setEnabled(true);</b>
-<b class="nc"><i>517</i>&nbsp;                            getChoice(&quot;CHOOSEWORKER&quot;);</b>
-<b class="nc"><i>518</i>&nbsp;                            chosenWorker = s.getValidChoicesWorkers().get(i);</b>
-<i>519</i>&nbsp;
-<i>520</i>&nbsp;                        }
-<i>521</i>&nbsp;                    }
-<i>522</i>&nbsp;                }
-<i>523</i>&nbsp;            });
-<i>524</i>&nbsp;        }
-<i>525</i>&nbsp;    }
-<i>526</i>&nbsp;    /**
-<i>527</i>&nbsp;     * This method is dedicated to choosing where to move the chosen worker.
-<i>528</i>&nbsp;     */
-<i>529</i>&nbsp;    public void askMove() {
+<b class="nc"><i>498</i>&nbsp;        }</b>
+<i>499</i>&nbsp;
+<b class="nc"><i>500</i>&nbsp;        for (int i = 0; i &lt; s.getValidChoicesWorkers().size(); i++) {</b>
+<b class="nc"><i>501</i>&nbsp;            workerButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));</b>
+<i>502</i>&nbsp;
+<b class="nc"><i>503</i>&nbsp;            if (workerButtons.get(i).getActionListeners().length &gt; 0) {</b>
+<b class="nc"><i>504</i>&nbsp;                workerButtons.get(i).removeActionListener(workerButtons.get(i).getActionListeners()[0]);</b>
+<i>505</i>&nbsp;            }
+<b class="nc"><i>506</i>&nbsp;            workerButtons.get(i).addActionListener(new ActionListener() {</b>
+<i>507</i>&nbsp;                @Override
+<i>508</i>&nbsp;                public void actionPerformed(ActionEvent e) {
+<i>509</i>&nbsp;
+<b class="nc"><i>510</i>&nbsp;                    for (int i = 0; i &lt; s.getValidChoicesWorkers().size(); i++) {</b>
+<i>511</i>&nbsp;
+<b class="nc"><i>512</i>&nbsp;                        if (e.getSource() == workerButtons.get(i)) {</b>
+<b class="nc"><i>513</i>&nbsp;                            workerButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));</b>
+<b class="nc"><i>514</i>&nbsp;                            for (int k = 0; k &lt; 5; k++) {</b>
+<b class="nc"><i>515</i>&nbsp;                                for (int l = 0; l &lt; 5; l++) {</b>
+<b class="nc"><i>516</i>&nbsp;                                    if (!boardButtons[l][k].equals(workerButtons.get(i)))</b>
+<b class="nc"><i>517</i>&nbsp;                                        boardButtons[l][k].setVisible(false);</b>
+<i>518</i>&nbsp;                                }
+<i>519</i>&nbsp;                            }
+<b class="nc"><i>520</i>&nbsp;                            for(JButton button : workerButtons){</b>
+<i>521</i>&nbsp;
+<b class="nc"><i>522</i>&nbsp;                                button.setBorder(BorderFactory.createLineBorder(Color.BLUE , 0));</b>
+<b class="nc"><i>523</i>&nbsp;                                button.setEnabled(false);</b>
+<i>524</i>&nbsp;
+<b class="nc"><i>525</i>&nbsp;                            }</b>
+<b class="nc"><i>526</i>&nbsp;                            mapPanel.getYesUndo().setEnabled(true);</b>
+<b class="nc"><i>527</i>&nbsp;                            mapPanel.getNoUndo().setEnabled(true);</b>
+<b class="nc"><i>528</i>&nbsp;                            getChoice(&quot;CHOOSEWORKER&quot;);</b>
+<b class="nc"><i>529</i>&nbsp;                            chosenWorker = s.getValidChoicesWorkers().get(i);</b>
 <i>530</i>&nbsp;
-<b class="nc"><i>531</i>&nbsp;        mapPanel.setChat(&quot;Move&quot;);</b>
-<i>532</i>&nbsp;
-<b class="nc"><i>533</i>&nbsp;        java.util.List&lt;BoardButton&gt; availableMoveButtons = new ArrayList&lt;&gt;();</b>
-<b class="nc"><i>534</i>&nbsp;        boardButtons = board.getBoardButtons();</b>
-<b class="nc"><i>535</i>&nbsp;        for (int i = 0; i &lt; 5; i++) {</b>
-<b class="nc"><i>536</i>&nbsp;            for (int j = 0; j &lt; 5; j++) {</b>
-<b class="nc"><i>537</i>&nbsp;                boardButtons[j][i].setVisible(true);</b>
-<i>538</i>&nbsp;            }
-<i>539</i>&nbsp;        }
-<b class="nc"><i>540</i>&nbsp;        for (Coordinates coordinates : s.getValidChoicesMoves()) {</b>
-<b class="nc"><i>541</i>&nbsp;            availableMoveButtons.add(board.getSpecificButtons(coordinates.getX(), coordinates.getY()));</b>
-<b class="nc"><i>542</i>&nbsp;        }</b>
+<i>531</i>&nbsp;                        }
+<i>532</i>&nbsp;                    }
+<i>533</i>&nbsp;                }
+<i>534</i>&nbsp;            });
+<i>535</i>&nbsp;        }
+<i>536</i>&nbsp;    }
+<i>537</i>&nbsp;    /**
+<i>538</i>&nbsp;     * This method is dedicated to choosing where to move the chosen worker.
+<i>539</i>&nbsp;     */
+<i>540</i>&nbsp;    public void askMove() {
+<i>541</i>&nbsp;
+<b class="nc"><i>542</i>&nbsp;        mapPanel.setChat(&quot;Move&quot;);</b>
 <i>543</i>&nbsp;
-<b class="nc"><i>544</i>&nbsp;        for (int i = 0; i &lt; availableMoveButtons.size(); i++) {</b>
-<b class="nc"><i>545</i>&nbsp;            availableMoveButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.YELLOW, 2));</b>
-<i>546</i>&nbsp;
-<b class="nc"><i>547</i>&nbsp;            if (availableMoveButtons.get(i).getActionListeners().length &gt; 0) {</b>
-<b class="nc"><i>548</i>&nbsp;                availableMoveButtons.get(i).removeActionListener(availableMoveButtons.get(i).getActionListeners()[0]);</b>
+<b class="nc"><i>544</i>&nbsp;        java.util.List&lt;BoardButton&gt; availableMoveButtons = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>545</i>&nbsp;        boardButtons = board.getBoardButtons();</b>
+<b class="nc"><i>546</i>&nbsp;        for (int i = 0; i &lt; 5; i++) {</b>
+<b class="nc"><i>547</i>&nbsp;            for (int j = 0; j &lt; 5; j++) {</b>
+<b class="nc"><i>548</i>&nbsp;                boardButtons[j][i].setVisible(true);</b>
 <i>549</i>&nbsp;            }
-<b class="nc"><i>550</i>&nbsp;            availableMoveButtons.get(i).addActionListener(new ActionListener() {</b>
-<i>551</i>&nbsp;                @Override
-<i>552</i>&nbsp;                public void actionPerformed(ActionEvent e) {
-<i>553</i>&nbsp;
-<b class="nc"><i>554</i>&nbsp;                    for (int i = 0; i &lt; availableMoveButtons.size(); i++) {</b>
-<i>555</i>&nbsp;
-<b class="nc"><i>556</i>&nbsp;                        if (e.getSource() == availableMoveButtons.get(i)) {</b>
-<i>557</i>&nbsp;
-<b class="nc"><i>558</i>&nbsp;                            availableMoveButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));</b>
-<i>559</i>&nbsp;
-<b class="nc"><i>560</i>&nbsp;                            for (int k = 0; k &lt; 5; k++) {</b>
-<b class="nc"><i>561</i>&nbsp;                                for (int l = 0; l &lt; 5; l++) {</b>
-<b class="nc"><i>562</i>&nbsp;                                    if (!boardButtons[l][k].equals(availableMoveButtons.get(i)))</b>
-<b class="nc"><i>563</i>&nbsp;                                        boardButtons[l][k].setVisible(false);</b>
-<i>564</i>&nbsp;                                }
-<i>565</i>&nbsp;                            }
+<i>550</i>&nbsp;        }
+<b class="nc"><i>551</i>&nbsp;        for (Coordinates coordinates : s.getValidChoicesMoves()) {</b>
+<b class="nc"><i>552</i>&nbsp;            availableMoveButtons.add(board.getSpecificButtons(coordinates.getX(), coordinates.getY()));</b>
+<b class="nc"><i>553</i>&nbsp;        }</b>
+<i>554</i>&nbsp;
+<b class="nc"><i>555</i>&nbsp;        for (int i = 0; i &lt; availableMoveButtons.size(); i++) {</b>
+<b class="nc"><i>556</i>&nbsp;            availableMoveButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.YELLOW, 2));</b>
+<b class="nc"><i>557</i>&nbsp;            availableMoveButtons.get(i).setEnabled(true);</b>
+<b class="nc"><i>558</i>&nbsp;            if (availableMoveButtons.get(i).getActionListeners().length &gt; 0) {</b>
+<b class="nc"><i>559</i>&nbsp;                availableMoveButtons.get(i).removeActionListener(availableMoveButtons.get(i).getActionListeners()[0]);</b>
+<i>560</i>&nbsp;            }
+<b class="nc"><i>561</i>&nbsp;            availableMoveButtons.get(i).addActionListener(new ActionListener() {</b>
+<i>562</i>&nbsp;                @Override
+<i>563</i>&nbsp;                public void actionPerformed(ActionEvent e) {
+<i>564</i>&nbsp;
+<b class="nc"><i>565</i>&nbsp;                    for (int i = 0; i &lt; availableMoveButtons.size(); i++) {</b>
 <i>566</i>&nbsp;
-<b class="nc"><i>567</i>&nbsp;                            mapPanel.getYesUndo().setEnabled(true);</b>
-<b class="nc"><i>568</i>&nbsp;                            mapPanel.getNoUndo().setEnabled(true);</b>
-<b class="nc"><i>569</i>&nbsp;                            chosenCoordinates = s.getValidChoicesMoves().get(i);</b>
-<b class="nc"><i>570</i>&nbsp;                            getChoice(&quot;MOVE&quot;);</b>
-<i>571</i>&nbsp;                        }
-<i>572</i>&nbsp;                    }
-<i>573</i>&nbsp;                }
-<i>574</i>&nbsp;
-<i>575</i>&nbsp;            });
-<i>576</i>&nbsp;        }
-<i>577</i>&nbsp;
-<i>578</i>&nbsp;    }
-<i>579</i>&nbsp;    /**
-<i>580</i>&nbsp;     * This method is dedicated to choosing where to build and the level the player wants to build.
-<i>581</i>&nbsp;     */
-<i>582</i>&nbsp;    public void askBuild() {
-<i>583</i>&nbsp;
-<b class="nc"><i>584</i>&nbsp;        mapPanel.setChat(&quot;BUILD&quot;);</b>
-<i>585</i>&nbsp;
-<i>586</i>&nbsp;
-<b class="nc"><i>587</i>&nbsp;        java.util.List&lt;BoardButton&gt; availableBuildButtons = new ArrayList&lt;&gt;();</b>
-<b class="nc"><i>588</i>&nbsp;        java.util.List&lt;JButton&gt; availableLevels = new ArrayList&lt;&gt;();</b>
-<b class="nc"><i>589</i>&nbsp;        boardButtons = board.getBoardButtons();</b>
-<b class="nc"><i>590</i>&nbsp;        for (int i = 0; i &lt; 5; i++) {</b>
-<b class="nc"><i>591</i>&nbsp;            for (int j = 0; j &lt; 5; j++) {</b>
-<b class="nc"><i>592</i>&nbsp;                boardButtons[j][i].setVisible(true);</b>
-<i>593</i>&nbsp;            }
-<i>594</i>&nbsp;        }
-<i>595</i>&nbsp;
-<b class="nc"><i>596</i>&nbsp;        for (Pair&lt;Coordinates, java.util.List&lt;Level&gt;&gt; validBuilds : s.getValidChoicesBuild()) {</b>
-<b class="nc"><i>597</i>&nbsp;            availableBuildButtons.add(board.getSpecificButtons(validBuilds.getValue0().getX(), validBuilds.getValue0().getY()));</b>
-<b class="nc"><i>598</i>&nbsp;        }</b>
+<b class="nc"><i>567</i>&nbsp;                        if (e.getSource() == availableMoveButtons.get(i)) {</b>
+<i>568</i>&nbsp;
+<b class="nc"><i>569</i>&nbsp;                            availableMoveButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));</b>
+<i>570</i>&nbsp;
+<b class="nc"><i>571</i>&nbsp;                            for (int k = 0; k &lt; 5; k++) {</b>
+<b class="nc"><i>572</i>&nbsp;                                for (int l = 0; l &lt; 5; l++) {</b>
+<b class="nc"><i>573</i>&nbsp;                                    if (!boardButtons[l][k].equals(availableMoveButtons.get(i)))</b>
+<b class="nc"><i>574</i>&nbsp;                                        boardButtons[l][k].setVisible(false);</b>
+<i>575</i>&nbsp;                                    else
+<b class="nc"><i>576</i>&nbsp;                                        boardButtons[l][k].setEnabled(false);</b>
+<i>577</i>&nbsp;                                }
+<i>578</i>&nbsp;                            }
+<i>579</i>&nbsp;
+<b class="nc"><i>580</i>&nbsp;                            mapPanel.getYesUndo().setEnabled(true);</b>
+<b class="nc"><i>581</i>&nbsp;                            mapPanel.getNoUndo().setEnabled(true);</b>
+<b class="nc"><i>582</i>&nbsp;                            chosenCoordinates = s.getValidChoicesMoves().get(i);</b>
+<b class="nc"><i>583</i>&nbsp;                            getChoice(&quot;MOVE&quot;);</b>
+<i>584</i>&nbsp;                        }
+<i>585</i>&nbsp;                    }
+<i>586</i>&nbsp;                }
+<i>587</i>&nbsp;
+<i>588</i>&nbsp;            });
+<i>589</i>&nbsp;        }
+<i>590</i>&nbsp;
+<i>591</i>&nbsp;    }
+<i>592</i>&nbsp;    /**
+<i>593</i>&nbsp;     * This method is dedicated to choosing where to build and the level the player wants to build.
+<i>594</i>&nbsp;     */
+<i>595</i>&nbsp;    public void askBuild() {
+<i>596</i>&nbsp;
+<b class="nc"><i>597</i>&nbsp;        mapPanel.setChat(&quot;BUILD&quot;);</b>
+<i>598</i>&nbsp;
 <i>599</i>&nbsp;
-<b class="nc"><i>600</i>&nbsp;        for (int i = 0; i &lt; availableBuildButtons.size(); i++) {</b>
-<b class="nc"><i>601</i>&nbsp;            availableBuildButtons.get(i).setBorder(BorderFactory.createLineBorder(new Color(255, 153, 0), 2));</b>
-<b class="nc"><i>602</i>&nbsp;            if (availableBuildButtons.get(i).getActionListeners().length &gt; 0) {</b>
-<b class="nc"><i>603</i>&nbsp;                availableBuildButtons.get(i).removeActionListener(availableBuildButtons.get(i).getActionListeners()[0]);</b>
-<i>604</i>&nbsp;            }
-<b class="nc"><i>605</i>&nbsp;            availableBuildButtons.get(i).addActionListener(new ActionListener() {</b>
-<i>606</i>&nbsp;                @Override
-<i>607</i>&nbsp;                public void actionPerformed(ActionEvent e) {
+<b class="nc"><i>600</i>&nbsp;        java.util.List&lt;BoardButton&gt; availableBuildButtons = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>601</i>&nbsp;        java.util.List&lt;JButton&gt; availableLevels = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>602</i>&nbsp;        boardButtons = board.getBoardButtons();</b>
+<b class="nc"><i>603</i>&nbsp;        for (int i = 0; i &lt; 5; i++) {</b>
+<b class="nc"><i>604</i>&nbsp;            for (int j = 0; j &lt; 5; j++) {</b>
+<b class="nc"><i>605</i>&nbsp;                boardButtons[j][i].setVisible(true);</b>
+<i>606</i>&nbsp;            }
+<i>607</i>&nbsp;        }
 <i>608</i>&nbsp;
-<b class="nc"><i>609</i>&nbsp;                    for (int i = 0; i &lt; availableBuildButtons.size(); i++) {</b>
-<i>610</i>&nbsp;
-<b class="nc"><i>611</i>&nbsp;                        if (e.getSource() == availableBuildButtons.get(i)) {</b>
+<b class="nc"><i>609</i>&nbsp;        for (Pair&lt;Coordinates, java.util.List&lt;Level&gt;&gt; validBuilds : s.getValidChoicesBuild()) {</b>
+<b class="nc"><i>610</i>&nbsp;            availableBuildButtons.add(board.getSpecificButtons(validBuilds.getValue0().getX(), validBuilds.getValue0().getY()));</b>
+<b class="nc"><i>611</i>&nbsp;        }</b>
 <i>612</i>&nbsp;
-<b class="nc"><i>613</i>&nbsp;                            availableBuildButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));</b>
-<b class="nc"><i>614</i>&nbsp;                            chosenPair = s.getValidChoicesBuild().get(i);</b>
-<b class="nc"><i>615</i>&nbsp;                            for (int k = 0; k &lt; 5; k++) {</b>
-<b class="nc"><i>616</i>&nbsp;                                for (int l = 0; l &lt; 5; l++) {</b>
-<b class="nc"><i>617</i>&nbsp;                                    if (!boardButtons[l][k].equals(availableBuildButtons.get(i)))</b>
-<b class="nc"><i>618</i>&nbsp;                                        boardButtons[l][k].setVisible(false);</b>
-<i>619</i>&nbsp;                                }
-<i>620</i>&nbsp;                            }
-<i>621</i>&nbsp;
-<b class="nc"><i>622</i>&nbsp;                            for (Pair&lt;Coordinates, java.util.List&lt;Level&gt;&gt; validBuilds : s.getValidChoicesBuild()) {</b>
-<i>623</i>&nbsp;
-<b class="nc"><i>624</i>&nbsp;                                if (validBuilds.getValue0().equals(chosenPair.getValue0())) {</b>
-<i>625</i>&nbsp;
-<b class="nc"><i>626</i>&nbsp;                                    for (Level validLevel : validBuilds.getValue1()) {</b>
-<b class="nc"><i>627</i>&nbsp;                                        mapPanel.setLevelImages(validLevel.ordinal() - 1);</b>
-<b class="nc"><i>628</i>&nbsp;                                        availableLevels.add(mapPanel.getLevel(validLevel.ordinal() - 1));</b>
-<b class="nc"><i>629</i>&nbsp;                                    }</b>
-<i>630</i>&nbsp;                                }
-<b class="nc"><i>631</i>&nbsp;                            }</b>
-<i>632</i>&nbsp;
-<b class="nc"><i>633</i>&nbsp;                            for (int j = 0; j &lt; availableLevels.size(); j++) {</b>
-<i>634</i>&nbsp;                                //System.out.println(availableLevels.get(i).getMouseListeners());
-<b class="nc"><i>635</i>&nbsp;                                if (availableLevels.get(j).getActionListeners().length&gt;0) {</b>
-<b class="nc"><i>636</i>&nbsp;                                    availableLevels.get(j).removeActionListener(availableLevels.get(j).getActionListeners()[0]);</b>
-<i>637</i>&nbsp;                                }
-<b class="nc"><i>638</i>&nbsp;                                availableLevels.get(j).addActionListener(new ActionListener() {</b>
-<i>639</i>&nbsp;                                    @Override
-<i>640</i>&nbsp;                                    public void actionPerformed(ActionEvent e) {
-<b class="nc"><i>641</i>&nbsp;                                        for (JButton availableLevel : availableLevels) {</b>
-<b class="nc"><i>642</i>&nbsp;                                            if (e.getSource() == availableLevel) {</b>
-<i>643</i>&nbsp;
-<b class="nc"><i>644</i>&nbsp;                                                build = new Pair&lt;&gt;(chosenPair.getValue0(), Level.valueOf(availableLevel.getText().toUpperCase()));</b>
-<b class="nc"><i>645</i>&nbsp;                                                mapPanel.getYesUndo().setEnabled(true);</b>
-<b class="nc"><i>646</i>&nbsp;                                                mapPanel.getNoUndo().setEnabled(true);</b>
-<b class="nc"><i>647</i>&nbsp;                                                getChoice(&quot;BUILD&quot;);</b>
+<b class="nc"><i>613</i>&nbsp;        for (int i = 0; i &lt; availableBuildButtons.size(); i++) {</b>
+<b class="nc"><i>614</i>&nbsp;            availableBuildButtons.get(i).setEnabled(true);</b>
+<b class="nc"><i>615</i>&nbsp;            availableBuildButtons.get(i).setBorder(BorderFactory.createLineBorder(new Color(255, 153, 0), 2));</b>
+<b class="nc"><i>616</i>&nbsp;            if (availableBuildButtons.get(i).getActionListeners().length &gt; 0) {</b>
+<b class="nc"><i>617</i>&nbsp;                availableBuildButtons.get(i).removeActionListener(availableBuildButtons.get(i).getActionListeners()[0]);</b>
+<i>618</i>&nbsp;            }
+<b class="nc"><i>619</i>&nbsp;            availableBuildButtons.get(i).addActionListener(new ActionListener() {</b>
+<i>620</i>&nbsp;                @Override
+<i>621</i>&nbsp;                public void actionPerformed(ActionEvent e) {
+<i>622</i>&nbsp;
+<b class="nc"><i>623</i>&nbsp;                    for (int i = 0; i &lt; availableBuildButtons.size(); i++) {</b>
+<i>624</i>&nbsp;
+<b class="nc"><i>625</i>&nbsp;                        if (e.getSource() == availableBuildButtons.get(i)) {</b>
+<i>626</i>&nbsp;
+<b class="nc"><i>627</i>&nbsp;                            availableBuildButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.red, 2));</b>
+<b class="nc"><i>628</i>&nbsp;                            chosenPair = s.getValidChoicesBuild().get(i);</b>
+<b class="nc"><i>629</i>&nbsp;                            for (int k = 0; k &lt; 5; k++) {</b>
+<b class="nc"><i>630</i>&nbsp;                                for (int l = 0; l &lt; 5; l++) {</b>
+<b class="nc"><i>631</i>&nbsp;                                    if (!boardButtons[l][k].equals(availableBuildButtons.get(i)))</b>
+<b class="nc"><i>632</i>&nbsp;                                        boardButtons[l][k].setVisible(false);</b>
+<i>633</i>&nbsp;                                    else
+<b class="nc"><i>634</i>&nbsp;                                        boardButtons[l][k].setEnabled(false);</b>
+<i>635</i>&nbsp;                                }
+<i>636</i>&nbsp;                            }
+<i>637</i>&nbsp;
+<b class="nc"><i>638</i>&nbsp;                            for (Pair&lt;Coordinates, java.util.List&lt;Level&gt;&gt; validBuilds : s.getValidChoicesBuild()) {</b>
+<i>639</i>&nbsp;
+<b class="nc"><i>640</i>&nbsp;                                if (validBuilds.getValue0().equals(chosenPair.getValue0())) {</b>
+<i>641</i>&nbsp;
+<b class="nc"><i>642</i>&nbsp;                                    for (Level validLevel : validBuilds.getValue1()) {</b>
+<b class="nc"><i>643</i>&nbsp;                                        mapPanel.setLevelImages(validLevel.ordinal() - 1);</b>
+<b class="nc"><i>644</i>&nbsp;                                        availableLevels.add(mapPanel.getLevel(validLevel.ordinal() - 1));</b>
+<b class="nc"><i>645</i>&nbsp;                                    }</b>
+<i>646</i>&nbsp;                                }
+<b class="nc"><i>647</i>&nbsp;                            }</b>
 <i>648</i>&nbsp;
-<i>649</i>&nbsp;                                            }
-<b class="nc"><i>650</i>&nbsp;                                        }</b>
-<i>651</i>&nbsp;                                    }
-<i>652</i>&nbsp;                                });
-<i>653</i>&nbsp;                            }
-<i>654</i>&nbsp;                        }
-<i>655</i>&nbsp;                    }
-<i>656</i>&nbsp;                }
-<i>657</i>&nbsp;            });
-<i>658</i>&nbsp;
-<i>659</i>&nbsp;        }
-<i>660</i>&nbsp;    }
-<i>661</i>&nbsp;    /**
-<i>662</i>&nbsp;     * This method is dedicated to making a decision in case there is special effect the players god card offers.
-<i>663</i>&nbsp;     */
-<i>664</i>&nbsp;    public void makeDecision() {
-<i>665</i>&nbsp;
-<b class="nc"><i>666</i>&nbsp;        mapPanel.makeDecision(s.getDecision());</b>
-<b class="nc"><i>667</i>&nbsp;        JButton yes = mapPanel.getYes();</b>
-<b class="nc"><i>668</i>&nbsp;        JButton no = mapPanel.getNo();</b>
-<b class="nc"><i>669</i>&nbsp;        if (yes.getActionListeners().length &gt; 0) {</b>
-<b class="nc"><i>670</i>&nbsp;            yes.removeActionListener(yes.getActionListeners()[0]);</b>
-<i>671</i>&nbsp;        }
-<b class="nc"><i>672</i>&nbsp;        yes.addActionListener(e -&gt; {</b>
-<b class="nc"><i>673</i>&nbsp;            if (e.getSource() == yes) {</b>
-<b class="nc"><i>674</i>&nbsp;                yes.setEnabled(false);</b>
-<b class="nc"><i>675</i>&nbsp;                no.setEnabled(false);</b>
-<b class="nc"><i>676</i>&nbsp;                Thread decisionYes = new Thread(() -&gt; {</b>
-<b class="nc"><i>677</i>&nbsp;                    EventForServer eventDecisionTaken = new DecisionTaken(true);</b>
-<b class="nc"><i>678</i>&nbsp;                    s.notify(eventDecisionTaken);</b>
-<i>679</i>&nbsp;                });
-<b class="nc"><i>680</i>&nbsp;                decisionYes.start();</b>
-<i>681</i>&nbsp;            }
-<i>682</i>&nbsp;        });
-<i>683</i>&nbsp;
-<b class="nc"><i>684</i>&nbsp;        if (no.getActionListeners().length &gt; 0) {</b>
-<b class="nc"><i>685</i>&nbsp;            no.removeActionListener(no.getActionListeners()[0]);</b>
-<i>686</i>&nbsp;        }
-<b class="nc"><i>687</i>&nbsp;        no.addActionListener(e -&gt; {</b>
-<b class="nc"><i>688</i>&nbsp;            if (e.getSource() == no) {</b>
-<b class="nc"><i>689</i>&nbsp;                yes.setEnabled(false);</b>
-<b class="nc"><i>690</i>&nbsp;                no.setEnabled(false);</b>
-<b class="nc"><i>691</i>&nbsp;                Thread decisionNo = new Thread(() -&gt; {</b>
-<b class="nc"><i>692</i>&nbsp;                    EventForServer eventDecisionTaken = new DecisionTaken(false);</b>
-<b class="nc"><i>693</i>&nbsp;                    s.notify(eventDecisionTaken);</b>
-<i>694</i>&nbsp;                });
-<b class="nc"><i>695</i>&nbsp;                decisionNo.start();</b>
-<i>696</i>&nbsp;            }
-<i>697</i>&nbsp;        });
-<i>698</i>&nbsp;
-<i>699</i>&nbsp;    }
-<i>700</i>&nbsp;
-<i>701</i>&nbsp;    /**
-<i>702</i>&nbsp;     * This method communicates to the players that their actions have been received by server.
-<i>703</i>&nbsp;     */
-<i>704</i>&nbsp;    public void ack() {
-<b class="nc"><i>705</i>&nbsp;        mapPanel.setChat(&quot;Your &quot; + s.getOperationConfirmed() + &quot; event is received by server...&quot;);</b>
-<i>706</i>&nbsp;    }
-<i>707</i>&nbsp;    /**
-<i>708</i>&nbsp;     * This method communicates to the players that something has gone wrong.
-<i>709</i>&nbsp;     */
-<i>710</i>&nbsp;    public void unsuccessfulOperation() {
-<b class="nc"><i>711</i>&nbsp;        mapPanel.setChat(&quot;Sorry , something went wrong server side...&quot; + &quot;\n&quot; + &quot;Repeat your last action !&quot;);</b>
-<i>712</i>&nbsp;    }
-<i>713</i>&nbsp;    /**
-<i>714</i>&nbsp;     * This method launches the win panel for the player who won at the end of the game.
-<i>715</i>&nbsp;     */
-<i>716</i>&nbsp;    public void winGame() throws IOException {
-<b class="nc"><i>717</i>&nbsp;        frame.getContentPane().removeAll();</b>
-<b class="nc"><i>718</i>&nbsp;        frame.setSize(1400, 700);</b>
-<i>719</i>&nbsp;        Image winImage;
-<i>720</i>&nbsp;
-<b class="nc"><i>721</i>&nbsp;        winImage = ImageIO.read(getClass().getResourceAsStream(&quot;/winBackground.jpg&quot;));</b>
+<b class="nc"><i>649</i>&nbsp;                            for(JButton button : availableLevels){</b>
+<b class="nc"><i>650</i>&nbsp;                                button.setEnabled(true);</b>
+<b class="nc"><i>651</i>&nbsp;                                button.setBorder(BorderFactory.createLineBorder(Color.red,2));</b>
+<b class="nc"><i>652</i>&nbsp;                            }</b>
+<i>653</i>&nbsp;
+<b class="nc"><i>654</i>&nbsp;                            for (int j = 0; j &lt; availableLevels.size(); j++) {</b>
+<i>655</i>&nbsp;                                //System.out.println(availableLevels.get(i).getMouseListeners());
+<b class="nc"><i>656</i>&nbsp;                                if (availableLevels.get(j).getActionListeners().length&gt;0) {</b>
+<b class="nc"><i>657</i>&nbsp;                                    availableLevels.get(j).removeActionListener(availableLevels.get(j).getActionListeners()[0]);</b>
+<i>658</i>&nbsp;                                }
+<b class="nc"><i>659</i>&nbsp;                                availableLevels.get(j).addActionListener(new ActionListener() {</b>
+<i>660</i>&nbsp;                                    @Override
+<i>661</i>&nbsp;                                    public void actionPerformed(ActionEvent e) {
+<b class="nc"><i>662</i>&nbsp;                                        for (JButton availableLevel : availableLevels) {</b>
+<b class="nc"><i>663</i>&nbsp;                                            if (e.getSource() == availableLevel) {</b>
+<b class="nc"><i>664</i>&nbsp;                                                for(JButton button : availableLevels){</b>
+<b class="nc"><i>665</i>&nbsp;                                                    button.setEnabled(false);</b>
+<b class="nc"><i>666</i>&nbsp;                                                    button.setBorder(BorderFactory.createLineBorder(Color.red,0));</b>
+<b class="nc"><i>667</i>&nbsp;                                                }</b>
+<b class="nc"><i>668</i>&nbsp;                                                build = new Pair&lt;&gt;(chosenPair.getValue0(), Level.valueOf(availableLevel.getText().toUpperCase()));</b>
+<b class="nc"><i>669</i>&nbsp;                                                mapPanel.getYesUndo().setEnabled(true);</b>
+<b class="nc"><i>670</i>&nbsp;                                                mapPanel.getNoUndo().setEnabled(true);</b>
+<b class="nc"><i>671</i>&nbsp;                                                getChoice(&quot;BUILD&quot;);</b>
+<i>672</i>&nbsp;
+<i>673</i>&nbsp;                                            }
+<b class="nc"><i>674</i>&nbsp;                                        }</b>
+<i>675</i>&nbsp;                                    }
+<i>676</i>&nbsp;                                });
+<i>677</i>&nbsp;                            }
+<i>678</i>&nbsp;                        }
+<i>679</i>&nbsp;                    }
+<i>680</i>&nbsp;                }
+<i>681</i>&nbsp;            });
+<i>682</i>&nbsp;
+<i>683</i>&nbsp;        }
+<i>684</i>&nbsp;    }
+<i>685</i>&nbsp;    /**
+<i>686</i>&nbsp;     * This method is dedicated to making a decision in case there is special effect the players god card offers.
+<i>687</i>&nbsp;     */
+<i>688</i>&nbsp;    public void makeDecision() {
+<i>689</i>&nbsp;
+<b class="nc"><i>690</i>&nbsp;        mapPanel.makeDecision(s.getDecision());</b>
+<b class="nc"><i>691</i>&nbsp;        JButton yes = mapPanel.getYes();</b>
+<b class="nc"><i>692</i>&nbsp;        JButton no = mapPanel.getNo();</b>
+<b class="nc"><i>693</i>&nbsp;        if (yes.getActionListeners().length &gt; 0) {</b>
+<b class="nc"><i>694</i>&nbsp;            yes.removeActionListener(yes.getActionListeners()[0]);</b>
+<i>695</i>&nbsp;        }
+<b class="nc"><i>696</i>&nbsp;        yes.addActionListener(e -&gt; {</b>
+<b class="nc"><i>697</i>&nbsp;            if (e.getSource() == yes) {</b>
+<b class="nc"><i>698</i>&nbsp;                yes.setEnabled(false);</b>
+<b class="nc"><i>699</i>&nbsp;                no.setEnabled(false);</b>
+<b class="nc"><i>700</i>&nbsp;                Thread decisionYes = new Thread(() -&gt; {</b>
+<b class="nc"><i>701</i>&nbsp;                    EventForServer eventDecisionTaken = new DecisionTaken(true);</b>
+<b class="nc"><i>702</i>&nbsp;                    s.notify(eventDecisionTaken);</b>
+<i>703</i>&nbsp;                });
+<b class="nc"><i>704</i>&nbsp;                decisionYes.start();</b>
+<i>705</i>&nbsp;            }
+<i>706</i>&nbsp;        });
+<i>707</i>&nbsp;
+<b class="nc"><i>708</i>&nbsp;        if (no.getActionListeners().length &gt; 0) {</b>
+<b class="nc"><i>709</i>&nbsp;            no.removeActionListener(no.getActionListeners()[0]);</b>
+<i>710</i>&nbsp;        }
+<b class="nc"><i>711</i>&nbsp;        no.addActionListener(e -&gt; {</b>
+<b class="nc"><i>712</i>&nbsp;            if (e.getSource() == no) {</b>
+<b class="nc"><i>713</i>&nbsp;                yes.setEnabled(false);</b>
+<b class="nc"><i>714</i>&nbsp;                no.setEnabled(false);</b>
+<b class="nc"><i>715</i>&nbsp;                Thread decisionNo = new Thread(() -&gt; {</b>
+<b class="nc"><i>716</i>&nbsp;                    EventForServer eventDecisionTaken = new DecisionTaken(false);</b>
+<b class="nc"><i>717</i>&nbsp;                    s.notify(eventDecisionTaken);</b>
+<i>718</i>&nbsp;                });
+<b class="nc"><i>719</i>&nbsp;                decisionNo.start();</b>
+<i>720</i>&nbsp;            }
+<i>721</i>&nbsp;        });
 <i>722</i>&nbsp;
-<b class="nc"><i>723</i>&nbsp;        winPanel = new WinPanel(winImage);</b>
+<i>723</i>&nbsp;    }
 <i>724</i>&nbsp;
-<b class="nc"><i>725</i>&nbsp;        frame.getContentPane().add(winPanel);</b>
-<b class="nc"><i>726</i>&nbsp;        frame.setVisible(true);</b>
-<i>727</i>&nbsp;    }
-<i>728</i>&nbsp;    /**
-<i>729</i>&nbsp;     * This method launches the lose panel for the player who lost at the end of the game.
-<i>730</i>&nbsp;     */
-<i>731</i>&nbsp;    public void loseGame() {
-<b class="nc"><i>732</i>&nbsp;        frame.getContentPane().removeAll();</b>
-<b class="nc"><i>733</i>&nbsp;        frame.setSize(1400, 700);</b>
-<i>734</i>&nbsp;
-<b class="nc"><i>735</i>&nbsp;        LosePanel losePanel = new LosePanel();</b>
-<b class="nc"><i>736</i>&nbsp;        losePanel.getText().setText(&quot;YOU LOST !!!&quot;);</b>
-<b class="nc"><i>737</i>&nbsp;        frame.getContentPane().add(losePanel);</b>
-<b class="nc"><i>738</i>&nbsp;        frame.setVisible(true);</b>
-<i>739</i>&nbsp;    }
-<i>740</i>&nbsp;    /**
-<i>741</i>&nbsp;     * This method lets the player know that there has been a disconnection.
-<i>742</i>&nbsp;     */
-<i>743</i>&nbsp;    public void disconnectGame() {
-<b class="nc"><i>744</i>&nbsp;        frame.getContentPane().removeAll();</b>
-<b class="nc"><i>745</i>&nbsp;        frame.setSize(1400, 700);</b>
-<b class="nc"><i>746</i>&nbsp;        LosePanel disconnectGame = new LosePanel();</b>
-<b class="nc"><i>747</i>&nbsp;        disconnectGame.getText().setText(&quot;Game Disconnected !!!&quot;);</b>
-<b class="nc"><i>748</i>&nbsp;        frame.getContentPane().add(disconnectGame);</b>
-<b class="nc"><i>749</i>&nbsp;        frame.setVisible(true);</b>
-<i>750</i>&nbsp;    }
-<i>751</i>&nbsp;    /**
-<i>752</i>&nbsp;     * This method lets the player that the game has ended.
-<i>753</i>&nbsp;     */
-<i>754</i>&nbsp;    public void endGame() {
-<b class="nc"><i>755</i>&nbsp;        if ( winPanel != null)</b>
-<b class="nc"><i>756</i>&nbsp;            winPanel.getGameEnded().setVisible(true);</b>
-<b class="nc"><i>757</i>&nbsp;        if (losePanel != null)</b>
-<b class="nc"><i>758</i>&nbsp;            losePanel.getGameEnded().setVisible(true);</b>
-<b class="nc"><i>759</i>&nbsp;        if ( winPanel == null &amp;&amp; losePanel == null) {</b>
-<b class="nc"><i>760</i>&nbsp;            frame.getContentPane().removeAll();</b>
-<b class="nc"><i>761</i>&nbsp;            frame.setSize(1400, 700);</b>
-<b class="nc"><i>762</i>&nbsp;            LosePanel endGame = new LosePanel();</b>
-<b class="nc"><i>763</i>&nbsp;            endGame.getText().setText(&quot;End Game !!!&quot;);</b>
-<b class="nc"><i>764</i>&nbsp;            frame.getContentPane().add(endGame);</b>
-<b class="nc"><i>765</i>&nbsp;            frame.setVisible(true);</b>
-<i>766</i>&nbsp;        }
-<i>767</i>&nbsp;    }
-<i>768</i>&nbsp;    /**
-<i>769</i>&nbsp;     * This method lets the player know that he is out of the room.
-<i>770</i>&nbsp;     */
-<i>771</i>&nbsp;    public void outOfRoom() {
-<b class="nc"><i>772</i>&nbsp;        frame.getContentPane().removeAll();</b>
-<b class="nc"><i>773</i>&nbsp;        frame.setSize(1400, 700);</b>
-<b class="nc"><i>774</i>&nbsp;        LosePanel outOfRoom = new LosePanel();</b>
-<b class="nc"><i>775</i>&nbsp;        outOfRoom.getText().setText(&quot;Out of Room&quot;);</b>
-<b class="nc"><i>776</i>&nbsp;        frame.getContentPane().add(outOfRoom);</b>
-<b class="nc"><i>777</i>&nbsp;        frame.setVisible(true);</b>
-<i>778</i>&nbsp;    }
-<i>779</i>&nbsp;    /**
-<i>780</i>&nbsp;     * This method lets the player know that his turn has ended.
-<i>781</i>&nbsp;     */
-<i>782</i>&nbsp;    public void turnIsEnd() {
-<b class="nc"><i>783</i>&nbsp;        mapPanel.setChat(&quot;Your turn has ended !&quot;);</b>
-<i>784</i>&nbsp;    }
-<i>785</i>&nbsp;    /**
-<i>786</i>&nbsp;     * This method lets the player know that the game is starting.
-<i>787</i>&nbsp;     */
-<i>788</i>&nbsp;    public void gameIsStarting() {
-<i>789</i>&nbsp;        //mapPanel.setChat( &quot;The game is started!!&quot;);
-<i>790</i>&nbsp;    }
-<i>791</i>&nbsp;    /**
-<i>792</i>&nbsp;     * This method manages the choice of the player to undo his last action.
-<i>793</i>&nbsp;     * @param methodName to understand which action the player wants to undo.
+<i>725</i>&nbsp;    /**
+<i>726</i>&nbsp;     * This method communicates to the players that their actions have been received by server.
+<i>727</i>&nbsp;     */
+<i>728</i>&nbsp;    public void ack() {
+<b class="nc"><i>729</i>&nbsp;        mapPanel.setChat(&quot;Your &quot; + s.getOperationConfirmed() + &quot; event is received by server...&quot;);</b>
+<i>730</i>&nbsp;    }
+<i>731</i>&nbsp;    /**
+<i>732</i>&nbsp;     * This method communicates to the players that something has gone wrong.
+<i>733</i>&nbsp;     */
+<i>734</i>&nbsp;    public void unsuccessfulOperation() {
+<b class="nc"><i>735</i>&nbsp;        mapPanel.setChat(&quot;Sorry , something went wrong server side...&quot; + &quot;\n&quot; + &quot;Repeat your last action !&quot;);</b>
+<i>736</i>&nbsp;    }
+<i>737</i>&nbsp;    /**
+<i>738</i>&nbsp;     * This method launches the win panel for the player who won at the end of the game.
+<i>739</i>&nbsp;     */
+<i>740</i>&nbsp;    public void winGame() throws IOException {
+<b class="nc"><i>741</i>&nbsp;        frame.getContentPane().removeAll();</b>
+<b class="nc"><i>742</i>&nbsp;        frame.setSize(1400,700);</b>
+<i>743</i>&nbsp;        BufferedImage winImage;
+<i>744</i>&nbsp;
+<b class="nc"><i>745</i>&nbsp;        winImage = ImageIO.read(getClass().getResourceAsStream(&quot;/winBackground.jpg&quot;));</b>
+<i>746</i>&nbsp;
+<b class="nc"><i>747</i>&nbsp;        winPanel = new WinPanel(winImage);</b>
+<i>748</i>&nbsp;
+<b class="nc"><i>749</i>&nbsp;        frame.getContentPane().add(winPanel);</b>
+<b class="nc"><i>750</i>&nbsp;        frame.setVisible(true);</b>
+<i>751</i>&nbsp;    }
+<i>752</i>&nbsp;    /**
+<i>753</i>&nbsp;     * This method launches the lose panel for the player who lost at the end of the game.
+<i>754</i>&nbsp;     */
+<i>755</i>&nbsp;    public void loseGame() {
+<b class="nc"><i>756</i>&nbsp;        frame.getContentPane().removeAll();</b>
+<b class="nc"><i>757</i>&nbsp;        frame.setSize(1400, 700);</b>
+<i>758</i>&nbsp;
+<b class="nc"><i>759</i>&nbsp;        LosePanel losePanel = new LosePanel();</b>
+<b class="nc"><i>760</i>&nbsp;        losePanel.getText().setText(&quot;YOU LOST !!!&quot;);</b>
+<b class="nc"><i>761</i>&nbsp;        frame.getContentPane().add(losePanel);</b>
+<b class="nc"><i>762</i>&nbsp;        frame.setVisible(true);</b>
+<i>763</i>&nbsp;    }
+<i>764</i>&nbsp;    /**
+<i>765</i>&nbsp;     * This method lets the player know that there has been a disconnection.
+<i>766</i>&nbsp;     */
+<i>767</i>&nbsp;    public void disconnectGame() {
+<b class="nc"><i>768</i>&nbsp;        frame.getContentPane().removeAll();</b>
+<b class="nc"><i>769</i>&nbsp;        frame.setSize(1400, 700);</b>
+<b class="nc"><i>770</i>&nbsp;        LosePanel disconnectGame = new LosePanel();</b>
+<b class="nc"><i>771</i>&nbsp;        disconnectGame.getText().setText(&quot;Game Disconnected !!!&quot;);</b>
+<b class="nc"><i>772</i>&nbsp;        frame.getContentPane().add(disconnectGame);</b>
+<b class="nc"><i>773</i>&nbsp;        frame.setVisible(true);</b>
+<i>774</i>&nbsp;    }
+<i>775</i>&nbsp;    /**
+<i>776</i>&nbsp;     * This method lets the player that the game has ended.
+<i>777</i>&nbsp;     */
+<i>778</i>&nbsp;    public void endGame() {
+<b class="nc"><i>779</i>&nbsp;        if (winPanel != null)</b>
+<b class="nc"><i>780</i>&nbsp;            winPanel.getGameEnded().setVisible(true);</b>
+<b class="nc"><i>781</i>&nbsp;        if (losePanel != null)</b>
+<b class="nc"><i>782</i>&nbsp;            losePanel.getGameEnded().setVisible(true);</b>
+<b class="nc"><i>783</i>&nbsp;        if (losePanel == null &amp;&amp; winPanel == null) {</b>
+<b class="nc"><i>784</i>&nbsp;            frame.getContentPane().removeAll();</b>
+<b class="nc"><i>785</i>&nbsp;            frame.setSize(1400, 700);</b>
+<b class="nc"><i>786</i>&nbsp;            LosePanel endGame = new LosePanel();</b>
+<b class="nc"><i>787</i>&nbsp;            endGame.getText().setText(&quot;You Lose !!! End Game&quot;);</b>
+<b class="nc"><i>788</i>&nbsp;            frame.getContentPane().add(endGame);</b>
+<b class="nc"><i>789</i>&nbsp;            frame.setVisible(true);</b>
+<i>790</i>&nbsp;        }
+<i>791</i>&nbsp;    }
+<i>792</i>&nbsp;    /**
+<i>793</i>&nbsp;     * This method lets the player know that he is out of the room.
 <i>794</i>&nbsp;     */
-<i>795</i>&nbsp;    private void getChoice(String methodName) {
-<i>796</i>&nbsp;
-<b class="nc"><i>797</i>&nbsp;        JButton yes = mapPanel.getYesUndo();</b>
-<b class="nc"><i>798</i>&nbsp;        JButton no = mapPanel.getNoUndo();</b>
-<i>799</i>&nbsp;
-<i>800</i>&nbsp;
-<b class="nc"><i>801</i>&nbsp;        Timer yesTimer = new Timer(5000, null);</b>
-<i>802</i>&nbsp;
-<b class="nc"><i>803</i>&nbsp;        ActionListener yesActionListener = new ActionListener() {</b>
-<i>804</i>&nbsp;            @Override
-<i>805</i>&nbsp;            public void actionPerformed(ActionEvent e) {
-<b class="nc"><i>806</i>&nbsp;                yesTimer.stop();</b>
-<b class="nc"><i>807</i>&nbsp;                yes.removeActionListener(this);</b>
-<b class="nc"><i>808</i>&nbsp;                no.removeActionListener(no.getActionListeners()[0]);</b>
-<i>809</i>&nbsp;                //here we have to handle the yes case...
-<i>810</i>&nbsp;
-<b class="nc"><i>811</i>&nbsp;                mapPanel.getYesUndo().setEnabled(false);</b>
-<b class="nc"><i>812</i>&nbsp;                mapPanel.getNoUndo().setEnabled(false);</b>
-<i>813</i>&nbsp;
-<b class="nc"><i>814</i>&nbsp;                switch (methodName) {</b>
-<i>815</i>&nbsp;                    case &quot;PLACEWORKER&quot;:
-<b class="nc"><i>816</i>&nbsp;                        EventForServer eventWorkerPosition = new WorkerPosition(coordinates);</b>
-<b class="nc"><i>817</i>&nbsp;                        s.notify(eventWorkerPosition);</b>
-<b class="nc"><i>818</i>&nbsp;                        break;</b>
-<i>819</i>&nbsp;                    case &quot;CHOOSEWORKER&quot;:
-<b class="nc"><i>820</i>&nbsp;                        EventForServer eventWorkerChoice = new WorkerChoice(chosenWorker);</b>
-<b class="nc"><i>821</i>&nbsp;                        s.notify(eventWorkerChoice);</b>
-<b class="nc"><i>822</i>&nbsp;                        break;</b>
-<i>823</i>&nbsp;                    case &quot;MOVE&quot;:
-<b class="nc"><i>824</i>&nbsp;                        EventForServer eventMoveChoice = new MoveChoice(chosenCoordinates);</b>
-<b class="nc"><i>825</i>&nbsp;                        s.notify(eventMoveChoice);</b>
-<b class="nc"><i>826</i>&nbsp;                        break;</b>
-<i>827</i>&nbsp;                    case &quot;BUILD&quot;:
-<b class="nc"><i>828</i>&nbsp;                        EventForServer eventBuild = new Build(build);</b>
-<b class="nc"><i>829</i>&nbsp;                        s.notify(eventBuild);</b>
-<i>830</i>&nbsp;                        break;
-<i>831</i>&nbsp;                }
-<i>832</i>&nbsp;            }
-<i>833</i>&nbsp;        };
+<i>795</i>&nbsp;    public void outOfRoom() {
+<b class="nc"><i>796</i>&nbsp;        frame.getContentPane().removeAll();</b>
+<b class="nc"><i>797</i>&nbsp;        frame.setSize(1400, 700);</b>
+<b class="nc"><i>798</i>&nbsp;        LosePanel outOfRoom = new LosePanel();</b>
+<b class="nc"><i>799</i>&nbsp;        outOfRoom.getText().setText(&quot;Out of Room&quot;);</b>
+<b class="nc"><i>800</i>&nbsp;        frame.getContentPane().add(outOfRoom);</b>
+<b class="nc"><i>801</i>&nbsp;        frame.setVisible(true);</b>
+<i>802</i>&nbsp;    }
+<i>803</i>&nbsp;    /**
+<i>804</i>&nbsp;     * This method lets the player know that his turn has ended.
+<i>805</i>&nbsp;     */
+<i>806</i>&nbsp;    public void turnIsEnd() {
+<b class="nc"><i>807</i>&nbsp;        mapPanel.setChat(&quot;Your turn has ended !&quot;);</b>
+<i>808</i>&nbsp;    }
+<i>809</i>&nbsp;    /**
+<i>810</i>&nbsp;     * This method lets the player know that the game is starting.
+<i>811</i>&nbsp;     */
+<i>812</i>&nbsp;    public void gameIsStarting() {
+<i>813</i>&nbsp;        //mapPanel.setChat( &quot;The game is started!!&quot;);
+<i>814</i>&nbsp;    }
+<i>815</i>&nbsp;    /**
+<i>816</i>&nbsp;     * This method manages the choice of the player to undo his last action.
+<i>817</i>&nbsp;     * @param methodName to understand which action the player wants to undo.
+<i>818</i>&nbsp;     */
+<i>819</i>&nbsp;    private void getChoice(String methodName) {
+<i>820</i>&nbsp;
+<b class="nc"><i>821</i>&nbsp;        JButton yes = mapPanel.getYesUndo();</b>
+<b class="nc"><i>822</i>&nbsp;        JButton no = mapPanel.getNoUndo();</b>
+<i>823</i>&nbsp;
+<i>824</i>&nbsp;
+<b class="nc"><i>825</i>&nbsp;        Timer yesTimer = new Timer(5000, null);</b>
+<i>826</i>&nbsp;
+<b class="nc"><i>827</i>&nbsp;        ActionListener yesActionListener = new ActionListener() {</b>
+<i>828</i>&nbsp;            @Override
+<i>829</i>&nbsp;            public void actionPerformed(ActionEvent e) {
+<b class="nc"><i>830</i>&nbsp;                yesTimer.stop();</b>
+<b class="nc"><i>831</i>&nbsp;                yes.removeActionListener(this);</b>
+<b class="nc"><i>832</i>&nbsp;                no.removeActionListener(no.getActionListeners()[0]);</b>
+<i>833</i>&nbsp;                //here we have to handle the yes case...
 <i>834</i>&nbsp;
-<b class="nc"><i>835</i>&nbsp;        ActionListener noActionListener = new ActionListener() {</b>
-<i>836</i>&nbsp;            @Override
-<i>837</i>&nbsp;            public void actionPerformed(ActionEvent e) {
-<b class="nc"><i>838</i>&nbsp;                yesTimer.stop();</b>
-<b class="nc"><i>839</i>&nbsp;                yes.removeActionListener(yes.getActionListeners()[0]);</b>
-<b class="nc"><i>840</i>&nbsp;                no.removeActionListener(this);</b>
-<i>841</i>&nbsp;                //here we have to handle the no case...
-<i>842</i>&nbsp;
-<b class="nc"><i>843</i>&nbsp;                mapPanel.getYesUndo().setEnabled(false);</b>
-<b class="nc"><i>844</i>&nbsp;                mapPanel.getNoUndo().setEnabled(false);</b>
-<i>845</i>&nbsp;
-<b class="nc"><i>846</i>&nbsp;                switch (methodName){</b>
-<i>847</i>&nbsp;                    case &quot;PLACEWORKER&quot;:
-<b class="nc"><i>848</i>&nbsp;                        SwingUtilities.invokeLater( () -&gt; { placeWorkers(); } );</b>
-<b class="nc"><i>849</i>&nbsp;                        break;</b>
-<i>850</i>&nbsp;                    case &quot;CHOOSEWORKER&quot;:
-<b class="nc"><i>851</i>&nbsp;                        SwingUtilities.invokeLater( () -&gt; { chooseWorker(); } );</b>
-<b class="nc"><i>852</i>&nbsp;                        break;</b>
-<i>853</i>&nbsp;                    case &quot;MOVE&quot;:
-<b class="nc"><i>854</i>&nbsp;                        SwingUtilities.invokeLater( () -&gt; { askMove(); } );</b>
-<b class="nc"><i>855</i>&nbsp;                        break;</b>
-<i>856</i>&nbsp;                    case &quot;BUILD&quot;:
-<b class="nc"><i>857</i>&nbsp;                        SwingUtilities.invokeLater( () -&gt; { askBuild(); } );</b>
-<i>858</i>&nbsp;                        break;
-<i>859</i>&nbsp;                }
-<i>860</i>&nbsp;            }
-<i>861</i>&nbsp;        };
-<i>862</i>&nbsp;
-<b class="nc"><i>863</i>&nbsp;        undoThread = new Thread(() -&gt; {</b>
-<i>864</i>&nbsp;
-<b class="nc"><i>865</i>&nbsp;            yes.addActionListener(yesActionListener);</b>
+<b class="nc"><i>835</i>&nbsp;                mapPanel.getYesUndo().setEnabled(false);</b>
+<b class="nc"><i>836</i>&nbsp;                mapPanel.getNoUndo().setEnabled(false);</b>
+<i>837</i>&nbsp;
+<b class="nc"><i>838</i>&nbsp;                switch (methodName) {</b>
+<i>839</i>&nbsp;                    case &quot;PLACEWORKER&quot;:
+<b class="nc"><i>840</i>&nbsp;                        EventForServer eventWorkerPosition = new WorkerPosition(coordinates);</b>
+<b class="nc"><i>841</i>&nbsp;                        s.notify(eventWorkerPosition);</b>
+<b class="nc"><i>842</i>&nbsp;                        break;</b>
+<i>843</i>&nbsp;                    case &quot;CHOOSEWORKER&quot;:
+<b class="nc"><i>844</i>&nbsp;                        EventForServer eventWorkerChoice = new WorkerChoice(chosenWorker);</b>
+<b class="nc"><i>845</i>&nbsp;                        s.notify(eventWorkerChoice);</b>
+<b class="nc"><i>846</i>&nbsp;                        break;</b>
+<i>847</i>&nbsp;                    case &quot;MOVE&quot;:
+<b class="nc"><i>848</i>&nbsp;                        EventForServer eventMoveChoice = new MoveChoice(chosenCoordinates);</b>
+<b class="nc"><i>849</i>&nbsp;                        s.notify(eventMoveChoice);</b>
+<b class="nc"><i>850</i>&nbsp;                        break;</b>
+<i>851</i>&nbsp;                    case &quot;BUILD&quot;:
+<b class="nc"><i>852</i>&nbsp;                        EventForServer eventBuild = new Build(build);</b>
+<b class="nc"><i>853</i>&nbsp;                        s.notify(eventBuild);</b>
+<i>854</i>&nbsp;                        break;
+<i>855</i>&nbsp;                }
+<i>856</i>&nbsp;            }
+<i>857</i>&nbsp;        };
+<i>858</i>&nbsp;
+<b class="nc"><i>859</i>&nbsp;        ActionListener noActionListener = new ActionListener() {</b>
+<i>860</i>&nbsp;            @Override
+<i>861</i>&nbsp;            public void actionPerformed(ActionEvent e) {
+<b class="nc"><i>862</i>&nbsp;                yesTimer.stop();</b>
+<b class="nc"><i>863</i>&nbsp;                yes.removeActionListener(yes.getActionListeners()[0]);</b>
+<b class="nc"><i>864</i>&nbsp;                no.removeActionListener(this);</b>
+<i>865</i>&nbsp;                //here we have to handle the no case...
 <i>866</i>&nbsp;
-<b class="nc"><i>867</i>&nbsp;            yesTimer.addActionListener(yesActionListener);</b>
-<b class="nc"><i>868</i>&nbsp;            yesTimer.setRepeats(false);</b>
-<b class="nc"><i>869</i>&nbsp;            yesTimer.start();</b>
-<i>870</i>&nbsp;
-<b class="nc"><i>871</i>&nbsp;            no.addActionListener(noActionListener);</b>
-<i>872</i>&nbsp;
-<i>873</i>&nbsp;        });
-<i>874</i>&nbsp;
-<b class="nc"><i>875</i>&nbsp;        undoThread.start();</b>
-<i>876</i>&nbsp;
-<i>877</i>&nbsp;    }
-<i>878</i>&nbsp;
-<i>879</i>&nbsp;
-<i>880</i>&nbsp;}
+<b class="nc"><i>867</i>&nbsp;                mapPanel.getYesUndo().setEnabled(false);</b>
+<b class="nc"><i>868</i>&nbsp;                mapPanel.getNoUndo().setEnabled(false);</b>
+<i>869</i>&nbsp;
+<b class="nc"><i>870</i>&nbsp;                switch (methodName){</b>
+<i>871</i>&nbsp;                    case &quot;PLACEWORKER&quot;:
+<b class="nc"><i>872</i>&nbsp;                        SwingUtilities.invokeLater( () -&gt; { placeWorkers(); } );</b>
+<b class="nc"><i>873</i>&nbsp;                        break;</b>
+<i>874</i>&nbsp;                    case &quot;CHOOSEWORKER&quot;:
+<b class="nc"><i>875</i>&nbsp;                        SwingUtilities.invokeLater( () -&gt; { chooseWorker(); } );</b>
+<b class="nc"><i>876</i>&nbsp;                        break;</b>
+<i>877</i>&nbsp;                    case &quot;MOVE&quot;:
+<b class="nc"><i>878</i>&nbsp;                        SwingUtilities.invokeLater( () -&gt; { askMove(); } );</b>
+<b class="nc"><i>879</i>&nbsp;                        break;</b>
+<i>880</i>&nbsp;                    case &quot;BUILD&quot;:
+<b class="nc"><i>881</i>&nbsp;                        SwingUtilities.invokeLater( () -&gt; { askBuild(); } );</b>
+<i>882</i>&nbsp;                        break;
+<i>883</i>&nbsp;                }
+<i>884</i>&nbsp;            }
+<i>885</i>&nbsp;        };
+<i>886</i>&nbsp;
+<b class="nc"><i>887</i>&nbsp;        undoThread = new Thread(() -&gt; {</b>
+<i>888</i>&nbsp;
+<b class="nc"><i>889</i>&nbsp;            yes.addActionListener(yesActionListener);</b>
+<i>890</i>&nbsp;
+<b class="nc"><i>891</i>&nbsp;            yesTimer.addActionListener(yesActionListener);</b>
+<b class="nc"><i>892</i>&nbsp;            yesTimer.setRepeats(false);</b>
+<b class="nc"><i>893</i>&nbsp;            yesTimer.start();</b>
+<i>894</i>&nbsp;
+<b class="nc"><i>895</i>&nbsp;            no.addActionListener(noActionListener);</b>
+<i>896</i>&nbsp;
+<i>897</i>&nbsp;        });
+<i>898</i>&nbsp;
+<b class="nc"><i>899</i>&nbsp;        undoThread.start();</b>
+<i>900</i>&nbsp;
+<i>901</i>&nbsp;    }
+<i>902</i>&nbsp;
+<i>903</i>&nbsp;
+<i>904</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2020-07-03 12:23</div>
+    <div style="float:right;">generated on 2020-07-03 19:26</div>
 </div>
 </body>
 </html>
