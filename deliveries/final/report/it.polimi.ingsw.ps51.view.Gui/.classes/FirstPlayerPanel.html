@@ -1,0 +1,175 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: FirstPlayerPanel</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.view.Gui</a> ]
+</div>
+
+<h1>Coverage Summary for Class: FirstPlayerPanel (it.polimi.ingsw.ps51.view.Gui)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FirstPlayerPanel</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 42)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.view.Gui;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;
+<i>4</i>&nbsp;import javax.imageio.ImageIO;
+<i>5</i>&nbsp;import javax.swing.*;
+<i>6</i>&nbsp;import java.awt.*;
+<i>7</i>&nbsp;import java.awt.image.BufferedImage;
+<i>8</i>&nbsp;import java.io.IOException;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;/**
+<i>11</i>&nbsp; * @author Merita Mullameti
+<i>12</i>&nbsp; * This class is a JPanel for the first player to choose the player that will start the game.
+<i>13</i>&nbsp; */
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;public class FirstPlayerPanel extends JPanel {
+<i>16</i>&nbsp;
+<b class="nc"><i>17</i>&nbsp;    GridBagConstraints gbc = new GridBagConstraints();</b>
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;    Container workerContainer;
+<i>20</i>&nbsp;    Image background;
+<i>21</i>&nbsp;    private JButton[] players;
+<i>22</i>&nbsp;    JLabel choosePlayer;
+<i>23</i>&nbsp;
+<b class="nc"><i>24</i>&nbsp;    public FirstPlayerPanel(Image background) {</b>
+<i>25</i>&nbsp;
+<b class="nc"><i>26</i>&nbsp;        this.background = background;</b>
+<b class="nc"><i>27</i>&nbsp;        setLayout(new GridBagLayout());</b>
+<i>28</i>&nbsp;
+<b class="nc"><i>29</i>&nbsp;        choosePlayer = new JLabel(&quot;Choose the first player : &quot;);</b>
+<b class="nc"><i>30</i>&nbsp;        choosePlayer.setHorizontalTextPosition(JLabel.CENTER);</b>
+<b class="nc"><i>31</i>&nbsp;        choosePlayer.setVerticalTextPosition(JLabel.CENTER);</b>
+<b class="nc"><i>32</i>&nbsp;        choosePlayer.setFont(new Font(&quot;Times New Roman&quot;, Font.BOLD, 42));</b>
+<b class="nc"><i>33</i>&nbsp;        choosePlayer.setForeground(new Color(0,102,0));</b>
+<b class="nc"><i>34</i>&nbsp;        gbc.gridx = 0;</b>
+<b class="nc"><i>35</i>&nbsp;        gbc.gridy = 0;</b>
+<b class="nc"><i>36</i>&nbsp;        add(choosePlayer , gbc);</b>
+<i>37</i>&nbsp;
+<b class="nc"><i>38</i>&nbsp;        definePlayerButtons();</b>
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    }
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    @Override
+<i>44</i>&nbsp;    protected void paintComponent(Graphics g) {
+<b class="nc"><i>45</i>&nbsp;        super.paintComponent(g);</b>
+<i>46</i>&nbsp;
+<b class="nc"><i>47</i>&nbsp;        g.drawImage(background, 0, 0,this.getWidth(),this.getHeight(), this);</b>
+<i>48</i>&nbsp;    }
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    private void definePlayerButtons(){
+<b class="nc"><i>52</i>&nbsp;        workerContainer = new Container();</b>
+<b class="nc"><i>53</i>&nbsp;        workerContainer.setLayout(new GridLayout(1,3,50,50));</b>
+<b class="nc"><i>54</i>&nbsp;        workerContainer.setSize(500, 300);</b>
+<i>55</i>&nbsp;
+<b class="nc"><i>56</i>&nbsp;        players = new JButton[3];</b>
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;
+<b class="nc"><i>59</i>&nbsp;        for( int i=0 ; i&lt;3 ; i++) {</b>
+<b class="nc"><i>60</i>&nbsp;            players[i] = new JButton();</b>
+<i>61</i>&nbsp;            try {
+<b class="nc"><i>62</i>&nbsp;                BufferedImage bufferedImage1 = ImageIO.read(getClass().getResourceAsStream(&quot;/Workers/red.png&quot;));</b>
+<b class="nc"><i>63</i>&nbsp;                ImageIcon workerImage = new ImageIcon(new ImageIcon(bufferedImage1).getImage().getScaledInstance(140, 240,Image.SCALE_DEFAULT));</b>
+<b class="nc"><i>64</i>&nbsp;                players[i].setIcon(workerImage);</b>
+<b class="nc"><i>65</i>&nbsp;            } catch (IOException e) {</b>
+<b class="nc"><i>66</i>&nbsp;                e.printStackTrace();</b>
+<b class="nc"><i>67</i>&nbsp;            }</b>
+<b class="nc"><i>68</i>&nbsp;            players[i].setForeground(Color.RED);</b>
+<b class="nc"><i>69</i>&nbsp;            players[i].setFont(new Font(&quot;Times New Roman&quot;, Font.BOLD,32));</b>
+<b class="nc"><i>70</i>&nbsp;            players[i].setHorizontalTextPosition(JButton.CENTER);</b>
+<b class="nc"><i>71</i>&nbsp;            players[i].setVerticalTextPosition(JButton.BOTTOM);</b>
+<b class="nc"><i>72</i>&nbsp;            players[i].setSize(140, 240);</b>
+<b class="nc"><i>73</i>&nbsp;            players[i].setOpaque(false);</b>
+<b class="nc"><i>74</i>&nbsp;            players[i].setContentAreaFilled(false);</b>
+<b class="nc"><i>75</i>&nbsp;            players[i].setBorder(null);</b>
+<b class="nc"><i>76</i>&nbsp;            players[i].setVisible(false);</b>
+<b class="nc"><i>77</i>&nbsp;            workerContainer.add(players[i]);</b>
+<i>78</i>&nbsp;        }
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;
+<b class="nc"><i>81</i>&nbsp;        gbc.insets = new Insets(50,0,50,0);</b>
+<b class="nc"><i>82</i>&nbsp;        gbc.gridx = 0;</b>
+<b class="nc"><i>83</i>&nbsp;        gbc.gridy = 1;</b>
+<b class="nc"><i>84</i>&nbsp;        add(workerContainer , gbc);</b>
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;    }
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    public JButton[] getPlayers() {
+<b class="nc"><i>89</i>&nbsp;        return players;</b>
+<i>90</i>&nbsp;    }
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-03 12:23</div>
+</div>
+</body>
+</html>

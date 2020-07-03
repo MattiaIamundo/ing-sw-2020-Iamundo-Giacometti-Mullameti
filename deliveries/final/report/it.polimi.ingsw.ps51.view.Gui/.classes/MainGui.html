@@ -1,0 +1,234 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MainGui</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.view.Gui</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MainGui (it.polimi.ingsw.ps51.view.Gui)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MainGui</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 25)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 73)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.view.Gui;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
+<i>4</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_server.EventForServer;
+<i>5</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_server.FirstPlayerChoice;
+<i>6</i>&nbsp;import it.polimi.ingsw.ps51.exceptions.OutOfMapException;
+<i>7</i>&nbsp;import it.polimi.ingsw.ps51.utility.MessageHandler;
+<i>8</i>&nbsp;import it.polimi.ingsw.ps51.view.Supporter;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;import javax.swing.*;
+<i>11</i>&nbsp;import java.io.IOException;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;import java.util.concurrent.ExecutionException;
+<i>14</i>&nbsp;import java.util.concurrent.Future;
+<i>15</i>&nbsp;import java.util.concurrent.TimeUnit;
+<i>16</i>&nbsp;import java.util.concurrent.TimeoutException;
+<i>17</i>&nbsp;/**
+<i>18</i>&nbsp; * This class allows the communication with the players in a graphic interface
+<i>19</i>&nbsp; */
+<i>20</i>&nbsp;public class MainGui extends Supporter {
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    Gui gui;
+<i>23</i>&nbsp;    private boolean ok;
+<i>24</i>&nbsp;    boolean isFinish;
+<i>25</i>&nbsp;    MessageHandler mh;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    public MainGui() {
+<b class="nc"><i>29</i>&nbsp;        super();</b>
+<b class="nc"><i>30</i>&nbsp;        gui = new Gui(this);</b>
+<b class="nc"><i>31</i>&nbsp;        ok = false;</b>
+<b class="nc"><i>32</i>&nbsp;        isFinish = false;</b>
+<b class="nc"><i>33</i>&nbsp;        mh = new MessageHandler(this);</b>
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    }
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    @Override
+<i>38</i>&nbsp;    public void update(EventForClient message) {
+<b class="nc"><i>39</i>&nbsp;        getEvents().add(message);</b>
+<i>40</i>&nbsp;    }
+<i>41</i>&nbsp;    /**
+<i>42</i>&nbsp;     * This is the main methods of the GUI.
+<i>43</i>&nbsp;     * We choose what method is to be called based on the messages we get from the client.
+<i>44</i>&nbsp;     */
+<i>45</i>&nbsp;    @Override
+<i>46</i>&nbsp;    public void run() {
+<i>47</i>&nbsp;
+<b class="nc"><i>48</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; gui.launch());</b>
+<b class="nc"><i>49</i>&nbsp;        while(!isFinish) {</b>
+<i>50</i>&nbsp;
+<b class="nc"><i>51</i>&nbsp;            Future&lt;String&gt; stringFuture = mh.handleTheFuture();</b>
+<b class="nc"><i>52</i>&nbsp;            ok = false;</b>
+<b class="nc"><i>53</i>&nbsp;            while (!ok) {</b>
+<b class="nc"><i>54</i>&nbsp;                ok = true;</b>
+<i>55</i>&nbsp;                try {
+<b class="nc"><i>56</i>&nbsp;                    setTypeOfEvent(stringFuture.get(1, TimeUnit.SECONDS));</b>
+<i>57</i>&nbsp;
+<b class="nc"><i>58</i>&nbsp;                    switch (getTypeOfEvent()) {</b>
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;                        case &quot;NICKNAME&quot;:
+<b class="nc"><i>61</i>&nbsp;                            SwingUtilities.invokeLater(() -&gt; gui.logIn());</b>
+<b class="nc"><i>62</i>&nbsp;                            break;</b>
+<i>63</i>&nbsp;                        case&quot;NUMBEROFPLAYER&quot; :
+<b class="nc"><i>64</i>&nbsp;                            SwingUtilities.invokeLater(() -&gt; gui.numberOfPlayers());</b>
+<b class="nc"><i>65</i>&nbsp;                            break;</b>
+<i>66</i>&nbsp;                        case &quot;GODSDECK&quot;:
+<b class="nc"><i>67</i>&nbsp;                            SwingUtilities.invokeLater(() -&gt; gui.chooseGodsDeck());</b>
+<b class="nc"><i>68</i>&nbsp;                            break;</b>
+<i>69</i>&nbsp;                        case &quot;GOD&quot; :
+<b class="nc"><i>70</i>&nbsp;                            SwingUtilities.invokeLater(() -&gt; gui.chooseGodsPlayers());</b>
+<b class="nc"><i>71</i>&nbsp;                            break;</b>
+<i>72</i>&nbsp;                        case &quot;FIRSTPLAYER&quot;:
+<b class="nc"><i>73</i>&nbsp;                            SwingUtilities.invokeLater(() -&gt; gui.chooseFirstPlayer());</b>
+<i>74</i>&nbsp;
+<b class="nc"><i>75</i>&nbsp;                            break;</b>
+<i>76</i>&nbsp;                        case &quot;COLOR&quot;:
+<b class="nc"><i>77</i>&nbsp;                            SwingUtilities.invokeLater(() -&gt; gui.chooseColor());</b>
+<b class="nc"><i>78</i>&nbsp;                            break;</b>
+<i>79</i>&nbsp;                        case &quot;WORKERPOSITION&quot;:
+<b class="nc"><i>80</i>&nbsp;                            SwingUtilities.invokeLater(() -&gt; gui.placeWorkers());</b>
+<b class="nc"><i>81</i>&nbsp;                            break;</b>
+<i>82</i>&nbsp;                        case &quot;WORKER&quot;:
+<b class="nc"><i>83</i>&nbsp;                            SwingUtilities.invokeLater(() -&gt; gui.chooseWorker());</b>
+<b class="nc"><i>84</i>&nbsp;                            break;</b>
+<i>85</i>&nbsp;                        case &quot;MOVE&quot;:
+<b class="nc"><i>86</i>&nbsp;                            SwingUtilities.invokeLater(() -&gt; gui.askMove());</b>
+<b class="nc"><i>87</i>&nbsp;                            break;</b>
+<i>88</i>&nbsp;                        case &quot;BUILD&quot;:
+<b class="nc"><i>89</i>&nbsp;                            SwingUtilities.invokeLater(() -&gt; gui.askBuild());</b>
+<b class="nc"><i>90</i>&nbsp;                            break;</b>
+<i>91</i>&nbsp;                        case &quot;MAP&quot;:
+<b class="nc"><i>92</i>&nbsp;                            SwingUtilities.invokeLater(() -&gt; {</b>
+<i>93</i>&nbsp;                                try {
+<b class="nc"><i>94</i>&nbsp;                                    gui.updateMap();</b>
+<b class="nc"><i>95</i>&nbsp;                                } catch (OutOfMapException e) {</b>
+<b class="nc"><i>96</i>&nbsp;                                    e.printStackTrace();</b>
+<b class="nc"><i>97</i>&nbsp;                                }</b>
+<i>98</i>&nbsp;                            });
+<b class="nc"><i>99</i>&nbsp;                            break;</b>
+<i>100</i>&nbsp;                        case &quot;DECISION&quot; :
+<b class="nc"><i>101</i>&nbsp;                            SwingUtilities.invokeLater(() -&gt; gui.makeDecision());</b>
+<b class="nc"><i>102</i>&nbsp;                            break;</b>
+<i>103</i>&nbsp;                        case &quot;ACK&quot;:
+<b class="nc"><i>104</i>&nbsp;                            SwingUtilities.invokeLater(() -&gt; gui.ack());</b>
+<b class="nc"><i>105</i>&nbsp;                            break;</b>
+<i>106</i>&nbsp;                        case &quot;UNSUCCESSFULOPERATION&quot;:
+<b class="nc"><i>107</i>&nbsp;                            SwingUtilities.invokeLater(() -&gt; gui.unsuccessfulOperation());</b>
+<b class="nc"><i>108</i>&nbsp;                            break;</b>
+<i>109</i>&nbsp;                        case &quot;GAME_IS_STARTING&quot;:
+<b class="nc"><i>110</i>&nbsp;                            SwingUtilities.invokeLater(() -&gt; gui.gameIsStarting());</b>
+<b class="nc"><i>111</i>&nbsp;                            break;</b>
+<i>112</i>&nbsp;                        case &quot;TURN_IS_END&quot;:
+<b class="nc"><i>113</i>&nbsp;                            SwingUtilities.invokeLater(() -&gt; gui.turnIsEnd());</b>
+<b class="nc"><i>114</i>&nbsp;                            break;</b>
+<i>115</i>&nbsp;                        case &quot;WIN&quot;:
+<b class="nc"><i>116</i>&nbsp;                            SwingUtilities.invokeLater(() -&gt; {</b>
+<i>117</i>&nbsp;                                try {
+<b class="nc"><i>118</i>&nbsp;                                    gui.winGame();</b>
+<b class="nc"><i>119</i>&nbsp;                                } catch (IOException e) {</b>
+<b class="nc"><i>120</i>&nbsp;                                    e.printStackTrace();</b>
+<b class="nc"><i>121</i>&nbsp;                                }</b>
+<i>122</i>&nbsp;                            });
+<b class="nc"><i>123</i>&nbsp;                            break;</b>
+<i>124</i>&nbsp;                        case &quot;LOSE&quot;:
+<b class="nc"><i>125</i>&nbsp;                            SwingUtilities.invokeLater(() -&gt; gui.loseGame());</b>
+<b class="nc"><i>126</i>&nbsp;                            break;</b>
+<i>127</i>&nbsp;                        case &quot;ROOM&quot;:
+<b class="nc"><i>128</i>&nbsp;                            SwingUtilities.invokeLater(() -&gt; gui.outOfRoom());</b>
+<b class="nc"><i>129</i>&nbsp;                            isFinish = true;</b>
+<b class="nc"><i>130</i>&nbsp;                            break;</b>
+<i>131</i>&nbsp;                        case &quot;DISCONNECTION&quot;:
+<b class="nc"><i>132</i>&nbsp;                            SwingUtilities.invokeLater(() -&gt; gui.disconnectGame());</b>
+<b class="nc"><i>133</i>&nbsp;                            isFinish = true;</b>
+<b class="nc"><i>134</i>&nbsp;                            break;</b>
+<i>135</i>&nbsp;                        case &quot;END&quot;:
+<b class="nc"><i>136</i>&nbsp;                            SwingUtilities.invokeLater(() -&gt; gui.endGame());</b>
+<b class="nc"><i>137</i>&nbsp;                            isFinish = true;</b>
+<b class="nc"><i>138</i>&nbsp;                            break;</b>
+<i>139</i>&nbsp;                        default:
+<b class="nc"><i>140</i>&nbsp;                            ok = false;</b>
+<i>141</i>&nbsp;                            break;
+<i>142</i>&nbsp;
+<i>143</i>&nbsp;                    }
+<b class="nc"><i>144</i>&nbsp;                } catch (InterruptedException | TimeoutException | ExecutionException e) {</b>
+<b class="nc"><i>145</i>&nbsp;                    ok = false;</b>
+<b class="nc"><i>146</i>&nbsp;                }</b>
+<i>147</i>&nbsp;            }
+<b class="nc"><i>148</i>&nbsp;        }</b>
+<b class="nc"><i>149</i>&nbsp;        this.mh.getEx().shutdown();</b>
+<i>150</i>&nbsp;    }
+<i>151</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-03 12:23</div>
+</div>
+</body>
+</html>

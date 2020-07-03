@@ -1,0 +1,107 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ChooseFirstPlayer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.events.events_for_client</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ChooseFirstPlayer (it.polimi.ingsw.ps51.events.events_for_client)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ChooseFirstPlayer</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    33,3%
+  </span>
+  <span class="absValue">
+    (1/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60%
+  </span>
+  <span class="absValue">
+    (3/ 5)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.events.events_for_client;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import java.util.List;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;/**
+<i>6</i>&nbsp; * The event carries the list of all the players to permit to the challenger to choose who will be the first player to move
+<i>7</i>&nbsp; */
+<i>8</i>&nbsp;public class ChooseFirstPlayer extends SpecificUserEvent implements EventForClient{
+<i>9</i>&nbsp;    private List&lt;String&gt; players;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;    public ChooseFirstPlayer(String receiver, List&lt;String&gt; players) {
+<b class="fc"><i>12</i>&nbsp;        super(receiver);</b>
+<b class="fc"><i>13</i>&nbsp;        this.players = players;</b>
+<b class="fc"><i>14</i>&nbsp;    }</b>
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    public List&lt;String&gt; getPlayers() {
+<b class="nc"><i>17</i>&nbsp;        return players;</b>
+<i>18</i>&nbsp;    }
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    @Override
+<i>21</i>&nbsp;    public String acceptVisitor(VisitorClient visitor) {
+<b class="nc"><i>22</i>&nbsp;        return visitor.visitChooseFirstPlayer(this);</b>
+<i>23</i>&nbsp;    }
+<i>24</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-03 12:23</div>
+</div>
+</body>
+</html>

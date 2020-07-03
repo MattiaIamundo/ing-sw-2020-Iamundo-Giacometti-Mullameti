@@ -1,0 +1,205 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Supporter</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.ps51.view</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Supporter (it.polimi.ingsw.ps51.view)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Supporter</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 32)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 47)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.ps51.view;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
+<i>4</i>&nbsp;import it.polimi.ingsw.ps51.events.events_for_server.EventForServer;
+<i>5</i>&nbsp;import it.polimi.ingsw.ps51.model.*;
+<i>6</i>&nbsp;import it.polimi.ingsw.ps51.model.Map;
+<i>7</i>&nbsp;import it.polimi.ingsw.ps51.model.gods.Gods;
+<i>8</i>&nbsp;import it.polimi.ingsw.ps51.utility.Observable;
+<i>9</i>&nbsp;import it.polimi.ingsw.ps51.utility.Observer;
+<i>10</i>&nbsp;import org.javatuples.Pair;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;import java.util.*;
+<i>13</i>&nbsp;import java.util.concurrent.ArrayBlockingQueue;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;abstract public class Supporter extends Observable&lt;EventForServer&gt; implements Runnable, Observer&lt;EventForClient&gt; {
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    private String typeOfEvent;
+<i>19</i>&nbsp;    ArrayBlockingQueue&lt;EventForClient&gt; events;
+<i>20</i>&nbsp;    private int godsNum;
+<i>21</i>&nbsp;    private List&lt;Gods&gt; availableGods;
+<i>22</i>&nbsp;    private int workerNum;
+<i>23</i>&nbsp;    private List&lt;Worker&gt; validChoicesWorkers;
+<i>24</i>&nbsp;    private List&lt;Coordinates&gt; validChoicesMoves;
+<i>25</i>&nbsp;    private List&lt;Pair&lt;Coordinates, List&lt;Level&gt;&gt;&gt; validChoicesBuild;
+<i>26</i>&nbsp;    private Map map;
+<i>27</i>&nbsp;    private List&lt;Worker&gt; workers;
+<i>28</i>&nbsp;    private String decision;
+<i>29</i>&nbsp;    private String ack;
+<i>30</i>&nbsp;    private List&lt;Pair&lt;String, Gods&gt;&gt; chosenGods;
+<i>31</i>&nbsp;    private List&lt;WorkerColor&gt; availableColors;
+<i>32</i>&nbsp;    private List&lt;String&gt; players;
+<i>33</i>&nbsp;    private java.util.Map&lt;String, WorkerColor&gt; chosenColors;
+<i>34</i>&nbsp;
+<b class="nc"><i>35</i>&nbsp;    public Supporter() {</b>
+<b class="nc"><i>36</i>&nbsp;        typeOfEvent = &quot;DEFAULT&quot;;</b>
+<b class="nc"><i>37</i>&nbsp;        events = new ArrayBlockingQueue&lt;&gt;(20);</b>
+<b class="nc"><i>38</i>&nbsp;        godsNum = 0;</b>
+<b class="nc"><i>39</i>&nbsp;        availableGods = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>40</i>&nbsp;        workerNum = 0;</b>
+<b class="nc"><i>41</i>&nbsp;        validChoicesWorkers = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>42</i>&nbsp;        validChoicesMoves = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>43</i>&nbsp;        validChoicesBuild = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>44</i>&nbsp;        map = new Map();</b>
+<b class="nc"><i>45</i>&nbsp;        workers = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>46</i>&nbsp;        decision = &quot;&quot;;</b>
+<b class="nc"><i>47</i>&nbsp;        ack = &quot;&quot;;</b>
+<b class="nc"><i>48</i>&nbsp;        chosenGods = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>49</i>&nbsp;        availableColors = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>50</i>&nbsp;        chosenColors = new HashMap&lt;&gt;();</b>
+<i>51</i>&nbsp;    }
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    public void setTypeOfEvent(String typeOfEvent) {
+<b class="nc"><i>54</i>&nbsp;        this.typeOfEvent = typeOfEvent;</b>
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    public String getTypeOfEvent() {
+<b class="nc"><i>58</i>&nbsp;        return typeOfEvent;</b>
+<i>59</i>&nbsp;    }
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    public synchronized ArrayBlockingQueue&lt;EventForClient&gt; getEvents() {
+<b class="nc"><i>62</i>&nbsp;        return this.events;</b>
+<i>63</i>&nbsp;    }
+<i>64</i>&nbsp;
+<b class="nc"><i>65</i>&nbsp;    public int getGodsNum (){return godsNum;}</b>
+<b class="nc"><i>66</i>&nbsp;    public void setGodsNum(int godsNum){ this.godsNum = godsNum;}</b>
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;
+<b class="nc"><i>69</i>&nbsp;    public List&lt;Gods&gt; getAvailableGods(){return availableGods;}</b>
+<b class="nc"><i>70</i>&nbsp;    public void setAvailableGods(List&lt;Gods&gt; availableGods){this.availableGods = availableGods;}</b>
+<i>71</i>&nbsp;
+<b class="nc"><i>72</i>&nbsp;    public int getWorkerNum(){return workerNum;}</b>
+<b class="nc"><i>73</i>&nbsp;    public void setWorkerNum(int workerNum){this.workerNum = workerNum;}</b>
+<i>74</i>&nbsp;
+<b class="nc"><i>75</i>&nbsp;    public List&lt;Worker&gt; getValidChoicesWorkers(){return validChoicesWorkers;}</b>
+<b class="nc"><i>76</i>&nbsp;    public void setValidChoicesWorkers(List&lt;Worker&gt; validChoicesWorkers){this.validChoicesWorkers = validChoicesWorkers;}</b>
+<i>77</i>&nbsp;
+<b class="nc"><i>78</i>&nbsp;    public List&lt;Coordinates&gt; getValidChoicesMoves(){return validChoicesMoves;}</b>
+<b class="nc"><i>79</i>&nbsp;    public void setValidChoicesMoves(List&lt;Coordinates&gt; validChoicesMoves){this.validChoicesMoves = validChoicesMoves;}</b>
+<i>80</i>&nbsp;
+<b class="nc"><i>81</i>&nbsp;    public List&lt;Pair&lt;Coordinates, List&lt;Level&gt;&gt;&gt; getValidChoicesBuild(){return validChoicesBuild;}</b>
+<b class="nc"><i>82</i>&nbsp;    public void setValidChoicesBuild(List&lt;Pair&lt;Coordinates, List&lt;Level&gt;&gt;&gt; validChoicesBuild){this.validChoicesBuild=validChoicesBuild;}</b>
+<i>83</i>&nbsp;
+<b class="nc"><i>84</i>&nbsp;    public Map getMap(){return map;}</b>
+<b class="nc"><i>85</i>&nbsp;    public void setMap(Map map){this.map = map;}</b>
+<i>86</i>&nbsp;
+<b class="nc"><i>87</i>&nbsp;    public List&lt;Worker&gt; getWorkers(){return workers;}</b>
+<b class="nc"><i>88</i>&nbsp;    public void setWorkers(List&lt;Worker&gt; workers){this.workers = workers;}</b>
+<i>89</i>&nbsp;
+<b class="nc"><i>90</i>&nbsp;    public String getDecision(){return decision;}</b>
+<b class="nc"><i>91</i>&nbsp;    public void setDecision(String decision){this.decision = decision;}</b>
+<i>92</i>&nbsp;
+<b class="nc"><i>93</i>&nbsp;    public String getOperationConfirmed(){return ack;}</b>
+<b class="nc"><i>94</i>&nbsp;    public void setOperationConfirmed(String ack){this.ack=ack;}</b>
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;    public List&lt;Pair&lt;String, Gods&gt;&gt; getChosenGods() {
+<b class="nc"><i>97</i>&nbsp;        return chosenGods;</b>
+<i>98</i>&nbsp;    }
+<b class="nc"><i>99</i>&nbsp;    public void setChosenGods(List&lt;Pair&lt;String, Gods&gt;&gt; chosenGods){this.chosenGods=chosenGods;}</b>
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;    public List&lt;WorkerColor&gt; getAvailableColors() {
+<b class="nc"><i>102</i>&nbsp;        return this.availableColors;</b>
+<i>103</i>&nbsp;    }
+<i>104</i>&nbsp;    public void setAvailableColors(List&lt;WorkerColor&gt; availableColors) {
+<b class="nc"><i>105</i>&nbsp;        this.availableColors = availableColors;</b>
+<i>106</i>&nbsp;    }
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;    public List&lt;String&gt; getPlayers() {
+<b class="nc"><i>109</i>&nbsp;        return players;</b>
+<i>110</i>&nbsp;    }
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;    public void setPlayers(List&lt;String&gt; players) {
+<b class="nc"><i>113</i>&nbsp;        this.players = players;</b>
+<i>114</i>&nbsp;    }
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;    public java.util.Map&lt;String, WorkerColor&gt; getChosenColors() {
+<b class="nc"><i>117</i>&nbsp;        return this.chosenColors;</b>
+<i>118</i>&nbsp;    }
+<i>119</i>&nbsp;    public void setChosenColors(java.util.Map&lt;String, WorkerColor&gt; chosenColor) {
+<b class="nc"><i>120</i>&nbsp;        this.chosenColors = chosenColor;</b>
+<i>121</i>&nbsp;    }
+<i>122</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-03 12:23</div>
+</div>
+</body>
+</html>
