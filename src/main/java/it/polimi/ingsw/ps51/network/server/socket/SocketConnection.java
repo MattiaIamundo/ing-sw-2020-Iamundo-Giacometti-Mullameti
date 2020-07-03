@@ -1,6 +1,7 @@
 package it.polimi.ingsw.ps51.network.server.socket;
 
 import it.polimi.ingsw.ps51.events.events_for_client.EventForClient;
+import it.polimi.ingsw.ps51.events.events_for_client.Lose;
 import it.polimi.ingsw.ps51.events.events_for_client.NumberOfPlayer;
 import it.polimi.ingsw.ps51.events.events_for_client.Ping;
 import it.polimi.ingsw.ps51.events.events_for_server.*;
@@ -41,6 +42,7 @@ public class SocketConnection implements Runnable, ServerInterface {
     int timeOut;
     VisitorForPong visitorPong;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
+    private boolean loser = false;
 
     /**
      * Constructor
@@ -119,6 +121,8 @@ public class SocketConnection implements Runnable, ServerInterface {
     public void sendEvent(EventForClient event){
         try {
             synchronized (this.getOb()) {
+                if (event instanceof Lose)
+                    this.loser = true;
                 this.oos.writeObject(event);
             }
         } catch (IOException e) {
@@ -271,8 +275,10 @@ public class SocketConnection implements Runnable, ServerInterface {
 
             if (gameRoom != null) {
                 logger.info("[SOCKETCONNECTION of " + this.nickname + "]: A disconnection is received...");
-                logger.info("[SOCKETCONNECTION of " + this.nickname + "]: I'm going to communicate it to the ROOM!");
-                this.gameRoom.update(new it.polimi.ingsw.ps51.events.events_for_server.Disconnection(this.nickname));
+                if (!this.loser) {
+                    logger.info("[SOCKETCONNECTION of " + this.nickname + "]: I'm going to communicate it to the ROOM!");
+                    this.gameRoom.update(new it.polimi.ingsw.ps51.events.events_for_server.Disconnection(this.nickname));
+                }
             }
             else {
                 synchronized (this.mainServer.getObjectToSynchronized()) {
